@@ -40,7 +40,6 @@ static void _list_click( void *data, Evas_Object *obj, void *event_info )
 	clen = strlen(cpdata);
 	p = malloc(clen + 1);
 	snprintf(p, clen, "%s", cpdata);
-	fprintf(stderr, "## cbhm : sel : %s\n", p);
 	elm_selection_set(1, obj, /*mark up*/1, p);
 }
 
@@ -59,6 +58,8 @@ int clipdrawer_update_contents(void *data)
 			elm_list_item_append(ad->txtlist, get_item_contents_by_pos(pos), NULL, NULL, NULL, ad);
 	}
 	elm_list_go(ad->txtlist);
+
+	/* FIXME : sometimes when list update, screen isn't updated */
 
 	return 0;
 }
