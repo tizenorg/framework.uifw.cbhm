@@ -1,3 +1,12 @@
+cbhm (0.1.0-6) unstable; urgency=low
+
+  * case of inhouse package
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-6
+  * add dependancy utilX
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Wed, 15 Sep 2010 13:29:33 +0900
+
 cbhm (0.1.0-5) unstable; urgency=low
 
   * case of inhouse package

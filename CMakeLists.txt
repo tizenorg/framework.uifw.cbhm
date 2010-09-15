@@ -10,7 +10,7 @@ SET(SRCS src/cbhm_main.c
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 INCLUDE(FindPkgConfig)
-pkg_check_modules(pkgs REQUIRED elementary appcore-efl appcore-common x11 ecore-x)
+pkg_check_modules(pkgs REQUIRED elementary appcore-efl appcore-common x11 ecore-x utilX)
 
 FOREACH(flag ${pkgs_CFLAGS})
 	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
