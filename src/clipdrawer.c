@@ -22,6 +22,20 @@ static const char *images[] = {
 };
 #define N_IMAGES (10)
 
+static void
+_image_click(void *data, Evas_Object *obj, void *event_info)
+{
+	char *p,*file;
+	int len;
+	file = evas_object_data_get(data, "URI");
+	char *dir = IM;
+	len = strlen(file) + strlen(dir);
+	p = malloc(len + 10);
+	snprintf(p,len+10,"file:///%s/%s",dir,file);
+
+	elm_selection_set(1,data,2,p);
+}
+
 static void _list_click( void *data, Evas_Object *obj, void *event_info )
 {
     Elm_List_Item *it = (Elm_List_Item *) elm_list_selected_item_get( obj );
@@ -104,6 +118,8 @@ static int clipdrawer_init(void *data)
 		elm_box_pack_end(ad->imgbox, pt);
 		evas_object_show(pt);
 		evas_object_data_set(pt,"URI",images[i]);
+
+		evas_object_smart_callback_add(pt, "clicked", _image_click, pt);
 	}
 
 	ad->txtlist = elm_list_add(ad->win_main);
