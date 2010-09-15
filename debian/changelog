@@ -2,7 +2,7 @@ cbhm (0.1.0-5) unstable; urgency=low
 
   * case of inhouse package
   * Git: 165.213.180.234:/git/slp/pkgs/cbhm
-  * Tag: cbhm_0.1.0-4
+  * Tag: cbhm_0.1.0-5
   * version up for pkg uploading
 
  -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Wed, 15 Sep 2010 13:15:51 +0900
