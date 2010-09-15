@@ -38,6 +38,7 @@ _image_click(void *data, Evas_Object *obj, void *event_info)
 
 static void _list_click( void *data, Evas_Object *obj, void *event_info )
 {
+	struct appdata *ad = data;
     Elm_List_Item *it = (Elm_List_Item *) elm_list_selected_item_get( obj );
 	if (it == NULL)
 		return;
@@ -55,6 +56,8 @@ static void _list_click( void *data, Evas_Object *obj, void *event_info )
 	p = malloc(clen + 1);
 	snprintf(p, clen, "%s", cpdata);
 	elm_selection_set(1, obj, /*mark up*/1, p);
+
+	clipdrawer_hide_view(ad);
 }
 
 int clipdrawer_update_contents(void *data)
@@ -151,4 +154,12 @@ void clipdrawer_activate_view(void *data)
 	
 	if (ad->win_main)
 		elm_win_activate(ad->win_main);
+}
+
+void clipdrawer_hide_view(void *data)
+{
+	struct appdata *ad = data;
+	
+	if (ad->win_main)
+		elm_win_lower(ad->win_main);
 }

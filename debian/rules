@@ -65,6 +65,7 @@ clean:
 	rm -rf install_manifest.txt
 	rm -rf *.so
 	rm -rf *.edj
+	rm -rf data/themes/*.edj
 
 	rm -rf po/CMakeCache.txt
 	rm -rf po/CMakeFiles
