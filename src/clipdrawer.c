@@ -57,7 +57,7 @@ static void _list_click( void *data, Evas_Object *obj, void *event_info )
 	snprintf(p, clen, "%s", cpdata);
 	elm_selection_set(1, obj, /*mark up*/1, p);
 
-	clipdrawer_hide_view(ad);
+	clipdrawer_lower_view(ad);
 }
 
 int clipdrawer_update_contents(void *data)
@@ -156,7 +156,7 @@ void clipdrawer_activate_view(void *data)
 		elm_win_activate(ad->win_main);
 }
 
-void clipdrawer_hide_view(void *data)
+void clipdrawer_lower_view(void *data)
 {
 	struct appdata *ad = data;
 	
