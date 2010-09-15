@@ -153,7 +153,10 @@ void clipdrawer_activate_view(void *data)
 	struct appdata *ad = data;
 	
 	if (ad->win_main)
+	{
+		evas_object_show(ad->win_main);
 		elm_win_activate(ad->win_main);
+	}
 }
 
 void clipdrawer_lower_view(void *data)
@@ -161,5 +164,8 @@ void clipdrawer_lower_view(void *data)
 	struct appdata *ad = data;
 	
 	if (ad->win_main)
+	{
+		evas_object_hide(ad->win_main);
 		elm_win_lower(ad->win_main);
+	}
 }

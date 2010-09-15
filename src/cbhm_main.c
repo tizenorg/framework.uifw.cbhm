@@ -60,7 +60,7 @@ int init_appview(void *data)
 
 	clipdrawer_create_view(ad);
 
-	evas_object_show(win);
+//	evas_object_show(win);
 
 	return 0;
 }
@@ -112,7 +112,7 @@ static int init(struct appdata *ad)
 	xcnp_init(ad);
 	init_appview(ad);
 
-	clipdrawer_lower_view(ad);
+//	clipdrawer_lower_view(ad);
 
 	return 0;
 }
