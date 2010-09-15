@@ -1,5 +1,5 @@
 #!/bin/sh
 
-ln -s /etc/init.d/cbhm /etc/rc.d/rc3.d/S95cbhm
+#ln -s /etc/init.d/cbhm /etc/rc.d/rc3.d/S95cbhm
 
 sync
