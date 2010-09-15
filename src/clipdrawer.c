@@ -46,15 +46,16 @@ static void _list_click( void *data, Evas_Object *obj, void *event_info )
     elm_list_item_selected_set(it, 0);
 
 	char *p = NULL;
-	char *cpdata = NULL;
+//	char *cpdata = NULL;
 	int clen;
 
-	cpdata = elm_list_item_label_get(it);
+//	cpdata = elm_list_item_label_get(it);
+	char *cpdata = "#en#";
 	if (cpdata == NULL)
 		return;
 	clen = strlen(cpdata);
 	p = malloc(clen + 1);
-	snprintf(p, clen, "%s", cpdata);
+	snprintf(p, clen+1, "%s", cpdata);
 	elm_selection_set(1, obj, /*mark up*/1, p);
 
 	clipdrawer_lower_view(ad);

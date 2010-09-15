@@ -63,6 +63,7 @@ static int _init_atoms()
 {
 	/* all atoms are global variables */
 	atomPrimary = XA_PRIMARY; 
+	atomSecondary = XA_SECONDARY; 
 	atomTarget = XA_STRING;
 	atomClipboard = XInternAtom(g_disp, ATOM_CLIPBOARD_NAME, False);
 	atomCBHM = XInternAtom (g_disp, ATOM_CLIPBOARD_MANAGER_NAME, False);
@@ -337,6 +338,9 @@ static int _xsel_clear_cb(void *data, int ev_type, void *event)
 	struct appdata *ad = data;
 
 	Ecore_X_Event_Selection_Clear *ev = (Ecore_X_Event_Selection_Clear *)event;
+
+	if (ev->selection != ECORE_X_SELECTION_CLIPBOARD)
+		return TRUE;
 	
 	DTRACE("SelectionClear\n");
 
@@ -352,6 +356,9 @@ static int _xsel_clear_cb(void *data, int ev_type, void *event)
 static int _xsel_request_cb(void *data, int ev_type, void *event)
 {
 	Ecore_X_Event_Selection_Request *ev = (Ecore_X_Event_Selection_Request *)event;
+
+	if (ev->selection != atomClipboard)
+		return TRUE;
 	
 	DTRACE("SelectionRequest\n");
 
@@ -366,6 +373,9 @@ static int _xsel_notify_cb(void *data, int ev_type, void *event)
 
 	Ecore_X_Event_Selection_Notify *ev = (Ecore_X_Event_Selection_Notify *)event;
 	Ecore_X_Selection_Data_Text *text_data = NULL;
+
+	if (ev->selection != ECORE_X_SELECTION_CLIPBOARD)
+		return TRUE;
 	
 	DTRACE("SelectionNotify\n");
 

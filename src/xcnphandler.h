@@ -46,6 +46,7 @@ static Ecore_X_Window g_evtwin = None;
 
 /* all atoms are global variables */
 static Atom atomPrimary;
+static Atom atomSecondary;
 static Atom atomTarget;
 static Atom atomClipboard;
 static Atom atomCBHM;
