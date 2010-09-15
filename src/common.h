@@ -6,6 +6,10 @@
 #include <string.h>
 #include <unistd.h>
 
+#ifndef _EDJ
+#define _EDJ(ly) elm_layout_edje_get(ly)
+#endif
+
 #define DEBUG 
 
 #ifdef DEBUG

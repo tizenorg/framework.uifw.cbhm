@@ -21,10 +21,6 @@
 #include "xcnphandler.h"
 #include "clipdrawer.h"
 
-#ifndef _EDJ
-#define _EDJ(ly) elm_layout_edje_get(ly)
-#endif
-
 static Evas_Object* create_win(const char *name);
 static Evas_Object* load_edj(Evas_Object *parent, const char *file, const char *group);
 
@@ -86,13 +82,13 @@ static Evas_Object* create_win(const char *name)
 static Evas_Object* load_edj(Evas_Object *parent, const char *file, const char *group)
 {       
 	Evas_Object *eo;
-	int r;
+	int ret;
 
 	eo = elm_layout_add(parent);
 	if (eo) 
 	{
-		r = elm_layout_file_set(eo, file, group);
-		if (!r) 
+		ret = elm_layout_file_set(eo, file, group);
+		if (!ret) 
 		{
 			evas_object_del(eo);
 			return NULL;
@@ -149,7 +145,7 @@ EAPI int elm_main(int argc, char **argv)
 
 int main( int argc, char *argv[] )
 {
-	setenv("ELM_THEME", "beat", 1); // not recommended way
+//	setenv("ELM_THEME", "beat", 1); // not recommended way
 
 	elm_init(argc, argv);
 
