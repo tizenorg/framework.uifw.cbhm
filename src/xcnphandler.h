@@ -34,6 +34,8 @@ static int _xsel_clear_cb(void *data, int ev_type, void *event);
 static int _xsel_request_cb(void *data, int ev_type, void *event);
 static int _xsel_notify_cb(void *data, int ev_type, void *event);
 static int _xclient_msg_cb(void *data, int ev_type, void *event);
+static Ecore_X_Window get_selection_secondary_target_win();
+int set_selection_secondary_data(char *sdata);
 	
 #define ATOM_CLIPBOARD_NAME "CLIPBOARD"
 #define ATOM_CLIPBOARD_MANAGER_NAME "CLIPBOARD_MANAGER"

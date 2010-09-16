@@ -33,7 +33,7 @@ _image_click(void *data, Evas_Object *obj, void *event_info)
 	p = malloc(len + 10);
 	snprintf(p,len+10,"file:///%s/%s",dir,file);
 
-	elm_selection_set(1,data,2,p);
+	elm_selection_set(/*secondary*/1,data,/*image*/2,p);
 }
 
 static void _list_click( void *data, Evas_Object *obj, void *event_info )
@@ -57,6 +57,8 @@ static void _list_click( void *data, Evas_Object *obj, void *event_info )
 	p = malloc(clen + 1);
 	snprintf(p, clen+1, "%s", cpdata);
 	elm_selection_set(1, obj, /*mark up*/1, p);
+
+//	set_selection_secondary_data(p);
 
 	clipdrawer_lower_view(ad);
 }

@@ -1,3 +1,12 @@
+cbhm (0.1.0-11) unstable; urgency=low
+
+  * case of inhouse package
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-11
+  * enable by default
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Thu, 16 Sep 2010 14:46:41 +0900
+
 cbhm (0.1.0-10) unstable; urgency=low
 
   * case of inhouse package

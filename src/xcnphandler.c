@@ -359,7 +359,7 @@ static int _xsel_request_cb(void *data, int ev_type, void *event)
 
 	if (ev->selection != atomClipboard)
 		return TRUE;
-	
+
 	DTRACE("SelectionRequest\n");
 
 	processing_selection_request(ev);
@@ -490,3 +490,43 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 	return TRUE;
 }
 
+static Ecore_X_Window get_selection_secondary_target_win()
+{
+	Atom actual_type;
+	int actual_format;
+	unsigned long nitems, bytes_after;
+	unsigned char *prop_return = NULL;
+	Atom atomCbhmXTarget = XInternAtom(g_disp, "CBHM_XTARGET", False);
+	static Ecore_X_Window xtarget = None;
+	if (xtarget != None)
+		return xtarget;
+
+	if(Success == 
+	   XGetWindowProperty(g_disp, DefaultRootWindow(g_disp), atomCbhmXTarget, 
+						  0, sizeof(Ecore_X_Window), False, XA_WINDOW, 
+						  &actual_type, &actual_format, &nitems, &bytes_after, &prop_return) && 
+	   prop_return)
+	{
+		xtarget = *(Ecore_X_Window*)prop_return;
+		XFree(prop_return);
+		fprintf(stderr, "## find clipboard secondary target at root\n");
+	}
+	return xtarget;
+}
+
+int set_selection_secondary_data(char *sdata)
+{
+//	elm_selection_set(1, obj, /*mark up*/1, p);
+	Ecore_X_Window setwin = get_selection_secondary_target_win();
+	if (setwin == None)
+		return 0;
+
+	if (sdata == NULL)
+		return 0;
+
+	int slen = strlen(sdata);
+
+	fprintf(stderr, "## cbhm xwin = 0x%x, d = %s\n", setwin, sdata);
+
+	ecore_x_selection_secondary_set(setwin, sdata, slen);
+}
