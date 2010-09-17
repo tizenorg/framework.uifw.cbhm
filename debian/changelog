@@ -1,3 +1,12 @@
+cbhm (0.1.0-12) unstable; urgency=low
+
+  * case of inhouse package
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-12
+  * change default img path
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Fri, 17 Sep 2010 14:07:51 +0900
+
 cbhm (0.1.0-11) unstable; urgency=low
 
   * case of inhouse package
