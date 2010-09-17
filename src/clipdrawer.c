@@ -7,20 +7,16 @@
 #define _EDJ(ly) elm_layout_edje_get(ly)
 #endif
 
-#define IM	"/mnt/ums/Images/Wallpapers/"
+#define IM	"/mnt/ums/Images/Photo/"
 static const char *images[] = {
-	IM"TFT_01_480x800.jpg",
-	IM"TFT_02_480x800.jpg",
-	IM"TFT_03_480x800.jpg",
-	IM"TFT_04_480x800.jpg",
-	IM"TFT_05_480x800.jpg",
-	IM"OCTA_01_480x800.jpg",
-	IM"OCTA_02_480x800.jpg",
-	IM"OCTA_03_480x800.jpg",
-	IM"OCTA_04_480x800.jpg",
-	IM"OCTA_05_480x800.jpg",
+	IM"1_photo.jpg",
+	IM"2_photo.jpg",
+	IM"3_photo.jpg",
+	IM"4_photo.jpg",
+	IM"5_photo.jpg",
+	IM"6_photo.jpg",
 };
-#define N_IMAGES (10)
+#define N_IMAGES (6)
 
 static void
 _image_click(void *data, Evas_Object *obj, void *event_info)
@@ -46,11 +42,11 @@ static void _list_click( void *data, Evas_Object *obj, void *event_info )
     elm_list_item_selected_set(it, 0);
 
 	char *p = NULL;
-//	char *cpdata = NULL;
+	char *cpdata = NULL;
 	int clen;
 
-//	cpdata = elm_list_item_label_get(it);
-	char *cpdata = "#en#";
+	cpdata = elm_list_item_label_get(it);
+//	char *cpdata = "#en#";
 	if (cpdata == NULL)
 		return;
 	clen = strlen(cpdata);
