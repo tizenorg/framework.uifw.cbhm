@@ -29,13 +29,13 @@ _image_click(void *data, Evas_Object *obj, void *event_info)
 	p = malloc(len + 10);
 	snprintf(p,len+10,"file:///%s/%s",dir,file);
 
-	elm_selection_set(/*secondary*/1,data,/*image*/2,p);
+//	elm_selection_set(/*secondary*/1,data,/*ELM_SEL_FORMAT_IMAGE*/4,p);
 }
 
 static void _list_click( void *data, Evas_Object *obj, void *event_info )
 {
 	struct appdata *ad = data;
-    Elm_List_Item *it = (Elm_List_Item *) elm_list_selected_item_get( obj );
+    Elm_List_Item *it = (Elm_List_Item *) elm_list_selected_item_get(obj);
 	if (it == NULL)
 		return;
 
@@ -43,16 +43,16 @@ static void _list_click( void *data, Evas_Object *obj, void *event_info )
 
 	char *p = NULL;
 	char *cpdata = NULL;
-	int clen;
+	int cplen;
 
 	cpdata = elm_list_item_label_get(it);
 //	char *cpdata = "#en#";
 	if (cpdata == NULL)
 		return;
-	clen = strlen(cpdata);
-	p = malloc(clen + 1);
-	snprintf(p, clen+1, "%s", cpdata);
-	elm_selection_set(1, obj, /*mark up*/1, p);
+	cplen = strlen(cpdata);
+	p = malloc(cplen + 1);
+	snprintf(p, cplen+1, "%s", cpdata);
+//	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
 
 //	set_selection_secondary_data(p);
 
