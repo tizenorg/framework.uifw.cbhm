@@ -30,6 +30,7 @@ _image_click(void *data, Evas_Object *obj, void *event_info)
 	snprintf(p,len+10,"file:///%s/%s",dir,file);
 
 //	elm_selection_set(/*secondary*/1,data,/*ELM_SEL_FORMAT_IMAGE*/4,p);
+//	elm_selection_set(/*secondary*/1,obj,4,p);
 }
 
 static void _list_click( void *data, Evas_Object *obj, void *event_info )
@@ -42,19 +43,17 @@ static void _list_click( void *data, Evas_Object *obj, void *event_info )
     elm_list_item_selected_set(it, 0);
 
 	char *p = NULL;
-	char *cpdata = NULL;
 	int cplen;
 
+	char *cpdata = NULL;
 	cpdata = elm_list_item_label_get(it);
-//	char *cpdata = "#en#";
 	if (cpdata == NULL)
 		return;
 	cplen = strlen(cpdata);
 	p = malloc(cplen + 1);
 	snprintf(p, cplen+1, "%s", cpdata);
 //	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
-
-//	set_selection_secondary_data(p);
+	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_MARKUP*/2, p);
 
 	clipdrawer_lower_view(ad);
 }
@@ -70,8 +69,10 @@ int clipdrawer_update_contents(void *data)
 		pos = get_current_history_position()+i;
 		if (pos > HISTORY_QUEUE_NUMBER-1)
 			pos = pos-HISTORY_QUEUE_NUMBER;
-		if (get_item_contents_by_pos(pos) != NULL)
+		if (get_item_contents_by_pos(pos) != NULL && strlen(get_item_contents_by_pos(pos)) > 0)
+		{
 			elm_list_item_append(ad->txtlist, get_item_contents_by_pos(pos), NULL, NULL, NULL, ad);
+		}
 	}
 	elm_list_go(ad->txtlist);
 
