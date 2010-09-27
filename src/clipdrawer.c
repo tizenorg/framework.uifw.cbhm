@@ -53,8 +53,8 @@ static void _list_click( void *data, Evas_Object *obj, void *event_info )
 	cplen = strlen(cpdata);
 	p = malloc(cplen + 1);
 	snprintf(p, cplen+1, "%s", cpdata);
-//	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
-	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_MARKUP*/2, p);
+	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
+//	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_MARKUP*/2, p);
 
 	clipdrawer_lower_view(ad);
 }
