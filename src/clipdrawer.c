@@ -21,16 +21,17 @@ static const char *images[] = {
 static void
 _image_click(void *data, Evas_Object *obj, void *event_info)
 {
+	struct appdata *ad = data;
 	char *p,*file;
 	int len;
-	file = evas_object_data_get(data, "URI");
-	char *dir = IM;
-	len = strlen(file) + strlen(dir);
+	file = evas_object_data_get(obj, "URI");
+	len = strlen(file);
 	p = malloc(len + 10);
-	snprintf(p,len+10,"file:///%s/%s",dir,file);
+	snprintf(p,len+10,"file:///%s",file);
 
-//	elm_selection_set(/*secondary*/1,data,/*ELM_SEL_FORMAT_IMAGE*/4,p);
-//	elm_selection_set(/*secondary*/1,obj,4,p);
+	elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
+
+	clipdrawer_lower_view(ad);
 }
 
 static void _list_click( void *data, Evas_Object *obj, void *event_info )
@@ -122,7 +123,7 @@ static int clipdrawer_init(void *data)
 		evas_object_show(pt);
 		evas_object_data_set(pt,"URI",images[i]);
 
-		evas_object_smart_callback_add(pt, "clicked", _image_click, pt);
+		evas_object_smart_callback_add(pt, "clicked", _image_click, ad);
 	}
 
 	ad->txtlist = elm_list_add(ad->win_main);
