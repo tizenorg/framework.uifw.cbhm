@@ -85,10 +85,10 @@ static int clipdrawer_init(void *data)
 {
 	struct appdata *ad = data;
 
-	evas_object_resize(ad->win_main, 480, 400);
-	evas_object_move(ad->win_main, 0, 400);
-	evas_object_resize(ad->ly_main, 480, 400);
-	evas_object_move(ad->ly_main, 0, 400);
+	evas_object_resize(ad->win_main, 480, 360);
+	evas_object_move(ad->win_main, 0, 440);
+	evas_object_resize(ad->ly_main, 480, 360);
+	evas_object_move(ad->ly_main, 0, 440);
 
 	ad->scrl = elm_scroller_add(ad->win_main);
 	edje_object_part_swallow(_EDJ(ad->ly_main), "cbhmdrawer/imglist", ad->scrl);
@@ -117,7 +117,7 @@ static int clipdrawer_init(void *data)
 				EVAS_HINT_EXPAND);
 		evas_object_size_hint_align_set(pt, EVAS_HINT_FILL,
 				EVAS_HINT_FILL);
-		elm_photo_size_set(pt, 145);
+		elm_photo_size_set(pt, 125);
 		elm_box_pack_end(ad->imgbox, pt);
 		evas_object_show(pt);
 		evas_object_data_set(pt,"URI",images[i]);
