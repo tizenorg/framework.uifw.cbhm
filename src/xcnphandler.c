@@ -348,7 +348,7 @@ static int _xsel_clear_cb(void *data, int ev_type, void *event)
 	if (ev->selection != ECORE_X_SELECTION_CLIPBOARD)
 		return TRUE;
 	
-	DTRACE("SelectionClear\n");
+	DTRACE("XE:SelectionClear\n");
 
 	send_convert_selection();
 	ecore_x_flush();
@@ -366,7 +366,7 @@ static int _xsel_request_cb(void *data, int ev_type, void *event)
 	if (ev->selection != atomClipboard)
 		return TRUE;
 
-	DTRACE("SelectionRequest\n");
+	DTRACE("XE:SelectionRequest\n");
 
 	processing_selection_request(ev);
 
@@ -383,7 +383,7 @@ static int _xsel_notify_cb(void *data, int ev_type, void *event)
 	if (ev->selection != ECORE_X_SELECTION_CLIPBOARD)
 		return TRUE;
 	
-	DTRACE("SelectionNotify\n");
+	DTRACE("XE:SelectionNotify\n");
 
 	text_data = ev->data;
 	DTRACE("content type = %d\n", text_data->data.content);
@@ -413,7 +413,7 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 	if (ev->message_type != atomCBHM_MSG)
 		return -1;
 
-	DTRACE("ClientMessage for CBHM\n");
+	DTRACE("XE:ClientMessage for CBHM\n");
 
 	DTRACE("## %s\n", ev->data.b);
 
@@ -500,7 +500,7 @@ static int _xfocus_out_cb(void *data, int ev_type, void *event)
 {
 	struct appdata *ad = data;
 
-	DTRACE("FOCUS OUT -> lowering cbhm\n");
+	DTRACE("XE:FOCUS OUT\n");
 
 	clipdrawer_lower_view(ad);
 
