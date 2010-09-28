@@ -1,11 +1,8 @@
 #include "common.h"
-#include "clipdrawer.h"
 #include "cbhm_main.h"
 #include "storage.h"
-
-#ifndef _EDJ
-#define _EDJ(ly) elm_layout_edje_get(ly)
-#endif
+#include "xcnphandler.h"
+#include "clipdrawer.h"
 
 #define IM	"/mnt/ums/Images/Photo/"
 static const char *images[] = {
@@ -82,7 +79,7 @@ int clipdrawer_update_contents(void *data)
 	return 0;
 }
 
-static int clipdrawer_init(void *data)
+int clipdrawer_init(void *data)
 {
 	struct appdata *ad = data;
 

@@ -3,7 +3,7 @@
 
 #include <Elementary.h>
 
-#define APPNAME "cbhm"
+#define APPNAME "Clipboard History Manager"
 #define LOCALEDIR "/usr/share/locale"
 
 #define EDJ_PATH "/usr/share/edje"

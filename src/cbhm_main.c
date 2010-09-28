@@ -108,8 +108,6 @@ static int init(struct appdata *ad)
 	xcnp_init(ad);
 	init_appview(ad);
 
-//	clipdrawer_lower_view(ad);
-
 	return 0;
 }
 
