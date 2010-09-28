@@ -1,3 +1,12 @@
+cbhm (0.1.0-16) unstable; urgency=low
+
+  * case of inhouse package
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-15
+  * update debian/control pkg dependency
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Tue, 28 Sep 2010 15:36:21 +0900
+
 cbhm (0.1.0-15) unstable; urgency=low
 
   * case of inhouse package
