@@ -8,6 +8,7 @@ static Ecore_Event_Handler *xsel_clear_handler = NULL;
 static Ecore_Event_Handler *xsel_request_handler = NULL;
 static Ecore_Event_Handler *xsel_notify_handler = NULL;
 static Ecore_Event_Handler *xclient_msg_handler = NULL;
+static Ecore_Event_Handler *xfocus_out_handler = NULL;
 
 char *g_lastest_content = NULL;
 int g_history_pos = 0;
@@ -28,6 +29,7 @@ int xcnp_init(void *data)
 	xsel_request_handler = ecore_event_handler_add(ECORE_X_EVENT_SELECTION_REQUEST, _xsel_request_cb, ad);
 	xsel_notify_handler = ecore_event_handler_add(ECORE_X_EVENT_SELECTION_NOTIFY, _xsel_notify_cb, ad);
 	xclient_msg_handler = ecore_event_handler_add(ECORE_X_EVENT_CLIENT_MESSAGE, _xclient_msg_cb, ad);
+	xfocus_out_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_FOCUS_OUT, _xfocus_out_cb, ad);
 
 	if(!xsel_clear_handler)
 		DTRACE("Failed to add ECORE_X_EVENT_SELECTION_CLEAR handler\n");
@@ -37,6 +39,8 @@ int xcnp_init(void *data)
 		DTRACE("Failed to add ECORE_X_EVENT_SELECTION_NOTIFY handler\n");
 	if(!xclient_msg_handler)
 		DTRACE("Failed to add ECORE_X_EVENT_CLIENT_MESSAGE handler\n");
+	if(!xfocus_out_handler)
+		DTRACE("Failed to add ECORE_X_EVENT_WINDOW_FOCUS_OUT handler\n");
 
 	return TRUE;
 }
@@ -48,11 +52,13 @@ int xcnp_shutdown()
 	ecore_event_handler_del(xsel_request_handler);
 	ecore_event_handler_del(xsel_notify_handler);
 	ecore_event_handler_del(xclient_msg_handler);
+	ecore_event_handler_del(xfocus_out_handler);
 
 	xsel_clear_handler = NULL;
 	xsel_request_handler = NULL;
 	xsel_notify_handler = NULL;
 	xclient_msg_handler = NULL;
+	xfocus_out_handler = NULL;
 
 	_cbhm_fini();
 
@@ -486,6 +492,15 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 	}
 
 	XFlush(g_disp);
+
+	return TRUE;
+}
+
+static int _xfocus_out_cb(void *data, int ev_type, void *event)
+{
+	struct appdata *ad = data;
+
+	clipdrawer_lower_view(ad);
 
 	return TRUE;
 }
