@@ -2,7 +2,7 @@ Source: cbhm
 Section: devel
 Priority: extra
 Maintainer: Hyoyoung Chang <hyoyoung.chang@samsung.com>
-Build-Depends: debhelper (>= 5), libelm-dev, libappcore-efl-dev, libslp-utilx-dev
+Build-Depends: debhelper (>= 5), libelm-dev, libappcore-efl-dev, libappcore-common-dev, libx11-dev, libecore-dev, libslp-utilx-dev
 Standards-Version: 0.1.1
 
 Package: cbhm
