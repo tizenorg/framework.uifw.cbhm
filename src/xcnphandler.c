@@ -500,6 +500,8 @@ static int _xfocus_out_cb(void *data, int ev_type, void *event)
 {
 	struct appdata *ad = data;
 
+	DTRACE("FOCUS OUT -> lowering cbhm\n");
+
 	clipdrawer_lower_view(ad);
 
 	return TRUE;
