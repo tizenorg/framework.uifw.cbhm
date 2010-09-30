@@ -79,6 +79,13 @@ int clipdrawer_update_contents(void *data)
 	return 0;
 }
 
+const char* clipdrawer_get_plain_string_from_escaped(char *escstr)
+{
+	/* TODO : is it should be here? besides, remove dependency for entry */
+	/* NOTE : return string should be freed */
+	return elm_entry_markup_to_utf8(escstr);
+}
+
 int clipdrawer_init(void *data)
 {
 	struct appdata *ad = data;

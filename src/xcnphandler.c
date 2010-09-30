@@ -180,6 +180,7 @@ int get_selection_content(void *data)
 	unsigned long cbsize, cbitems;
 	unsigned char *cbbuf;
 	struct appdata *ad = data;
+	const char *unesc;
 
 	XGetWindowProperty(g_disp, g_evtwin, atomCBOut, 0, 0, False,
 					   AnyPropertyType, &cbtype, &cbformat, &cbitems, &cbsize, &cbbuf);
@@ -205,8 +206,12 @@ int get_selection_content(void *data)
 					   AnyPropertyType, &cbtype, &cbformat, &cbitems, &cbsize, &cbbuf);
 	XDeleteProperty(g_disp, g_evtwin, atomCBOut);
 
-	add_to_storage_buffer(ad, cbbuf, cbitems);
-	DTRACE("len = %ld, data = %s\n", cbitems, cbbuf);
+	unesc = clipdrawer_get_plain_string_from_escaped(cbbuf);
+//	add_to_storage_buffer(ad, cbbuf, cbitems);
+//	DTRACE("len = %ld, data = %s\n", cbitems, cbbuf);
+	add_to_storage_buffer(ad, unesc, strlen(unesc));
+	DTRACE("len = %ld, data = %s\n", strlen(unesc), unesc);
+	free(unesc);
 
 	DTRACE("\n");
 	print_storage_buffer();
