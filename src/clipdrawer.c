@@ -5,7 +5,7 @@
 #include "clipdrawer.h"
 
 #define IM	"/mnt/ums/Images/Photo/"
-static const char *images[] = {
+static const char *g_images_path[] = {
 	IM"1_photo.jpg",
 	IM"2_photo.jpg",
 	IM"3_photo.jpg",
@@ -14,6 +14,17 @@ static const char *images[] = {
 	IM"6_photo.jpg",
 };
 #define N_IMAGES (6)
+
+typedef struct tag_imgitem
+{
+	Elm_Gengrid_Item *item;
+	const char *path;
+	const char *filename;
+	Evas_Object* ck;
+} imgitem_t;
+
+Elm_Gengrid_Item_Class gic;
+imgitem_t oneimg[N_IMAGES];
 
 static void
 _image_click(void *data, Evas_Object *obj, void *event_info)
@@ -86,6 +97,20 @@ const char* clipdrawer_get_plain_string_from_escaped(char *escstr)
 	return elm_entry_markup_to_utf8(escstr);
 }
 
+Evas_Object* grid_icon_get(const void *data, Evas_Object *obj, const char *part)
+{
+	imgitem_t *ti = (imgitem_t *)data;
+	if (!strcmp(part, "elm.swallow.icon"))
+	{
+		Evas_Object *icon = elm_icon_add(obj);
+		elm_icon_file_set(icon, ti->path, NULL);
+		evas_object_size_hint_aspect_set(icon, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
+		evas_object_show(icon);
+		return icon;
+	}
+	return NULL;
+}
+
 int clipdrawer_init(void *data)
 {
 	struct appdata *ad = data;
@@ -95,40 +120,32 @@ int clipdrawer_init(void *data)
 	evas_object_resize(ad->ly_main, 480, 360);
 	evas_object_move(ad->ly_main, 0, 440);
 
-	ad->scrl = elm_scroller_add(ad->win_main);
-	edje_object_part_swallow(_EDJ(ad->ly_main), "cbhmdrawer/imglist", ad->scrl);
-	evas_object_size_hint_weight_set(ad->scrl, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	elm_scroller_bounce_set(ad->scrl, EINA_TRUE, EINA_FALSE);
-	elm_scroller_policy_set(ad->scrl, ELM_SCROLLER_POLICY_AUTO, ELM_SCROLLER_POLICY_OFF);
-	elm_win_resize_object_add(ad->win_main, ad->scrl);
-	evas_object_show(ad->scrl);
+	ad->imglist = NULL;
+	ad->imglist = elm_gengrid_add(ad->win_main);
+	elm_layout_content_set(ad->ly_main, "cbhmdrawer/imglist", ad->imglist);
+	elm_gengrid_item_size_set(ad->imglist, 125, 135);
+	elm_gengrid_align_set(ad->imglist, 0.5, 0.0);
+	elm_gengrid_horizontal_set(ad->imglist, EINA_TRUE);
+	elm_gengrid_bounce_set(ad->imglist, EINA_TRUE, EINA_FALSE);
+	elm_gengrid_multi_select_set(ad->imglist, EINA_FALSE);
+	evas_object_size_hint_weight_set(ad->imglist, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
-	evas_object_resize(ad->scrl,480,95);
- 
-	ad->imgbox = elm_box_add(ad->win_main);
-	elm_box_horizontal_set(ad->imgbox, TRUE);
-	evas_object_size_hint_weight_set(ad->imgbox, EVAS_HINT_EXPAND, 0);
-	evas_object_size_hint_align_set(ad->imgbox, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	elm_scroller_content_set(ad->scrl, ad->imgbox);
-	evas_object_show(ad->imgbox);
+	elm_gengrid_clear(ad->imglist);
 
-	Evas_Object *pt;
+	gic.item_style = "default_grid";
+	gic.func.label_get = NULL;
+	gic.func.icon_get = grid_icon_get;
+	gic.func.state_get = NULL;
+	gic.func.del = NULL;
+
 	int i;
-	for (i = 0 ; i < N_IMAGES ; i ++)
+	for (i = 0; i < N_IMAGES; i++)
 	{
-		pt = elm_photo_add(ad->win_main);
-		elm_photo_file_set(pt, images[i]);
-		evas_object_size_hint_weight_set(pt, EVAS_HINT_EXPAND,
-				EVAS_HINT_EXPAND);
-		evas_object_size_hint_align_set(pt, EVAS_HINT_FILL,
-				EVAS_HINT_FILL);
-		elm_photo_size_set(pt, 125);
-		elm_box_pack_end(ad->imgbox, pt);
-		evas_object_show(pt);
-		evas_object_data_set(pt,"URI",images[i]);
-
-		evas_object_smart_callback_add(pt, "clicked", _image_click, ad);
+		oneimg[i].path = eina_stringshare_add(g_images_path[i]);
+		oneimg[i].item = elm_gengrid_item_append(ad->imglist, &gic, &(oneimg[i]), NULL, NULL);
 	}
+
+	evas_object_show (ad->imglist);
 
 	ad->txtlist = elm_list_add(ad->win_main);
 	elm_layout_content_set(ad->ly_main, "cbhmdrawer/txtlist", ad->txtlist);
@@ -149,6 +166,10 @@ int clipdrawer_create_view(void *data)
 	struct appdata *ad = data;
 
 	clipdrawer_init(ad);
+
+	// for debug
+	// at starting, showing app view
+	//clipdrawer_activate_view(ad);
 
 	return 0;
 }

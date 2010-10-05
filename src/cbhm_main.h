@@ -16,8 +16,7 @@ struct appdata
 	Evas_Object *win_main;
 	Evas_Object *ly_main; /* layout widget based on EDJ */
 	/* add more variables here */
-	Evas_Object *scrl;
-	Evas_Object *imgbox; 
+	Evas_Object *imglist; 
 	Evas_Object *txtlist; 
 };
 
