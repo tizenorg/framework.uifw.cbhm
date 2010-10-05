@@ -15,16 +15,11 @@ static const char *g_images_path[] = {
 };
 #define N_IMAGES (6)
 
-typedef struct tag_imgitem
+typedef struct tag_gridimgitem
 {
 	Elm_Gengrid_Item *item;
 	const char *path;
-	const char *filename;
-	Evas_Object* ck;
-} imgitem_t;
-
-Elm_Gengrid_Item_Class gic;
-imgitem_t oneimg[N_IMAGES];
+} gridimgitem_t;
 
 static void
 _image_click(void *data, Evas_Object *obj, void *event_info)
@@ -99,7 +94,7 @@ const char* clipdrawer_get_plain_string_from_escaped(char *escstr)
 
 Evas_Object* grid_icon_get(const void *data, Evas_Object *obj, const char *part)
 {
-	imgitem_t *ti = (imgitem_t *)data;
+	gridimgitem_t *ti = (gridimgitem_t *)data;
 	if (!strcmp(part, "elm.swallow.icon"))
 	{
 		Evas_Object *icon = elm_icon_add(obj);
@@ -111,6 +106,39 @@ Evas_Object* grid_icon_get(const void *data, Evas_Object *obj, const char *part)
 	return NULL;
 }
 
+static void grid_selected(void *data, Evas_Object *obj, void *event_info)
+{
+	struct appdata *ad = data;
+	char *file, *p;
+	int len;
+	Elm_Gengrid_Item *sgobj = NULL;
+	sgobj = elm_gengrid_selected_item_get(ad->imggrid);
+	gridimgitem_t *ti = NULL;
+	ti = elm_gengrid_item_data_get(sgobj);
+
+	if (!sgobj || !ti)
+	{
+		DTRACE("ERR: cbhm can't get the selected image\n");
+		return;
+	}
+	len = strlen(ti->path);
+	p = malloc(len + 10);
+	snprintf(p,len+10, "file:///%s", ti->path);
+
+	elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
+
+	clipdrawer_lower_view(ad);
+
+	elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
+}
+
+void grid_del(const void *data, Evas_Object *obj)
+{
+	gridimgitem_t *ti = (gridimgitem_t *)data;
+	eina_stringshare_del(ti->path);
+	free(ti);
+}
+
 int clipdrawer_init(void *data)
 {
 	struct appdata *ad = data;
@@ -120,32 +148,39 @@ int clipdrawer_init(void *data)
 	evas_object_resize(ad->ly_main, 480, 360);
 	evas_object_move(ad->ly_main, 0, 440);
 
-	ad->imglist = NULL;
-	ad->imglist = elm_gengrid_add(ad->win_main);
-	elm_layout_content_set(ad->ly_main, "cbhmdrawer/imglist", ad->imglist);
-	elm_gengrid_item_size_set(ad->imglist, 125, 135);
-	elm_gengrid_align_set(ad->imglist, 0.5, 0.0);
-	elm_gengrid_horizontal_set(ad->imglist, EINA_TRUE);
-	elm_gengrid_bounce_set(ad->imglist, EINA_TRUE, EINA_FALSE);
-	elm_gengrid_multi_select_set(ad->imglist, EINA_FALSE);
-	evas_object_size_hint_weight_set(ad->imglist, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	ad->imggrid = NULL;
+	ad->imggrid = elm_gengrid_add(ad->win_main);
+	elm_layout_content_set(ad->ly_main, "cbhmdrawer/imglist", ad->imggrid);
+	elm_gengrid_item_size_set(ad->imggrid, 125, 135);
+	elm_gengrid_align_set(ad->imggrid, 0.5, 0.0);
+	elm_gengrid_horizontal_set(ad->imggrid, EINA_TRUE);
+	elm_gengrid_bounce_set(ad->imggrid, EINA_TRUE, EINA_FALSE);
+	elm_gengrid_multi_select_set(ad->imggrid, EINA_FALSE);
+	evas_object_smart_callback_add(ad->imggrid, "selected", grid_selected, ad);
+	evas_object_size_hint_weight_set(ad->imggrid, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
-	elm_gengrid_clear(ad->imglist);
+	elm_gengrid_clear(ad->imggrid);
 
+	// gic should live at gengrid callback functions
+	static Elm_Gengrid_Item_Class gic;
 	gic.item_style = "default_grid";
 	gic.func.label_get = NULL;
 	gic.func.icon_get = grid_icon_get;
 	gic.func.state_get = NULL;
-	gic.func.del = NULL;
+	gic.func.del = grid_del;
 
 	int i;
+	gridimgitem_t *newgenimg;
+
 	for (i = 0; i < N_IMAGES; i++)
 	{
-		oneimg[i].path = eina_stringshare_add(g_images_path[i]);
-		oneimg[i].item = elm_gengrid_item_append(ad->imglist, &gic, &(oneimg[i]), NULL, NULL);
+		newgenimg = malloc(sizeof(gridimgitem_t));
+		newgenimg->path = eina_stringshare_add(g_images_path[i]);
+		newgenimg->item = elm_gengrid_item_append(ad->imggrid, &gic, newgenimg, NULL, NULL);
+//		evas_object_data_set(newgenimg->item, "URI", g_images_path[i]);
 	}
 
-	evas_object_show (ad->imglist);
+	evas_object_show (ad->imggrid);
 
 	ad->txtlist = elm_list_add(ad->win_main);
 	elm_layout_content_set(ad->ly_main, "cbhmdrawer/txtlist", ad->txtlist);
