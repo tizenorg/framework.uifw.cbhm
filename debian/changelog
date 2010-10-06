@@ -1,3 +1,21 @@
+cbhm (0.1.0-22) unstable; urgency=low
+
+  * case of inhouse package
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-22
+  * apply background image
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Wed, 06 Oct 2010 21:58:06 +0900
+
+cbhm (0.1.0-21) unstable; urgency=low
+
+  * case of inhouse package
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-21
+  * add close button
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Wed, 06 Oct 2010 21:41:08 +0900
+
 cbhm (0.1.0-20) unstable; urgency=low
 
   * case of inhouse package

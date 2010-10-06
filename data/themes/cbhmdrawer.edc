@@ -36,6 +36,26 @@ collections
 				}
 			}
 
+			part 
+			{ 
+				// width: 480, height: 335
+				name: "background/image";
+				type: IMAGE;
+				scale: 1;
+				mouse_events: 1;
+				description 
+				{
+					state: "default" 0.0;
+					rel1 { relative: 0.0 0.0; to: "background";}
+					rel2 { relative: 1.0 1.0; to: "background";}
+					image
+					{
+						normal: "clipboard_panel_bg.png";
+						border: 0 0 10 0;
+					}
+				}
+			}
+
 			part
 			{
 				// width: 35, height: 335
