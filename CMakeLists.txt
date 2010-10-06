@@ -29,6 +29,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkgs_LDFLAGS})
 
 ADD_CUSTOM_TARGET(cbhmdrawer.edj 
 		COMMAND edje_cc 
+		-id ${CMAKE_CURRENT_SOURCE_DIR}/data/images		
 		${CMAKE_SOURCE_DIR}/data/themes/cbhmdrawer.edc ${CMAKE_BINARY_DIR}/data/themes/cbhmdrawer.edj
 		DEPENDS ${CMAKE_SOURCE_DIR}/data/themes/cbhmdrawer.edc
 )

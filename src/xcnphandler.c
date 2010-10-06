@@ -209,7 +209,17 @@ int get_selection_content(void *data)
 	unesc = clipdrawer_get_plain_string_from_escaped(cbbuf);
 //	add_to_storage_buffer(ad, cbbuf, cbitems);
 //	DTRACE("len = %ld, data = %s\n", cbitems, cbbuf);
-	add_to_storage_buffer(ad, unesc, strlen(unesc));
+
+/*
+	if (!strncmp(unesc, "file://", 7) && 
+		(strstr(unesc,".png") || strstr(unesc,".jpg")))
+	{
+		fprintf(stderr, "## clipdrawer add path = %s\n", unesc);
+		clipdrawer_add_image_item(unesc);
+	}
+	else
+*/
+		add_to_storage_buffer(ad, unesc, strlen(unesc));
 	DTRACE("len = %ld, data = %s\n", strlen(unesc), unesc);
 	free(unesc);
 

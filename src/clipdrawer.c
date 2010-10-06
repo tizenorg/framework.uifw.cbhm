@@ -15,27 +15,18 @@ static const char *g_images_path[] = {
 };
 #define N_IMAGES (6)
 
+// FIXME: how to remove main_ad? 
+//        it's mainly used at 'clipdrawer_add_image_item'
+struct appdata *g_main_ad = NULL;
+
+// gic should live at gengrid callback functions
+Elm_Gengrid_Item_Class gic;
+
 typedef struct tag_gridimgitem
 {
 	Elm_Gengrid_Item *item;
 	const char *path;
 } gridimgitem_t;
-
-static void
-_image_click(void *data, Evas_Object *obj, void *event_info)
-{
-	struct appdata *ad = data;
-	char *p,*file;
-	int len;
-	file = evas_object_data_get(obj, "URI");
-	len = strlen(file);
-	p = malloc(len + 10);
-	snprintf(p,len+10,"file:///%s",file);
-
-	elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
-
-	clipdrawer_lower_view(ad);
-}
 
 static void _list_click( void *data, Evas_Object *obj, void *event_info )
 {
@@ -125,6 +116,8 @@ static void grid_selected(void *data, Evas_Object *obj, void *event_info)
 	p = malloc(len + 10);
 	snprintf(p,len+10, "file:///%s", ti->path);
 
+	fprintf(stderr, "## sel path = %s_\n", p);
+
 	elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
 
 	clipdrawer_lower_view(ad);
@@ -139,19 +132,50 @@ void grid_del(const void *data, Evas_Object *obj)
 	free(ti);
 }
 
-int clipdrawer_init(void *data)
+// FIXME: how to remove main_ad? 
+//        it's mainly used at 'clipdrawer_add_image_item'
+int clipdrawer_add_image_item(char *imagepath)
+{
+//	struct appdata *ad = data;
+	gridimgitem_t *newgenimg = NULL;
+	char* filepath = NULL;
+	filepath = &imagepath[7]; // skip 'file://'
+
+	fprintf(stderr, "## image_path = %s_\n", filepath);
+	newgenimg = malloc(sizeof(gridimgitem_t));
+	newgenimg->path = eina_stringshare_add(filepath);
+	newgenimg->item = elm_gengrid_item_append(g_main_ad->imggrid, &gic, newgenimg, NULL, NULL);
+
+	return TRUE;
+}
+
+static void
+clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const char *source)
 {
 	struct appdata *ad = data;
 
-	evas_object_resize(ad->win_main, 480, 360);
-	evas_object_move(ad->win_main, 0, 440);
-	evas_object_resize(ad->ly_main, 480, 360);
-	evas_object_move(ad->ly_main, 0, 440);
+	if (!strncmp(source, "cbhmdrawer/closebtn_", 20))
+	{
+		clipdrawer_lower_view(ad);
+	}
+}
+
+int clipdrawer_init(void *data)
+{
+	struct appdata *ad = data;
+	g_main_ad = ad;
+
+	evas_object_resize(ad->win_main, CLIPDRAWER_WIDTH, CLIPDRAWER_HEIGHT);
+	evas_object_move(ad->win_main, CLIPDRAWER_POS_X, CLIPDRAWER_POS_Y);
+	evas_object_resize(ad->ly_main, CLIPDRAWER_WIDTH, CLIPDRAWER_HEIGHT);
+	evas_object_move(ad->ly_main, CLIPDRAWER_POS_X, CLIPDRAWER_POS_Y);
+
+	edje_object_signal_callback_add(elm_layout_edje_get(ad->ly_main), "mouse,up,1", "*", clipdrawer_ly_clicked, ad);
 
 	ad->imggrid = NULL;
 	ad->imggrid = elm_gengrid_add(ad->win_main);
 	elm_layout_content_set(ad->ly_main, "cbhmdrawer/imglist", ad->imggrid);
-	elm_gengrid_item_size_set(ad->imggrid, 125, 135);
+	elm_gengrid_item_size_set(ad->imggrid, 100, 100+3);
 	elm_gengrid_align_set(ad->imggrid, 0.5, 0.0);
 	elm_gengrid_horizontal_set(ad->imggrid, EINA_TRUE);
 	elm_gengrid_bounce_set(ad->imggrid, EINA_TRUE, EINA_FALSE);
@@ -161,8 +185,6 @@ int clipdrawer_init(void *data)
 
 	elm_gengrid_clear(ad->imggrid);
 
-	// gic should live at gengrid callback functions
-	static Elm_Gengrid_Item_Class gic;
 	gic.item_style = "default_grid";
 	gic.func.label_get = NULL;
 	gic.func.icon_get = grid_icon_get;
