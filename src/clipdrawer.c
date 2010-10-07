@@ -219,7 +219,9 @@ int clipdrawer_init(void *data)
 
 	ad->txtlist = elm_list_add(ad->win_main);
 	elm_layout_content_set(ad->ly_main, "texthistory/list", ad->txtlist);
-	elm_list_horizontal_mode_set(ad->txtlist, ELM_LIST_COMPRESS);
+	elm_theme_extension_add(NULL, APP_EDJ_FILE);
+	elm_object_style_set(ad->txtlist, "extended/historylist");
+	evas_object_size_hint_weight_set(ad->txtlist, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_smart_callback_add(ad->txtlist, "selected", _list_click, ad);
 	elm_list_item_append(ad->txtlist, "default", NULL, NULL, NULL, ad);
 

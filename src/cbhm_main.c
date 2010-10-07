@@ -45,7 +45,7 @@ int init_appview(void *data)
 	ad->evas = evas_object_evas_get(win);
 	ad->win_main = win;
 
-	ly = load_edj(win, EDJ_FILE, GRP_MAIN);
+	ly = load_edj(win, APP_EDJ_FILE, GRP_MAIN);
 	if (ly == NULL)
 		return -1; 
 	elm_win_resize_object_add(win, ly);

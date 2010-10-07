@@ -32,6 +32,7 @@ ADD_CUSTOM_TARGET(cbhmdrawer.edj
 		-id ${CMAKE_CURRENT_SOURCE_DIR}/data/images		
 		${CMAKE_SOURCE_DIR}/data/themes/cbhmdrawer.edc ${CMAKE_BINARY_DIR}/data/themes/cbhmdrawer.edj
 		DEPENDS ${CMAKE_SOURCE_DIR}/data/themes/cbhmdrawer.edc
+		DEPENDS ${CMAKE_SOURCE_DIR}/data/themes/extstyles.edc
 )
 ADD_DEPENDENCIES(${PROJECT_NAME} cbhmdrawer.edj)
 
