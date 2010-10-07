@@ -1,3 +1,5 @@
+// original color - base
+// color: 246 245 237 255; 
 #define BEAT_GENLIST_PART_BASE( param_item_height ) \
          part { name: "base"; \
             type: RECT; \
@@ -5,7 +7,7 @@
             scale: 1; \
             description { state: "default" 0.0; \
                min: 0 param_item_height; \
-               color: 246 245 237 255; \
+               color: 242 239 225 255; \
             } \
          }
 
