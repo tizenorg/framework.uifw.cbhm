@@ -110,8 +110,8 @@ collections
 				description
 				{
 					state: "default" 0.0;
-					rel1 { relative: 0.0916666666 0.0537313432; to: background; }
-					rel2 { relative: 1.0 0.3641791044; to: background; }
+					rel1 { relative: 0.0916666666 0.0656716418; to: background; }
+					rel2 { relative: 1.0 .3771493537; to: background; }
 					color: 0 0 0 0;
 				}
 			}
@@ -159,7 +159,7 @@ collections
 				description
 				{
 					state: "default" 0.0;
-					rel1 { relative: 0.005 0.006; to: "texthistory/bg"; }
+					rel1 { relative: 0.005 0.02; to: "texthistory/bg"; }
 					rel2 { relative: 0.995 1.0; to: "texthistory/bg"; }
 				}
 			}

@@ -184,6 +184,7 @@ int clipdrawer_init(void *data)
 	evas_object_smart_callback_add(ad->imggrid, "selected", grid_selected, ad);
 	evas_object_size_hint_weight_set(ad->imggrid, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
+
 	elm_gengrid_clear(ad->imggrid);
 
 	gic.item_style = "default_grid";
@@ -204,6 +205,17 @@ int clipdrawer_init(void *data)
 	}
 
 	evas_object_show (ad->imggrid);
+
+// for debugging, calc image history pos
+/*
+   Evas_Coord x, y, w, h;
+   Evas_Coord vx, vy, vw, vh;
+
+   edje_object_part_geometry_get(elm_layout_edje_get(ad->ly_main),"imagehistory/list",&x,&y,&w,&h);
+   evas_object_geometry_get (ad->imggrid, &vx,&vy,&vw,&vh);
+   fprintf(stderr, "## x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
+   fprintf(stderr, "## vx = %d, vy = %d, vw = %d, vh = %d\n", vx, vy, vw, vh);
+*/
 
 	ad->txtlist = elm_list_add(ad->win_main);
 	elm_layout_content_set(ad->ly_main, "texthistory/list", ad->txtlist);
