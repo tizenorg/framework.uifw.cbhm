@@ -154,7 +154,8 @@ clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 {
 	struct appdata *ad = data;
 
-	if (!strncmp(source, "cbhmdrawer/closebtn_", 20))
+	#define EDJE_CLOSE_PART_PREFIX "closebutton/"
+	if (!strncmp(source, EDJE_CLOSE_PART_PREFIX, strlen(EDJE_CLOSE_PART_PREFIX)))
 	{
 		clipdrawer_lower_view(ad);
 	}
@@ -174,7 +175,7 @@ int clipdrawer_init(void *data)
 
 	ad->imggrid = NULL;
 	ad->imggrid = elm_gengrid_add(ad->win_main);
-	elm_layout_content_set(ad->ly_main, "cbhmdrawer/imglist", ad->imggrid);
+	elm_layout_content_set(ad->ly_main, "imagehistory/list", ad->imggrid);
 	elm_gengrid_item_size_set(ad->imggrid, 100, 100+3);
 	elm_gengrid_align_set(ad->imggrid, 0.5, 0.0);
 	elm_gengrid_horizontal_set(ad->imggrid, EINA_TRUE);
@@ -205,7 +206,7 @@ int clipdrawer_init(void *data)
 	evas_object_show (ad->imggrid);
 
 	ad->txtlist = elm_list_add(ad->win_main);
-	elm_layout_content_set(ad->ly_main, "cbhmdrawer/txtlist", ad->txtlist);
+	elm_layout_content_set(ad->ly_main, "texthistory/list", ad->txtlist);
 	elm_list_horizontal_mode_set(ad->txtlist, ELM_LIST_COMPRESS);
 	evas_object_smart_callback_add(ad->txtlist, "selected", _list_click, ad);
 	elm_list_item_append(ad->txtlist, "default", NULL, NULL, NULL, ad);

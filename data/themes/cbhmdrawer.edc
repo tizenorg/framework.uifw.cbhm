@@ -59,7 +59,7 @@ collections
 			part
 			{
 				// width: 35, height: 335
-				name: "cbhmdrawer/closebtn_bg";
+				name: "closebutton/bg";
 				type: IMAGE;
 				scale: 1;
 				ignore_flags: ON_HOLD;
@@ -80,7 +80,7 @@ collections
 			part
 			{
 				// width: 35, height: 335
-				name: "cbhmdrawer/closebtn_arrow";
+				name: "closebutton/arrow";
 				type: IMAGE;
 				scale: 1;
 				ignore_flags: ON_HOLD;
@@ -88,8 +88,8 @@ collections
 				description
 				{
 					state: "default" 0.0;
-					rel1 { relative: 0.0 0.0; to: "cbhmdrawer/closebtn_bg"; }
-					rel2 { relative: 1.0 1.0; to: "cbhmdrawer/closebtn_bg"; }
+					rel1 { relative: 0.0 0.0; to: "closebutton/bg"; }
+					rel2 { relative: 1.0 1.0; to: "closebutton/bg"; }
 					align: 0.5 0.5;
 					min: 35 39;
 					max: 35 39;
@@ -103,8 +103,8 @@ collections
 			part 
 			{
 				// width: 436, height: 155
-				name: "cbhmdrawer/imglist";
-				type: SWALLOW;
+				name: "imagehistory/bg";
+				type: RECT;
 				scale: 1;
 				mouse_events: 1;
 				description
@@ -112,20 +112,55 @@ collections
 					state: "default" 0.0;
 					rel1 { relative: 0.0916666666 0.0537313432; to: background; }
 					rel2 { relative: 1.0 0.3641791044; to: background; }
+					color: 0 0 0 0;
 				}
 			}
 			part 
 			{
-				// width: 427, height: 180
-				name: "cbhmdrawer/txtlist";
+				// width: 436, height: 155
+				name: "imagehistory/list";
 				type: SWALLOW;
 				scale: 1;
 				mouse_events: 1;
 				description
 				{
 					state: "default" 0.0;
-					rel1 { relative: 0.0916666666 0.4626865672; to: background; }
-					rel2 { relative: 0.98125 1.0; to: background; }
+					rel1 { relative: 0.0 0.0; to: "imagehistory/bg"; }
+					rel2 { relative: 1.0 1.0; to: "imagehistory/bg"; }
+				}
+			}
+
+			part 
+			{
+				// width: 427, height: 180
+				name: "texthistory/bg";
+				type: IMAGE;
+				scale: 1;
+				mouse_events: 1;
+				description
+				{
+					state: "default" 0.0;
+					rel1 { relative: 0.0916666666 0.4626865672; to: "background"; }
+					rel2 { relative: 0.98125 1.0; to: "background"; }
+					image 
+					{
+						normal: "clipboard_panel_list_bg.png";
+						border: 15 15 30 0;
+					}
+				}
+			}
+			part 
+			{
+				// width: 427, height: 180
+				name: "texthistory/list";
+				type: SWALLOW;
+				scale: 1;
+				mouse_events: 1;
+				description
+				{
+					state: "default" 0.0;
+					rel1 { relative: 0.005 0.006; to: "texthistory/bg"; }
+					rel2 { relative: 0.995 1.0; to: "texthistory/bg"; }
 				}
 			}
 		} // parts
@@ -133,9 +168,16 @@ collections
 		{
 				program 
 				{
-						name:   "mouse_up";
+						name:   "mouse_up_closebtn_bg";
 						signal: "mouse,up,1";
-						source: "cbhmdrawer/closebtn_bg";
+						source: "closebutton/bg";
+						action: SIGNAL_EMIT "elm,action,click" "";
+				}
+				program 
+				{
+						name:   "mouse_up_closebtn_arrow";
+						signal: "mouse,up,1";
+						source: "closebutton/arrow";
 						action: SIGNAL_EMIT "elm,action,click" "";
 				}
 		} //programs
