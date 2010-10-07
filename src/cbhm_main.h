@@ -8,7 +8,6 @@
 
 #define EDJ_PATH "/usr/share/edje"
 #define APP_EDJ_FILE EDJ_PATH"/cbhmdrawer.edj"
-//#define EXTSTYLE_EDJ_FILE EDJ_PATH"/extstyles.edj"
 #define GRP_MAIN "cbhmdrawer"
 
 struct appdata
