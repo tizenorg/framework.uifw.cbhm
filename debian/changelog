@@ -1,3 +1,12 @@
+cbhm (0.1.0-24) unstable; urgency=low
+
+  * case of inhouse package
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-24
+  * apply customized elm_list style
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Thu, 07 Oct 2010 20:03:29 +0900
+
 cbhm (0.1.0-23) unstable; urgency=low
 
   * case of inhouse package
