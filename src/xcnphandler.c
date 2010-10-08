@@ -210,7 +210,9 @@ int get_selection_content(void *data)
 //	add_to_storage_buffer(ad, cbbuf, cbitems);
 //	DTRACE("len = %ld, data = %s\n", cbitems, cbbuf);
 
-/*
+	/* FIXME : it needs two verification. 
+               1. does the file exist?
+               2. dose the file wanted type? */
 	if (!strncmp(unesc, "file://", 7) && 
 		(strstr(unesc,".png") || strstr(unesc,".jpg")))
 	{
@@ -218,7 +220,6 @@ int get_selection_content(void *data)
 		clipdrawer_add_image_item(unesc);
 	}
 	else
-*/
 		add_to_storage_buffer(ad, unesc, strlen(unesc));
 	DTRACE("len = %ld, data = %s\n", strlen(unesc), unesc);
 	free(unesc);
