@@ -518,7 +518,7 @@ static int _xfocus_out_cb(void *data, int ev_type, void *event)
 
 	DTRACE("XE:FOCUS OUT\n");
 
-//	clipdrawer_lower_view(ad);
+	clipdrawer_lower_view(ad);
 
 	return TRUE;
 }
