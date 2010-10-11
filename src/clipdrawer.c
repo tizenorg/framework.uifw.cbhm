@@ -50,7 +50,7 @@ static void _list_click( void *data, Evas_Object *obj, void *event_info )
 	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
 //	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_MARKUP*/2, p);
 
-	clipdrawer_lower_view(ad);
+//	clipdrawer_lower_view(ad);
 }
 
 int clipdrawer_update_contents(void *data)
@@ -118,7 +118,7 @@ static void grid_selected(void *data, Evas_Object *obj, void *event_info)
 
 	elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
 
-	clipdrawer_lower_view(ad);
+//	clipdrawer_lower_view(ad);
 
 	elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
 }
