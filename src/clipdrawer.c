@@ -116,8 +116,6 @@ static void grid_selected(void *data, Evas_Object *obj, void *event_info)
 	p = malloc(len + 10);
 	snprintf(p,len+10, "file:///%s", ti->path);
 
-	fprintf(stderr, "## sel path = %s_\n", p);
-
 	elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
 
 	clipdrawer_lower_view(ad);
@@ -141,7 +139,6 @@ int clipdrawer_add_image_item(char *imagepath)
 	char* filepath = NULL;
 	filepath = &imagepath[7]; // skip 'file://'
 
-	fprintf(stderr, "## image_path = %s_\n", filepath);
 	newgenimg = malloc(sizeof(gridimgitem_t));
 	newgenimg->path = eina_stringshare_add(filepath);
 	newgenimg->item = elm_gengrid_item_append(g_main_ad->imggrid, &gic, newgenimg, NULL, NULL);
