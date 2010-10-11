@@ -1,3 +1,12 @@
+cbhm (0.1.0-27) unstable; urgency=low
+
+  * case of inhouse package
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-27
+  * dummy for version up
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Mon, 11 Oct 2010 12:44:56 +0900
+
 cbhm (0.1.0-26) unstable; urgency=low
 
   * case of inhouse package
@@ -5,7 +14,7 @@ cbhm (0.1.0-26) unstable; urgency=low
   * Tag: cbhm_0.1.0-26
   * do not lowering at focusout, and item pasting
 
- -- root <hyoyoung.chang@samsung.com>  Mon, 11 Oct 2010 12:08:45 +0900
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Mon, 11 Oct 2010 12:08:45 +0900
 
 cbhm (0.1.0-25) unstable; urgency=low
 
