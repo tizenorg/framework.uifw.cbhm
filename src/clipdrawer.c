@@ -7,13 +7,15 @@
 #define IM	"/mnt/ums/Images/Photo/"
 static const char *g_images_path[] = {
 	IM"1_photo.jpg",
+/*
 	IM"2_photo.jpg",
 	IM"3_photo.jpg",
 	IM"4_photo.jpg",
 	IM"5_photo.jpg",
 	IM"6_photo.jpg",
+*/
 };
-#define N_IMAGES (6)
+#define N_IMAGES (1)
 
 // FIXME: how to remove main_ad? 
 //        it's mainly used at 'clipdrawer_add_image_item'
@@ -174,7 +176,7 @@ int clipdrawer_init(void *data)
 	ad->imggrid = elm_gengrid_add(ad->win_main);
 	elm_layout_content_set(ad->ly_main, "imagehistory/list", ad->imggrid);
 	elm_gengrid_item_size_set(ad->imggrid, 100, 100+3);
-	elm_gengrid_align_set(ad->imggrid, 0.5, 0.0);
+	elm_gengrid_align_set(ad->imggrid, 0.0, 0.0);
 	elm_gengrid_horizontal_set(ad->imggrid, EINA_TRUE);
 	elm_gengrid_bounce_set(ad->imggrid, EINA_TRUE, EINA_FALSE);
 	elm_gengrid_multi_select_set(ad->imggrid, EINA_FALSE);
