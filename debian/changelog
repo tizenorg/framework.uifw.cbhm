@@ -1,3 +1,12 @@
+cbhm (0.1.0-30) unstable; urgency=low
+
+  * case of inhouse package
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-30
+  * change default charset from XA_STRING to UTF-8
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Tue, 12 Oct 2010 20:00:10 +0900
+
 cbhm (0.1.0-29) unstable; urgency=low
 
   * case of inhouse package
