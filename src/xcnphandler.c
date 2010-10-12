@@ -152,7 +152,8 @@ int print_storage_buffer()
 
 int send_convert_selection()
 {
-	XConvertSelection(g_disp, atomClipboard, atomTarget, atomCBOut, g_evtwin, CurrentTime);
+//	XConvertSelection(g_disp, atomClipboard, atomTarget, atomCBOut, g_evtwin, CurrentTime);
+	XConvertSelection(g_disp, atomClipboard, atomUTF8String, atomCBOut, g_evtwin, CurrentTime);
 	DTRACE("sent convert selection\n");
 	return 0;
 }
@@ -278,7 +279,8 @@ int processing_selection_request(Ecore_X_Event_Selection_Request *ev)
 		else 
 		{
 			// send all (not using INCR) 
-			XChangeProperty(g_disp, req_win, req_atom, atomTarget, 
+//			XChangeProperty(g_disp, req_win, req_atom, atomTarget, 
+			XChangeProperty(g_disp, req_win, req_atom, atomUTF8String, 
 							8, PropModeReplace, (unsigned char *) g_lastest_content, (int) txt_len);
 		}
 		DTRACE("txt target, len = %d\n", txt_len);

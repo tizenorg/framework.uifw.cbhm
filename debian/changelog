@@ -1,3 +1,12 @@
+cbhm (0.1.0-29) unstable; urgency=low
+
+  * case of inhouse package
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-29
+  * lowering view at focus-out
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Mon, 11 Oct 2010 15:04:34 +0900
+
 cbhm (0.1.0-28) unstable; urgency=low
 
   * case of inhouse package
