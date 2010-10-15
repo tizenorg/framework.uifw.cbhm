@@ -4,7 +4,8 @@
 #define CLIPDRAWER_POS_X 0
 #define CLIPDRAWER_POS_Y 465
 #define CLIPDRAWER_WIDTH 480
-#define CLIPDRAWER_HEIGHT 335
+//#define CLIPDRAWER_HEIGHT 335
+#define CLIPDRAWER_HEIGHT 360
 
 /* view maintains */
 int clipdrawer_init(void *data);
