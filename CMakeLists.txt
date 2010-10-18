@@ -5,6 +5,7 @@ SET(SRCS src/cbhm_main.c
 	src/clipdrawer.c
 	src/storage.c
 	src/xcnphandler.c
+	src/scrcapture.c
 )
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
@@ -15,6 +16,8 @@ pkg_check_modules(pkgs REQUIRED elementary appcore-efl appcore-common x11 ecore-
 FOREACH(flag ${pkgs_CFLAGS})
 	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
 ENDFOREACH(flag)
+#for XV extension screenshot
+SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} -L/usr/lib -lscreenshot")
 #SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} -finstrument-functions")
 
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
