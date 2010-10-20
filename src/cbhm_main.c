@@ -72,7 +72,8 @@ static Evas_Object* create_win(const char *name)
     {
 		elm_win_title_set(eo, name);
 		elm_win_borderless_set(eo, EINA_TRUE);
-		evas_object_smart_callback_add(eo, "delete,request", win_del_cb, NULL);
+//      NOTE : cbhm doesn't want to response home key.
+//		evas_object_smart_callback_add(eo, "delete,request", win_del_cb, NULL);
 		ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
 		evas_object_resize(eo, w, h);
 	}
