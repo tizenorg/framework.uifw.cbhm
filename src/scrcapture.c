@@ -1,13 +1,76 @@
+#include "common.h"
+#include "cbhm_main.h"
 #include "xcnphandler.h"
 #include "scrcapture.h"
 
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
+#include <Ecore.h>
 #include <Ecore_X.h>
+#include <Ecore_Input.h>
 #include <utilX.h>
 
 #include <stdio.h>
+
+static Eina_Bool capture_current_screen(void *data)
+{
+//	char *captured_image = scrcapture_capture_screen_by_xv_ext(480, 800);
+
+
+//	scrcapture_release_screen_by_xv_ext(captured_image);
+
+	return EINA_TRUE;
+}
+
+static Eina_Bool scrcapture_keydown_cb(void *data, int type, void *event)
+{
+	Ecore_Event_Key *ev = event;
+
+	/* FIXME : it will be changed to camera+select, not ony one key */
+
+	if(!strcmp(ev->keyname, KEY_CAMERA) || !strcmp(ev->keyname, KEY_SELECT))
+	{
+		DTRACE("keydown = %s\n", ev->keyname);
+	}
+
+	return ECORE_CALLBACK_PASS_ON;
+}
+
+int init_scrcapture(void *data)
+{
+	struct appdata *ad = data;
+
+	int result = 0;
+
+	/* Key Grab */
+	Ecore_X_Display *xdisp = ecore_x_display_get();
+	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
+
+	result = utilx_grab_key(xdisp, xwin, KEY_SELECT, SHARED_GRAB);
+	if(!!result)
+		DTRACE("KEY_HOME key grab is failed\n");
+
+//	result = utilx_grab_key(xdisp, xwin, KEY_CAMERA, SHARED_GRAB);
+//	if(!result)
+//		DTRACE( "KEY_CAMERA key grab\n");
+
+	ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, scrcapture_keydown_cb, NULL);
+
+	return 0;
+}
+
+void close_scrcapture(void *data)
+{
+	struct appdata *ad = data;
+
+	Ecore_X_Display *xdisp = ecore_x_display_get();
+	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
+
+	utilx_ungrab_key(xdisp, xwin, KEY_SELECT);
+//	utilx_ungrab_key(xdisp, xwin, KEY_CAMERA);
+}
+
 
 inline static Ecore_X_Display *get_display(void)
 {
@@ -19,7 +82,7 @@ static int get_window_attribute(Window id, int *depth, Visual **visual, int *wid
 //	assert(id);
 	XWindowAttributes attr;
 
-	printf("XGetWindowAttributes");
+	DTRACE("XGetWindowAttributes\n");
 	if (!XGetWindowAttributes(get_display(), id, &attr)) {
 		return -1;
 	}
@@ -41,7 +104,7 @@ static Window _get_parent_window( Window id )
 	Window* children;
 	unsigned int num;
 
-	fprintf(stderr, "XQeuryTree\n");
+	DTRACE( "XQeuryTree\n");
 
 	if (!XQueryTree(get_display(), id, &root, &parent, &children, &num)) 
 	{
@@ -49,7 +112,7 @@ static Window _get_parent_window( Window id )
 	}
 
 	if( children ) {
-		fprintf(stderr, "XFree\n");
+		DTRACE( "XFree\n");
 		XFree(children);
 	}
 
@@ -68,7 +131,7 @@ static Window find_capture_available_window( Window id, Visual** visual, int* de
 
 	do {
 		id = parent;	
-		fprintf(stderr, "## find_capture - XGetWindowAttributes\n");
+		DTRACE( "## find_capture - XGetWindowAttributes\n");
 
 		if (!XGetWindowAttributes(get_display(), id, &attr)) 
 		{
@@ -90,7 +153,7 @@ static Window find_capture_available_window( Window id, Visual** visual, int* de
 	} while( parent != attr.root && parent != 0 ); //Failed finding a redirected window 
 	
 
-	fprintf(stderr, "## find_capture - cannot find id\n");
+	DTRACE( "## find_capture - cannot find id\n");
 	XGetWindowAttributes( get_display(), orig_id, &attr );
 	*depth = attr.depth;
 	*width = attr.width;
@@ -117,21 +180,21 @@ char *scrcapture_screen_capture(Window oid, int *size)
 
 	if (id == 0 || id == -1 || id == oid)
 	{
-		fprintf(stderr, "Window : 0x%lX\n", id);
+		DTRACE( "Window : 0x%lX\n", id);
 		if (get_window_attribute(id, &depth, &visual, &width, &height) < 0) 
 		{
-			fprintf(stderr, "Failed to get the attributes from 0x%x\n", (unsigned int)id);
+			DTRACE( "Failed to get the attributes from 0x%x\n", (unsigned int)id);
 			return NULL;
 		}
 	}
 
-	fprintf(stderr, "WxH : %dx%d\n", width, height);
-	fprintf(stderr, "Depth : %d\n", depth >> 3);
+	DTRACE( "WxH : %dx%d\n", width, height);
+	DTRACE( "Depth : %d\n", depth >> 3);
 
 	// NOTE: just add one more depth....
 	si.shmid = shmget(IPC_PRIVATE, width * height * ((depth >> 3)+1), IPC_CREAT | 0666);
 	if (si.shmid < 0) {
-		fprintf(stderr, "## error at shmget\n");
+		DTRACE( "## error at shmget\n");
 		return NULL;
 	}
 	si.readOnly = False;
@@ -139,7 +202,7 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	if (si.shmaddr == (char*)-1) {
 		shmdt(si.shmaddr);
 		shmctl(si.shmid, IPC_RMID, 0);
-		fprintf(stderr, "## can't get shmat\n");
+		DTRACE( "## can't get shmat\n");
 		return NULL;
 	}
 
@@ -161,7 +224,7 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	}
 */
 
-	fprintf(stderr, "XShmCreateImage\n");
+	DTRACE( "XShmCreateImage\n");
 	xim = XShmCreateImage(get_display(), visual, depth, ZPixmap, NULL, &si, width, height);
 	if (!xim) {
 		shmdt(si.shmaddr);
@@ -177,34 +240,34 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	}
 
 	*size = xim->bytes_per_line * xim->height;
-	fprintf(stderr, "## size = %d\n", *size);
+	DTRACE( "## size = %d\n", *size);
 	xim->data = si.shmaddr;
 
-	fprintf(stderr,"XCompositeNameWindowPixmap\n");
+	DTRACE("XCompositeNameWindowPixmap\n");
 	pix = XCompositeNameWindowPixmap(get_display(), id);
 
-	fprintf(stderr,"XShmAttach\n");
+	DTRACE("XShmAttach\n");
 	XShmAttach(get_display(), &si);
 
-	fprintf(stderr,"XShmGetImage\n");
+	DTRACE("XShmGetImage\n");
 	XShmGetImage(get_display(), pix, xim, 0, 0, 0xFFFFFFFF);
 
 	//XUnmapWindow(disp, id);
 	//XMapWindow(disp, id);
-	fprintf(stderr,"XSync\n");
+	DTRACE("XSync\n");
 	XSync(get_display(), False);
 
-		fprintf(stderr, "## data dump - start\n");
+		DTRACE( "## data dump - start\n");
 		
 		int i = 0;
 		for (i = 0; i < (*size/1000); i++)
 		{
-			fprintf(stderr, "%X", xim->data[i]);
+			DTRACE( "%X", xim->data[i]);
 			if ((i % 24) == 0)
-				fprintf(stderr, "\n");
+				DTRACE( "\n");
 		}
 
-		fprintf(stderr, "## data end - start\n");
+		DTRACE( "## data end - start\n");
 
 	//sleep(1);
 	// We can optimize this!
@@ -212,14 +275,14 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	if (captured_image) {
 		memcpy(captured_image, xim->data, *size);
 	} else {
-		perror("calloc");
+		DTRACE("calloc error");
 	}
 
-	fprintf(stderr,"XShmDetach");
+	DTRACE("XShmDetach");
 	XShmDetach(get_display(), &si);
-	fprintf(stderr,"XFreePixmap\n");
+	DTRACE("XFreePixmap\n");
 	XFreePixmap(get_display(), pix);
-	fprintf(stderr,"XDestroyImage\n");
+	DTRACE("XDestroyImage\n");
 	XDestroyImage(xim);
 
 /*
@@ -244,15 +307,15 @@ char *scrcapture_capture_screen_by_x11(Window xid, int *size)
 	char *captured_image;
 
 
-	fprintf(stderr, "Window : 0x%lX\n", xid);
+	DTRACE("Window : 0x%lX\n", xid);
 	if (get_window_attribute(xid, &depth, &visual, &width, &height) < 0) 
 	{
-		fprintf(stderr, "Failed to get the attributes from 0x%x\n", (unsigned int)xid);
+		DTRACE("Failed to get the attributes from 0x%x\n", (unsigned int)xid);
 		return NULL;
 	}
 
-	fprintf(stderr, "WxH : %dx%d\n", width, height);
-	fprintf(stderr, "Depth : %d\n", depth >> 3);
+	DTRACE("WxH : %dx%d\n", width, height);
+	DTRACE("Depth : %d\n", depth >> 3);
 
 	xim = XGetImage (get_display(), xid, 0, 0,
 					 width, height, AllPlanes, ZPixmap);
@@ -263,7 +326,7 @@ char *scrcapture_capture_screen_by_x11(Window xid, int *size)
 	if (captured_image) {
 		memcpy(captured_image, xim->data, *size);
 	} else {
-		perror("calloc");
+		DTRACE("calloc error");
 	}
 
 	return captured_image;
@@ -273,7 +336,7 @@ char *scrcapture_capture_screen_by_xv_ext(int width, int height)
 {
 	char *captured_image;
 
-	captured_image = createScreenShot(480, 800);
+	captured_image = createScreenShot(width, height);
 }
 
 void scrcapture_release_screen_by_xv_ext(const char *s)

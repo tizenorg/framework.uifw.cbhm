@@ -12,7 +12,11 @@ const char* createScreenShot(int width, int height);
 void releaseScreenShot(const char *ss);
 // XV extension API - end
 
-char *scrcapture_screen_capture_by_x11(Window xid, int *size);
-char *scrcapture_screen_capture_by_xv_ext(int width, int height);
+char *scrcapture_capture_screen_by_x11(Window xid, int *size);
+char *scrcapture_capture_screen_by_xv_ext(int width, int height);
+void scrcapture_release_screen_by_xv_ext(const char *s);
+
+int init_scrcapture(void *data);
+void close_scrcapture(void *data);
 
 #endif // _scrcapture_h_

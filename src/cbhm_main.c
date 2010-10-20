@@ -20,6 +20,7 @@
 #include "cbhm_main.h"
 #include "xcnphandler.h"
 #include "clipdrawer.h"
+#include "scrcapture.h"
 
 static Evas_Object* create_win(const char *name);
 static Evas_Object* load_edj(Evas_Object *parent, const char *file, const char *group);
@@ -107,6 +108,7 @@ static int init(struct appdata *ad)
 
 	xcnp_init(ad);
 	init_appview(ad);
+//	init_scrcapture(ad);
 
 	return 0;
 }
