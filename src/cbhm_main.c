@@ -115,6 +115,8 @@ static int init(struct appdata *ad)
 
 static void fini(struct appdata *ad)
 {
+//	close_scrcapture(ad);
+
 	if (ad->ly_main)
 		evas_object_del(ad->ly_main);
 

@@ -11,28 +11,156 @@
 #include <Ecore_Input.h>
 #include <utilX.h>
 
-#include <stdio.h>
+#define IMAGE_SAVE_DIR "/mnt/ums/Images/Photo"
+#define IMAGE_SAVE_FILE_TYPE ".jpg"
+
+typedef struct tag_captureimginfo
+{
+	char filename[64];
+	Evas_Object *eo;
+	char *imgdata;
+} captureimginfo_t;
+
+static Eina_Bool get_image_filename_with_date(char *dstr)
+{
+	time_t tim = time(NULL);
+	struct tm *now = localtime(&tim);
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	sprintf(dstr, "%s/screen-%d%02d%02d%02d%02d%02d%0ld%s", 
+			IMAGE_SAVE_DIR,
+			now->tm_year+1900, now->tm_mon+1, now->tm_mday,
+			now->tm_hour, now->tm_min,
+			now->tm_sec, tv.tv_usec,
+			IMAGE_SAVE_FILE_TYPE);
+	return EINA_TRUE;
+}
+
+static Eina_Bool _scrcapture_capture_postprocess(void* data)
+{
+	captureimginfo_t *capimginfo = data;
+
+	DTIME("start capture postprocess - %s\n", capimginfo->filename);
+
+	if (!evas_object_image_save(capimginfo->eo, capimginfo->filename, NULL, NULL)) 
+	{
+		DTRACE("screen capture save fail\n");
+		return EINA_FALSE;
+	}
+
+	DTIME("end capture postprocess - %s\n", capimginfo->filename);
+        
+	evas_object_del(capimginfo->eo);
+	free(capimginfo->imgdata);
+	free(capimginfo);
+
+	return EINA_FALSE;
+}
 
 static Eina_Bool capture_current_screen(void *data)
 {
-//	char *captured_image = scrcapture_capture_screen_by_xv_ext(480, 800);
+	struct appdata *ad = data;
 
+	captureimginfo_t *capimginfo = NULL;
+	capimginfo = malloc(sizeof(captureimginfo_t) * 1);
+	get_image_filename_with_date(capimginfo->filename);
 
-//	scrcapture_release_screen_by_xv_ext(captured_image);
+	int width, height;
+	width = 480; height = 800;
+	capimginfo->imgdata = malloc(sizeof(char) * width*height*4);
+	capimginfo->eo = evas_object_image_add(ad->evas);
+
+	char *scrimage = scrcapture_capture_screen_by_xv_ext(width, height);
+	memcpy(capimginfo->imgdata, scrimage, width*height*4);
+	scrcapture_release_screen_by_xv_ext(scrimage);
+
+	if (capimginfo->eo == NULL || capimginfo->imgdata == NULL) 
+	{
+		DTRACE("screen capture fail\n");
+		return EINA_FALSE;
+	}
+
+	evas_object_image_data_set(capimginfo->eo, NULL);
+	evas_object_image_size_set(capimginfo->eo, width, height);
+	evas_object_image_data_set(capimginfo->eo, capimginfo->imgdata);
+	evas_object_image_data_update_add(capimginfo->eo, 0, 0, width, height);
+	evas_object_resize(capimginfo->eo, width, height);
+
+	ecore_idler_add(_scrcapture_capture_postprocess, capimginfo);
 
 	return EINA_TRUE;
 }
 
 static Eina_Bool scrcapture_keydown_cb(void *data, int type, void *event)
 {
+	struct appdata *ad = data;
 	Ecore_Event_Key *ev = event;
+	static int savedkey = 0;
+	static double savedtime = 0.0;
+
+#define KEY_COMPOSITE_DURATION 1.0
 
 	/* FIXME : it will be changed to camera+select, not ony one key */
 
+	if(!strcmp(ev->keyname, KEY_END) || !strcmp(ev->keyname, KEY_SELECT))
+	{
+		int curkey = 0;
+		DTRACE("keydown = %s\n", ev->keyname);
+
+		struct timeval tv; 
+		gettimeofday(&tv, NULL); 
+		double ct = tv.tv_sec+(tv.tv_usec/1000000.0);
+
+		if (!strcmp(ev->keyname, KEY_END))
+			curkey = KEY_END;
+		else
+			curkey = KEY_SELECT;
+
+		if (((ct - savedtime) <= KEY_COMPOSITE_DURATION) && savedkey != curkey)
+		{
+			DTRACE("screen capture is triggered\n");
+//		capture_current_screen(ad);
+		}
+
+		savedtime = ct;
+		savedkey = curkey;
+	}
+	else
+	{
+		savedtime = 0.0;
+		savedkey = 0;
+	}
+
+/*
 	if(!strcmp(ev->keyname, KEY_CAMERA) || !strcmp(ev->keyname, KEY_SELECT))
 	{
+		int curkey = 0;
 		DTRACE("keydown = %s\n", ev->keyname);
+
+		struct timeval tv; 
+		gettimeofday(&tv, NULL); 
+		double ct = tv.tv_sec+(tv.tv_usec/1000000.0);
+
+		if (!strcmp(ev->keyname, KEY_CAMERA))
+			curkey = KEY_CAMERA;
+		else
+			curkey = KEY_SELECT;
+
+		if (((ct - savedtime) <= KEY_COMPOSITE_DURATION) && savedkey != curkey)
+		{
+			DTRACE("screen capture is triggered\n");
+//		capture_current_screen(ad);
+		}
+
+		savedtime = ct;
+		savedkey = curkey;
 	}
+	else
+	{
+		savedtime = 0.0;
+		savedkey = 0;
+	}
+*/
 
 	return ECORE_CALLBACK_PASS_ON;
 }
@@ -51,11 +179,17 @@ int init_scrcapture(void *data)
 	if(!!result)
 		DTRACE("KEY_HOME key grab is failed\n");
 
+/*
+	result = utilx_grab_key(xdisp, xwin, KEY_END, SHARED_GRAB);
+	if(!result)
+		DTRACE( "KEY_END key grab\n");
+*/
+
 //	result = utilx_grab_key(xdisp, xwin, KEY_CAMERA, SHARED_GRAB);
 //	if(!result)
 //		DTRACE( "KEY_CAMERA key grab\n");
 
-	ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, scrcapture_keydown_cb, NULL);
+	ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, scrcapture_keydown_cb, ad);
 
 	return 0;
 }
@@ -119,7 +253,7 @@ static Window _get_parent_window( Window id )
 	return parent;
 }
 
-static Window find_capture_available_window( Window id, Visual** visual, int* depth, int* width, int* height ) 
+static Window find_capture_available_window( Window id, Visual** visual, int* depth, int* width, int* height) 
 {
 	XWindowAttributes attr;
 	Window parent = id;
@@ -131,7 +265,7 @@ static Window find_capture_available_window( Window id, Visual** visual, int* de
 
 	do {
 		id = parent;	
-		DTRACE( "## find_capture - XGetWindowAttributes\n");
+		DTRACE("find_capture - XGetWindowAttributes\n");
 
 		if (!XGetWindowAttributes(get_display(), id, &attr)) 
 		{
@@ -153,7 +287,7 @@ static Window find_capture_available_window( Window id, Visual** visual, int* de
 	} while( parent != attr.root && parent != 0 ); //Failed finding a redirected window 
 	
 
-	DTRACE( "## find_capture - cannot find id\n");
+	DTRACE( "find_capture - cannot find id\n");
 	XGetWindowAttributes( get_display(), orig_id, &attr );
 	*depth = attr.depth;
 	*width = attr.width;
@@ -180,21 +314,21 @@ char *scrcapture_screen_capture(Window oid, int *size)
 
 	if (id == 0 || id == -1 || id == oid)
 	{
-		DTRACE( "Window : 0x%lX\n", id);
+		DTRACE("Window : 0x%lX\n", id);
 		if (get_window_attribute(id, &depth, &visual, &width, &height) < 0) 
 		{
-			DTRACE( "Failed to get the attributes from 0x%x\n", (unsigned int)id);
+			DTRACE("Failed to get the attributes from 0x%x\n", (unsigned int)id);
 			return NULL;
 		}
 	}
 
-	DTRACE( "WxH : %dx%d\n", width, height);
-	DTRACE( "Depth : %d\n", depth >> 3);
+	DTRACE("WxH : %dx%d\n", width, height);
+	DTRACE("Depth : %d\n", depth >> 3);
 
 	// NOTE: just add one more depth....
 	si.shmid = shmget(IPC_PRIVATE, width * height * ((depth >> 3)+1), IPC_CREAT | 0666);
 	if (si.shmid < 0) {
-		DTRACE( "## error at shmget\n");
+		DTRACE("error at shmget\n");
 		return NULL;
 	}
 	si.readOnly = False;
@@ -202,7 +336,7 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	if (si.shmaddr == (char*)-1) {
 		shmdt(si.shmaddr);
 		shmctl(si.shmid, IPC_RMID, 0);
-		DTRACE( "## can't get shmat\n");
+		DTRACE("can't get shmat\n");
 		return NULL;
 	}
 
@@ -224,7 +358,7 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	}
 */
 
-	DTRACE( "XShmCreateImage\n");
+	DTRACE("XShmCreateImage\n");
 	xim = XShmCreateImage(get_display(), visual, depth, ZPixmap, NULL, &si, width, height);
 	if (!xim) {
 		shmdt(si.shmaddr);
@@ -240,7 +374,6 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	}
 
 	*size = xim->bytes_per_line * xim->height;
-	DTRACE( "## size = %d\n", *size);
 	xim->data = si.shmaddr;
 
 	DTRACE("XCompositeNameWindowPixmap\n");
@@ -256,18 +389,6 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	//XMapWindow(disp, id);
 	DTRACE("XSync\n");
 	XSync(get_display(), False);
-
-		DTRACE( "## data dump - start\n");
-		
-		int i = 0;
-		for (i = 0; i < (*size/1000); i++)
-		{
-			DTRACE( "%X", xim->data[i]);
-			if ((i % 24) == 0)
-				DTRACE( "\n");
-		}
-
-		DTRACE( "## data end - start\n");
 
 	//sleep(1);
 	// We can optimize this!

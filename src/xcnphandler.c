@@ -507,39 +507,6 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 	else if (strcmp("show", ev->data.b) == 0)
 	{
 		clipdrawer_activate_view(ad);
-
-/*
-#include "scrcapture.h"
-
-		int imgsize, width, height;
-		char *img = NULL;
-		Evas_Object *capture = evas_object_image_add(ad->evas);
-//		img = scrcapture_capture_screen_by_xv_ext();
-		img = scrcapture_capture_screen_by_x11(DefaultRootWindow(g_disp), &imgsize);
-
-        if (capture == NULL) 
-		{
-			fprintf(stderr, "##capture fail\n");
-			return TRUE;
-        }
-
-		width = 480; height = 800;
-        evas_object_image_data_set( capture, NULL );
-        evas_object_image_size_set( capture, width, height);
-        evas_object_image_data_set( capture, img );
-        evas_object_image_data_update_add(capture, 0, 0, width, height);
-        evas_object_resize(capture, width, height);
-
-//		elm_win_resize_object_add(ad->win_main, capture);
-
-        if (!evas_object_image_save( capture, "/tmp/ss.png", NULL, NULL)) 
-		{
-			fprintf(stderr, "##save fail\n");
-			return TRUE;
-        }
-        
-        evas_object_del(capture);
-*/
 	}
 
 	XFlush(g_disp);
