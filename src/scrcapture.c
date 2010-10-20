@@ -49,6 +49,14 @@ static Eina_Bool _scrcapture_capture_postprocess(void* data)
 	}
 
 	DTIME("end capture postprocess - %s\n", capimginfo->filename);
+
+	char *imgpath = NULL;
+	imgpath = malloc(strlen(capimginfo->filename)+strlen("file://")+2);
+	snprintf(imgpath, strlen(capimginfo->filename)+strlen("file://")+1,
+			 "%s%s", "file://", capimginfo->filename);
+	DTRACE("add to image history = %s\n", imgpath);
+	clipdrawer_add_image_item(imgpath);
+	free(imgpath);
         
 	evas_object_del(capimginfo->eo);
 	free(capimginfo->imgdata);
