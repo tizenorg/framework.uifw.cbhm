@@ -1,3 +1,12 @@
+cbhm (0.1.0-34) unstable; urgency=low
+
+  * case of inhouse package
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-34
+  * enable screencapture feature
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Wed, 20 Oct 2010 19:43:44 +0900
+
 cbhm (0.1.0-33) unstable; urgency=low
 
   * case of inhouse package
