@@ -108,14 +108,14 @@ static int init(struct appdata *ad)
 
 	xcnp_init(ad);
 	init_appview(ad);
-//	init_scrcapture(ad);
+	init_scrcapture(ad);
 
 	return 0;
 }
 
 static void fini(struct appdata *ad)
 {
-//	close_scrcapture(ad);
+	close_scrcapture(ad);
 
 	if (ad->ly_main)
 		evas_object_del(ad->ly_main);

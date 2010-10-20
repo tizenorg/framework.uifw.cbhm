@@ -101,37 +101,6 @@ static Eina_Bool scrcapture_keydown_cb(void *data, int type, void *event)
 #define KEY_COMPOSITE_DURATION 1.0
 
 	/* FIXME : it will be changed to camera+select, not ony one key */
-
-	if(!strcmp(ev->keyname, KEY_END) || !strcmp(ev->keyname, KEY_SELECT))
-	{
-		int curkey = 0;
-		DTRACE("keydown = %s\n", ev->keyname);
-
-		struct timeval tv; 
-		gettimeofday(&tv, NULL); 
-		double ct = tv.tv_sec+(tv.tv_usec/1000000.0);
-
-		if (!strcmp(ev->keyname, KEY_END))
-			curkey = KEY_END;
-		else
-			curkey = KEY_SELECT;
-
-		if (((ct - savedtime) <= KEY_COMPOSITE_DURATION) && savedkey != curkey)
-		{
-			DTRACE("screen capture is triggered\n");
-//		capture_current_screen(ad);
-		}
-
-		savedtime = ct;
-		savedkey = curkey;
-	}
-	else
-	{
-		savedtime = 0.0;
-		savedkey = 0;
-	}
-
-/*
 	if(!strcmp(ev->keyname, KEY_CAMERA) || !strcmp(ev->keyname, KEY_SELECT))
 	{
 		int curkey = 0;
@@ -149,7 +118,7 @@ static Eina_Bool scrcapture_keydown_cb(void *data, int type, void *event)
 		if (((ct - savedtime) <= KEY_COMPOSITE_DURATION) && savedkey != curkey)
 		{
 			DTRACE("screen capture is triggered\n");
-//		capture_current_screen(ad);
+			capture_current_screen(ad);
 		}
 
 		savedtime = ct;
@@ -160,7 +129,6 @@ static Eina_Bool scrcapture_keydown_cb(void *data, int type, void *event)
 		savedtime = 0.0;
 		savedkey = 0;
 	}
-*/
 
 	return ECORE_CALLBACK_PASS_ON;
 }
@@ -179,15 +147,9 @@ int init_scrcapture(void *data)
 	if(!!result)
 		DTRACE("KEY_HOME key grab is failed\n");
 
-/*
-	result = utilx_grab_key(xdisp, xwin, KEY_END, SHARED_GRAB);
-	if(!result)
-		DTRACE( "KEY_END key grab\n");
-*/
-
-//	result = utilx_grab_key(xdisp, xwin, KEY_CAMERA, SHARED_GRAB);
-//	if(!result)
-//		DTRACE( "KEY_CAMERA key grab\n");
+	result = utilx_grab_key(xdisp, xwin, KEY_CAMERA, SHARED_GRAB);
+	if(!!result)
+		DTRACE( "KEY_CAMERA key grab is failed\n");
 
 	ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, scrcapture_keydown_cb, ad);
 
@@ -202,7 +164,7 @@ void close_scrcapture(void *data)
 	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
 
 	utilx_ungrab_key(xdisp, xwin, KEY_SELECT);
-//	utilx_ungrab_key(xdisp, xwin, KEY_CAMERA);
+	utilx_ungrab_key(xdisp, xwin, KEY_CAMERA);
 }
 
 
@@ -238,7 +200,7 @@ static Window _get_parent_window( Window id )
 	Window* children;
 	unsigned int num;
 
-	DTRACE( "XQeuryTree\n");
+	DTRACE("XQeuryTree\n");
 
 	if (!XQueryTree(get_display(), id, &root, &parent, &children, &num)) 
 	{
@@ -246,7 +208,7 @@ static Window _get_parent_window( Window id )
 	}
 
 	if( children ) {
-		DTRACE( "XFree\n");
+		DTRACE("XFree\n");
 		XFree(children);
 	}
 
