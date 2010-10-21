@@ -27,7 +27,10 @@ static Evas_Object* load_edj(Evas_Object *parent, const char *file, const char *
 
 static void win_del_cb(void *data, Evas_Object *obj, void *event)
 {
-	elm_exit();
+	struct appdata *ad = (struct appdata *) data;
+	clipdrawer_lower_view(ad);
+//  NOTE : cbhm doesn't want to exit by home key.
+//	elm_exit();
 }
 
 static void main_quit_cb(void *data, Evas_Object* obj, void* event_info)
@@ -50,13 +53,16 @@ int init_appview(void *data)
 	if (ly == NULL)
 		return -1; 
 	elm_win_resize_object_add(win, ly);
-	edje_object_signal_callback_add(elm_layout_edje_get(ly), "EXIT", "*", main_quit_cb, NULL);
 	ad->ly_main = ly;
 
 	evas_object_show(ly);
 
 	clipdrawer_create_view(ad);
 
+	evas_object_smart_callback_add(ad->win_main, "delete,request", win_del_cb, ad);
+	edje_object_signal_callback_add(elm_layout_edje_get(ly), "EXIT", "*", main_quit_cb, NULL);
+
+// NOTE: do not show before win_main window resizing
 //	evas_object_show(win);
 
 	return 0;
@@ -72,8 +78,6 @@ static Evas_Object* create_win(const char *name)
     {
 		elm_win_title_set(eo, name);
 		elm_win_borderless_set(eo, EINA_TRUE);
-//      NOTE : cbhm doesn't want to response home key.
-//		evas_object_smart_callback_add(eo, "delete,request", win_del_cb, NULL);
 		ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
 		evas_object_resize(eo, w, h);
 	}
@@ -148,8 +152,6 @@ EAPI int elm_main(int argc, char **argv)
 
 int main( int argc, char *argv[] )
 {
-//	setenv("ELM_THEME", "beat", 1); // not recommended way
-
 	elm_init(argc, argv);
 
 	return elm_main(argc, argv);

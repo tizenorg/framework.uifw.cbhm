@@ -109,7 +109,7 @@ static Eina_Bool scrcapture_keydown_cb(void *data, int type, void *event)
 #define KEY_COMPOSITE_DURATION 1.0
 
 	/* FIXME : it will be changed to camera+select, not ony one key */
-	if(!strcmp(ev->keyname, KEY_CAMERA) || !strcmp(ev->keyname, KEY_SELECT))
+	if (!strcmp(ev->keyname, KEY_CAMERA) || !strcmp(ev->keyname, KEY_SELECT))
 	{
 		int curkey = 0;
 		DTRACE("keydown = %s\n", ev->keyname);
@@ -187,11 +187,13 @@ static int get_window_attribute(Window id, int *depth, Visual **visual, int *wid
 	XWindowAttributes attr;
 
 	DTRACE("XGetWindowAttributes\n");
-	if (!XGetWindowAttributes(get_display(), id, &attr)) {
+	if (!XGetWindowAttributes(get_display(), id, &attr)) 
+	{
 		return -1;
 	}
 
-	if (attr.map_state == IsViewable && attr.class == InputOutput) {
+	if (attr.map_state == IsViewable && attr.class == InputOutput) 
+	{
 		*depth = attr.depth;
 		*width = attr.width;
 		*height= attr.height;
@@ -215,7 +217,8 @@ static Window _get_parent_window( Window id )
 		return 0;
 	}
 
-	if( children ) {
+	if (children) 
+	{
 		DTRACE("XFree\n");
 		XFree(children);
 	}
@@ -229,11 +232,13 @@ static Window find_capture_available_window( Window id, Visual** visual, int* de
 	Window parent = id;
 	Window orig_id = id;
 	
-	if( id == 0 ) {
+	if (id == 0) 
+	{
 		return (Window) -1;
 	}
 
-	do {
+	do 
+	{
 		id = parent;	
 		DTRACE("find_capture - XGetWindowAttributes\n");
 
@@ -244,10 +249,10 @@ static Window find_capture_available_window( Window id, Visual** visual, int* de
 		
 		parent = _get_parent_window( id );
 
-		if( attr.map_state == IsViewable
+		if (attr.map_state == IsViewable
 			       	&& attr.override_redirect == True
-			       	&&  attr.class == InputOutput && parent == attr.root )
-	       	{
+			       	&& attr.class == InputOutput && parent == attr.root )
+       	{
 			*depth = attr.depth;
 			*width = attr.width;
 			*height = attr.height;
@@ -258,7 +263,7 @@ static Window find_capture_available_window( Window id, Visual** visual, int* de
 	
 
 	DTRACE( "find_capture - cannot find id\n");
-	XGetWindowAttributes( get_display(), orig_id, &attr );
+	XGetWindowAttributes (get_display(), orig_id, &attr);
 	*depth = attr.depth;
 	*width = attr.width;
 	*height = attr.height;
@@ -297,13 +302,15 @@ char *scrcapture_screen_capture(Window oid, int *size)
 
 	// NOTE: just add one more depth....
 	si.shmid = shmget(IPC_PRIVATE, width * height * ((depth >> 3)+1), IPC_CREAT | 0666);
-	if (si.shmid < 0) {
+	if (si.shmid < 0) 
+	{
 		DTRACE("error at shmget\n");
 		return NULL;
 	}
 	si.readOnly = False;
 	si.shmaddr = shmat(si.shmid, NULL, 0);
-	if (si.shmaddr == (char*)-1) {
+	if (si.shmaddr == (char*)-1) 
+	{
 		shmdt(si.shmaddr);
 		shmctl(si.shmid, IPC_RMID, 0);
 		DTRACE("can't get shmat\n");
@@ -311,31 +318,39 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	}
 
 /*
-	if (!need_redirecting) {
+	if (!need_redirecting) 
+	{
 		Window border;
-		if (get_border_window(id, &border) < 0) {
+		if (get_border_window(id, &border) < 0) 
+		{
 			need_redirecting = 1;
 			printf("Failed to find a border, forcely do redirecting\n");
-		} else {
+		} 
+		else 
+		{
 			id = border;
 			printf("Border window is found, use it : 0x%X\n", (unsigned int)id);
 		}
 	}
 
-	if (need_redirecting) {
+	if (need_redirecting) 
+	{
 		printf("XCompositeRedirectWindow");
 		XCompositeRedirectWindow(get_display(), id, CompositeRedirectManual);
 	}
 */
 
+
 	DTRACE("XShmCreateImage\n");
 	xim = XShmCreateImage(get_display(), visual, depth, ZPixmap, NULL, &si, width, height);
-	if (!xim) {
+	if (!xim) 
+	{
 		shmdt(si.shmaddr);
 		shmctl(si.shmid, IPC_RMID, 0);
 
 /*
-		if (need_redirecting) {
+		if (need_redirecting) 
+		{
 			printf("XCompositeUnredirectWindow");
 			XCompositeUnredirectWindow(get_display(), id, CompositeRedirectManual);
 		}
@@ -363,9 +378,12 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	//sleep(1);
 	// We can optimize this!
 	captured_image = calloc(1, *size);
-	if (captured_image) {
+	if (captured_image) 
+	{
 		memcpy(captured_image, xim->data, *size);
-	} else {
+	} 
+	else 
+	{
 		DTRACE("calloc error");
 	}
 
@@ -408,15 +426,18 @@ char *scrcapture_capture_screen_by_x11(Window xid, int *size)
 	DTRACE("WxH : %dx%d\n", width, height);
 	DTRACE("Depth : %d\n", depth >> 3);
 
-	xim = XGetImage (get_display(), xid, 0, 0,
+	xim = XGetImage(get_display(), xid, 0, 0,
 					 width, height, AllPlanes, ZPixmap);
 
 	*size = xim->bytes_per_line * xim->height;
 
 	captured_image = calloc(1, *size);
-	if (captured_image) {
+	if (captured_image) 
+	{
 		memcpy(captured_image, xim->data, *size);
-	} else {
+	} 
+	else 
+	{
 		DTRACE("calloc error");
 	}
 
