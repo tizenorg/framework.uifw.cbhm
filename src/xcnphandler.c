@@ -77,6 +77,7 @@ static int _init_atoms()
 	atomInc = XInternAtom(g_disp, "INCR", False);
 	atomTargets = XInternAtom(g_disp, "TARGETS", False);
 	atomUTF8String = XInternAtom(g_disp, "UTF8_STRING", False);
+	atomHtmltext = XInternAtom(g_disp, "text/html;charset=utf-8", False);
 
 	return TRUE;
 }
@@ -251,15 +252,14 @@ int processing_selection_request(Ecore_X_Event_Selection_Request *ev)
 
 	DTRACE("## wanted target = %d\n", ev->target);
 	DTRACE("## wanted target = %s\n", XGetAtomName(g_disp, ev->target));
+	DTRACE("## req target atom name = %s\n", XGetAtomName(g_disp, ev->target));
 
 	/* TODO : if there are request which cbhm doesn't understand,
 	   then reply None property to requestor */
 	if (ev->target == atomTargets) 
 	{
 //        Atom types[2] = { atomTargets, atomUTF8String };
-		Atom atomHtml = XInternAtom(g_disp, "text/html;charset=utf-8", False);
-
-        Atom types[3] = { atomTargets, atomUTF8String, atomHtml };
+        Atom types[3] = { atomTargets, atomUTF8String, atomHtmltext };
 
         // send all (not using INCR) 
         XChangeProperty(g_disp, req_win, req_atom, XA_ATOM,

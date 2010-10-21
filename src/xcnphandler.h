@@ -57,6 +57,7 @@ static Atom atomCBOut;
 static Atom atomInc;
 static Atom atomTargets;
 static Atom atomUTF8String;
+static Atom atomHtmltext;
 
 #endif //_xcnphandler_h_
 

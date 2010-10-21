@@ -8,6 +8,11 @@
 #include <time.h>
 #include <sys/time.h>
 
+#include <Elementary.h>
+#include <Ecore_X.h>
+#include <utilX.h>
+//#include <appcore-efl.h>
+
 #ifndef _EDJ
 #define _EDJ(ly) elm_layout_edje_get(ly)
 #endif

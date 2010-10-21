@@ -10,12 +10,6 @@
  * you entered into with Samsung Electronics.
  */
 
-#include <stdio.h>
-#include <Elementary.h>
-#include <Ecore_X.h>
-#include <utilX.h>
-//#include <appcore-efl.h>
-
 #include "common.h"
 #include "cbhm_main.h"
 #include "xcnphandler.h"
