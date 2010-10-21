@@ -70,7 +70,7 @@ static int _init_atoms()
 	/* all atoms are global variables */
 	atomPrimary = XA_PRIMARY; 
 	atomSecondary = XA_SECONDARY; 
-	atomTarget = XA_STRING;
+//	atomTarget = XA_STRING;
 	atomClipboard = XInternAtom(g_disp, ATOM_CLIPBOARD_NAME, False);
 	atomCBHM = XInternAtom (g_disp, ATOM_CLIPBOARD_MANAGER_NAME, False);
 	atomCBOut = XInternAtom(g_disp, ATOM_CBHM_OUTBUF, False);
@@ -152,7 +152,6 @@ int print_storage_buffer()
 
 int send_convert_selection()
 {
-//	XConvertSelection(g_disp, atomClipboard, atomTarget, atomCBOut, g_evtwin, CurrentTime);
 	XConvertSelection(g_disp, atomClipboard, atomUTF8String, atomCBOut, g_evtwin, CurrentTime);
 	DTRACE("sent convert selection\n");
 	return 0;
@@ -250,11 +249,17 @@ int processing_selection_request(Ecore_X_Event_Selection_Request *ev)
     req_win = ev->requestor;
 	req_atom = ev->property;
 
+	DTRACE("## wanted target = %d\n", ev->target);
+	DTRACE("## wanted target = %s\n", XGetAtomName(g_disp, ev->target));
+
 	/* TODO : if there are request which cbhm doesn't understand,
 	   then reply None property to requestor */
 	if (ev->target == atomTargets) 
 	{
-        Atom types[2] = { atomTargets, atomTarget };
+//        Atom types[2] = { atomTargets, atomUTF8String };
+		Atom atomHtml = XInternAtom(g_disp, "text/html;charset=utf-8", False);
+
+        Atom types[3] = { atomTargets, atomUTF8String, atomHtml };
 
         // send all (not using INCR) 
         XChangeProperty(g_disp, req_win, req_atom, XA_ATOM,
@@ -279,7 +284,6 @@ int processing_selection_request(Ecore_X_Event_Selection_Request *ev)
 		else 
 		{
 			// send all (not using INCR) 
-//			XChangeProperty(g_disp, req_win, req_atom, atomTarget, 
 			XChangeProperty(g_disp, req_win, req_atom, atomUTF8String, 
 							8, PropModeReplace, (unsigned char *) g_lastest_content, (int) txt_len);
 		}
@@ -498,7 +502,7 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 	{
 		if (get_storage_start_addr != NULL)
 		{
-			XChangeProperty(g_disp, reqwin, atomCBHM_cRAW, XA_STRING, 
+			XChangeProperty(g_disp, reqwin, atomCBHM_cRAW, atomUTF8String, 
 							8, PropModeReplace, 
 							(unsigned char *) get_storage_start_addr(),
 							(int) get_total_storage_size());
