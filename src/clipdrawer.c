@@ -57,11 +57,11 @@ int clipdrawer_update_contents(void *data)
 	int i, pos;
 
 	elm_list_clear(ad->txtlist);
-	for (i = 0; i < HISTORY_QUEUE_NUMBER; i++)
+	for (i = 0; i < HISTORY_QUEUE_MAX_TXT_ITEMS; i++)
 	{
 		pos = get_current_history_position()+i;
-		if (pos > HISTORY_QUEUE_NUMBER-1)
-			pos = pos-HISTORY_QUEUE_NUMBER;
+		if (pos > HISTORY_QUEUE_MAX_TXT_ITEMS-1)
+			pos = pos-HISTORY_QUEUE_MAX_TXT_ITEMS;
 		if (get_item_contents_by_pos(pos) != NULL && strlen(get_item_contents_by_pos(pos)) > 0)
 		{
 			elm_list_item_append(ad->txtlist, get_item_contents_by_pos(pos), NULL, NULL, NULL, ad);
@@ -141,7 +141,7 @@ int clipdrawer_add_image_item(char *imagepath)
 
 	igl = elm_gengrid_items_get(ad->imggrid);
 	igl_counter = eina_list_count(igl);
-	if (igl_counter >= 10)
+	if (igl_counter >= HISTORY_QUEUE_MAX_IMG_ITEMS)
 	{
 		elm_gengrid_item_del(eina_list_nth(igl, 0));
 	}

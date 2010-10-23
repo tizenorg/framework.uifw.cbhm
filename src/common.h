@@ -31,6 +31,7 @@
 
 struct appdata;
 
-#define HISTORY_QUEUE_NUMBER 5
+#define HISTORY_QUEUE_MAX_TXT_ITEMS 5
+#define HISTORY_QUEUE_MAX_IMG_ITEMS 10
 
 #endif // _common_h_
