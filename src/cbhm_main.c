@@ -16,6 +16,9 @@
 #include "clipdrawer.h"
 #include "scrcapture.h"
 
+// FIXME: how to remove g_main_ad? 
+static struct appdata *g_main_ad = NULL;
+
 static Evas_Object* create_win(const char *name);
 static Evas_Object* load_edj(Evas_Object *parent, const char *file, const char *group);
 
@@ -30,6 +33,11 @@ static void win_del_cb(void *data, Evas_Object *obj, void *event)
 static void main_quit_cb(void *data, Evas_Object* obj, void* event_info)
 {
 	elm_exit();
+}
+
+void* g_get_main_appdata()
+{
+	return (void*)g_main_ad;
 }
 
 int init_appview(void *data)
@@ -126,6 +134,7 @@ static void fini(struct appdata *ad)
 static void init_ad(struct appdata *ad)
 {
 	memset(ad, 0x0, sizeof(struct appdata));
+	g_main_ad = ad;
 }
 
 EAPI int elm_main(int argc, char **argv)

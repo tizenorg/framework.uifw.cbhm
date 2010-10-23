@@ -1,7 +1,7 @@
 #include "common.h"
 #include "storage.h"
 
-#define STORAGE_FILEPATH "/tmp/.savecbh"
+#define STORAGE_FILEPATH "/opt/var/.savecbh"
 #define STORAGE_MAX_ITEMS HISTORY_QUEUE_NUMBER
 #define HEADER_ITEM_SIZE (sizeof(int)) 
 #define BODY_ITEM_SIZE (4 * 1024) // 4Kilo 

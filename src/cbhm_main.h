@@ -20,5 +20,7 @@ struct appdata
 	Evas_Object *txtlist; 
 };
 
+void* g_get_main_appdata();
+
 #endif /* _cbhm_main_h_ */
 
