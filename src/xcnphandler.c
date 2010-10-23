@@ -115,13 +115,16 @@ int add_to_storage_buffer(void *data, char *src, int len)
 	if (len <= 0)
 		return -1;
 
+	// FIXME: replace magic number to a define
 	if (g_lastest_content == NULL)
-		g_lastest_content = malloc(sizeof(char)*(4*1024));
+		g_lastest_content = malloc(sizeof(char)*(HISTORY_QUEUE_TXT_ITEM_SIZE));
 	if (g_history_pos >= HISTORY_QUEUE_MAX_TXT_ITEMS)
 		g_history_pos = 0;
 
 	// FIXME: remove g_lasteset_content
-	strcpy(g_lastest_content, src);
+	//strcpy(g_lastest_content, src);
+	memcpy(g_lastest_content, src, len);
+	g_lastest_content[len] = '\0';
 	adding_item_to_storage(g_history_pos, g_lastest_content);
 	increment_current_history_position();
 
@@ -182,6 +185,8 @@ int get_selection_content(void *data)
 	unsigned char *cbbuf;
 	struct appdata *ad = data;
 	const char *unesc;
+	size_t unesc_len = 0;
+	int i;
 
 	XGetWindowProperty(g_disp, g_evtwin, atomCBOut, 0, 0, False,
 					   AnyPropertyType, &cbtype, &cbformat, &cbitems, &cbsize, &cbbuf);
@@ -208,6 +213,28 @@ int get_selection_content(void *data)
 	XDeleteProperty(g_disp, g_evtwin, atomCBOut);
 
 	unesc = clipdrawer_get_plain_string_from_escaped(cbbuf);
+	if (unesc != NULL)
+		unesc_len = strlen(unesc);
+	else
+		unesc_len = 0;
+
+	fprintf(stderr, "## unesc len = %d\n", unesc_len);
+
+	// FIXME: invent more clever way to right trim the string
+	for (i = unesc_len-1; i > 0; i--)
+	{
+		fprintf(stderr, "## unesc[%d] = 0x%x\n", i, unesc[i]);
+		if (unesc[i] >= 0x01 && unesc[i] <= 0x1F)
+			continue;
+		else
+		{
+			unesc_len = i+1;
+			break;
+		}
+	}
+	
+	fprintf(stderr, "## unesc len = %d\n", unesc_len);
+
 //	add_to_storage_buffer(ad, cbbuf, cbitems);
 //	DTRACE("len = %ld, data = %s\n", cbitems, cbbuf);
 
@@ -221,8 +248,8 @@ int get_selection_content(void *data)
 		clipdrawer_add_image_item(unesc);
 	}
 	else
-		add_to_storage_buffer(ad, unesc, strlen(unesc));
-	DTRACE("len = %ld, data = %s\n", strlen(unesc), unesc);
+		add_to_storage_buffer(ad, unesc, unesc_len);
+	DTRACE("len = %ld, data = %s\n", unesc_len, unesc);
 	free(unesc);
 
 	DTRACE("\n");
