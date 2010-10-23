@@ -214,26 +214,25 @@ int get_selection_content(void *data)
 
 	unesc = clipdrawer_get_plain_string_from_escaped(cbbuf);
 	if (unesc != NULL)
-		unesc_len = strlen(unesc);
-	else
-		unesc_len = 0;
-
-	fprintf(stderr, "## unesc len = %d\n", unesc_len);
-
-	// FIXME: invent more clever way to right trim the string
-	for (i = unesc_len-1; i > 0; i--)
 	{
-		fprintf(stderr, "## unesc[%d] = 0x%x\n", i, unesc[i]);
-		if (unesc[i] >= 0x01 && unesc[i] <= 0x1F)
-			continue;
-		else
+		unesc_len = strlen(unesc);
+		// FIXME: invent more clever way to right trim the string
+		for (i = unesc_len-1; i > 0; i--)
 		{
-			unesc_len = i+1;
-			break;
+			// avoid control characters
+			if (unesc[i] >= 0x01 && unesc[i] <= 0x1F)
+				continue;
+			else
+			{
+				DTRACE("before right trim len = %d\n", unesc_len);
+				unesc_len = i+1;
+				DTRACE("after right trim len = %d\n", unesc_len);
+				break;
+			}
 		}
 	}
-	
-	fprintf(stderr, "## unesc len = %d\n", unesc_len);
+	else
+		unesc_len = 0;
 
 //	add_to_storage_buffer(ad, cbbuf, cbitems);
 //	DTRACE("len = %ld, data = %s\n", cbitems, cbbuf);
@@ -244,7 +243,7 @@ int get_selection_content(void *data)
 	if (!strncmp(unesc, "file://", 7) && 
 		(strstr(unesc,".png") || strstr(unesc,".jpg")))
 	{
-		fprintf(stderr, "## clipdrawer add path = %s\n", unesc);
+		DTRACE("clipdrawer add path = %s\n", unesc);
 		clipdrawer_add_image_item(unesc);
 	}
 	else
