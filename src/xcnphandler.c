@@ -115,7 +115,6 @@ int add_to_storage_buffer(void *data, char *src, int len)
 	if (len <= 0)
 		return -1;
 
-	// FIXME: replace magic number to a define
 	if (g_lastest_content == NULL)
 		g_lastest_content = malloc(sizeof(char)*(HISTORY_QUEUE_TXT_ITEM_SIZE));
 	if (g_history_pos >= HISTORY_QUEUE_MAX_TXT_ITEMS)
