@@ -1,3 +1,11 @@
+cbhm (0.1.0-39) unstable; urgency=low
+
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-39
+  * limit 10 image items, change img path
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Mon, 25 Oct 2010 18:11:00 +0900
+
 cbhm (0.1.0-38) unstable; urgency=low
 
   * case of inhouse package
