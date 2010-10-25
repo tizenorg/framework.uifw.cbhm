@@ -4,7 +4,7 @@
 #include "xcnphandler.h"
 #include "clipdrawer.h"
 
-#define IM	"/mnt/ums/Images/Photo/"
+#define IM	"/opt/media/Images and videos/My photo clips/"
 static const char *g_images_path[] = {
 	IM"1_photo.jpg",
 /*
