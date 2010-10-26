@@ -1,3 +1,11 @@
+cbhm (0.1.0-42) unstable; urgency=low
+
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-42
+  * realign close arrow button image pos
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Tue, 26 Oct 2010 15:23:05 +0900
+
 cbhm (0.1.0-41) unstable; urgency=low
 
   * Git: 165.213.180.234:/git/slp/pkgs/cbhm

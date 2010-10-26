@@ -247,7 +247,7 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-	clipdrawer_activate_view(ad);
+	//clipdrawer_activate_view(ad);
 
 	return 0;
 }
