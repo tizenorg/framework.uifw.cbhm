@@ -1,3 +1,11 @@
+cbhm (0.1.0-41) unstable; urgency=low
+
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-41
+  * deactivate by default
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Tue, 26 Oct 2010 15:12:30 +0900
+
 cbhm (0.1.0-40) unstable; urgency=low
 
   * Git: 165.213.180.234:/git/slp/pkgs/cbhm
