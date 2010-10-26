@@ -12,6 +12,8 @@
 
 struct appdata
 {
+	int root_w;
+	int root_h;
 	Evas *evas;
 	Evas_Object *win_main;
 	Evas_Object *ly_main; /* layout widget based on EDJ */

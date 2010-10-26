@@ -19,7 +19,7 @@
 // FIXME: how to remove g_main_ad? 
 static struct appdata *g_main_ad = NULL;
 
-static Evas_Object* create_win(const char *name);
+static Evas_Object* create_win(void *data, const char *name);
 static Evas_Object* load_edj(Evas_Object *parent, const char *file, const char *group);
 
 static void win_del_cb(void *data, Evas_Object *obj, void *event)
@@ -45,7 +45,7 @@ int init_appview(void *data)
 	struct appdata *ad = (struct appdata *) data;
 	Evas_Object *win, *ly;
 
-	win = create_win(APPNAME);
+	win = create_win(ad, APPNAME);
 	if(win == NULL)
 		return -1;
 	ad->evas = evas_object_evas_get(win);
@@ -70,8 +70,9 @@ int init_appview(void *data)
 	return 0;
 }
 
-static Evas_Object* create_win(const char *name)
+static Evas_Object* create_win(void *data, const char *name)
 {
+	struct appdata *ad = (struct appdata *) data;
 	Evas_Object *eo;
 	int w, h;
 
@@ -81,6 +82,8 @@ static Evas_Object* create_win(const char *name)
 		elm_win_title_set(eo, name);
 		elm_win_borderless_set(eo, EINA_TRUE);
 		ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
+		ad->root_w = w;
+		ad->root_h = h;
 		evas_object_resize(eo, w, h);
 	}
 

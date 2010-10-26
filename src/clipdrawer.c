@@ -168,11 +168,15 @@ clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 int clipdrawer_init(void *data)
 {
 	struct appdata *ad = data;
+	double cdy, cdw;
 
-	evas_object_resize(ad->win_main, CLIPDRAWER_WIDTH, CLIPDRAWER_HEIGHT);
-	evas_object_move(ad->win_main, CLIPDRAWER_POS_X, CLIPDRAWER_POS_Y);
-	evas_object_resize(ad->ly_main, CLIPDRAWER_WIDTH, CLIPDRAWER_HEIGHT);
-	evas_object_move(ad->ly_main, CLIPDRAWER_POS_X, CLIPDRAWER_POS_Y);
+	cdy = (1.0*CLIPDRAWER_HEIGHT/800)*ad->root_h;
+	cdw = (1.0*CLIPDRAWER_POS_Y/800*1.0)*ad->root_h;
+
+	evas_object_resize(ad->win_main, ad->root_w, (int)cdy);
+	evas_object_move(ad->win_main, CLIPDRAWER_POS_X, (int)cdw);
+	evas_object_resize(ad->ly_main, ad->root_w, (int)cdy);
+	evas_object_move(ad->ly_main, CLIPDRAWER_POS_X, (int)cdw);
 
 	edje_object_signal_callback_add(elm_layout_edje_get(ad->ly_main), "mouse,up,1", "*", clipdrawer_ly_clicked, ad);
 
@@ -243,7 +247,7 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-	//clipdrawer_activate_view(ad);
+	clipdrawer_activate_view(ad);
 
 	return 0;
 }
