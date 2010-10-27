@@ -1,3 +1,11 @@
+cbhm (0.1.0-43) unstable; urgency=low
+
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-43
+  * check file exist when img item adding
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Wed, 27 Oct 2010 21:11:21 +0900
+
 cbhm (0.1.0-42) unstable; urgency=low
 
   * Git: 165.213.180.234:/git/slp/pkgs/cbhm
