@@ -82,8 +82,7 @@ static Evas_Object* create_win(void *data, const char *name)
 		elm_win_title_set(eo, name);
 		elm_win_borderless_set(eo, EINA_TRUE);
 		ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
-		ad->root_w = w;
-		ad->root_h = h;
+		ad->root_w = w;	ad->root_h = h;
 		evas_object_resize(eo, w, h);
 	}
 

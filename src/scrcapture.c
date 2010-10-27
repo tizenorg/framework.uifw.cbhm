@@ -2,6 +2,7 @@
 #include "cbhm_main.h"
 #include "xcnphandler.h"
 #include "scrcapture.h"
+#include "clipdrawer.h"
 
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -136,6 +137,8 @@ static Eina_Bool scrcapture_keydown_cb(void *data, int type, void *event)
 	{
 		savedtime = 0.0;
 		savedkey = 0;
+		if (!strcmp(ev->keyname, KEY_END))
+			clipdrawer_lower_view(ad);
 	}
 
 	return ECORE_CALLBACK_PASS_ON;
