@@ -144,6 +144,7 @@ int clipdrawer_add_image_item(char *imagepath)
 	if (igl_counter >= HISTORY_QUEUE_MAX_IMG_ITEMS)
 	{
 		elm_gengrid_item_del(eina_list_nth(igl, 0));
+//		elm_gengrid_item_del(eina_list_last(igl));
 	}
 
 	newgenimg = malloc(sizeof(gridimgitem_t));

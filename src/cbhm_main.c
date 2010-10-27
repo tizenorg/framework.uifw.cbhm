@@ -51,6 +51,10 @@ int init_appview(void *data)
 	ad->evas = evas_object_evas_get(win);
 	ad->win_main = win;
 
+//  avoid focus but it can't be used. because grap keys
+//	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
+//	ecore_x_icccm_hints_set(xwin, 0, 0, 0, 0, 0, 0, 0);
+
 	ly = load_edj(win, APP_EDJ_FILE, GRP_MAIN);
 	if (ly == NULL)
 		return -1; 
