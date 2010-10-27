@@ -15,4 +15,6 @@ int get_item_counts();
 char *get_item_contents_by_pos(int pos);
 int close_storage();
 
+int check_regular_file(char *path);
+
 #endif // _storage_h_

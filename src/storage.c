@@ -153,4 +153,15 @@ int close_storage()
 	return 0;
 }
 
+int check_regular_file(char *path)
+{
+	struct stat fattr;
+	if (stat(path, &fattr))
+	{
+		DTRACE("Cannot get file at path = %s\n", path);
+		return FALSE;
+	}
+	
+	return S_ISREG(fattr.st_mode);
+}
 

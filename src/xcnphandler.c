@@ -18,7 +18,7 @@ int xcnp_init(void *data)
 	struct appdata *ad = data;
 	DTRACE("xcnp_init().. start!\n");
 
-	if(!_cbhm_init())
+	if(!_cbhm_init(ad))
 	{
 		DTRACE("Failed - _cbhm_init()..!\n");
 		return NULL;
@@ -240,10 +240,11 @@ int get_selection_content(void *data)
                1. does the file exist?
                2. dose the file wanted type? */
 	if (!strncmp(unesc, "file://", 7) && 
-		(strstr(unesc,".png") || strstr(unesc,".jpg")))
+		(strstr(unesc,".png") || strstr(unesc,".jpg")) &&
+		check_regular_file(unesc+7))
 	{
-		DTRACE("clipdrawer add path = %s\n", unesc);
-		clipdrawer_add_image_item(unesc);
+		DTRACE("clipdrawer add path = %s\n", unesc+7);
+		clipdrawer_add_image_item(unesc+7);
 	}
 	else
 		add_to_storage_buffer(ad, unesc, unesc_len);
@@ -339,8 +340,9 @@ int processing_selection_request(Ecore_X_Event_Selection_Request *ev)
 	return 0;
 }
 
-static int _cbhm_init()
+static int _cbhm_init(void *data)
 {
+	struct appdata *ad = data;
 	//Set default data structure
 	//Control that the libraries are properly initialized
 	if (!ecore_init()) return EXIT_FAILURE;
@@ -580,7 +582,6 @@ static Ecore_X_Window get_selection_secondary_target_win()
 
 int set_selection_secondary_data(char *sdata)
 {
-//	elm_selection_set(1, obj, /*mark up*/1, p);
 	Ecore_X_Window setwin = get_selection_secondary_target_win();
 	if (setwin == None)
 		return 0;

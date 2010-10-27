@@ -137,7 +137,12 @@ int clipdrawer_add_image_item(char *imagepath)
 	char* filepath = NULL;
 	Eina_List *igl = NULL;
 	unsigned int igl_counter = 0;
-	filepath = &imagepath[7]; // skip 'file://'
+
+	if (!check_regular_file(imagepath))
+	{
+		DTRACE("Error : it isn't normal file = %s\n", imagepath);
+		return -1;
+	}
 
 	igl = elm_gengrid_items_get(ad->imggrid);
 	igl_counter = eina_list_count(igl);
@@ -148,7 +153,7 @@ int clipdrawer_add_image_item(char *imagepath)
 	}
 
 	newgenimg = malloc(sizeof(gridimgitem_t));
-	newgenimg->path = eina_stringshare_add(filepath);
+	newgenimg->path = eina_stringshare_add(imagepath);
 	newgenimg->item = elm_gengrid_item_append(ad->imggrid, &gic, newgenimg, NULL, NULL);
 	
 	return TRUE;
@@ -205,10 +210,7 @@ int clipdrawer_init(void *data)
 
 	for (i = 0; i < N_IMAGES; i++)
 	{
-		newgenimg = malloc(sizeof(gridimgitem_t));
-		newgenimg->path = eina_stringshare_add(g_images_path[i]);
-		newgenimg->item = elm_gengrid_item_append(ad->imggrid, &gic, newgenimg, NULL, NULL);
-//		evas_object_data_set(newgenimg->item, "URI", g_images_path[i]);
+		clipdrawer_add_image_item(g_images_path[i]);
 	}
 
 	evas_object_show (ad->imggrid);

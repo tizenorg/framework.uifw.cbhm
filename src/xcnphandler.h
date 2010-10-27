@@ -28,7 +28,7 @@ int set_selection_owner();
 int get_selection_content(void *data);
 int processing_selection_request(Ecore_X_Event_Selection_Request *ev);
 
-static int _cbhm_init();
+static int _cbhm_init(void *data);
 static void _cbhm_fini();
 static int _xsel_clear_cb(void *data, int ev_type, void *event);
 static int _xsel_request_cb(void *data, int ev_type, void *event);

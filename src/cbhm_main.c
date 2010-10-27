@@ -118,7 +118,6 @@ static Evas_Object* load_edj(Evas_Object *parent, const char *file, const char *
 static int init(struct appdata *ad)
 {
 	/* FIXME : add checking multiple instance */
-
 	xcnp_init(ad);
 	init_appview(ad);
 	init_scrcapture(ad);
