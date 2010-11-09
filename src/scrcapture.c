@@ -73,6 +73,7 @@ static Eina_Bool capture_current_screen(void *data)
 	captureimginfo_t *capimginfo = NULL;
 	capimginfo = malloc(sizeof(captureimginfo_t) * 1);
 	get_image_filename_with_date(capimginfo->filename);
+	DTRACE("capture current screen\n");
 
 	int width, height;
 	width = 480; height = 800;
