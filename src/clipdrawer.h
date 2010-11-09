@@ -6,6 +6,7 @@
 #define CLIPDRAWER_WIDTH 480
 //#define CLIPDRAWER_HEIGHT 335
 #define CLIPDRAWER_HEIGHT 360
+#define SCREEN_HEIGHT 800
 
 /* view maintains */
 int clipdrawer_init(void *data);

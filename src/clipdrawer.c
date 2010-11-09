@@ -4,6 +4,7 @@
 #include "xcnphandler.h"
 #include "clipdrawer.h"
 
+#define DELETE_ICON_PATH "/usr/share/icon/cbhm/05_delete.png"
 #define IM	"/opt/media/Images and videos/My photo clips/"
 static const char *g_images_path[] = {
 	IM"1_photo.jpg",
@@ -110,6 +111,10 @@ int clipdrawer_update_contents(void *data)
 {
 	struct appdata *ad = data;
 	int i, pos;
+
+	// if delete mode, then back to normal mode
+	if (get_clipdrawer_mode())
+		clipdrawer_change_mode(ad);
 
 	elm_list_clear(ad->txtlist);
 	for (i = 0; i < HISTORY_QUEUE_MAX_TXT_ITEMS; i++)
@@ -306,7 +311,7 @@ int clipdrawer_refresh_txthistory_item(void *data, int delete_mode)
 		if (delete_mode)
 		{
 			Evas_Object *ci = elm_icon_add(ad->win_main);
-			elm_icon_file_set(ci, "/usr/share/icon/cbhm/05_delete.png", NULL);
+			elm_icon_file_set(ci, DELETE_ICON_PATH, NULL);
 			evas_object_size_hint_min_set(ci, 33 * elm_scale_get(), 33 * elm_scale_get());
 //			evas_object_size_hint_aspect_set(ci, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
 			evas_object_show(ci);
@@ -358,6 +363,10 @@ int clipdrawer_add_image_item(char *imagepath)
 	char* filepath = NULL;
 	Eina_List *igl = NULL;
 	unsigned int igl_counter = 0;
+
+	// if delete mode, then back to normal mode
+	if (get_clipdrawer_mode())
+		clipdrawer_change_mode(ad);
 
 	if (!check_regular_file(imagepath))
 	{
