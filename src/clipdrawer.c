@@ -399,8 +399,8 @@ int clipdrawer_init(void *data)
 	// for elm_check, elm_list
 	elm_theme_extension_add(NULL, APP_EDJ_FILE);
 
-	cdy = (1.0*CLIPDRAWER_HEIGHT/800)*ad->root_h;
-	cdw = (1.0*CLIPDRAWER_POS_Y/800*1.0)*ad->root_h;
+	cdy = (1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h;
+	cdw = (1.0*CLIPDRAWER_POS_Y/SCREEN_HEIGHT)*ad->root_h;
 
 	evas_object_resize(ad->win_main, ad->root_w, (int)cdy);
 	evas_object_move(ad->win_main, CLIPDRAWER_POS_X, (int)cdw);

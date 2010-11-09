@@ -76,7 +76,8 @@ static Eina_Bool capture_current_screen(void *data)
 	DTRACE("capture current screen\n");
 
 	int width, height;
-	width = 480; height = 800;
+	width = ad->root_w;
+	height = ad->root_h;
 	capimginfo->imgdata = malloc(sizeof(char) * width*height*4);
 	capimginfo->eo = evas_object_image_add(ad->evas);
 
