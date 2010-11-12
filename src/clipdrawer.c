@@ -20,6 +20,7 @@ static const char *g_images_path[] = {
 
 #define GRID_ITEM_SIZE 100
 
+// 0 - select mode, 1 - delete mode
 static int g_clipdrawer_mode = 0;
 // gic should live at gengrid callback functions
 Elm_Gengrid_Item_Class gic;
@@ -113,8 +114,8 @@ int clipdrawer_update_contents(void *data)
 	int i, pos;
 
 	// if delete mode, then back to normal mode
-	if (get_clipdrawer_mode())
-		clipdrawer_change_mode(ad);
+//	if (get_clipdrawer_mode())
+//		clipdrawer_change_mode(ad);
 
 	elm_list_clear(ad->txtlist);
 	for (i = 0; i < HISTORY_QUEUE_MAX_TXT_ITEMS; i++)
@@ -365,8 +366,8 @@ int clipdrawer_add_image_item(char *imagepath)
 	unsigned int igl_counter = 0;
 
 	// if delete mode, then back to normal mode
-	if (get_clipdrawer_mode())
-		clipdrawer_change_mode(ad);
+//	if (get_clipdrawer_mode())
+//		clipdrawer_change_mode(ad);
 
 	if (!check_regular_file(imagepath))
 	{
