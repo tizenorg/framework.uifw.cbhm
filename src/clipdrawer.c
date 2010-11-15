@@ -5,9 +5,9 @@
 #include "clipdrawer.h"
 
 #define DELETE_ICON_PATH "/usr/share/icon/cbhm/05_delete.png"
-#define IM	"/opt/media/Images and videos/My photo clips/"
+#define IM	"/usr/share/icon/cbhm/"
 static const char *g_images_path[] = {
-	IM"1_photo.jpg",
+	IM"cbhm_default_img.png",
 /*
 	IM"2_photo.jpg",
 	IM"3_photo.jpg",
