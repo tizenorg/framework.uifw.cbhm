@@ -1,3 +1,11 @@
+cbhm (0.1.0-46) unstable; urgency=low
+
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-46
+  * add null checking at scrcapture
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Wed, 17 Nov 2010 14:16:28 +0900
+
 cbhm (0.1.0-45) unstable; urgency=low
 
   * Git: 165.213.180.234:/git/slp/pkgs/cbhm
