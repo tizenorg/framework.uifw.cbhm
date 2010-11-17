@@ -78,16 +78,22 @@ static Eina_Bool capture_current_screen(void *data)
 	int width, height;
 	width = ad->root_w;
 	height = ad->root_h;
-	capimginfo->imgdata = malloc(sizeof(char) * width*height*4);
+	capimginfo->imgdata = malloc(sizeof(char) * (width*height*4) + 1);
 	capimginfo->eo = evas_object_image_add(ad->evas);
 
-	char *scrimage = scrcapture_capture_screen_by_xv_ext(width, height);
-	memcpy(capimginfo->imgdata, scrimage, width*height*4);
+	char *scrimage = NULL;
+	scrimage = scrcapture_capture_screen_by_xv_ext(width, height);
+	if (scrimage)
+		memcpy(capimginfo->imgdata, scrimage, width*height*4);
 	scrcapture_release_screen_by_xv_ext(scrimage);
 
-	if (capimginfo->eo == NULL || capimginfo->imgdata == NULL) 
+	if (scrimage == NULL || capimginfo->eo == NULL || capimginfo->imgdata == NULL) 
 	{
 		DTRACE("screen capture fail\n");
+		free(capimginfo->imgdata);
+		if (capimginfo->eo)
+			evas_object_del(capimginfo->eo);
+		free(capimginfo);
 		return EINA_FALSE;
 	}
 
