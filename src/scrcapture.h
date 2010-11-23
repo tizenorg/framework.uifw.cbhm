@@ -12,6 +12,7 @@ const char* createScreenShot(int width, int height);
 void releaseScreenShot(const char *ss);
 // XV extension API - end
 
+Eina_Bool capture_current_screen(void *data);
 char *scrcapture_capture_screen_by_x11(Window xid, int *size);
 char *scrcapture_capture_screen_by_xv_ext(int width, int height);
 void scrcapture_release_screen_by_xv_ext(const char *s);

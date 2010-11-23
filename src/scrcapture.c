@@ -66,7 +66,7 @@ static Eina_Bool _scrcapture_capture_postprocess(void* data)
 	return EINA_FALSE;
 }
 
-static Eina_Bool capture_current_screen(void *data)
+Eina_Bool capture_current_screen(void *data)
 {
 	struct appdata *ad = data;
 

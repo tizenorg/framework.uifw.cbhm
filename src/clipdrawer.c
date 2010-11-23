@@ -148,10 +148,66 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 	gridimgitem_t *ti = (gridimgitem_t *)data;
 	if (!strcmp(part, "elm.swallow.icon"))
 	{
+/*
 		Evas_Object *icon = elm_icon_add(obj);
 		elm_icon_file_set(icon, ti->path, NULL);
 		evas_object_size_hint_aspect_set(icon, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
 		evas_object_show(icon);
+*/
+		Ecore_Evas *my_ee;
+		Evas *my_e;
+		Evas_Object *fgimg;
+		Evas_Object *bgrect;
+		Evas_Object *delbtn;
+		Evas_Object *icon;
+		my_ee = ecore_evas_buffer_new(GRID_ITEM_SIZE, GRID_ITEM_SIZE);
+		my_e = ecore_evas_get(my_ee);
+
+		bgrect = evas_object_rectangle_add(my_e);
+		evas_object_color_set(bgrect, 119, 116, 100, 255);
+		evas_object_resize(bgrect, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
+		evas_object_move(bgrect, 0, 0);
+		evas_object_show(bgrect);
+
+		#define BORDER_SIZE 10
+		fgimg = evas_object_image_add(my_e);
+		evas_object_image_load_size_set(fgimg, GRID_ITEM_SIZE-BORDER_SIZE*2, GRID_ITEM_SIZE-BORDER_SIZE*2);
+		evas_object_image_file_set(fgimg, ti->path, NULL);
+		evas_object_image_fill_set(fgimg, 0, 0, GRID_ITEM_SIZE-BORDER_SIZE*2, GRID_ITEM_SIZE-BORDER_SIZE*2);
+		evas_object_image_filled_set(fgimg, 1);
+		evas_object_resize(fgimg, GRID_ITEM_SIZE-BORDER_SIZE*2, GRID_ITEM_SIZE-BORDER_SIZE*2);
+		evas_object_move(fgimg, BORDER_SIZE, BORDER_SIZE);
+		evas_object_show(fgimg);
+
+/*
+		if (delete_mode)
+		{
+			delbtn = evas_object_image_add(my_e);
+			evas_object_image_load_size_set(delbtn, 33, 33);
+			evas_object_image_file_set(delbtn, DELETE_ICON_PATH, NULL);
+			evas_object_image_fill_set(delbtn, 0, 0, 33, 33);
+			evas_object_image_filled_set(delbtn, 1);
+			evas_object_resize(delbtn, 33, 33);
+			evas_object_move(delbtn, 55, 38);
+			evas_object_show(delbtn);
+		}
+*/
+	
+		icon = evas_object_image_add(evas_object_evas_get(obj));
+
+		evas_object_image_data_set(icon, NULL);
+		evas_object_image_size_set(icon, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
+		evas_object_image_fill_set(icon, 0, 0, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
+		evas_object_image_filled_set(icon, EINA_TRUE);
+		evas_object_image_data_copy_set(icon, (int *)ecore_evas_buffer_pixels_get(my_ee));
+		evas_object_image_data_update_add(icon, 0, 0, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
+
+		evas_object_del(bgrect);
+		evas_object_del(fgimg);
+		if (delete_mode)
+			evas_object_del(delbtn);
+		ecore_evas_free(my_ee);
+
 		return icon;
 	}
 	else if (!strcmp(part, "elm.swallow.end") && delete_mode)
@@ -377,6 +433,21 @@ int clipdrawer_add_image_item(char *imagepath)
 
 	igl = elm_gengrid_items_get(ad->imggrid);
 	igl_counter = eina_list_count(igl);
+
+	Eina_List *l;
+	Elm_Gengrid_Item *item;
+	gridimgitem_t *ti = NULL;
+
+	EINA_LIST_FOREACH(igl, l, item)
+	{
+		ti = elm_gengrid_item_data_get(item);
+		if (!strcmp(ti->path, imagepath))
+		{
+			DTRACE("Error : duplicated file path = %s\n", imagepath);
+			return -1;
+		}
+	}
+
 	if (igl_counter >= HISTORY_QUEUE_MAX_IMG_ITEMS)
 	{
 		elm_gengrid_item_del(eina_list_data_get(eina_list_last(igl)));
@@ -484,7 +555,7 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-	//clipdrawer_activate_view(ad);
+	// clipdrawer_activate_view(ad);
 
 	return 0;
 }

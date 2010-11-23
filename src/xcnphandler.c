@@ -211,6 +211,7 @@ int get_selection_content(void *data)
 					   AnyPropertyType, &cbtype, &cbformat, &cbitems, &cbsize, &cbbuf);
 	XDeleteProperty(g_disp, g_evtwin, atomCBOut);
 
+/*
 	unesc = clipdrawer_get_plain_string_from_escaped(cbbuf);
 	if (unesc != NULL)
 	{
@@ -232,13 +233,48 @@ int get_selection_content(void *data)
 	}
 	else
 		unesc_len = 0;
+*/
 
 //	add_to_storage_buffer(ad, cbbuf, cbitems);
 //	DTRACE("len = %ld, data = %s\n", cbitems, cbbuf);
 
+	if (cbbuf != NULL)
+	{
+		unesc_len = strlen(cbbuf);
+		// FIXME: invent more clever way to right trim the string
+		for (i = unesc_len-1; i > 0; i--)
+		{
+			// avoid control characters
+			if (cbbuf[i] >= 0x01 && cbbuf[i] <= 0x1F)
+				continue;
+			else
+			{
+				DTRACE("before right trim len = %d\n", unesc_len);
+				unesc_len = i+1;
+				DTRACE("after right trim len = %d\n", unesc_len);
+				break;
+			}
+		}
+	}
+	else
+		unesc_len = 0;
+
+	if (!strncmp(cbbuf, "file://", 7) && 
+		(strcasestr(cbbuf,".png") || strcasestr(cbbuf,".jpg") || strcasestr(cbbuf,".bmp")) &&
+		check_regular_file(cbbuf+7))
+	{
+		DTRACE("clipdrawer add path = %s\n", cbbuf+7);
+		clipdrawer_add_image_item(cbbuf+7);
+	}
+	else
+		add_to_storage_buffer(ad, cbbuf, unesc_len);
+	DTRACE("len = %ld, data = %s\n", unesc_len, cbbuf);
+
+
 	/* FIXME : it needs two verification. 
                1. does the file exist?
                2. dose the file wanted type? */
+/*
 	if (!strncmp(unesc, "file://", 7) && 
 		(strcasestr(unesc,".png") || strcasestr(unesc,".jpg") || strcasestr(unesc,".bmp")) &&
 		check_regular_file(unesc+7))
@@ -250,6 +286,7 @@ int get_selection_content(void *data)
 		add_to_storage_buffer(ad, unesc, unesc_len);
 	DTRACE("len = %ld, data = %s\n", unesc_len, unesc);
 	free(unesc);
+*/
 
 	DTRACE("\n");
 	print_storage_buffer();
@@ -365,6 +402,7 @@ static int _cbhm_init(void *data)
 	ecore_x_netwm_name_set(g_evtwin, CLIPBOARD_MANAGER_WINDOW_TITLE_STRING);
 
 	XSelectInput(g_disp, g_evtwin, PropertyChangeMask);
+	XSelectInput(g_disp, g_rootwin, StructureNotifyMask);
 //	ecore_x_window_show(g_evtwin);
 	ecore_x_flush();
 
@@ -454,10 +492,20 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 
 	Atom atomCBHM_MSG = XInternAtom(g_disp, "CBHM_MSG", False);
 	Atom atomCBHM_cRAW = XInternAtom(g_disp, "CBHM_cRAW", False);
+	Atom atomXKey_MSG = XInternAtom(g_disp, "_XKEY_COMPOSITION", False);
 	char atomname[10];
 	Atom cbhm_atoms[HISTORY_QUEUE_MAX_TXT_ITEMS];
 	Ecore_X_Window reqwin = ev->win;
 	int i, pos;
+
+	if (ev->message_type == atomXKey_MSG)
+	{
+		DTRACE("XE:ClientMessage for Screen capture\n");
+
+		capture_current_screen(ad);
+
+		return TRUE;
+	}
 
 	if (ev->message_type != atomCBHM_MSG)
 		return -1;
