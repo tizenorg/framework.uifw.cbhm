@@ -59,17 +59,42 @@ static void _list_click_paste(void *data, Evas_Object *obj, void *event_info)
 
     elm_list_item_selected_set(it, 0);
 
+	Elm_List_Item *item;
+	Eina_List *n;
+	int hc = 0;
+	EINA_LIST_FOREACH(elm_list_items_get(ad->txtlist), n, item)
+	{
+		if (item == it)
+			break;
+		hc++;
+	}
+
+	fprintf(stderr, "## this c = %d, %d\n", hc, get_current_history_position());
+
+//	int pos = get_current_history_position() - hc;
+
+	int	pos = get_current_history_position()-hc;
+	if (pos < 0)
+		pos = pos+(HISTORY_QUEUE_MAX_TXT_ITEMS);
+
+	fprintf(stderr, "## pos = %d, %s\n", pos, get_item_contents_by_pos(pos));
+	char *p = strdup(get_item_contents_by_pos(pos));
+
+	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
+
+/*
 	char *p = NULL;
 	int cplen;
 
 	char *cpdata = NULL;
-	cpdata = elm_list_item_label_get(it);
+	cpdata = elm_entry_utf8_to_markup(elm_list_item_label_get(it));
 	if (cpdata == NULL)
 		return;
 	cplen = strlen(cpdata);
 	p = malloc(cplen + 1);
 	snprintf(p, cplen+1, "%s", cpdata);
-	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
+*/
+//	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
 //	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_MARKUP*/2, p);
 
 //	clipdrawer_lower_view(ad);
@@ -112,6 +137,7 @@ int clipdrawer_update_contents(void *data)
 {
 	struct appdata *ad = data;
 	int i, pos;
+	char *unesc = NULL;
 
 	// if delete mode, then back to normal mode
 //	if (get_clipdrawer_mode())
@@ -120,12 +146,16 @@ int clipdrawer_update_contents(void *data)
 	elm_list_clear(ad->txtlist);
 	for (i = 0; i < HISTORY_QUEUE_MAX_TXT_ITEMS; i++)
 	{
-		pos = get_current_history_position()+i;
-		if (pos > HISTORY_QUEUE_MAX_TXT_ITEMS-1)
-			pos = pos-HISTORY_QUEUE_MAX_TXT_ITEMS;
+		pos = get_current_history_position() - i;
+		if (pos < 0)
+			pos = pos+HISTORY_QUEUE_MAX_TXT_ITEMS;
+
 		if (get_item_contents_by_pos(pos) != NULL && strlen(get_item_contents_by_pos(pos)) > 0)
 		{
-			elm_list_item_append(ad->txtlist, get_item_contents_by_pos(pos), NULL, NULL, NULL, ad);
+			unesc = clipdrawer_get_plain_string_from_escaped(get_item_contents_by_pos(pos));
+			unesc = unesc ? unesc : "";
+			elm_list_item_append(ad->txtlist, unesc, NULL, NULL, NULL, ad);
+			free(unesc);
 		}
 	}
 	elm_list_go(ad->txtlist);
@@ -214,7 +244,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 	{
 		ti->delbtn = elm_check_add(obj);
 		elm_object_style_set(ti->delbtn, "extended/imagegrid");
-		elm_check_state_set(ti->delbtn, 1);
+		elm_check_state_set(ti->delbtn, EINA_TRUE);
 		evas_object_show(ti->delbtn);
 		return ti->delbtn;
 	}

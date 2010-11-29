@@ -103,7 +103,7 @@ int get_current_history_position()
 {
 	int pos = g_history_pos-1;
 	if (pos < 0)
-		pos = HISTORY_QUEUE_MAX_TXT_ITEMS;
+		pos = HISTORY_QUEUE_MAX_TXT_ITEMS-1;
 	
 	return pos;
 }
@@ -319,6 +319,7 @@ int processing_selection_request(Ecore_X_Event_Selection_Request *ev)
 
 	/* TODO : if there are request which cbhm doesn't understand,
 	   then reply None property to requestor */
+	/* TODO : add image type */
 	if (ev->target == atomTargets) 
 	{
 //        Atom types[2] = { atomTargets, atomUTF8String };
