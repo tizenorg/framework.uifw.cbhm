@@ -1,3 +1,11 @@
+cbhm (0.1.0-47) unstable; urgency=low
+
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-47
+  * change history item retrieving method, disable window effect
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Mon, 29 Nov 2010 16:32:31 +0900
+
 cbhm (0.1.0-46) unstable; urgency=low
 
   * Git: 165.213.180.234:/git/slp/pkgs/cbhm
