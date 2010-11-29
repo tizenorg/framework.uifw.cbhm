@@ -79,6 +79,8 @@ static Evas_Object* create_win(void *data, const char *name)
 	struct appdata *ad = (struct appdata *) data;
 	Evas_Object *eo;
 	int w, h;
+	Ecore_X_Display *dpy;
+	dpy = ecore_x_display_get();
 
 	eo = elm_win_add(NULL, name, ELM_WIN_BASIC);
 	if (eo)
@@ -88,6 +90,10 @@ static Evas_Object* create_win(void *data, const char *name)
 		ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
 		ad->root_w = w;	ad->root_h = h;
 		evas_object_resize(eo, w, h);
+		if (dpy)
+		{   //disable window effect
+			utilx_set_window_effect_state(dpy, elm_win_xwindow_get(eo), 0);
+		}
 	}
 
 	return eo;
