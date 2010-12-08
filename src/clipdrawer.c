@@ -119,7 +119,7 @@ static void _list_click_delete(void *data, Evas_Object *obj, void *event_info)
     elm_list_item_selected_set(it, 0);
 
 	Evas_Object *popup = elm_popup_add(ad->win_main);
-	elm_popup_timeout_set(popup, 3);
+	elm_popup_timeout_set(popup, 5);
 	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	elm_popup_desc_set(popup, "Are you sure delete this?");
 	elm_popup_buttons_add(popup, 2,
@@ -309,7 +309,7 @@ static void _grid_click_delete(void *data, Evas_Object *obj, void *event_info)
 	}
 
 	Evas_Object *popup = elm_popup_add(ad->win_main);
-	elm_popup_timeout_set(popup, 3);
+	elm_popup_timeout_set(popup, 5);
 	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	elm_popup_desc_set(popup, "Are you sure delete this?");
 	elm_popup_buttons_add(popup, 2,

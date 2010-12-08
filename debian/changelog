@@ -1,3 +1,11 @@
+cbhm (0.1.0-48) unstable; urgency=low
+
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-48
+  * change delete popup timeout
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Mon, 29 Nov 2010 17:03:40 +0900
+
 cbhm (0.1.0-47) unstable; urgency=low
 
   * Git: 165.213.180.234:/git/slp/pkgs/cbhm
