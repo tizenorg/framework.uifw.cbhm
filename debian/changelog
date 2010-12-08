@@ -1,3 +1,11 @@
+cbhm (0.1.0-49) unstable; urgency=low
+
+  * Git: 165.213.180.234:/git/slp/pkgs/cbhm
+  * Tag: cbhm_0.1.0-49
+  * remove screen capture keygrab
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Wed, 08 Dec 2010 11:19:51 +0900
+
 cbhm (0.1.0-48) unstable; urgency=low
 
   * Git: 165.213.180.234:/git/slp/pkgs/cbhm
