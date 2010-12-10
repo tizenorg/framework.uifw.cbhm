@@ -16,9 +16,9 @@ struct appdata
 	int root_h;
 	Evas *evas;
 	Evas_Object *win_main;
-	Evas_Object *ly_main; /* layout widget based on EDJ */
+	Evas_Object *ly_main; // layout widget based on EDJ 
 	/* add more variables here */
-	Evas_Object *imggrid; 
+	Evas_Object *hig;     // history item gengrid 
 	Evas_Object *txtlist; 
 };
 

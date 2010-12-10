@@ -263,7 +263,7 @@ int get_selection_content(void *data)
 		check_regular_file(cbbuf+7))
 	{
 		DTRACE("clipdrawer add path = %s\n", cbbuf+7);
-		clipdrawer_add_image_item(cbbuf+7);
+		clipdrawer_add_item(cbbuf+7, GI_IMAGE);
 	}
 	else
 		add_to_storage_buffer(ad, cbbuf, unesc_len);
@@ -279,10 +279,13 @@ int get_selection_content(void *data)
 		check_regular_file(unesc+7))
 	{
 		DTRACE("clipdrawer add path = %s\n", unesc+7);
-		clipdrawer_add_image_item(unesc+7);
+		clipdrawer_add_item(unesc+7, GI_IMAGE);
 	}
 	else
+	{
 		add_to_storage_buffer(ad, unesc, unesc_len);
+		clipdrawer_add_item(unesc, GI_TEXT);
+	}
 	DTRACE("len = %ld, data = %s\n", unesc_len, unesc);
 	free(unesc);
 
@@ -598,7 +601,7 @@ static int _xfocus_out_cb(void *data, int ev_type, void *event)
 
 	DTRACE("XE:FOCUS OUT\n");
 
-	clipdrawer_lower_view(ad);
+//	clipdrawer_lower_view(ad);
 
 	return TRUE;
 }

@@ -18,19 +18,23 @@ static const char *g_images_path[] = {
 };
 #define N_IMAGES (1)
 
-#define GRID_ITEM_SIZE 100
+#define GRID_ITEM_W 187
+#define GRID_ITEM_H 151
+#define GRID_IMAGE_LIMIT_W 91
+#define GRID_IMAGE_LIMIT_H 113
 
 // 0 - select mode, 1 - delete mode
 static int g_clipdrawer_mode = 0;
 // gic should live at gengrid callback functions
 Elm_Gengrid_Item_Class gic;
 
-typedef struct tag_gridimgitem
+typedef struct tag_griditem
 {
 	Elm_Gengrid_Item *item;
-	const char *path;
+	const char *idata;
+	int itype;
 	Evas_Object *delbtn;
-} gridimgitem_t;
+} griditem_t;
 
 static int toggle_clipdrawer_mode()
 {
@@ -41,13 +45,6 @@ static int toggle_clipdrawer_mode()
 static int get_clipdrawer_mode()
 {
 	return g_clipdrawer_mode;
-}
-
-static void _list_longpress(void *data, Evas_Object *obj, void *event_info)
-{
-	struct appdata *ad = data;
-
-	clipdrawer_change_mode(ad);
 }
 
 static void _list_click_paste(void *data, Evas_Object *obj, void *event_info)
@@ -100,39 +97,6 @@ static void _list_click_paste(void *data, Evas_Object *obj, void *event_info)
 //	clipdrawer_lower_view(ad);
 }
 
-static void _list_del_response_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	Elm_List_Item *it = (Elm_List_Item *)data;
-	evas_object_del(obj);
-
-	if((int)event_info == ELM_POPUP_RESPONSE_OK)
-		elm_list_item_del(it);
-}
-
-static void _list_click_delete(void *data, Evas_Object *obj, void *event_info)
-{
-	struct appdata *ad = data;
-    Elm_List_Item *it = (Elm_List_Item *) elm_list_selected_item_get(obj);
-	if (it == NULL)
-		return;
-
-    elm_list_item_selected_set(it, 0);
-
-	Evas_Object *popup = elm_popup_add(ad->win_main);
-	elm_popup_timeout_set(popup, 5);
-	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	elm_popup_desc_set(popup, "Are you sure delete this?");
-	elm_popup_buttons_add(popup, 2,
-						  "Yes", ELM_POPUP_RESPONSE_OK,
-						  "No", ELM_POPUP_RESPONSE_CANCEL,
-						  NULL);
-	evas_object_smart_callback_add(popup, "response", _list_del_response_cb, it);
-	evas_object_show(popup);
-
-//	char *slabel = NULL;
-//	slabel = elm_list_item_label_get(it);
-}
-
 int clipdrawer_update_contents(void *data)
 {
 	struct appdata *ad = data;
@@ -143,7 +107,6 @@ int clipdrawer_update_contents(void *data)
 //	if (get_clipdrawer_mode())
 //		clipdrawer_change_mode(ad);
 
-	elm_list_clear(ad->txtlist);
 	for (i = 0; i < HISTORY_QUEUE_MAX_TXT_ITEMS; i++)
 	{
 		pos = get_current_history_position() - i;
@@ -158,7 +121,6 @@ int clipdrawer_update_contents(void *data)
 			free(unesc);
 		}
 	}
-	elm_list_go(ad->txtlist);
 
 	/* FIXME : sometimes when list update, screen isn't updated */
 
@@ -175,70 +137,74 @@ const char* clipdrawer_get_plain_string_from_escaped(char *escstr)
 Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part)
 {
 	int delete_mode = get_clipdrawer_mode();
-	gridimgitem_t *ti = (gridimgitem_t *)data;
+	griditem_t *ti = (griditem_t *)data;
+
 	if (!strcmp(part, "elm.swallow.icon"))
 	{
-/*
-		Evas_Object *icon = elm_icon_add(obj);
-		elm_icon_file_set(icon, ti->path, NULL);
-		evas_object_size_hint_aspect_set(icon, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
-		evas_object_show(icon);
-*/
-		Ecore_Evas *my_ee;
-		Evas *my_e;
-		Evas_Object *fgimg;
-		Evas_Object *bgrect;
-		Evas_Object *delbtn;
-		Evas_Object *icon;
-		my_ee = ecore_evas_buffer_new(GRID_ITEM_SIZE, GRID_ITEM_SIZE);
-		my_e = ecore_evas_get(my_ee);
-
-		bgrect = evas_object_rectangle_add(my_e);
-		evas_object_color_set(bgrect, 119, 116, 100, 255);
-		evas_object_resize(bgrect, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
-		evas_object_move(bgrect, 0, 0);
-		evas_object_show(bgrect);
-
-		#define BORDER_SIZE 10
-		fgimg = evas_object_image_add(my_e);
-		evas_object_image_load_size_set(fgimg, GRID_ITEM_SIZE-BORDER_SIZE*2, GRID_ITEM_SIZE-BORDER_SIZE*2);
-		evas_object_image_file_set(fgimg, ti->path, NULL);
-		evas_object_image_fill_set(fgimg, 0, 0, GRID_ITEM_SIZE-BORDER_SIZE*2, GRID_ITEM_SIZE-BORDER_SIZE*2);
-		evas_object_image_filled_set(fgimg, 1);
-		evas_object_resize(fgimg, GRID_ITEM_SIZE-BORDER_SIZE*2, GRID_ITEM_SIZE-BORDER_SIZE*2);
-		evas_object_move(fgimg, BORDER_SIZE, BORDER_SIZE);
-		evas_object_show(fgimg);
-
-/*
-		if (delete_mode)
+		if (ti->itype == GI_TEXT)
 		{
-			delbtn = evas_object_image_add(my_e);
-			evas_object_image_load_size_set(delbtn, 33, 33);
-			evas_object_image_file_set(delbtn, DELETE_ICON_PATH, NULL);
-			evas_object_image_fill_set(delbtn, 0, 0, 33, 33);
-			evas_object_image_filled_set(delbtn, 1);
-			evas_object_resize(delbtn, 33, 33);
-			evas_object_move(delbtn, 55, 38);
-			evas_object_show(delbtn);
+			Evas_Object *ientry = elm_entry_add(obj);
+			elm_entry_entry_set(ientry, eina_strbuf_string_get(ti->idata));
+			elm_entry_background_color_set(ientry, 242, 233, 183, 255);
+			elm_entry_editable_set(ientry, EINA_FALSE);
+			evas_object_size_hint_aspect_set(ientry, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
+			evas_object_show(ientry);
+			return ientry;
 		}
+		else// if (ti->itype == GI_IMAGE)
+		{
+			Evas_Object *icon = elm_icon_add(obj);
+			elm_icon_file_set(icon, ti->idata, NULL);
+			evas_object_size_hint_aspect_set(icon, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
+			evas_object_show(icon);
+
+/*
+			Ecore_Evas *my_ee;
+			Evas *my_e;
+			Evas_Object *fgimg;
+			Evas_Object *bgrect;
+			Evas_Object *delbtn;
+			Evas_Object *icon;
+			my_ee = ecore_evas_buffer_new(GRID_ITEM_W, GRID_ITEM_H);
+			my_e = ecore_evas_get(my_ee);
+
+			bgrect = evas_object_rectangle_add(my_e);
+			evas_object_color_set(bgrect, 255, 255, 255, 255);
+			evas_object_resize(bgrect, GRID_ITEM_W, GRID_ITEM_H);
+			evas_object_move(bgrect, 0, 0);
+			evas_object_show(bgrect);
+
+#define BORDER_SIZE 1
+			fgimg = evas_object_image_add(my_e);
+			evas_object_image_load_size_set(fgimg, GRID_ITEM_W-BORDER_SIZE*2, GRID_ITEM_H-BORDER_SIZE*2);
+			evas_object_image_file_set(fgimg, ti->idata, NULL);
+			evas_object_image_fill_set(fgimg, 0, 0, GRID_ITEM_W-BORDER_SIZE*2, GRID_ITEM_H-BORDER_SIZE*2);
+			evas_object_image_filled_set(fgimg, 1);
+			int x,y;
+			evas_object_image_size_get(fgimg, &x, &y);
+			fprintf(stderr, "## img x = %d, y = %d\n", x, y);
+			evas_object_resize(fgimg, GRID_ITEM_W-BORDER_SIZE*2, GRID_ITEM_H-BORDER_SIZE*2);
+			evas_object_move(fgimg, BORDER_SIZE, BORDER_SIZE);
+			evas_object_show(fgimg);
+
+			icon = evas_object_image_add(evas_object_evas_get(obj));
+
+			evas_object_image_data_set(icon, NULL);
+			evas_object_image_size_set(icon, GRID_ITEM_W, GRID_ITEM_H);
+			evas_object_image_fill_set(icon, 0, 0, GRID_ITEM_W, GRID_ITEM_H);
+			evas_object_image_filled_set(icon, EINA_TRUE);
+			evas_object_image_data_copy_set(icon, (int *)ecore_evas_buffer_pixels_get(my_ee));
+			evas_object_image_data_update_add(icon, 0, 0, GRID_ITEM_W, GRID_ITEM_H);
+
+			evas_object_del(bgrect);
+			evas_object_del(fgimg);
+			ecore_evas_free(my_ee);
 */
-	
-		icon = evas_object_image_add(evas_object_evas_get(obj));
 
-		evas_object_image_data_set(icon, NULL);
-		evas_object_image_size_set(icon, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
-		evas_object_image_fill_set(icon, 0, 0, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
-		evas_object_image_filled_set(icon, EINA_TRUE);
-		evas_object_image_data_copy_set(icon, (int *)ecore_evas_buffer_pixels_get(my_ee));
-		evas_object_image_data_update_add(icon, 0, 0, GRID_ITEM_SIZE, GRID_ITEM_SIZE);
+			return icon;
+		}
 
-		evas_object_del(bgrect);
-		evas_object_del(fgimg);
-		if (delete_mode)
-			evas_object_del(delbtn);
-		ecore_evas_free(my_ee);
-
-		return icon;
+//		return icon;
 	}
 	else if (!strcmp(part, "elm.swallow.end") && delete_mode)
 	{
@@ -265,8 +231,8 @@ static void _grid_click_paste(void *data, Evas_Object *obj, void *event_info)
 	char *file, *p;
 	int len;
 	Elm_Gengrid_Item *sgobj = NULL;
-	sgobj = elm_gengrid_selected_item_get(ad->imggrid);
-	gridimgitem_t *ti = NULL;
+	sgobj = elm_gengrid_selected_item_get(ad->hig);
+	griditem_t *ti = NULL;
 	ti = elm_gengrid_item_data_get(sgobj);
 
 	if (!sgobj || !ti)
@@ -274,9 +240,9 @@ static void _grid_click_paste(void *data, Evas_Object *obj, void *event_info)
 		DTRACE("ERR: cbhm can't get the selected image\n");
 		return;
 	}
-	len = strlen(ti->path);
+	len = strlen(ti->idata);
 	p = malloc(len + 10);
-	snprintf(p,len+10, "file:///%s", ti->path);
+	snprintf(p,len+10, "file:///%s", ti->idata);
 
 	elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
 
@@ -298,8 +264,8 @@ static void _grid_click_delete(void *data, Evas_Object *obj, void *event_info)
 {
 	struct appdata *ad = data;
 	Elm_Gengrid_Item *sgobj = NULL;
-	sgobj = elm_gengrid_selected_item_get(ad->imggrid);
-	gridimgitem_t *ti = NULL;
+	sgobj = elm_gengrid_selected_item_get(ad->hig);
+	griditem_t *ti = NULL;
 	ti = elm_gengrid_item_data_get(sgobj);
 
 	if (!sgobj || !ti)
@@ -322,8 +288,11 @@ static void _grid_click_delete(void *data, Evas_Object *obj, void *event_info)
 
 void _grid_del(const void *data, Evas_Object *obj)
 {
-	gridimgitem_t *ti = (gridimgitem_t *)data;
-	eina_stringshare_del(ti->path);
+	griditem_t *ti = (griditem_t *)data;
+	if (ti->itype == GI_IMAGE)
+		eina_stringshare_del(ti->idata);
+	else
+		eina_strbuf_free(ti->idata);
 	free(ti);
 }
 
@@ -333,27 +302,27 @@ int clipdrawer_refresh_imghistory_item(void *data, int delete_mode)
 	Eina_List *oldlist = NULL;
 	const Eina_List *l;
 	Elm_Gengrid_Item *lgrid;
-	gridimgitem_t *lgitem;
+	griditem_t *lgitem;
 	Evas_Object *ngg;
 	Evas_Object *oldgg;
 	
-	oldlist = elm_gengrid_items_get(ad->imggrid);
+	oldlist = elm_gengrid_items_get(ad->hig);
 	elm_layout_content_unset(ad->ly_main, "imagehistory/list");
 	ngg = elm_gengrid_add(ad->win_main);
 	elm_layout_content_set(ad->ly_main, "imagehistory/list", ngg);
-	oldgg = ad->imggrid;
-	ad->imggrid = ngg;
-	elm_gengrid_item_size_set(ad->imggrid, GRID_ITEM_SIZE, GRID_ITEM_SIZE+3);
-	elm_gengrid_align_set(ad->imggrid, 0.0, 0.0);
-	elm_gengrid_horizontal_set(ad->imggrid, EINA_TRUE);
-	elm_gengrid_bounce_set(ad->imggrid, EINA_TRUE, EINA_FALSE);
-	elm_gengrid_multi_select_set(ad->imggrid, EINA_FALSE);
+	oldgg = ad->hig;
+	ad->hig = ngg;
+	elm_gengrid_item_size_set(ad->hig, GRID_ITEM_W, GRID_ITEM_H+3);
+	elm_gengrid_align_set(ad->hig, 0.5, 0.5);
+//	elm_gengrid_horizontal_set(ad->hig, EINA_TRUE);
+	elm_gengrid_bounce_set(ad->hig, EINA_TRUE, EINA_FALSE);
+	elm_gengrid_multi_select_set(ad->hig, EINA_FALSE);
 	if (delete_mode)
-		evas_object_smart_callback_add(ad->imggrid, "selected", _grid_click_delete, ad);
+		evas_object_smart_callback_add(ad->hig, "selected", _grid_click_delete, ad);
 	else
-		evas_object_smart_callback_add(ad->imggrid, "selected", _grid_click_paste, ad);
-	evas_object_smart_callback_add(ad->imggrid, "longpressed", _grid_longpress, ad);
-	evas_object_size_hint_weight_set(ad->imggrid, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+		evas_object_smart_callback_add(ad->hig, "selected", _grid_click_paste, ad);
+	evas_object_smart_callback_add(ad->hig, "longpressed", _grid_longpress, ad);
+	evas_object_size_hint_weight_set(ad->hig, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
 	gic.item_style = "default_grid";
 	gic.func.label_get = NULL;
@@ -364,65 +333,14 @@ int clipdrawer_refresh_imghistory_item(void *data, int delete_mode)
 	EINA_LIST_REVERSE_FOREACH(oldlist, l, lgrid)
 	{
 		lgitem = elm_gengrid_item_data_get(lgrid);
-		clipdrawer_add_image_item(lgitem->path);
+		clipdrawer_add_item(lgitem->idata, GI_IMAGE);
 	}
 
-	evas_object_show (ad->imggrid);
+	evas_object_show (ad->hig);
 
 	elm_gengrid_clear(oldgg);
 	evas_object_hide(oldgg);
 	evas_object_del(oldgg);
-
-	return 0;
-}
-
-int clipdrawer_refresh_txthistory_item(void *data, int delete_mode)
-{
-	struct appdata *ad = data;
-	Eina_List *oldlist = NULL;
-	const Eina_List *l;
-	Elm_List_Item *litem;
-	const char *ltext;
-	Evas_Object *ntl = NULL;
-//	Evas_Object *ci = NULL;
-
-	oldlist = elm_list_items_get(ad->txtlist);
-	elm_layout_content_unset(ad->ly_main, "texthistory/list");
-	ntl = elm_list_add(ad->win_main);
-	elm_layout_content_set(ad->ly_main, "texthistory/list", ntl);
-	elm_object_style_set(ntl, "extended/historylist");
-
-	EINA_LIST_FOREACH(oldlist, l, litem)
-	{
-		ltext = elm_list_item_label_get(litem);
-		if (delete_mode)
-		{
-			Evas_Object *ci = elm_icon_add(ad->win_main);
-			elm_icon_file_set(ci, DELETE_ICON_PATH, NULL);
-			evas_object_size_hint_min_set(ci, 33 * elm_scale_get(), 33 * elm_scale_get());
-//			evas_object_size_hint_aspect_set(ci, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
-			evas_object_show(ci);
-			elm_list_item_append(ntl, ltext, NULL, ci, NULL, ad);
-		}
-		else
-		{
-			elm_list_item_append(ntl, ltext, NULL, NULL, NULL, ad);
-		}
-	}
-
-	elm_list_clear(ad->txtlist);
-	evas_object_hide(ad->txtlist);
-	evas_object_del(ad->txtlist);
-
-	ad->txtlist = ntl;
-	evas_object_size_hint_weight_set(ad->txtlist, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	if (delete_mode)
-		evas_object_smart_callback_add(ad->txtlist, "selected", _list_click_delete, ad);
-	else
-		evas_object_smart_callback_add(ad->txtlist, "selected", _list_click_paste, ad);
-	evas_object_smart_callback_add(ad->txtlist, "longpressed", _list_longpress, ad);
-
-	elm_list_go(ad->txtlist);
 
 	return 0;
 }
@@ -442,11 +360,11 @@ int clipdrawer_change_mode(void *data)
 }
 
 // FIXME: how to remove calling g_get_main_appdata()? 
-//        it's mainly used at 'clipdrawer_add_image_item'
-int clipdrawer_add_image_item(char *imagepath)
+//        it's mainly used at 'clipdrawer_image_item'
+int clipdrawer_add_item(char *imagepath, int type)
 {
 	struct appdata *ad = g_get_main_appdata();
-	gridimgitem_t *newgenimg = NULL;
+	griditem_t *newgi = NULL;
 	char* filepath = NULL;
 	Eina_List *igl = NULL;
 	unsigned int igl_counter = 0;
@@ -455,18 +373,19 @@ int clipdrawer_add_image_item(char *imagepath)
 //	if (get_clipdrawer_mode())
 //		clipdrawer_change_mode(ad);
 
+/*
 	if (!check_regular_file(imagepath))
 	{
 		DTRACE("Error : it isn't normal file = %s\n", imagepath);
 		return -1;
 	}
 
-	igl = elm_gengrid_items_get(ad->imggrid);
+	igl = elm_gengrid_items_get(ad->hig);
 	igl_counter = eina_list_count(igl);
 
 	Eina_List *l;
 	Elm_Gengrid_Item *item;
-	gridimgitem_t *ti = NULL;
+	griditem_t *ti = NULL;
 
 	EINA_LIST_FOREACH(igl, l, item)
 	{
@@ -483,9 +402,31 @@ int clipdrawer_add_image_item(char *imagepath)
 		elm_gengrid_item_del(eina_list_data_get(eina_list_last(igl)));
 	}
 
-	newgenimg = malloc(sizeof(gridimgitem_t));
-	newgenimg->path = eina_stringshare_add(imagepath);
-	newgenimg->item = elm_gengrid_item_prepend(ad->imggrid, &gic, newgenimg, NULL, NULL);
+	newgi = malloc(sizeof(griditem_t));
+	newgi->itype = GI_IMAGE;
+	newgi->idata = eina_stringshare_add(imagepath);
+	newgi->item = elm_gengrid_item_prepend(ad->hig, &gic, newgi, NULL, NULL);
+*/
+
+	static int testmode = 0;
+	testmode++;
+
+	newgi = malloc(sizeof(griditem_t));
+	if (testmode % 3)
+	{
+	newgi->itype = GI_IMAGE;
+	newgi->idata = eina_stringshare_add(imagepath);
+	}
+	else
+	{
+	newgi->itype = GI_TEXT;
+	newgi->idata = eina_strbuf_new();
+	eina_strbuf_append(newgi->idata, "hello!! <item absize=40x30 href=file:///usr/share/icon/cbhm/cbhm_default_img.png></item>");
+
+	}
+//	newgi->item = elm_gengrid_item_prepend(ad->hig, &gic, newgi, NULL, NULL);
+	newgi->item = elm_gengrid_item_append(ad->hig, &gic, newgi, NULL, NULL);
+
 
 	return TRUE;
 }
@@ -495,7 +436,7 @@ clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 {
 	struct appdata *ad = data;
 
-	#define EDJE_CLOSE_PART_PREFIX "closebutton/"
+	#define EDJE_CLOSE_PART_PREFIX "background/close"
 	if (!strncmp(source, EDJE_CLOSE_PART_PREFIX, strlen(EDJE_CLOSE_PART_PREFIX)))
 	{
 		clipdrawer_lower_view(ad);
@@ -507,7 +448,7 @@ int clipdrawer_init(void *data)
 	struct appdata *ad = data;
 	double cdy, cdw;
 
-	// for elm_check, elm_list
+	// for elm_check
 	elm_theme_extension_add(NULL, APP_EDJ_FILE);
 
 	cdy = (1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h;
@@ -520,19 +461,19 @@ int clipdrawer_init(void *data)
 
 	edje_object_signal_callback_add(elm_layout_edje_get(ad->ly_main), "mouse,up,1", "*", clipdrawer_ly_clicked, ad);
 
-	ad->imggrid = NULL;
-	ad->imggrid = elm_gengrid_add(ad->win_main);
-	elm_layout_content_set(ad->ly_main, "imagehistory/list", ad->imggrid);
-	elm_gengrid_item_size_set(ad->imggrid, GRID_ITEM_SIZE, GRID_ITEM_SIZE+3);
-	elm_gengrid_align_set(ad->imggrid, 0.0, 0.0);
-	elm_gengrid_horizontal_set(ad->imggrid, EINA_TRUE);
-	elm_gengrid_bounce_set(ad->imggrid, EINA_TRUE, EINA_FALSE);
-	elm_gengrid_multi_select_set(ad->imggrid, EINA_FALSE);
-	evas_object_smart_callback_add(ad->imggrid, "selected", _grid_click_paste, ad);
-	evas_object_smart_callback_add(ad->imggrid, "longpressed", _grid_longpress, ad);
-	evas_object_size_hint_weight_set(ad->imggrid, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	ad->hig = NULL;
+	ad->hig = elm_gengrid_add(ad->win_main);
+	elm_layout_content_set(ad->ly_main, "historyitems", ad->hig);
+	elm_gengrid_item_size_set(ad->hig, GRID_ITEM_W, GRID_ITEM_H);
+	elm_gengrid_align_set(ad->hig, 0.5, 0.5);
+	elm_gengrid_horizontal_set(ad->hig, EINA_TRUE);
+	elm_gengrid_bounce_set(ad->hig, EINA_TRUE, EINA_FALSE);
+	elm_gengrid_multi_select_set(ad->hig, EINA_FALSE);
+//	evas_object_smart_callback_add(ad->hig, "selected", _grid_click_paste, ad);
+//	evas_object_smart_callback_add(ad->hig, "longpressed", _grid_longpress, ad);
+	evas_object_size_hint_weight_set(ad->hig, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
-	elm_gengrid_clear(ad->imggrid);
+	elm_gengrid_clear(ad->hig);
 
 	gic.item_style = "default_grid";
 	gic.func.label_get = NULL;
@@ -541,14 +482,15 @@ int clipdrawer_init(void *data)
 	gic.func.del = _grid_del;
 
 	int i;
-	gridimgitem_t *newgenimg;
+	griditem_t *newgi;
 
-	for (i = 0; i < N_IMAGES; i++)
+//	for (i = 0; i < N_IMAGES; i++)
+	for (i = 0; i < 9; i++)
 	{
-		clipdrawer_add_image_item(g_images_path[i]);
+		clipdrawer_add_item(g_images_path[0], GI_IMAGE);
 	}
 
-	evas_object_show (ad->imggrid);
+	evas_object_show (ad->hig);
 
 // for debugging, calc image history pos
 /*
@@ -556,23 +498,13 @@ int clipdrawer_init(void *data)
    Evas_Coord vx, vy, vw, vh;
 
    edje_object_part_geometry_get(elm_layout_edje_get(ad->ly_main),"imagehistory/list",&x,&y,&w,&h);
-   evas_object_geometry_get (ad->imggrid, &vx,&vy,&vw,&vh);
+   evas_object_geometry_get (ad->hig, &vx,&vy,&vw,&vh);
    fprintf(stderr, "## x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
    fprintf(stderr, "## vx = %d, vy = %d, vw = %d, vh = %d\n", vx, vy, vw, vh);
 */
 
-	ad->txtlist = elm_list_add(ad->win_main);
-	elm_layout_content_set(ad->ly_main, "texthistory/list", ad->txtlist);
-	elm_object_style_set(ad->txtlist, "extended/historylist");
-	evas_object_size_hint_weight_set(ad->txtlist, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_smart_callback_add(ad->txtlist, "selected", _list_click_paste, ad);
-	evas_object_smart_callback_add(ad->txtlist, "longpressed", _list_longpress, ad);
-	elm_list_item_append(ad->txtlist, "default", NULL, NULL, NULL, ad);
-
-	elm_list_go(ad->txtlist);
-
-	if (get_item_counts() != 0)
-		clipdrawer_update_contents(ad);
+//	if (get_item_counts() != 0)
+//		clipdrawer_update_contents(ad);
 
 	return 0;
 }
@@ -585,7 +517,7 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-	// clipdrawer_activate_view(ad);
+	clipdrawer_activate_view(ad);
 
 	return 0;
 }

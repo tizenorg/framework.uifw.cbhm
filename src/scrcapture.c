@@ -56,7 +56,7 @@ static Eina_Bool _scrcapture_capture_postprocess(void* data)
 	snprintf(imgpath, strlen(capimginfo->filename)+strlen("file://")+1,
 			 "%s%s", "file://", capimginfo->filename);
 	DTRACE("add to image history = %s\n", imgpath+strlen("file://"));
-	clipdrawer_add_image_item(imgpath+strlen("file://"));
+	clipdrawer_add_item(imgpath+strlen("file://"), GI_IMAGE);
 	free(imgpath);
         
 	evas_object_del(capimginfo->eo);
@@ -112,9 +112,42 @@ static Eina_Bool scrcapture_keydown_cb(void *data, int type, void *event)
 {
 	struct appdata *ad = data;
 	Ecore_Event_Key *ev = event;
+	static int savedkey = 0;
+	static double savedtime = 0.0;
 
-	if (!strcmp(ev->keyname, KEY_END))
-		clipdrawer_lower_view(ad);
+#define KEY_COMPOSITE_DURATION 1.0
+
+	/* FIXME : it will be changed to camera+select, not ony one key */
+	if (!strcmp(ev->keyname, KEY_CAMERA) || !strcmp(ev->keyname, KEY_POWER))
+	{
+		int curkey = 0;
+		DTRACE("keydown = %s\n", ev->keyname);
+
+		struct timeval tv; 
+		gettimeofday(&tv, NULL); 
+		double ct = tv.tv_sec+(tv.tv_usec/1000000.0);
+
+		if (!strcmp(ev->keyname, KEY_CAMERA))
+			curkey = KEY_CAMERA;
+		else
+			curkey = KEY_POWER;
+
+		if (((ct - savedtime) <= KEY_COMPOSITE_DURATION) && savedkey != curkey)
+		{
+			DTRACE("screen capture is triggered\n");
+			capture_current_screen(ad);
+		}
+
+		savedtime = ct;
+		savedkey = curkey;
+	}
+	else
+	{
+		savedtime = 0.0;
+		savedkey = 0;
+		if (!strcmp(ev->keyname, KEY_END))
+			clipdrawer_lower_view(ad);
+	}
 
 	return ECORE_CALLBACK_PASS_ON;
 }
@@ -129,6 +162,19 @@ int init_scrcapture(void *data)
 	Ecore_X_Display *xdisp = ecore_x_display_get();
 	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
 
+/*
+	result = utilx_grab_key(xdisp, xwin, KEY_SELECT, SHARED_GRAB);
+	if(!!result)
+		DTRACE("KEY_HOME key grab is failed\n");
+*/
+	result = utilx_grab_key(xdisp, xwin, KEY_POWER, SHARED_GRAB);
+	if(!!result)
+		DTRACE("KEY_HOME key grab is failed\n");
+
+	result = utilx_grab_key(xdisp, xwin, KEY_CAMERA, SHARED_GRAB);
+	if(!!result)
+		DTRACE( "KEY_CAMERA key grab is failed\n");
+
 	ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, scrcapture_keydown_cb, ad);
 
 	return 0;
@@ -140,6 +186,10 @@ void close_scrcapture(void *data)
 
 	Ecore_X_Display *xdisp = ecore_x_display_get();
 	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
+
+//	utilx_ungrab_key(xdisp, xwin, KEY_SELECT);
+	utilx_ungrab_key(xdisp, xwin, KEY_POWER);
+	utilx_ungrab_key(xdisp, xwin, KEY_CAMERA);
 }
 
 
