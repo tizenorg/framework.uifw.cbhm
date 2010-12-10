@@ -25,6 +25,6 @@ void clipdrawer_lower_view(void *data);
 const char* clipdrawer_get_plain_string_from_escaped(char *escstr);
 int clipdrawer_update_contents(void *data);
 
-int clipdrawer_add_item(char *imagepath, int type);
+int clipdrawer_add_item(char *idata, int type);
 
 #endif // _clipdrawer_h_

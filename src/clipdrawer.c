@@ -147,7 +147,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			elm_entry_entry_set(ientry, eina_strbuf_string_get(ti->idata));
 			elm_entry_background_color_set(ientry, 242, 233, 183, 255);
 			elm_entry_editable_set(ientry, EINA_FALSE);
-			evas_object_size_hint_aspect_set(ientry, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
+//			evas_object_size_hint_aspect_set(ientry, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
 			evas_object_show(ientry);
 			return ientry;
 		}
@@ -206,6 +206,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 
 //		return icon;
 	}
+/*
 	else if (!strcmp(part, "elm.swallow.end") && delete_mode)
 	{
 		ti->delbtn = elm_check_add(obj);
@@ -214,6 +215,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 		evas_object_show(ti->delbtn);
 		return ti->delbtn;
 	}
+*/
 	   
 	return NULL;
 }
@@ -240,15 +242,22 @@ static void _grid_click_paste(void *data, Evas_Object *obj, void *event_info)
 		DTRACE("ERR: cbhm can't get the selected image\n");
 		return;
 	}
-	len = strlen(ti->idata);
-	p = malloc(len + 10);
-	snprintf(p,len+10, "file:///%s", ti->idata);
+	if (ti->itype == GI_TEXT)
+	{
+		char *p = strdup(eina_strbuf_string_get(ti->idata));
 
-	elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
+		elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
+	}
+	else //if (ti->itype == GI_IMAGE)
+	{
+		len = strlen(ti->idata);
+		p = malloc(len + 10);
+		snprintf(p,len+10, "file:///%s", ti->idata);
 
-//	clipdrawer_lower_view(ad);
+		elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
 
-	elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
+		elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
+	}
 }
 
 static void _grid_del_response_cb(void *data, Evas_Object *obj, void *event_info)
@@ -360,7 +369,7 @@ int clipdrawer_change_mode(void *data)
 
 // FIXME: how to remove calling g_get_main_appdata()? 
 //        it's mainly used at 'clipdrawer_image_item'
-int clipdrawer_add_item(char *imagepath, int type)
+int clipdrawer_add_item(char *idata, int type)
 {
 	struct appdata *ad = g_get_main_appdata();
 	griditem_t *newgi = NULL;
@@ -407,6 +416,7 @@ int clipdrawer_add_item(char *imagepath, int type)
 	newgi->item = elm_gengrid_item_prepend(ad->hig, &gic, newgi, NULL, NULL);
 */
 
+/*
 	static int testmode = 0;
 	testmode++;
 
@@ -423,9 +433,24 @@ int clipdrawer_add_item(char *imagepath, int type)
 	eina_strbuf_append(newgi->idata, "hello!! <item absize=40x30 href=file:///usr/share/icon/cbhm/cbhm_default_img.png></item>");
 
 	}
-//	newgi->item = elm_gengrid_item_prepend(ad->hig, &gic, newgi, NULL, NULL);
 	newgi->item = elm_gengrid_item_append(ad->hig, &gic, newgi, NULL, NULL);
+*/
 
+	newgi = malloc(sizeof(griditem_t));
+	newgi->itype = type;
+
+	fprintf(stderr, "## add %d : %s\n", newgi->itype, idata);
+	if (type == GI_TEXT)
+	{
+		newgi->idata = eina_strbuf_new();
+		eina_strbuf_append(newgi->idata, idata);
+
+	}
+	else //if (type == GI_IMAGE)
+	{
+		newgi->idata = eina_stringshare_add(idata);
+	}
+	newgi->item = elm_gengrid_item_prepend(ad->hig, &gic, newgi, NULL, NULL);
 
 	return TRUE;
 }
@@ -468,7 +493,7 @@ int clipdrawer_init(void *data)
 	elm_gengrid_horizontal_set(ad->hig, EINA_TRUE);
 	elm_gengrid_bounce_set(ad->hig, EINA_TRUE, EINA_FALSE);
 	elm_gengrid_multi_select_set(ad->hig, EINA_FALSE);
-//	evas_object_smart_callback_add(ad->hig, "selected", _grid_click_paste, ad);
+	evas_object_smart_callback_add(ad->hig, "selected", _grid_click_paste, ad);
 //	evas_object_smart_callback_add(ad->hig, "longpressed", _grid_longpress, ad);
 	evas_object_size_hint_weight_set(ad->hig, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
@@ -483,8 +508,8 @@ int clipdrawer_init(void *data)
 	int i;
 	griditem_t *newgi;
 
-//	for (i = 0; i < N_IMAGES; i++)
-	for (i = 0; i < 9; i++)
+	for (i = 0; i < N_IMAGES; i++)
+//	for (i = 0; i < 9; i++)
 	{
 		clipdrawer_add_item(g_images_path[0], GI_IMAGE);
 	}
