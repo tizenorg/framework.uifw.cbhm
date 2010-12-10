@@ -296,7 +296,7 @@ void _grid_del(const void *data, Evas_Object *obj)
 	free(ti);
 }
 
-int clipdrawer_refresh_imghistory_item(void *data, int delete_mode)
+int clipdrawer_refresh_history_item(void *data, int delete_mode)
 {
 	struct appdata *ad = data;
 	Eina_List *oldlist = NULL;
@@ -353,8 +353,7 @@ int clipdrawer_change_mode(void *data)
 
 	DTRACE("clipdrawer delete mode = %d\n", get_clipdrawer_mode());
 
-	clipdrawer_refresh_imghistory_item(ad, get_clipdrawer_mode());
-	clipdrawer_refresh_txthistory_item(ad, get_clipdrawer_mode());
+	clipdrawer_refresh_history_item(ad, get_clipdrawer_mode());
 
 	return 0;
 }
