@@ -147,18 +147,20 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			elm_entry_entry_set(ientry, eina_strbuf_string_get(ti->idata));
 			elm_entry_background_color_set(ientry, 242, 233, 183, 255);
 			elm_entry_editable_set(ientry, EINA_FALSE);
-//			evas_object_size_hint_aspect_set(ientry, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
+//			evas_object_size_hint_aspect_set(ientry, EVAS_ASPECT_CONTROL_HORIZONTAL, 1, 1);
+//			evas_object_resize(ientry, GRID_ITEM_W, GRID_ITEM_H);
 			evas_object_show(ientry);
 			return ientry;
 		}
 		else// if (ti->itype == GI_IMAGE)
 		{
+/*
 			Evas_Object *icon = elm_icon_add(obj);
 			elm_icon_file_set(icon, ti->idata, NULL);
 			evas_object_size_hint_aspect_set(icon, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
 			evas_object_show(icon);
+*/
 
-/*
 			Ecore_Evas *my_ee;
 			Evas *my_e;
 			Evas_Object *fgimg;
@@ -199,7 +201,6 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			evas_object_del(bgrect);
 			evas_object_del(fgimg);
 			ecore_evas_free(my_ee);
-*/
 
 			return icon;
 		}
@@ -443,8 +444,9 @@ int clipdrawer_add_item(char *idata, int type)
 	if (type == GI_TEXT)
 	{
 		newgi->idata = eina_strbuf_new();
-		eina_strbuf_append(newgi->idata, idata);
-
+		eina_strbuf_append_n(newgi->idata, idata, 69);
+		if (strlen(idata) > 69)
+			eina_strbuf_append(newgi->idata, "...");
 	}
 	else //if (type == GI_IMAGE)
 	{
@@ -488,7 +490,7 @@ int clipdrawer_init(void *data)
 	ad->hig = NULL;
 	ad->hig = elm_gengrid_add(ad->win_main);
 	elm_layout_content_set(ad->ly_main, "historyitems", ad->hig);
-	elm_gengrid_item_size_set(ad->hig, GRID_ITEM_W, GRID_ITEM_H);
+	elm_gengrid_item_size_set(ad->hig, GRID_ITEM_W+3, GRID_ITEM_H);
 	elm_gengrid_align_set(ad->hig, 0.5, 0.5);
 	elm_gengrid_horizontal_set(ad->hig, EINA_TRUE);
 	elm_gengrid_bounce_set(ad->hig, EINA_TRUE, EINA_FALSE);
@@ -509,14 +511,21 @@ int clipdrawer_init(void *data)
 	griditem_t *newgi;
 
 	for (i = 0; i < N_IMAGES; i++)
-//	for (i = 0; i < 9; i++)
 	{
 		clipdrawer_add_item(g_images_path[0], GI_IMAGE);
 	}
 
+/*
+	clipdrawer_add_item("some aslkdfjalskdjflkasdf as dflkjas df aslk fjalskdf jlaks djflaksj dflkas flkas jdflkas jdflkasj dflk asjldfk jqwlkerj qlkw jflkzjx cvlkzx vlkasj fldkjqwlkerj qwlkerj qwlrkj asldkfjalskdjflaskdjflaskjdflaksjdflkasjdflkjasldfkjaslkrj123i4o uosadf osapd fuoasiuer lqw rlqwkj foiasudfqlkj;lrqjewlr  ", GI_TEXT);
+
+	clipdrawer_add_item("appliance r  ", GI_TEXT);
+	clipdrawer_add_item("appliance k  ", GI_TEXT);
+	clipdrawer_add_item("appliance s  ", GI_TEXT);
+*/
+
 	evas_object_show (ad->hig);
 
-// for debugging, calc image history pos
+// for debugging, calc history pos
 /*
    Evas_Coord x, y, w, h;
    Evas_Coord vx, vy, vw, vh;
