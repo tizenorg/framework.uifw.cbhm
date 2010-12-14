@@ -267,16 +267,14 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 
 //		return icon;
 	}
-/*
-	else if (!strcmp(part, "elm.swallow.end") && delete_mode)
+	else if (!strcmp(part, "elm.swallow.end") /*&& delete_mode*/)
 	{
 		ti->delbtn = elm_check_add(obj);
-		elm_object_style_set(ti->delbtn, "extended/imagegrid");
+		elm_object_style_set(ti->delbtn, "extended/itemcheck");
 		elm_check_state_set(ti->delbtn, EINA_TRUE);
 		evas_object_show(ti->delbtn);
 		return ti->delbtn;
 	}
-*/
 	   
 	return NULL;
 }
@@ -481,6 +479,7 @@ int clipdrawer_add_item(char *idata, int type)
 
 	if (igl_counter >= HISTORY_QUEUE_MAX_ITEMS)
 	{
+		// FIXME: add routine that is removing its elements
 		elm_gengrid_item_del(eina_list_data_get(eina_list_last(igl)));
 	}
 
@@ -576,7 +575,7 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-	// clipdrawer_activate_view(ad);
+	clipdrawer_activate_view(ad);
 
 	return 0;
 }
