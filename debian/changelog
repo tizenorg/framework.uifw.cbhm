@@ -1,3 +1,11 @@
+cbhm (0.1.0-51) unstable; urgency=low
+
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-51
+  * applying new UX(0.2)
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Tue, 14 Dec 2010 15:57:44 +0900
+
 cbhm (0.1.0-50) unstable; urgency=low
 
   * Git: 165.213.180.234:slp/pkgs/c/cbhm
