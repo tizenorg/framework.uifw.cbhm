@@ -266,7 +266,10 @@ int get_selection_content(void *data)
 		clipdrawer_add_item(cbbuf+7, GI_IMAGE);
 	}
 	else
+	{
 		add_to_storage_buffer(ad, cbbuf, unesc_len);
+		clipdrawer_add_item(cbbuf, GI_TEXT);
+	}
 	DTRACE("len = %ld, data = %s\n", unesc_len, cbbuf);
 */
 
@@ -601,7 +604,7 @@ static int _xfocus_out_cb(void *data, int ev_type, void *event)
 
 	DTRACE("XE:FOCUS OUT\n");
 
-//	clipdrawer_lower_view(ad);
+	clipdrawer_lower_view(ad);
 
 	return TRUE;
 }

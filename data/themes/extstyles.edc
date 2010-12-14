@@ -342,3 +342,79 @@
         	}
 	}
 
+#define W               187
+#define H               151
+#define PL              187 // Thumbnail Long
+#define PS              151  // Thumbnail Short
+#define INNER           6   // Inner line
+
+group
+{
+        name: "elm/gengrid/widestyle/horizontal_layout";
+
+        parts {
+                part {
+                        name: "bg";
+                        type: RECT;
+                        mouse_events: 1;
+                        scale: 1;
+                        description {
+                                state: "default" 0.0;
+                                rel1 { relative: 0.0 0.0; offset: 0 0; }
+                                rel2 { relative: 1.0 1.0; offset: -2 -2; }
+                                //rel2 { relative: 1.0 1.0; offset: -1 -1; }
+                                color: 0 0 0 0;
+                        }
+                }
+
+                part {
+                        name: "icon_bg";
+                        type: RECT;
+			scale: 1;
+                        description {
+                                state: "default" 0.0;
+                                //color: 255 255 255 255;
+                                color: 0 0 0 0;
+                                rel1 { relative: 0.0 0.0; to: "bg"; }
+                                rel2 { relative: 1.0 1.0; to: "bg"; }
+                                //rel1 { relative: (((W-PL)/2)/W) (((H-PS)/2)/H); to: "bg"; }
+                                //rel2 { relative: ((W-(W-PL)/2)/W) ((H-(H-PS)/2)/H); to: "bg"; }
+                        }
+                }
+
+                part {
+                        name: "elm.swallow.icon";
+                        type: SWALLOW;
+			scale: 1;
+                        description {
+                                state: "default" 0.0;
+                                rel1 { relative: 0.0 0.0; offset: INNER 0; to: "icon_bg"; }
+                                rel2 { relative: 1.0 1.0; offset: (-INNER-1) 0; to: "icon_bg"; }
+                                //rel1 { relative: 0.0 0.0; offset: INNER INNER; to: "icon_bg"; }
+                                //rel2 { relative: 1.0 1.0; offset: (-INNER-1) (-INNER-1); to: "icon_bg"; }
+                        }
+                }
+                part {
+                        name: "cliprect";
+                        type: RECT;
+			scale: 1;
+                        description {
+                                state: "default" 0.0;
+                                rel1 { relative: 0.0 0.0; to: "elm.swallow.icon"; }
+                                rel2 { relative: 1.0 1.0; to: "elm.swallow.icon"; }
+                        }
+                }
+                part {
+                        name: "elm.swallow.inner";
+                        type: SWALLOW;
+			clip_to: "cliprect";
+			scale: 1;
+                        description {
+                                state: "default" 0.0;
+                                rel1 { relative: 0.0 0.0; offset: 1 1; to: "cliprect"; }
+                                rel2 { relative: 1.0 1.0; offset: -1 -1; to: "cliprect"; }
+                        }
+                }
+        }
+}
+

@@ -93,6 +93,7 @@ static Evas_Object* create_win(void *data, const char *name)
 		if (dpy)
 		{   //disable window effect
 			utilx_set_window_effect_state(dpy, elm_win_xwindow_get(eo), 0);
+			ecore_x_icccm_name_class_set(elm_win_xwindow_get(eo), "NORMAL_WINDOW", "NORMAL_WINDOW");
 		}
 	}
 
