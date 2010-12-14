@@ -12,7 +12,7 @@ enum {
 	GI_TEXT = 0,
 	GI_IMAGE,
 
-	GI_MAX_ITEM,
+	GI_MAX_ITEMS,
 };
 
 /* view maintains */

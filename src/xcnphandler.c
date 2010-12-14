@@ -93,7 +93,7 @@ static void _set_cbhmwin_prop()
 int increment_current_history_position()
 {
 	int pos = g_history_pos+1;
-	if (pos >= HISTORY_QUEUE_MAX_TXT_ITEMS)
+	if (pos >= HISTORY_QUEUE_MAX_ITEMS)
 		pos = 0;
 	g_history_pos = pos;
 	return pos;
@@ -103,7 +103,7 @@ int get_current_history_position()
 {
 	int pos = g_history_pos-1;
 	if (pos < 0)
-		pos = HISTORY_QUEUE_MAX_TXT_ITEMS-1;
+		pos = HISTORY_QUEUE_MAX_ITEMS-1;
 	
 	return pos;
 }
@@ -116,8 +116,8 @@ int add_to_storage_buffer(void *data, char *src, int len)
 		return -1;
 
 	if (g_lastest_content == NULL)
-		g_lastest_content = malloc(sizeof(char)*(HISTORY_QUEUE_TXT_ITEM_SIZE));
-	if (g_history_pos >= HISTORY_QUEUE_MAX_TXT_ITEMS)
+		g_lastest_content = malloc(sizeof(char)*(HISTORY_QUEUE_ITEM_SIZE));
+	if (g_history_pos >= HISTORY_QUEUE_MAX_ITEMS)
 		g_history_pos = 0;
 
 	// FIXME: remove g_lasteset_content
@@ -144,11 +144,11 @@ int print_storage_buffer()
 {
 	int pos;
 	int i = 0;
-	for (i = 0; i < HISTORY_QUEUE_MAX_TXT_ITEMS; i++)
+	for (i = 0; i < HISTORY_QUEUE_MAX_ITEMS; i++)
 	{
 		pos = get_current_history_position()+i;
-		if (pos > HISTORY_QUEUE_MAX_TXT_ITEMS-1)
-			pos = pos-HISTORY_QUEUE_MAX_TXT_ITEMS;
+		if (pos > HISTORY_QUEUE_MAX_ITEMS-1)
+			pos = pos-HISTORY_QUEUE_MAX_ITEMS;
 		DTRACE("%d: %s\n", i, get_item_contents_by_pos(pos) != NULL ? get_item_contents_by_pos(pos) : "NULL");
 	}
 }
@@ -499,7 +499,7 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 	Atom atomCBHM_cRAW = XInternAtom(g_disp, "CBHM_cRAW", False);
 	Atom atomXKey_MSG = XInternAtom(g_disp, "_XKEY_COMPOSITION", False);
 	char atomname[10];
-	Atom cbhm_atoms[HISTORY_QUEUE_MAX_TXT_ITEMS];
+	Atom cbhm_atoms[HISTORY_QUEUE_MAX_ITEMS];
 	Ecore_X_Window reqwin = ev->win;
 	int i, pos;
 
@@ -539,10 +539,10 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 		int num = ev->data.b[5] - '0';
 		int cur = get_current_history_position();
 		num = cur + num - 1;
-		if (num > HISTORY_QUEUE_MAX_TXT_ITEMS-1)
-			num = num-HISTORY_QUEUE_MAX_TXT_ITEMS;
+		if (num > HISTORY_QUEUE_MAX_ITEMS-1)
+			num = num-HISTORY_QUEUE_MAX_ITEMS;
 
-		if (num >= 0 && num < HISTORY_QUEUE_MAX_TXT_ITEMS)
+		if (num >= 0 && num < HISTORY_QUEUE_MAX_ITEMS)
 		{
 			DTRACE("## pos : #%d\n", num);
 			// FIXME : handle with correct atom
@@ -575,7 +575,7 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 			}
 			pos--;
 			if (pos < 0)
-				pos = HISTORY_QUEUE_MAX_TXT_ITEMS-1;
+				pos = HISTORY_QUEUE_MAX_ITEMS-1;
 		}
 	}
 	else if (strcmp("get raw", ev->data.b) == 0)

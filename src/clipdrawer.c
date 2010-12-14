@@ -76,7 +76,7 @@ static void _list_click_paste(void *data, Evas_Object *obj, void *event_info)
 
 	int	pos = get_current_history_position()-hc;
 	if (pos < 0)
-		pos = pos+(HISTORY_QUEUE_MAX_TXT_ITEMS);
+		pos = pos+(HISTORY_QUEUE_MAX_ITEMS);
 
 	fprintf(stderr, "## pos = %d, %s\n", pos, get_item_contents_by_pos(pos));
 	char *p = strdup(get_item_contents_by_pos(pos));
@@ -111,11 +111,11 @@ int clipdrawer_update_contents(void *data)
 //	if (get_clipdrawer_mode())
 //		clipdrawer_change_mode(ad);
 
-	for (i = 0; i < HISTORY_QUEUE_MAX_TXT_ITEMS; i++)
+	for (i = 0; i < HISTORY_QUEUE_MAX_ITEMS; i++)
 	{
 		pos = get_current_history_position() - i;
 		if (pos < 0)
-			pos = pos+HISTORY_QUEUE_MAX_TXT_ITEMS;
+			pos = pos+HISTORY_QUEUE_MAX_ITEMS;
 
 		if (get_item_contents_by_pos(pos) != NULL && strlen(get_item_contents_by_pos(pos)) > 0)
 		{
@@ -435,7 +435,6 @@ int clipdrawer_add_item(char *idata, int type)
 {
 	struct appdata *ad = g_get_main_appdata();
 	griditem_t *newgi = NULL;
-	char* filepath = NULL;
 	Eina_List *igl = NULL;
 	unsigned int igl_counter = 0;
 
@@ -443,63 +442,11 @@ int clipdrawer_add_item(char *idata, int type)
 //	if (get_clipdrawer_mode())
 //		clipdrawer_change_mode(ad);
 
-/*
-	if (!check_regular_file(imagepath))
-	{
-		DTRACE("Error : it isn't normal file = %s\n", imagepath);
-		return -1;
-	}
-
-	igl = elm_gengrid_items_get(ad->hig);
-	igl_counter = eina_list_count(igl);
-
-	Eina_List *l;
-	Elm_Gengrid_Item *item;
-	griditem_t *ti = NULL;
-
-	EINA_LIST_FOREACH(igl, l, item)
-	{
-		ti = elm_gengrid_item_data_get(item);
-		if (!strcmp(ti->path, imagepath))
-		{
-			DTRACE("Error : duplicated file path = %s\n", imagepath);
-			return -1;
-		}
-	}
-
-	if (igl_counter >= HISTORY_QUEUE_MAX_IMG_ITEMS)
-	{
-		elm_gengrid_item_del(eina_list_data_get(eina_list_last(igl)));
-	}
-
-	newgi = malloc(sizeof(griditem_t));
-	newgi->itype = GI_IMAGE;
-	newgi->idata = eina_stringshare_add(imagepath);
-	newgi->item = elm_gengrid_item_prepend(ad->hig, &gic, newgi, NULL, NULL);
-*/
-
-/*
-	static int testmode = 0;
-	testmode++;
-
-	newgi = malloc(sizeof(griditem_t));
-	if (testmode % 3)
-	{
-	newgi->itype = GI_IMAGE;
-	newgi->idata = eina_stringshare_add(imagepath);
-	}
-	else
-	{
-	newgi->itype = GI_TEXT;
-	newgi->idata = eina_strbuf_new();
-	eina_strbuf_append(newgi->idata, "hello!! <item absize=40x30 href=file:///usr/share/icon/cbhm/cbhm_default_img.png></item>");
-
-	}
-	newgi->item = elm_gengrid_item_append(ad->hig, &gic, newgi, NULL, NULL);
-*/
 
 	newgi = malloc(sizeof(griditem_t));
 	newgi->itype = type;
+	igl = elm_gengrid_items_get(ad->hig);
+	igl_counter = eina_list_count(igl);
 
 	fprintf(stderr, "## add - %d : %s\n", newgi->itype, idata);
 	if (type == GI_TEXT)
@@ -509,8 +456,34 @@ int clipdrawer_add_item(char *idata, int type)
 	}
 	else //if (type == GI_IMAGE)
 	{
+		Eina_List *l;
+		Elm_Gengrid_Item *item;
+		griditem_t *ti = NULL;
+
+		if (!check_regular_file(idata))
+		{
+			DTRACE("Error : it isn't normal file = %s\n", idata);
+			return -1;
+		}
+
+		EINA_LIST_FOREACH(igl, l, item)
+		{
+			ti = elm_gengrid_item_data_get(item);
+			if ((ti->itype == type) && !strcmp(ti->ipathdata, idata))
+			{
+				DTRACE("Error : duplicated file path = %s\n", idata);
+				return -1;
+			}
+		}
+
 		newgi->ipathdata = eina_stringshare_add(idata);
 	}
+
+	if (igl_counter >= HISTORY_QUEUE_MAX_ITEMS)
+	{
+		elm_gengrid_item_del(eina_list_data_get(eina_list_last(igl)));
+	}
+
 	newgi->item = elm_gengrid_item_prepend(ad->hig, &gic, newgi, NULL, NULL);
 
 	return TRUE;
