@@ -148,6 +148,12 @@
 					else if (!strcmp(st, "default"))
 						set_state(PART:"check", "pressed", 0.0);
 				}		
+				after: "checkpressed";
+			}
+			program { name: "checkpressed";
+				signal: "mouse,up,1";
+				source: "check";
+				action: SIGNAL_EMIT "elm,action,click" "";
 			}
 			program { name: "mouseout";
 				signal: "mouse,out";
@@ -204,351 +210,6 @@
 		}
 	}
 
-	group {
-     		name: "elm/check/base/extended/imagegrid";
-     	   	images {
-                	image: "clipboard_button_delete.png" COMP;
-                	image: "clipboard_button_delete_press.png" COMP;
-     	   	}
-
-        	parts {
-                	part {
-                        	name: "bg";
-                        	type: RECT;
-                        	mouse_events: 0;
-                        	scale: 1;
-                        	description {
-                                	state: "default" 0.0;
-                                	rel2.relative: 0.0 1.0;
-                                	align: 0.0 0.5;
-                                	min: 100 100;
-                                	max: 100 100;
-                                	color: 0 0 0 0;
-                                	aspect: 1.0 1.0;
-                                	aspect_preference: VERTICAL;
-                                	visible: 1;
-                        	}
-                        	description {
-                                	state: "pressed" 0.0;
-                                	inherit: "default" 0.0;
-                        	}
-                        	description {
-                                	state: "disabled" 0.0;
-                                	inherit: "default" 0.0;
-                                	visible: 0;
-                        	}
-                	}
-                	part {
-                        	name: "bg2";
-                        	type: RECT;
-                        	mouse_events: 0;
-                        	scale: 1;
-                        	description {
-                                	state: "default" 0.0;
-                                	rel2.relative: 1.0 1.0;
-                                	align: 0.95 0.5;
-                                	min: 33 33;
-                                	max: 33 33;
-                                	color:  0 0 0 0;
-                                	aspect: 1.0 1.0;
-                                	aspect_preference: VERTICAL;
-                                	visible: 1;
-                        	}
-                        	description {
-                                	state: "pressed" 0.0;
-                                	inherit: "default" 0.0;
-                        	}
-                        	description {
-                                	state: "disabled" 0.0;
-                                	inherit: "default" 0.0;
-                                	visible: 1;
-                        	}
-                	}
-			part {
-                        	name: "check";
-                        	mouse_events: 0;
-                        	scale: 1;
-                        	description {
-                                	state: "default" 0.0;
-                                	rel1.to: "bg2";
-                                	rel2.to: "bg2";
-                                	visible: 0;
-                                	image.normal: "clipboard_button_delete.png";
-                        	}
-                        	description {
-                               		state: "visible" 0.0;
-                                	inherit: "default" 0.0;
-                                	visible: 1;
-                        	}
-                        	description {
-                                	state: "pressed" 0.0;
-                                	inherit: "default" 0.0;
-                                	visible: 0;
-                        	}
-                        	description {
-                                	state: "disabled_visible" 0.0;
-                                	inherit: "default" 0.0;
-                                	visible: 1;
-                        	}
-                 	}
-                 	part {
-                        	name: "elm.swallow.content";
-                        	type: SWALLOW;
-                        	description {
-                                	state: "default" 0.0;
-                                	fixed: 1 0;
-                                	visible: 0;
-                                	color: 255 255 255 255;
-                                	align: 0.0 0.5;
-                                	rel1.to_x: "bg2";
-                                	rel1.relative: 1.0 0.0;
-                                	rel1.offset: 1 1;
-                                	rel2.to_x: "bg2";
-                                	rel2.relative: 1.0 1.0;
-                                	rel2.offset: 2 -2;
-                        	}
-                        	description {
-                                	state: "visible" 0.0;
-                                	inherit: "default" 0.0;
-                                	fixed: 1 1;
-                                	visible: 1;
-                                	aspect: 1.0 1.0;
-                                	aspect_preference: VERTICAL;
-                        	}
-                        	description {
-                                	state: "disabled" 0.0;
-                                	inherit: "default" 0.0;
-                                	color: 128 128 128 128;
-                        	}
-				description {
-                                	state: "disabled_visible" 0.0;
-                                	inherit: "default" 0.0;
-                                	color: 128 128 128 128;
-                                	fixed: 1 1;
-                                	visible: 1;
-                                	aspect: 1.0 1.0;
-                        	}
-                	}
-                	part {
-                        	name: "elm.text";
-                        	type: TEXTBLOCK;
-                        	mouse_events: 0;
-                        	scale: 1;
-                        	description {
-                                	state: "default" 0.0;
-                                	visible: 0;
-                                	fixed: 1 1;
-                                	rel1 { relative: 1.0 0.5; offset: 1 1; to_x: "elm.swallow.content"; }
-                                	rel2 { relative: 1.0 0.5; offset: -2 -2; }
-                                	color: 255 255 255 255;
-                                	align: 0.0 0.5;
-                                	text {
-                                        	style: "check_label_textblock_style";
-                                        	min: 0 0;
-                                	}
-                        	}
-                        	description {
-                                	state: "visible" 0.0;
-                                	inherit: "default" 0.0;
-                                	visible: 1;
-                                	text.min: 1 1;
-                        	}
-                        	description {
-                                	state: "disabled" 0.0;
-                                	inherit: "default" 0.0;
-                        	}
-                        	description {
-                                	state: "disabled_visible" 0.0;
-                                	inherit: "default" 0.0;
-                                	visible: 1;
-                                	text {
-                                        	style: "check_label_textblock_disabled_style";
-                                        	min: 1 1;
-                                	}
-                        	}
-                 	}
-                	part {
-                        	name: "events";
-                        	type: RECT;
-                        	ignore_flags: ON_HOLD;
-                        	description {
-                                	state: "default" 0.0;
-                                	color: 0 0 0 0;
-                        	}
-                	}
-			part {
-                        	name: "disabler";
-                        	type: RECT;
-                        	description {
-                               		state: "default" 0.0;
-                                	color: 0 0 0 0;
-                                	//visible: 0;
-                                	visible: 1;
-                        	}
-                        	description {
-                                	state: "disabled" 0.0;
-                                	inherit: "default" 0.0;
-                                	visible: 1;
-                        	}
-                	}
-        	}
-
-        	programs {
-                	program {
-                        	name: "click";
-                        	signal: "mouse,up,1";
-                        	source: "events";
-                        	action: SIGNAL_EMIT "elm,action,check,toggle" "";
-                        	after: "bg_normal";
-                	}
-                	program {
-                        	name: "bg_normal";
-                        	script {
-                                	set_state(PART:"bg", "default", 0.0);
-                                	set_state(PART:"bg2", "default", 0.0);
-                        	}
-                	}
-                	program {
-                       		name: "mouseout";
-                        	signal: "mouse,out";
-                        	source: "events";
-                        	after: "bg_check_normal";
-                	}
-               		program {
-                        	name: "bg_check_normal";
-                        	script {
-                                	new st[31];
-                                	new Float:vl;
-                                	get_state(PART:"check", st, 30, vl);
-                                	if (!strcmp(st, "pressed"))
-                                        	set_state(PART:"check", "visible", 0.0);
-                                	set_state(PART:"bg", "default", 0.0);
-                                	set_state(PART:"bg2", "default", 0.0);
-                        	}
-                	}
-			program {
-                        	name: "pressed";
-                        	signal: "mouse,down,1";
-                        	source: "events";
-                        	script {
-                                	new st[31];
-                                	new Float:vl;
-                                	get_state(PART:"check", st, 30, vl);
-                                	if (!strcmp(st, "visible"))
-                                        	set_state(PART:"check", "pressed", 0.0);
-                                	set_state(PART:"bg", "pressed", 0.0);
-                                	set_state(PART:"bg2", "pressed", 0.0);
-                        	}
-                	}
-                	program {
-                       		name: "check_on";
-                        	signal: "elm,state,check,on";
-                        	source: "elm";
-                        	action:  STATE_SET "visible" 0.0;
-                        	target: "check";
-                	}
-                	program {
-                        	name: "check_off";
-                        	signal: "elm,state,check,off";
-                        	source: "elm";
-                        	action:  STATE_SET "default" 0.0;
-                        	target: "check";
-                	}
-                	program {
-                        	name: "text_show";
-                        	signal: "elm,state,text,visible";
-                        	source: "elm";
-                        	action:  STATE_SET "visible" 0.0;
-                        	target: "elm.text";
-                	}
-                	program {
-                        	name: "text_hide";
-                        	signal: "elm,state,text,hidden";
-                        	source: "elm";
-                        	action:  STATE_SET "default" 0.0;
-                        	target: "elm.text";
-                	}
-                	program {
-                        	name: "icon_show";
-                        	signal: "elm,state,icon,visible";
-                        	source: "elm";
-                        	action:  STATE_SET "visible" 0.0;
-                        	target: "elm.swallow.content";
-                	}
-                	program {
-                        	name: "icon_hide";
-                        	signal: "elm,state,icon,hidden";
-                        	source: "elm";
-                        	action:  STATE_SET "default" 0.0;
-                        	target: "elm.swallow.content";
-                	}
-			program {
-                        	name: "disable";
-                        	signal: "elm,state,disabled";
-                        	source: "elm";
-                        	action: STATE_SET "disabled" 0.0;
-                        	target: "disabler";
-                        	target: "bg";
-                        	target: "bg2";
-                        	after: "disable_text";
-                	}
-                	program {
-                        	name: "disable_text";
-                        	script {
-                                	new st[31];
-                                	new Float:vl;
-                                	get_state(PART:"elm.text", st, 30, vl);
-                                	if (!strcmp(st, "visible"))
-                                       		set_state(PART:"elm.text", "disabled_visible", 0.0);
-                                	else
-                                        	set_state(PART:"elm.text", "disabled", 0.0);
-
-                                	get_state(PART:"elm.swallow.content", st, 30, vl);
-                                	if (!strcmp(st, "visible"))
-                                        	set_state(PART:"elm.swallow.content", "disabled_visible", 0.0);
-                                	else
-                                        	set_state(PART:"elm.swallow.content", "disabled", 0.0);
-
-                                	get_state(PART:"check", st, 30, vl);
-                                	if (!strcmp(st, "visible"))
-                                        	set_state(PART:"check", "disabled_visible", 0.0);
-                        	}
-                	}
-                	program {
-                        	name: "enable";
-                        	signal: "elm,state,enabled";
-                        	source: "elm";
-                        	action: STATE_SET "default" 0.0;
-                        	target: "disabler";
-                        	target: "bg";
-                        	target: "bg2";
-                        	after: "enable_text";
-                	}
-			program {
-                        	name: "enable_text";
-                        	script {
-                                	new st[31];
-                                	new Float:vl;
-                                	get_state(PART:"elm.text", st, 30, vl);
-                                	if (!strcmp(st, "disabled_visible"))
-                                       		set_state(PART:"elm.text", "visible", 0.0);
-                                	else
-                                        	set_state(PART:"elm.text", "default", 0.0);
-
-                                	get_state(PART:"elm.swallow.content", st, 30, vl);
-                                	if (!strcmp(st, "visible"))
-                                        	set_state(PART:"elm.swallow.content", "visible", 0.0);
-                                	else
-                                        	set_state(PART:"elm.swallow.content", "default", 0.0);
-
-                                	get_state(PART:"check", st, 30, vl);
-                                	if (!strcmp(st, "disabled_visible"))
-                                        	set_state(PART:"check", "visible", 0.0);
-                        	}
-                	}
-        	}
-	}
-
 #define W               187
 #define H               151
 #define PL              187 // Thumbnail Long
@@ -558,6 +219,10 @@
 group
 {
         name: "elm/gengrid/widestyle/horizontal_layout";
+	images {
+		image: "clipboard_button_delete.png" COMP;
+		image: "clipboard_button_delete_press.png" COMP;
+	}
 
         parts {
                 part {
@@ -578,6 +243,7 @@ group
                         name: "icon_bg";
                         type: RECT;
 			scale: 1;
+			mouse_events: 0;
                         description {
                                 state: "default" 0.0;
                                 //color: 255 255 255 255;
@@ -593,6 +259,7 @@ group
                         name: "elm.swallow.icon";
                         type: SWALLOW;
 			scale: 1;
+			mouse_events: 0;
                         description {
                                 state: "default" 0.0;
                                 rel1 { relative: 0.0 0.0; offset: INNER 0; to: "icon_bg"; }
@@ -616,12 +283,89 @@ group
                         type: SWALLOW;
 			clip_to: "cliprect";
 			scale: 1;
+			mouse_events: 0;
                         description {
                                 state: "default" 0.0;
                                 rel1 { relative: 0.0 0.0; offset: 1 1; to: "cliprect"; }
                                 rel2 { relative: 1.0 1.0; offset: -1 -1; to: "cliprect"; }
                         }
                 }
-        }
-}
+		part {
+			name: "delbtn";
+			type: RECT;
+			mouse_events: 1;
+			scale: 1;
+			description {
+				state: "default" 0.0;
+				rel1.to: "elm.swallow.icon";
+				rel2.to: "elm.swallow.icon";
+				align: 0.95 0.01;
+				min: 46 40;
+				max: 46 40;
+				color:  0 0 0 0;
+				visible: 1;
+			}
+		}
+		part { 
+			name: "delbtn/img";
+			mouse_events: 1;
+			scale: 1;
+			description { 
+				state: "default" 0.0;
+				rel1.to: "delbtn";
+				rel2.to: "delbtn";
+				visible: 1;
+				image {
+					normal: "clipboard_button_delete.png";
+				}
+			}
+			description { state: "pressed" 0.0;
+				inherit: "default" 0.0;
+				image {
+					normal: "clipboard_button_delete_press.png";
+				}
+			}
+		} // part
+        } // parts
+	programs
+	{
+		program { name: "pressed";
+			signal: "mouse,down,1";
+			source: "delbtn/img";
+			script {
+				new st[31];
+				new Float:vl;
+				get_state(PART:"delbtn/img", st, 30, vl);
+				if (!strcmp(st, "default"))
+					set_state(PART:"delbtn/img", "pressed", 0.0);
+			}		
+		}
+		program { 
+			name: "mouseout";
+			signal: "mouse,out";
+			source: "delbtn/img";
+			script {
+				new st[31];
+				new Float:vl;
+				get_state(PART:"delbtn/img", st, 30, vl);
+				if (!strcmp(st, "pressed"))
+					set_state(PART:"delbtn/img", "default", 0.0);
+			}		
+		}
+		program 
+		{
+			name:   "mouse_up_delbtn";
+			signal: "mouse,up,1";
+			source: "delbtn";
+			action: SIGNAL_EMIT "elm,action,click" "";
+		}
+		program 
+		{
+			name:   "mouse_up_delbtn_img";
+			signal: "mouse,up,1";
+			source: "delbtn/img";
+			action: SIGNAL_EMIT "elm,action,click" "";
+		}
+	} //programs
+} //group
 

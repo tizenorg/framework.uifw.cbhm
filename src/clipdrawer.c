@@ -138,6 +138,22 @@ const char* clipdrawer_get_plain_string_from_escaped(char *escstr)
 	return elm_entry_markup_to_utf8(escstr);
 }
 
+static void
+_grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emission, const char *source)
+{
+	struct appdata *ad = data;
+
+	fprintf(stderr, "## gi clicked = %s\n", source);
+}
+
+static void
+_grid_item_check_changed(void *data, Evas_Object *obj, void *event_info)
+{
+	griditem_t *ti = (griditem_t *)data;
+
+	fprintf(stderr, "## item clicked\n");
+}
+
 Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part)
 {
 	int delete_mode = get_clipdrawer_mode();
@@ -149,6 +165,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 		{
 			Evas_Object *layout = elm_layout_add (obj);
 			elm_layout_theme_set(layout, "gengrid", "widestyle", "horizontal_layout");
+			edje_object_signal_callback_add(elm_layout_edje_get(layout), "mouse,up,1", "*", _grid_item_ly_clicked, g_get_main_appdata());
 			Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(obj));
 			evas_object_resize(rect, GRID_ITEM_W, GRID_ITEM_H);
 			evas_object_color_set(rect, 242, 233, 183, 255);
@@ -202,6 +219,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 		{
 			Evas_Object *layout = elm_layout_add (obj);
 			elm_layout_theme_set(layout, "gengrid", "widestyle", "horizontal_layout");
+			edje_object_signal_callback_add(elm_layout_edje_get(layout), "mouse,up,1", "*", _grid_item_ly_clicked, g_get_main_appdata());
 			Evas_Object *sicon;
 			sicon = evas_object_image_add(evas_object_evas_get(obj));
 			evas_object_image_load_size_set(sicon, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
@@ -267,14 +285,18 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 
 //		return icon;
 	}
-	else if (!strcmp(part, "elm.swallow.end") /*&& delete_mode*/)
+/*
+	else if (!strcmp(part, "elm.swallow.end"))
 	{
 		ti->delbtn = elm_check_add(obj);
 		elm_object_style_set(ti->delbtn, "extended/itemcheck");
-		elm_check_state_set(ti->delbtn, EINA_TRUE);
+		//evas_object_propagate_events_set(ti->delbtn, 0);
+		elm_check_state_set(ti->delbtn, tcm);
+		evas_object_smart_callback_add(ti->delbtn, "changed", _grid_item_check_changed, data);
 		evas_object_show(ti->delbtn);
 		return ti->delbtn;
 	}
+*/
 	   
 	return NULL;
 }
@@ -492,6 +514,8 @@ static void
 clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const char *source)
 {
 	struct appdata *ad = data;
+
+	fprintf(stderr, "## clicked = %s\n", source);
 
 	#define EDJE_CLOSE_PART_PREFIX "background/close"
 	if (!strncmp(source, EDJE_CLOSE_PART_PREFIX, strlen(EDJE_CLOSE_PART_PREFIX)))
