@@ -1,3 +1,11 @@
+cbhm (0.1.0-52) unstable; urgency=low
+
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-52
+  * enable delbtn popup
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Mon, 20 Dec 2010 14:34:45 +0900
+
 cbhm (0.1.0-51) unstable; urgency=low
 
   * Git: 165.213.180.234:slp/pkgs/c/cbhm
