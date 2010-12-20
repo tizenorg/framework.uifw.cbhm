@@ -1,3 +1,19 @@
+cbhm (0.1.0-54) unstable; urgency=low
+
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-54
+  * version up
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Mon, 20 Dec 2010 15:36:16 +0900
+
+cbhm (0.1.0-53) unstable; urgency=low
+
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-53
+  * set gengrid selection item to false
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Mon, 20 Dec 2010 15:11:28 +0900
+
 cbhm (0.1.0-52) unstable; urgency=low
 
   * Git: 165.213.180.234:slp/pkgs/c/cbhm
