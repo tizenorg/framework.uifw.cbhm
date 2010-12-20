@@ -164,6 +164,8 @@ _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 			return;
 		}
 
+		elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
+
 		if (ti->itype == GI_TEXT)
 		{
 			char *p = strdup(eina_strbuf_string_get(ti->istrdata));
@@ -179,10 +181,16 @@ _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 			elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
 		}
 
-		elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
-
 		return;
 	}
+
+	if (!sgobj)
+	{
+		DTRACE("ERR: cbhm can't get the selected item\n");
+		return;
+	}
+
+	elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
 
 	Evas_Object *popup = elm_popup_add(ad->win_main);
 	elm_popup_timeout_set(popup, 5);
@@ -194,8 +202,6 @@ _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 						  NULL);
 	evas_object_smart_callback_add(popup, "response", _grid_del_response_cb, sgobj);
 	evas_object_show(popup);
-
-	elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
 }
 
 
@@ -584,7 +590,7 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-	clipdrawer_activate_view(ad);
+	// clipdrawer_activate_view(ad);
 
 	return 0;
 }
