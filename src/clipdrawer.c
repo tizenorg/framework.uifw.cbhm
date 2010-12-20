@@ -8,13 +8,6 @@
 #define IM	"/usr/share/icon/cbhm/"
 static const char *g_images_path[] = {
 	IM"cbhm_default_img.png",
-/*
-	IM"2_photo.jpg",
-	IM"3_photo.jpg",
-	IM"4_photo.jpg",
-	IM"5_photo.jpg",
-	IM"6_photo.jpg",
-*/
 };
 #define N_IMAGES (1)
 
@@ -138,21 +131,74 @@ const char* clipdrawer_get_plain_string_from_escaped(char *escstr)
 	return elm_entry_markup_to_utf8(escstr);
 }
 
+static void _grid_del_response_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	Elm_Gengrid_Item *it = (Elm_Gengrid_Item *)data;
+	evas_object_del(obj);
+
+	if((int)event_info == ELM_POPUP_RESPONSE_OK)
+		elm_gengrid_item_del(it);
+}
+
+static void _grid_click_delete(void *data, Evas_Object *obj, void *event_info)
+{
+	struct appdata *ad = data;
+}
+
 static void
 _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emission, const char *source)
 {
-	struct appdata *ad = data;
+	struct appdata *ad = g_get_main_appdata();
 
-	fprintf(stderr, "## gi clicked = %s\n", source);
+	Elm_Gengrid_Item *sgobj = NULL;
+	sgobj = elm_gengrid_selected_item_get(ad->hig);
+	griditem_t *ti = NULL;
+	ti = elm_gengrid_item_data_get(sgobj);
+
+	#define EDJE_DELBTN_PART_PREFIX "delbtn"
+	if (strncmp(source, EDJE_DELBTN_PART_PREFIX, strlen(EDJE_DELBTN_PART_PREFIX)))
+	{
+		if (!sgobj || !ti)
+		{
+			DTRACE("ERR: cbhm can't get the selected image\n");
+			return;
+		}
+
+		if (ti->itype == GI_TEXT)
+		{
+			char *p = strdup(eina_strbuf_string_get(ti->istrdata));
+
+			elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
+		}
+		else //if (ti->itype == GI_IMAGE)
+		{
+			int len = strlen(ti->ipathdata);
+			char *p = malloc(len + 10);
+			snprintf(p,len+10, "file:///%s", ti->ipathdata);
+
+			elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
+		}
+
+		elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
+
+		return;
+	}
+
+	Evas_Object *popup = elm_popup_add(ad->win_main);
+	elm_popup_timeout_set(popup, 5);
+	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	elm_popup_desc_set(popup, "Are you sure delete this?");
+	elm_popup_buttons_add(popup, 2,
+						  "Yes", ELM_POPUP_RESPONSE_OK,
+						  "No", ELM_POPUP_RESPONSE_CANCEL,
+						  NULL);
+	evas_object_smart_callback_add(popup, "response", _grid_del_response_cb, sgobj);
+	evas_object_show(popup);
+
+	elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
 }
 
-static void
-_grid_item_check_changed(void *data, Evas_Object *obj, void *event_info)
-{
-	griditem_t *ti = (griditem_t *)data;
 
-	fprintf(stderr, "## item clicked\n");
-}
 
 Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part)
 {
@@ -165,7 +211,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 		{
 			Evas_Object *layout = elm_layout_add (obj);
 			elm_layout_theme_set(layout, "gengrid", "widestyle", "horizontal_layout");
-			edje_object_signal_callback_add(elm_layout_edje_get(layout), "mouse,up,1", "*", _grid_item_ly_clicked, g_get_main_appdata());
+			edje_object_signal_callback_add(elm_layout_edje_get(layout), "mouse,up,1", "*", _grid_item_ly_clicked, data);
 			Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(obj));
 			evas_object_resize(rect, GRID_ITEM_W, GRID_ITEM_H);
 			evas_object_color_set(rect, 242, 233, 183, 255);
@@ -219,7 +265,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 		{
 			Evas_Object *layout = elm_layout_add (obj);
 			elm_layout_theme_set(layout, "gengrid", "widestyle", "horizontal_layout");
-			edje_object_signal_callback_add(elm_layout_edje_get(layout), "mouse,up,1", "*", _grid_item_ly_clicked, g_get_main_appdata());
+			edje_object_signal_callback_add(elm_layout_edje_get(layout), "mouse,up,1", "*", _grid_item_ly_clicked, data);
 			Evas_Object *sicon;
 			sicon = evas_object_image_add(evas_object_evas_get(obj));
 			evas_object_image_load_size_set(sicon, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
@@ -310,71 +356,12 @@ static void _grid_longpress(void *data, Evas_Object *obj, void *event_info)
 static void _grid_click_paste(void *data, Evas_Object *obj, void *event_info)
 {
 	struct appdata *ad = data;
-	char *file, *p;
-	int len;
 	Elm_Gengrid_Item *sgobj = NULL;
 	sgobj = elm_gengrid_selected_item_get(ad->hig);
 	griditem_t *ti = NULL;
 	ti = elm_gengrid_item_data_get(sgobj);
 
-	if (!sgobj || !ti)
-	{
-		DTRACE("ERR: cbhm can't get the selected image\n");
-		return;
-	}
-	if (ti->itype == GI_TEXT)
-	{
-		char *p = strdup(eina_strbuf_string_get(ti->istrdata));
-
-		elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
-
-		elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
-	}
-	else //if (ti->itype == GI_IMAGE)
-	{
-		len = strlen(ti->ipathdata);
-		p = malloc(len + 10);
-		snprintf(p,len+10, "file:///%s", ti->ipathdata);
-
-		elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
-
-		elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
-	}
-}
-
-static void _grid_del_response_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	Elm_Gengrid_Item *it = (Elm_Gengrid_Item *)data;
-	evas_object_del(obj);
-
-	if((int)event_info == ELM_POPUP_RESPONSE_OK)
-		elm_gengrid_item_del(it);
-}
-
-static void _grid_click_delete(void *data, Evas_Object *obj, void *event_info)
-{
-	struct appdata *ad = data;
-	Elm_Gengrid_Item *sgobj = NULL;
-	sgobj = elm_gengrid_selected_item_get(ad->hig);
-	griditem_t *ti = NULL;
-	ti = elm_gengrid_item_data_get(sgobj);
-
-	if (!sgobj || !ti)
-	{
-		DTRACE("ERR: cbhm can't get the clicked del image\n");
-		return;
-	}
-
-	Evas_Object *popup = elm_popup_add(ad->win_main);
-	elm_popup_timeout_set(popup, 5);
-	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	elm_popup_desc_set(popup, "Are you sure delete this?");
-	elm_popup_buttons_add(popup, 2,
-						  "Yes", ELM_POPUP_RESPONSE_OK,
-						  "No", ELM_POPUP_RESPONSE_CANCEL,
-						  NULL);
-	evas_object_smart_callback_add(popup, "response", _grid_del_response_cb, sgobj);
-	evas_object_show(popup);
+	fprintf(stderr, "## grid_click_paste = 0x%x\n", event_info);
 }
 
 void _grid_del(const void *data, Evas_Object *obj)
@@ -514,8 +501,6 @@ static void
 clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const char *source)
 {
 	struct appdata *ad = data;
-
-	fprintf(stderr, "## clicked = %s\n", source);
 
 	#define EDJE_CLOSE_PART_PREFIX "background/close"
 	if (!strncmp(source, EDJE_CLOSE_PART_PREFIX, strlen(EDJE_CLOSE_PART_PREFIX)))
