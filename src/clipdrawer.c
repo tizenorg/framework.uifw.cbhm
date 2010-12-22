@@ -472,8 +472,8 @@ int clipdrawer_init(void *data)
 		clipdrawer_add_item(g_images_path[0], GI_IMAGE);
 	}
 
-	//clipdrawer_add_item("clipboard history", GI_TEXT);
-	clipdrawer_add_item("clipboard history asldfjlaskdf las dflkas dflas dfljask dflasd flaksdf jalskdf jalskdf jalsk flaskdfj lkasjf lksad jf", GI_TEXT);
+	clipdrawer_add_item("clipboard history", GI_TEXT);
+	//clipdrawer_add_item("clipboard history asldfjlaskdf las dflkas dflas dfljask dflasd flaksdf jalskdf jalskdf jalsk flaskdfj lkasjf lksad jf", GI_TEXT);
 
 	evas_object_show (ad->hig);
 
@@ -502,7 +502,7 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-	clipdrawer_activate_view(ad);
+	// clipdrawer_activate_view(ad);
 
 	return 0;
 }
