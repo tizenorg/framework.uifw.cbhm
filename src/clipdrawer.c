@@ -19,30 +19,17 @@ static const char *g_images_path[] = {
 #define GRID_IMAGE_LIMIT_W 91
 #define GRID_IMAGE_LIMIT_H 113
 
-// 0 - select mode, 1 - delete mode
-static int g_clipdrawer_mode = 0;
 // gic should live at gengrid callback functions
 Elm_Gengrid_Item_Class gic;
 
 typedef struct tag_griditem
 {
+	int itype;
 	Elm_Gengrid_Item *item;
 	const char *ipathdata;
-	Eina_Strbuf* istrdata;
-	int itype;
+	Eina_Strbuf *istrdata;
 	Evas_Object *delbtn;
 } griditem_t;
-
-static int toggle_clipdrawer_mode()
-{
-	g_clipdrawer_mode = !g_clipdrawer_mode;
-	return g_clipdrawer_mode;
-}
-
-static int get_clipdrawer_mode()
-{
-	return g_clipdrawer_mode;
-}
 
 static void _list_click_paste(void *data, Evas_Object *obj, void *event_info)
 {
@@ -64,8 +51,6 @@ static void _list_click_paste(void *data, Evas_Object *obj, void *event_info)
 	}
 
 	fprintf(stderr, "## this c = %d, %d\n", hc, get_current_history_position());
-
-//	int pos = get_current_history_position() - hc;
 
 	int	pos = get_current_history_position()-hc;
 	if (pos < 0)
@@ -99,10 +84,6 @@ int clipdrawer_update_contents(void *data)
 	struct appdata *ad = data;
 	int i, pos;
 	char *unesc = NULL;
-
-	// if delete mode, then back to normal mode
-//	if (get_clipdrawer_mode())
-//		clipdrawer_change_mode(ad);
 
 	for (i = 0; i < HISTORY_QUEUE_MAX_ITEMS; i++)
 	{
@@ -204,11 +185,8 @@ _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 	evas_object_show(popup);
 }
 
-
-
 Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part)
 {
-	int delete_mode = get_clipdrawer_mode();
 	griditem_t *ti = (griditem_t *)data;
 
 	if (!strcmp(part, "elm.swallow.icon"))
@@ -380,68 +358,6 @@ void _grid_del(const void *data, Evas_Object *obj)
 	free(ti);
 }
 
-int clipdrawer_refresh_history_item(void *data, int delete_mode)
-{
-	struct appdata *ad = data;
-	Eina_List *oldlist = NULL;
-	const Eina_List *l;
-	Elm_Gengrid_Item *lgrid;
-	griditem_t *lgitem;
-	Evas_Object *ngg;
-	Evas_Object *oldgg;
-	
-	oldlist = elm_gengrid_items_get(ad->hig);
-	elm_layout_content_unset(ad->ly_main, "imagehistory/list");
-	ngg = elm_gengrid_add(ad->win_main);
-	elm_layout_content_set(ad->ly_main, "imagehistory/list", ngg);
-	oldgg = ad->hig;
-	ad->hig = ngg;
-	elm_gengrid_item_size_set(ad->hig, GRID_ITEM_W, GRID_ITEM_H);
-	elm_gengrid_align_set(ad->hig, 0.5, 0.5);
-//	elm_gengrid_horizontal_set(ad->hig, EINA_TRUE);
-	elm_gengrid_bounce_set(ad->hig, EINA_TRUE, EINA_FALSE);
-	elm_gengrid_multi_select_set(ad->hig, EINA_FALSE);
-	if (delete_mode)
-		evas_object_smart_callback_add(ad->hig, "selected", _grid_click_delete, ad);
-	else
-		evas_object_smart_callback_add(ad->hig, "selected", _grid_click_paste, ad);
-	evas_object_smart_callback_add(ad->hig, "longpressed", _grid_longpress, ad);
-	evas_object_size_hint_weight_set(ad->hig, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-
-	gic.item_style = "default_grid";
-	gic.func.label_get = NULL;
-	gic.func.icon_get = _grid_icon_get;
-	gic.func.state_get = NULL;
-	gic.func.del = _grid_del;
-
-	EINA_LIST_REVERSE_FOREACH(oldlist, l, lgrid)
-	{
-		lgitem = elm_gengrid_item_data_get(lgrid);
-		clipdrawer_add_item(lgitem->ipathdata, GI_IMAGE);
-	}
-
-	evas_object_show (ad->hig);
-
-	elm_gengrid_clear(oldgg);
-	evas_object_hide(oldgg);
-	evas_object_del(oldgg);
-
-	return 0;
-}
-
-int clipdrawer_change_mode(void *data)
-{
-	struct appdata *ad = data;
-
-	toggle_clipdrawer_mode();
-
-	DTRACE("clipdrawer delete mode = %d\n", get_clipdrawer_mode());
-
-	clipdrawer_refresh_history_item(ad, get_clipdrawer_mode());
-
-	return 0;
-}
-
 // FIXME: how to remove calling g_get_main_appdata()? 
 //        it's mainly used at 'clipdrawer_image_item'
 int clipdrawer_add_item(char *idata, int type)
@@ -450,11 +366,6 @@ int clipdrawer_add_item(char *idata, int type)
 	griditem_t *newgi = NULL;
 	Eina_List *igl = NULL;
 	unsigned int igl_counter = 0;
-
-	// if delete mode, then back to normal mode
-//	if (get_clipdrawer_mode())
-//		clipdrawer_change_mode(ad);
-
 
 	newgi = malloc(sizeof(griditem_t));
 	newgi->itype = type;
@@ -561,7 +472,8 @@ int clipdrawer_init(void *data)
 		clipdrawer_add_item(g_images_path[0], GI_IMAGE);
 	}
 
-	clipdrawer_add_item("clipboard history", GI_TEXT);
+	//clipdrawer_add_item("clipboard history", GI_TEXT);
+	clipdrawer_add_item("clipboard history asldfjlaskdf las dflkas dflas dfljask dflasd flaksdf jalskdf jalskdf jalsk flaskdfj lkasjf lksad jf", GI_TEXT);
 
 	evas_object_show (ad->hig);
 
@@ -590,7 +502,7 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-	// clipdrawer_activate_view(ad);
+	clipdrawer_activate_view(ad);
 
 	return 0;
 }
@@ -614,9 +526,5 @@ void clipdrawer_lower_view(void *data)
 	{
 		evas_object_hide(ad->win_main);
 		elm_win_lower(ad->win_main);
-
-		// if delete mode, then back to normal mode
-		if (get_clipdrawer_mode())
-			clipdrawer_change_mode(ad);
 	}
 }
