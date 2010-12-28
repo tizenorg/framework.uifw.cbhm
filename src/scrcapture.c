@@ -81,11 +81,15 @@ Eina_Bool capture_current_screen(void *data)
 	capimginfo->imgdata = malloc(sizeof(char) * (width*height*4) + 1);
 	capimginfo->eo = evas_object_image_add(ad->evas);
 
+	DTRACE("capture current screen 1 - w=%d,h=%d\n", width, height);
+
 	char *scrimage = NULL;
 	scrimage = scrcapture_capture_screen_by_xv_ext(width, height);
 	if (scrimage)
 		memcpy(capimginfo->imgdata, scrimage, width*height*4);
 	scrcapture_release_screen_by_xv_ext(scrimage);
+
+	DTRACE("capture current screen 2\n");
 
 	if (scrimage == NULL || capimginfo->eo == NULL || capimginfo->imgdata == NULL) 
 	{
@@ -97,11 +101,15 @@ Eina_Bool capture_current_screen(void *data)
 		return EINA_FALSE;
 	}
 
+	DTRACE("capture current screen 3\n");
+
 	evas_object_image_data_set(capimginfo->eo, NULL);
 	evas_object_image_size_set(capimginfo->eo, width, height);
 	evas_object_image_data_set(capimginfo->eo, capimginfo->imgdata);
 	evas_object_image_data_update_add(capimginfo->eo, 0, 0, width, height);
 	evas_object_resize(capimginfo->eo, width, height);
+
+	DTRACE("capture current screen 4\n");
 
 	ecore_idler_add(_scrcapture_capture_postprocess, capimginfo);
 
@@ -413,9 +421,7 @@ char *scrcapture_capture_screen_by_x11(Window xid, int *size)
 
 char *scrcapture_capture_screen_by_xv_ext(int width, int height)
 {
-	char *captured_image;
-
-	captured_image = createScreenShot(width, height);
+	return createScreenShot(width, height);
 }
 
 void scrcapture_release_screen_by_xv_ext(const char *s)
