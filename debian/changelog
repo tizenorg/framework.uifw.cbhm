@@ -1,3 +1,11 @@
+cbhm (0.1.0-56) unstable; urgency=low
+
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-56
+  * add screen capture effect sound
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Tue, 28 Dec 2010 20:11:13 +0900
+
 cbhm (0.1.0-55) unstable; urgency=low
 
   * Git: 165.213.180.234:slp/pkgs/c/cbhm
