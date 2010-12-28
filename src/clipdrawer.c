@@ -4,8 +4,8 @@
 #include "xcnphandler.h"
 #include "clipdrawer.h"
 
-#define DELETE_ICON_PATH "/usr/share/icon/cbhm/05_delete.png"
-#define IM	"/usr/share/icon/cbhm/"
+#define DELETE_ICON_PATH "/usr/share/cbhm/icons/05_delete.png"
+#define IM	"/usr/share/cbhm/icons/"
 static const char *g_images_path[] = {
 	IM"cbhm_default_img.png",
 };

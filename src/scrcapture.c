@@ -14,6 +14,17 @@
 
 #define IMAGE_SAVE_DIR "/opt/media/Images and videos/My photo clips"
 #define IMAGE_SAVE_FILE_TYPE ".jpg"
+#define CAPTURE_SOUND_FILE "/usr/share/cbhm/sounds/Shutter_01.wav"
+#define CAPTURE_SOUND_TIMEOUT_SEC 2
+		        
+#include <mmf/mm_sound_private.h>
+#include <pthread.h>
+#include <errno.h>
+#include <sys/time.h>
+
+static pthread_mutex_t g_sound_lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t g_sound_cond = PTHREAD_COND_INITIALIZER;
+static Eina_Bool g_shot = EINA_FALSE;
 
 typedef struct tag_captureimginfo
 {
@@ -35,6 +46,69 @@ static Eina_Bool get_image_filename_with_date(char *dstr)
 			now->tm_sec, tv.tv_usec,
 			IMAGE_SAVE_FILE_TYPE);
 	return EINA_TRUE;
+}
+
+static void _sound_callback(void *data)
+{
+		DTRACE("_sound_callback\n");
+        pthread_cond_broadcast(&g_sound_cond);
+        return;
+}
+
+static void _play_capture_sound()
+{
+	int ret, step, handle;
+	MMSoundParamType pparam = {0,};
+	Eina_Bool sync = EINA_FALSE;
+	struct timespec timeout;
+	struct timeval tv;
+	ret = mm_sound_set_path(MM_SOUND_GAIN_CAMERA, MM_SOUND_PATH_SPK, MM_SOUND_PATH_NONE, MM_SOUND_PATH_OPTION_NONE);	 
+	if (ret != MM_ERROR_NONE)
+	{
+		DTRACE("mm_sound_set_path is failed\n");
+		return;
+	}
+	ret = mm_sound_volume_get_step(VOLUME_TYPE_FIXED, &step);
+	if (ret != MM_ERROR_NONE)
+	{
+		DTRACE("mm_sound_volume_get_step is failed\n");
+		return;
+	}
+	if (pthread_mutex_trylock(&g_sound_lock) == EBUSY)
+	{
+		DTRACE("trylock is fail - g_sound_lock\n");
+		return;
+	}
+	pparam.filename = CAPTURE_SOUND_FILE;
+	pparam.loop = 1;
+	pparam.volume = step-1;
+	pparam.callback = _sound_callback;
+
+	if (mm_sound_play_loud_solo_sound(CAPTURE_SOUND_FILE, 
+									  VOLUME_TYPE_FIXED, _sound_callback, 
+									  NULL, &handle) 
+		== MM_ERROR_NONE)
+	{
+		if(sync)
+		{
+			gettimeofday(&tv, NULL);
+			timeout.tv_sec = tv.tv_sec + CAPTURE_SOUND_TIMEOUT_SEC;
+			timeout.tv_nsec = tv.tv_usec;
+			if(ETIMEDOUT == pthread_cond_timedwait(&g_sound_cond, &g_sound_lock, &timeout))
+			{
+				if(handle>0)
+					mm_sound_stop_sound(handle);
+			}
+		}
+	}
+	else
+	{
+		DTRACE("effect sound play failed\n");
+		pthread_mutex_unlock(&g_sound_lock);
+		return;
+	}
+	pthread_mutex_unlock(&g_sound_lock);
+	DTRACE("sound play success\n");
 }
 
 static Eina_Bool _scrcapture_capture_postprocess(void* data)
@@ -63,12 +137,23 @@ static Eina_Bool _scrcapture_capture_postprocess(void* data)
 	free(capimginfo->imgdata);
 	free(capimginfo);
 
+	_play_capture_sound();
+
+	g_shot = EINA_FALSE;
+
 	return EINA_FALSE;
 }
 
 Eina_Bool capture_current_screen(void *data)
 {
 	struct appdata *ad = data;
+
+	if (g_shot)
+	{
+		DTRACE("too early to capture current screen\n");
+		return EINA_FALSE;
+	}
+	g_shot = EINA_TRUE;
 
 	captureimginfo_t *capimginfo = NULL;
 	capimginfo = malloc(sizeof(captureimginfo_t) * 1);
@@ -96,6 +181,8 @@ Eina_Bool capture_current_screen(void *data)
 		free(capimginfo);
 		return EINA_FALSE;
 	}
+
+	DTRACE("screen capture prepared\n");
 
 	evas_object_image_data_set(capimginfo->eo, NULL);
 	evas_object_image_size_set(capimginfo->eo, width, height);
@@ -131,6 +218,9 @@ int init_scrcapture(void *data)
 
 	ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, scrcapture_keydown_cb, ad);
 
+	pthread_mutex_init(&g_sound_lock, NULL);
+	pthread_cond_init(&g_sound_cond, NULL);
+
 	return 0;
 }
 
@@ -140,6 +230,9 @@ void close_scrcapture(void *data)
 
 	Ecore_X_Display *xdisp = ecore_x_display_get();
 	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
+
+	pthread_mutex_destroy(&g_sound_lock);
+	pthread_cond_destroy(&g_sound_cond);
 }
 
 
@@ -411,9 +504,9 @@ char *scrcapture_capture_screen_by_x11(Window xid, int *size)
 	return captured_image;
 }
 
-char *scrcapture_capture_screen_by_xv_ext(int width, int height)
+char *scrcapture_capture_screen_by_xv_ext(int w, int h)
 {
-	return createScreenShot(width, height);
+	return createScreenShot(w, h);
 }
 
 void scrcapture_release_screen_by_xv_ext(const char *s)

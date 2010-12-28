@@ -11,7 +11,7 @@ SET(SRCS src/cbhm_main.c
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 INCLUDE(FindPkgConfig)
-pkg_check_modules(pkgs REQUIRED elementary appcore-efl appcore-common x11 ecore-x utilX)
+pkg_check_modules(pkgs REQUIRED elementary appcore-efl appcore-common x11 ecore-x utilX mm-common mm-sound)
 
 FOREACH(flag ${pkgs_CFLAGS})
 	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
@@ -41,5 +41,6 @@ ADD_DEPENDENCIES(${PROJECT_NAME} cbhmdrawer.edj)
 
 INSTALL(TARGETS ${PROJECT_NAME} DESTINATION bin)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/data/themes/cbhmdrawer.edj DESTINATION share/edje)
-INSTALL(FILES ${CMAKE_BINARY_DIR}/data/images/cbhm_default_img.png DESTINATION share/icon/cbhm)
+INSTALL(FILES ${CMAKE_BINARY_DIR}/data/images/cbhm_default_img.png DESTINATION share/cbhm/icons)
+INSTALL(FILES ${CMAKE_BINARY_DIR}/data/sounds/Shutter_01.wav DESTINATION share/cbhm/sounds)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/data/init_script/cbhm DESTINATION /etc/init.d PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
