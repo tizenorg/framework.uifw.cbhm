@@ -14,7 +14,7 @@
 
 #define IMAGE_SAVE_DIR "/opt/media/Images and videos/My photo clips"
 #define IMAGE_SAVE_FILE_TYPE ".jpg"
-#define CAPTURE_SOUND_FILE "/usr/share/cbhm/sounds/Shutter_01.wav"
+#define CAPTURE_SOUND_FILE "/usr/share/cbhm/sounds/14_screen_capture.wav"
 #define CAPTURE_SOUND_TIMEOUT_SEC 2
 		        
 #include <mmf/mm_sound_private.h>
