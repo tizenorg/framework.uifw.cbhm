@@ -319,12 +319,30 @@ group
 					normal: "clipboard_button_delete.png";
 				}
 			}
-			description { state: "pressed" 0.0;
+			description { 
+				state: "pressed" 0.0;
 				inherit: "default" 0.0;
 				image {
 					normal: "clipboard_button_delete_press.png";
 				}
 			}
+			description { 
+				state: "hide" 0.0;
+				rel1.to: "delbtn";
+				rel2.to: "delbtn";
+				visible: 0;
+			}
+                }
+                part {
+                        name: "elm.swallow.cover";
+                        type: SWALLOW;
+			scale: 1;
+			mouse_events: 0;
+                        description {
+                                state: "default" 0.0;
+				rel1.to: "cliprect";
+				rel2.to: "cliprect";
+                        }
 		} // part
         } // parts
 	programs
@@ -365,6 +383,14 @@ group
 			signal: "mouse,up,1";
 			source: "delbtn/img";
 			action: SIGNAL_EMIT "elm,action,click" "";
+		}
+		program { 
+			name: "hide_delbtn";
+			source: "elm";
+			signal: "elm,state,hide,delbtn";
+			script {
+				set_state(PART:"delbtn/img", "hide", 0.0);
+			}		
 		}
 	} //programs
 } //group

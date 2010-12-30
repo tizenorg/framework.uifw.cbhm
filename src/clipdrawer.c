@@ -249,7 +249,9 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 		{
 			Evas_Object *layout = elm_layout_add (obj);
 			elm_layout_theme_set(layout, "gengrid", "widestyle", "horizontal_layout");
-			edje_object_signal_callback_add(elm_layout_edje_get(layout), "mouse,up,1", "*", _grid_item_ly_clicked, data);
+			edje_object_signal_callback_add(elm_layout_edje_get(layout), 
+											"mouse,up,1", "*", _grid_item_ly_clicked, data);
+
 			Evas_Object *sicon;
 			sicon = evas_object_image_add(evas_object_evas_get(obj));
 			evas_object_image_load_size_set(sicon, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
@@ -257,6 +259,16 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			evas_object_image_fill_set(sicon, 0, 0, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
 			evas_object_resize(sicon, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
 			elm_layout_content_set(layout, "elm.swallow.icon", sicon);
+
+/*
+//			edje_object_signal_emit(elm_layout_edje_get(layout), "elm,state,hide,delbtn", "elm");
+
+			Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(obj));
+//			evas_object_resize(rect, GRID_ITEM_W, GRID_ITEM_H);
+			evas_object_color_set(rect, 0, 0, 0, 200);
+			evas_object_show(rect);
+			elm_layout_content_set(layout, "elm.swallow.cover", rect);
+*/
 
 			return layout;
 
@@ -502,7 +514,7 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-	// clipdrawer_activate_view(ad);
+	clipdrawer_activate_view(ad);
 
 	return 0;
 }
