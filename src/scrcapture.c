@@ -120,6 +120,7 @@ static Eina_Bool _scrcapture_capture_postprocess(void* data)
 	if (!evas_object_image_save(capimginfo->eo, capimginfo->filename, NULL, NULL)) 
 	{
 		DTRACE("screen capture save fail\n");
+		g_shot = EINA_FALSE;
 		return EINA_FALSE;
 	}
 
@@ -136,6 +137,8 @@ static Eina_Bool _scrcapture_capture_postprocess(void* data)
 	evas_object_del(capimginfo->eo);
 	free(capimginfo->imgdata);
 	free(capimginfo);
+
+	DTIME("end current capture\n");
 
 	_play_capture_sound();
 
@@ -154,6 +157,8 @@ Eina_Bool capture_current_screen(void *data)
 		return EINA_FALSE;
 	}
 	g_shot = EINA_TRUE;
+
+	DTIME("start current capture\n");
 
 	captureimginfo_t *capimginfo = NULL;
 	capimginfo = malloc(sizeof(captureimginfo_t) * 1);
@@ -179,6 +184,7 @@ Eina_Bool capture_current_screen(void *data)
 		if (capimginfo->eo)
 			evas_object_del(capimginfo->eo);
 		free(capimginfo);
+		g_shot = EINA_FALSE;
 		return EINA_FALSE;
 	}
 

@@ -202,6 +202,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			evas_object_show(rect);
 			elm_layout_content_set(layout, "elm.swallow.icon", rect);
 
+			// FIXME: add string length check
 			Evas_Object *ientry = elm_scrolled_entry_add(obj);
 			evas_object_size_hint_weight_set(ientry, 0, 0);
 			Eina_Strbuf *strent = NULL;
