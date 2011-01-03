@@ -195,7 +195,8 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 		{
 			Evas_Object *layout = elm_layout_add (obj);
 			elm_layout_theme_set(layout, "gengrid", "widestyle", "horizontal_layout");
-			edje_object_signal_callback_add(elm_layout_edje_get(layout), "mouse,up,1", "*", _grid_item_ly_clicked, data);
+			edje_object_signal_callback_add(elm_layout_edje_get(layout), 
+											"mouse,up,1", "*", _grid_item_ly_clicked, data);
 			Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(obj));
 			evas_object_resize(rect, GRID_ITEM_W, GRID_ITEM_H);
 			evas_object_color_set(rect, 242, 233, 183, 255);
@@ -455,7 +456,8 @@ int clipdrawer_init(void *data)
 	evas_object_resize(ad->ly_main, ad->root_w, (int)cdy);
 	evas_object_move(ad->ly_main, CLIPDRAWER_POS_X, (int)cdw);
 
-	edje_object_signal_callback_add(elm_layout_edje_get(ad->ly_main), "mouse,up,1", "*", clipdrawer_ly_clicked, ad);
+	edje_object_signal_callback_add(elm_layout_edje_get(ad->ly_main), 
+									"mouse,up,1", "*", clipdrawer_ly_clicked, ad);
 
 	ad->hig = NULL;
 	ad->hig = elm_gengrid_add(ad->win_main);
@@ -486,7 +488,6 @@ int clipdrawer_init(void *data)
 	}
 
 	clipdrawer_add_item("clipboard history", GI_TEXT);
-	//clipdrawer_add_item("clipboard history asldfjlaskdf las dflkas dflas dfljask dflasd flaksdf jalskdf jalskdf jalsk flaskdfj lkasjf lksad jf", GI_TEXT);
 
 	evas_object_show (ad->hig);
 
