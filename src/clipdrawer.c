@@ -515,7 +515,7 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-	clipdrawer_activate_view(ad);
+	// clipdrawer_activate_view(ad);
 
 	return 0;
 }
@@ -526,6 +526,7 @@ void clipdrawer_activate_view(void *data)
 	
 	if (ad->win_main)
 	{
+		set_transient_for(ad);
 		evas_object_show(ad->win_main);
 		elm_win_activate(ad->win_main);
 	}
@@ -537,6 +538,7 @@ void clipdrawer_lower_view(void *data)
 	
 	if (ad->win_main)
 	{
+		unset_transient_for(ad);
 		evas_object_hide(ad->win_main);
 		elm_win_lower(ad->win_main);
 	}

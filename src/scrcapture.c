@@ -13,7 +13,7 @@
 #include <utilX.h>
 
 #define IMAGE_SAVE_DIR "/opt/media/Images and videos/My photo clips"
-#define IMAGE_SAVE_FILE_TYPE ".jpg"
+#define IMAGE_SAVE_FILE_TYPE ".png"
 #define CAPTURE_SOUND_FILE "/usr/share/cbhm/sounds/14_screen_capture.wav"
 #define CAPTURE_SOUND_TIMEOUT_SEC 2
 		        
@@ -117,7 +117,7 @@ static Eina_Bool _scrcapture_capture_postprocess(void* data)
 
 	DTIME("start capture postprocess - %s\n", capimginfo->filename);
 
-	if (!evas_object_image_save(capimginfo->eo, capimginfo->filename, NULL, NULL)) 
+	if (!evas_object_image_save(capimginfo->eo, capimginfo->filename, NULL, "compress=1")) 
 	{
 		DTRACE("screen capture save fail\n");
 		g_shot = EINA_FALSE;

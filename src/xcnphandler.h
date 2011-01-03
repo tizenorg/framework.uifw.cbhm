@@ -28,6 +28,9 @@ int set_selection_owner();
 int get_selection_content(void *data);
 int processing_selection_request(Ecore_X_Event_Selection_Request *ev);
 
+void set_transient_for(void *data);
+void unset_transient_for(void *data);
+
 static int _cbhm_init(void *data);
 static void _cbhm_fini();
 static int _xsel_clear_cb(void *data, int ev_type, void *event);

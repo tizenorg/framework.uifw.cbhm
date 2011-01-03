@@ -609,6 +609,32 @@ static int _xfocus_out_cb(void *data, int ev_type, void *event)
 	return TRUE;
 }
 
+void set_transient_for(void *data)
+{
+	struct appdata *ad = data;
+
+	Ecore_X_Window xwin_active = None;
+	Atom atomActive = XInternAtom(g_disp, "_NET_ACTIVE_WINDOW", False);
+
+	if (ecore_x_window_prop_window_get(DefaultRootWindow(g_disp), 
+									   atomActive, &xwin_active, 1) != -1)
+	{
+		ecore_x_icccm_transient_for_set (elm_win_xwindow_get(ad->win_main), xwin_active);
+		DTRACE("Success to set transient_for active window = 0x%X\n", xwin_active);
+	}
+	else
+	{
+		DTRACE("Failed to find active window for transient_for\n");
+	}
+}
+
+void unset_transient_for(void *data)
+{
+	struct appdata *ad = data;
+
+	ecore_x_icccm_transient_for_unset(elm_win_xwindow_get(ad->win_main));
+}
+
 static Ecore_X_Window get_selection_secondary_target_win()
 {
 	Atom actual_type;
