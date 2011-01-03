@@ -1,3 +1,11 @@
+cbhm (0.1.0-58) unstable; urgency=low
+
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-58
+  * add to set transient_for at main_win
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Mon, 03 Jan 2011 15:46:38 +0900
+
 cbhm (0.1.0-57) unstable; urgency=low
 
   * Git: 165.213.180.234:slp/pkgs/c/cbhm
