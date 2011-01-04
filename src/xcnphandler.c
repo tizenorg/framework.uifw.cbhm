@@ -211,6 +211,8 @@ int get_selection_content(void *data)
 					   AnyPropertyType, &cbtype, &cbformat, &cbitems, &cbsize, &cbbuf);
 	XDeleteProperty(g_disp, g_evtwin, atomCBOut);
 
+#define _NORMAL
+#ifdef _NORMAL
 	unesc = clipdrawer_get_plain_string_from_escaped(cbbuf);
 	if (unesc != NULL)
 	{
@@ -233,10 +235,11 @@ int get_selection_content(void *data)
 	else
 		unesc_len = 0;
 
-//	add_to_storage_buffer(ad, cbbuf, cbitems);
-//	DTRACE("len = %ld, data = %s\n", cbitems, cbbuf);
+#endif
+#ifdef _DEMO
+	add_to_storage_buffer(ad, cbbuf, cbitems);
+	DTRACE("len = %ld, data = %s\n", cbitems, cbbuf);
 
-/*
 	if (cbbuf != NULL)
 	{
 		unesc_len = strlen(cbbuf);
@@ -271,9 +274,9 @@ int get_selection_content(void *data)
 		clipdrawer_add_item(cbbuf, GI_TEXT);
 	}
 	DTRACE("len = %ld, data = %s\n", unesc_len, cbbuf);
-*/
+#endif
 
-
+#ifdef _NORMAL
 	/* FIXME : it needs two verification. 
                1. does the file exist?
                2. dose the file wanted type? */
@@ -291,6 +294,7 @@ int get_selection_content(void *data)
 	}
 	DTRACE("len = %ld, data = %s\n", unesc_len, unesc);
 	free(unesc);
+#endif
 
 	DTRACE("\n");
 	print_storage_buffer();
