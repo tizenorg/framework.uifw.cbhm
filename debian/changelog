@@ -1,7 +1,7 @@
 cbhm (0.1.0-59) unstable; urgency=low
 
   * Git: 165.213.180.234:slp/pkgs/c/cbhm
-  * Tag: cbhm_0.1.0-58
+  * Tag: cbhm_0.1.0-59
   * minor bugfix(error handling at scrcapture)
 
  -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Wed, 05 Jan 2011 09:53:54 +0900
