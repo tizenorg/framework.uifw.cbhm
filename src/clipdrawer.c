@@ -365,10 +365,10 @@ static void _grid_click_paste(void *data, Evas_Object *obj, void *event_info)
 void _grid_del(const void *data, Evas_Object *obj)
 {
 	griditem_t *ti = (griditem_t *)data;
-	if (ti->itype == GI_IMAGE)
-		eina_stringshare_del(ti->ipathdata);
-	else
+	if (ti->itype == GI_TEXT)
 		eina_strbuf_free(ti->istrdata);
+	else
+		eina_stringshare_del(ti->ipathdata);
 	free(ti);
 }
 

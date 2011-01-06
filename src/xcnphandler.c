@@ -135,8 +135,6 @@ int add_to_storage_buffer(void *data, char *src, int len)
 					(unsigned char *)&nserial, (int) 1);
 	XFlush(g_disp);
 
-	clipdrawer_update_contents(ad);
-
 	return 0;
 }
 

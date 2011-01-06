@@ -31,7 +31,7 @@
 
 struct appdata;
 
-#define HISTORY_QUEUE_ITEM_SIZE (5 * 1024) // 4Kilo 
+#define HISTORY_QUEUE_ITEM_SIZE (512 * 1024) // 5Kilo 
 #define HISTORY_QUEUE_MAX_ITEMS 12
 
 #endif // _common_h_
