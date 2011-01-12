@@ -1,3 +1,11 @@
+cbhm (0.1.0-65) unstable; urgency=low
+
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-65
+  * version up
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Wed, 12 Jan 2011 19:40:10 +0900
+
 cbhm (0.1.0-64) unstable; urgency=low
 
   * Git: 165.213.180.234:slp/pkgs/c/cbhm
