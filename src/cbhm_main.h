@@ -19,6 +19,7 @@ struct appdata
 	Evas_Object *ly_main; // layout widget based on EDJ 
 	/* add more variables here */
 	Evas_Object *hig;     // history item gengrid 
+	unsigned int hicount; // history item count
 	Evas_Object *txtlist; 
 };
 

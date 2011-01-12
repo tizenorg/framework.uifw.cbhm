@@ -378,13 +378,9 @@ int clipdrawer_add_item(char *idata, int type)
 {
 	struct appdata *ad = g_get_main_appdata();
 	griditem_t *newgi = NULL;
-	//Eina_List *igl = NULL;
-	unsigned int igl_counter = 0;
 
 	newgi = malloc(sizeof(griditem_t));
 	newgi->itype = type;
-	//igl = elm_gengrid_items_get(ad->hig);
-	//igl_counter = eina_list_count(igl);
 
 	fprintf(stderr, "## add - %d : %s\n", newgi->itype, idata);
 	if (type == GI_TEXT)
@@ -394,7 +390,6 @@ int clipdrawer_add_item(char *idata, int type)
 	}
 	else //if (type == GI_IMAGE)
 	{
-		//Eina_List *l;
 		Elm_Gengrid_Item *item = elm_gengrid_first_item_get(ad->hig);
 		griditem_t *ti = NULL;
 
@@ -405,17 +400,6 @@ int clipdrawer_add_item(char *idata, int type)
 		}
 
 		while (item)	
-	      	{
-		     ti = elm_gengrid_item_data_get(item);
-		     if ((ti->itype == type) && !strcmp(ti->ipathdata, idata))
-		     {
-			     DTRACE("Error : duplicated file path = %s\n", idata);
-			     return -1;
-		     }
-	  	     item = elm_gengrid_item_next_get(item);	     
-		}
-
-		/*EINA_LIST_FOREACH(igl, l, item)
 		{
 			ti = elm_gengrid_item_data_get(item);
 			if ((ti->itype == type) && !strcmp(ti->ipathdata, idata))
@@ -423,17 +407,20 @@ int clipdrawer_add_item(char *idata, int type)
 				DTRACE("Error : duplicated file path = %s\n", idata);
 				return -1;
 			}
-		}*/
+			item = elm_gengrid_item_next_get(item);	     
+		}
 
 		newgi->ipathdata = eina_stringshare_add(idata);
 	}
 
-	/*if (igl_counter >= HISTORY_QUEUE_MAX_ITEMS)
+	if (ad->hicount >= HISTORY_QUEUE_MAX_ITEMS)
 	{
+		ad->hicount--;
 		// FIXME: add routine that is removing its elements
-		elm_gengrid_item_del(eina_list_data_get(eina_list_last(igl)));
-	}*/
+		elm_gengrid_item_del(elm_gengrid_last_item_get(ad->hig));
+	}
 
+	ad->hicount++;
 	newgi->item = elm_gengrid_item_prepend(ad->hig, &gic, newgi, NULL, NULL);
 
 	return TRUE;
@@ -455,6 +442,8 @@ int clipdrawer_init(void *data)
 {
 	struct appdata *ad = data;
 	double cdy, cdw;
+
+	ad->hicount = 0; 
 
 	// for elm_check
 	elm_theme_extension_add(NULL, APP_EDJ_FILE);
