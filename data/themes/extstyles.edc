@@ -385,6 +385,14 @@ group
 			action: SIGNAL_EMIT "elm,action,click" "";
 		}
 		program { 
+			name: "show_delbtn";
+			source: "elm";
+			signal: "elm,state,show,delbtn";
+			script {
+				set_state(PART:"delbtn/img", "default", 0.0);
+			}		
+		}
+		program { 
 			name: "hide_delbtn";
 			source: "elm";
 			signal: "elm,state,hide,delbtn";
