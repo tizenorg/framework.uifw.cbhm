@@ -1,3 +1,11 @@
+cbhm (0.1.0-66) unstable; urgency=low
+
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-66
+  * add textonly mode feature
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Fri, 14 Jan 2011 15:45:55 +0900
+
 cbhm (0.1.0-65) unstable; urgency=low
 
   * Git: 165.213.180.234:slp/pkgs/c/cbhm
