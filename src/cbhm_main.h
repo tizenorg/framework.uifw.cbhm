@@ -21,6 +21,7 @@ struct appdata
 	Evas_Object *hig;     // history item gengrid 
 	unsigned int hicount; // history item count
 	Evas_Object *txtlist; 
+	Eina_Bool pastetextonly;
 };
 
 void* g_get_main_appdata();

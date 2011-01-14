@@ -29,55 +29,9 @@ typedef struct tag_griditem
 	const char *ipathdata;
 	Eina_Strbuf *istrdata;
 	Evas_Object *delbtn;
+	Evas_Object *ilayout;
 } griditem_t;
 
-static void _list_click_paste(void *data, Evas_Object *obj, void *event_info)
-{
-	struct appdata *ad = data;
-    Elm_List_Item *it = (Elm_List_Item *) elm_list_selected_item_get(obj);
-	if (it == NULL)
-		return;
-
-    elm_list_item_selected_set(it, 0);
-
-	Elm_List_Item *item;
-	Eina_List *n;
-	int hc = 0;
-	EINA_LIST_FOREACH(elm_list_items_get(ad->txtlist), n, item)
-	{
-		if (item == it)
-			break;
-		hc++;
-	}
-
-	fprintf(stderr, "## this c = %d, %d\n", hc, get_current_history_position());
-
-	int	pos = get_current_history_position()-hc;
-	if (pos < 0)
-		pos = pos+(HISTORY_QUEUE_MAX_ITEMS);
-
-	fprintf(stderr, "## pos = %d, %s\n", pos, get_item_contents_by_pos(pos));
-	char *p = strdup(get_item_contents_by_pos(pos));
-
-	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
-
-/*
-	char *p = NULL;
-	int cplen;
-
-	char *cpdata = NULL;
-	cpdata = elm_entry_utf8_to_markup(elm_list_item_label_get(it));
-	if (cpdata == NULL)
-		return;
-	cplen = strlen(cpdata);
-	p = malloc(cplen + 1);
-	snprintf(p, cplen+1, "%s", cpdata);
-*/
-//	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_TEXT*/1, p);
-//	elm_selection_set(1, obj, /*ELM_SEL_FORMAT_MARKUP*/2, p);
-
-//	clipdrawer_lower_view(ad);
-}
 
 int clipdrawer_update_contents(void *data)
 {
@@ -155,11 +109,18 @@ _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 		}
 		else //if (ti->itype == GI_IMAGE)
 		{
-			int len = strlen(ti->ipathdata);
-			char *p = malloc(len + 10);
-			snprintf(p,len+10, "file:///%s", ti->ipathdata);
+			if (!clipdrawer_paste_textonly_get(ad))
+			{
+				int len = strlen(ti->ipathdata);
+				char *p = malloc(len + 10);
+				snprintf(p,len+10, "file:///%s", ti->ipathdata);
 
-			elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
+				elm_selection_set(/*secondary*/1,obj,/*ELM_SEL_FORMAT_IMAGE*/4,p);
+			}
+			else
+			{
+				DTRACE("ERR: cbhm image paste mode is false\n");
+			}
 		}
 
 		return;
@@ -262,16 +223,18 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			evas_object_resize(sicon, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
 			elm_layout_content_set(layout, "elm.swallow.icon", sicon);
 
-/*
-//			edje_object_signal_emit(elm_layout_edje_get(layout), "elm,state,hide,delbtn", "elm");
+			struct appdata *ad = g_get_main_appdata();
+			
+			if (!clipdrawer_paste_textonly_get(ad))
+			{
+				edje_object_signal_emit(elm_layout_edje_get(layout), "elm,state,hide,delbtn", "elm");
+				Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(obj));
+				evas_object_color_set(rect, 0, 0, 0, 200);
+				evas_object_show(rect);
+				elm_layout_content_set(layout, "elm.swallow.cover", rect);
+			}
 
-			Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(obj));
-//			evas_object_resize(rect, GRID_ITEM_W, GRID_ITEM_H);
-			evas_object_color_set(rect, 0, 0, 0, 200);
-			evas_object_show(rect);
-			elm_layout_content_set(layout, "elm.swallow.cover", rect);
-*/
-
+			ti->ilayout = layout;
 			return layout;
 
 /*
@@ -443,7 +406,8 @@ int clipdrawer_init(void *data)
 	struct appdata *ad = data;
 	double cdy, cdw;
 
-	ad->hicount = 0; 
+	ad->hicount = 0;
+	ad->pastetextonly = EINA_TRUE;
 
 	// for elm_check
 	elm_theme_extension_add(NULL, APP_EDJ_FILE);
@@ -543,4 +507,73 @@ void clipdrawer_lower_view(void *data)
 		evas_object_hide(ad->win_main);
 		elm_win_lower(ad->win_main);
 	}
+}
+
+void _change_gengrid_paste_textonly_mode(void *data)
+{
+	struct appdata *ad = data;
+
+	fprintf(stderr, "## _change_gengrid_paste_textonly_mode = %d\n", clipdrawer_paste_textonly_get(ad));
+
+	Elm_Gengrid_Item *item;
+	griditem_t *ti = NULL;
+
+	if (clipdrawer_paste_textonly_get(ad))
+	{ // textonly paste mode
+		Elm_Gengrid_Item *item = elm_gengrid_first_item_get(ad->hig);
+
+		while (item)	
+		{
+			ti = elm_gengrid_item_data_get(item);
+			if ((ti->itype == GI_IMAGE) && (ti->ilayout))
+			{
+				fprintf(stderr, "## sig to hide delbtn\n");
+
+				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,hide,delbtn", "elm");
+				Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(ad->hig));
+				evas_object_color_set(rect, 0, 0, 0, 200);
+				evas_object_show(rect);
+				elm_layout_content_set(ti->ilayout, "elm.swallow.cover", rect);
+			}
+			item = elm_gengrid_item_next_get(item);	     
+		}
+	}
+	else
+	{ // text+image paste mode
+		Elm_Gengrid_Item *item = elm_gengrid_first_item_get(ad->hig);
+
+		while (item)	
+		{
+			ti = elm_gengrid_item_data_get(item);
+			fprintf(stderr, "## itype = %d\n", ti->itype);
+			fprintf(stderr, "## ilayout = 0x%x\n", ti->ilayout);
+			if ((ti->itype == GI_IMAGE) && (ti->ilayout))
+			{
+				fprintf(stderr, "## sig to show delbtn\n");
+
+				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,show,delbtn", "elm");
+				Evas_Object *rect = elm_layout_content_unset(ti->ilayout, "elm.swallow.cover");
+				evas_object_hide(rect);
+				evas_object_del(rect);
+			}
+			item = elm_gengrid_item_next_get(item);	     
+		}
+	}
+}
+
+void clipdrawer_paste_textonly_set(void *data, Eina_Bool textonly)
+{
+	struct appdata *ad = data;
+	textonly = !!textonly;
+	if (ad->pastetextonly != textonly)
+		ad->pastetextonly = textonly;
+	DTRACE("paste textonly mode = %d\n", textonly);
+
+	_change_gengrid_paste_textonly_mode(ad);
+}
+
+Eina_Bool clipdrawer_paste_textonly_get(void *data)
+{
+	struct appdata *ad = data;
+	return ad->pastetextonly;
 }

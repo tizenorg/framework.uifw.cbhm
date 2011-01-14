@@ -23,8 +23,10 @@ void clipdrawer_activate_view(void *data);
 void clipdrawer_lower_view(void *data);
 
 const char* clipdrawer_get_plain_string_from_escaped(char *escstr);
-int clipdrawer_update_contents(void *data);
 
 int clipdrawer_add_item(char *idata, int type);
+
+void clipdrawer_paste_textonly_set(void *data, Eina_Bool textonly);
+Eina_Bool clipdrawer_paste_textonly_get(void *data);
 
 #endif // _clipdrawer_h_

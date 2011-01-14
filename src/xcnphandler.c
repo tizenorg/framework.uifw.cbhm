@@ -590,8 +590,16 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 							(int) get_total_storage_size());
 		}
 	}
-	else if (strcmp("show", ev->data.b) == 0)
+	else if (strncmp("show", ev->data.b, 4) == 0)
 	{
+/*
+		if (ev->data.b[4] != NULL && ev->data.b[4] == '1')
+			clipdrawer_paste_textonly_set(ad, EINA_FALSE);
+		else
+			clipdrawer_paste_textonly_set(ad, EINA_TRUE);
+*/
+			clipdrawer_paste_textonly_set(ad, EINA_FALSE);
+
 		clipdrawer_activate_view(ad);
 	}
 
