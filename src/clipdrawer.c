@@ -408,6 +408,7 @@ int clipdrawer_init(void *data)
 
 	ad->hicount = 0;
 	ad->pastetextonly = EINA_TRUE;
+	ad->anim_status = STATUS_NONE;
 
 	// for elm_check
 	elm_theme_extension_add(NULL, APP_EDJ_FILE);
@@ -480,9 +481,100 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-	// clipdrawer_activate_view(ad);
+//	clipdrawer_activate_view(ad);
+
+//	clipdrawer_anim_show_effect(ad);
 
 	return 0;
+}
+
+Ecore_Timer *tm_anim;
+
+Eina_Bool anim_pos_calc_cb(void *data)
+{
+	struct appdata *ad = data;
+
+	static int anim_count = 0;
+	static int anim_end = 120;
+	int anim_starty, anim_endy, deltay;
+//	if (anim_count == 0)
+//	{
+		switch (ad->anim_status)
+		{
+			case HIDE_ANIM:
+				anim_starty = (int)((1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
+				anim_endy = ad->root_h;
+				anim_starty = anim_endy - anim_starty;
+				break;
+			case SHOW_ANIM:
+				anim_starty = ad->root_h;
+				anim_endy = (int)((1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
+				anim_endy = anim_starty-anim_endy;
+				break;
+			default:
+				return EINA_FALSE;
+		}
+
+//	}
+
+	double posprop = 1.0*anim_count/anim_end;
+	if (ad->anim_status == HIDE_ANIM)
+		deltay = (int)((anim_endy-anim_starty)*posprop);
+	else
+		deltay = (int)((anim_starty-anim_endy)*posprop);
+
+	if (anim_count > anim_end)
+	{
+		anim_count = 0;
+		ad->anim_status = STATUS_NONE;
+		if (ad->anim_status == HIDE_ANIM)
+		{
+			evas_object_hide(ad->win_main);
+			elm_win_lower(ad->win_main);
+		}
+		return EINA_FALSE;
+	}
+
+	if (ad->anim_status == HIDE_ANIM)
+		evas_object_move(ad->win_main, 0, anim_starty+deltay);
+	else
+		evas_object_move(ad->win_main, 0, anim_starty-deltay);
+	anim_count++;
+
+	if (ad->anim_status == HIDE_ANIM)
+		fprintf(stderr, "## cur pos y = %d\n", anim_starty+deltay);
+	else
+		fprintf(stderr, "## cur pos y = %d\n", anim_starty-deltay);
+
+	return EINA_TRUE;
+}
+
+void clipdrawer_anim_show_effect(void *data)
+{
+	struct appdata *ad = data;
+
+	if (ad->anim_status != STATUS_NONE)
+	{
+		DTRACE("ERR: another animation is showing\n");
+		return;
+	}
+
+	ad->anim_status = SHOW_ANIM;
+	ecore_timer_add(1.0/60, anim_pos_calc_cb, ad);
+}
+
+void clipdrawer_anim_hide_effect(void *data)
+{
+	struct appdata *ad = data;
+
+	if (ad->anim_status != STATUS_NONE)
+	{
+		DTRACE("ERR: another animation is showing\n");
+		return;
+	}
+
+	ad->anim_status = HIDE_ANIM;
+	ecore_timer_add(1.0/60, anim_pos_calc_cb, ad);
 }
 
 void clipdrawer_activate_view(void *data)
@@ -493,6 +585,7 @@ void clipdrawer_activate_view(void *data)
 	{
 		set_transient_for(ad);
 		evas_object_show(ad->win_main);
+//		clipdrawer_anim_show_effect(ad);
 		elm_win_activate(ad->win_main);
 	}
 }
@@ -504,6 +597,7 @@ void clipdrawer_lower_view(void *data)
 	if (ad->win_main)
 	{
 		unset_transient_for(ad);
+//		clipdrawer_anim_hide_effect(ad);
 		evas_object_hide(ad->win_main);
 		elm_win_lower(ad->win_main);
 	}

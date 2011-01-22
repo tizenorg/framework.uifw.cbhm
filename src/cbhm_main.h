@@ -10,6 +10,15 @@
 #define APP_EDJ_FILE EDJ_PATH"/cbhmdrawer.edj"
 #define GRP_MAIN "cbhmdrawer"
 
+typedef enum _anim_status_t
+{
+	STATUS_NONE = 0,
+	SHOW_ANIM,
+	HIDE_ANIM,
+
+	STATUS_MAX
+} anim_status_t;
+
 struct appdata
 {
 	int root_w;
@@ -20,7 +29,8 @@ struct appdata
 	/* add more variables here */
 	Evas_Object *hig;     // history item gengrid 
 	unsigned int hicount; // history item count
-	Evas_Object *txtlist; 
+	Evas_Object *txtlist;
+	anim_status_t anim_status;
 	Eina_Bool pastetextonly;
 };
 

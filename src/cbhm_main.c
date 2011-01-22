@@ -74,6 +74,22 @@ int init_appview(void *data)
 	return 0;
 }
 
+void disable_focus_for_app_window (Evas_Object *win)
+{
+    Eina_Bool accepts_focus;
+    Ecore_X_Window_State_Hint initial_state;
+    Ecore_X_Pixmap icon_pixmap;
+    Ecore_X_Pixmap icon_mask;
+    Ecore_X_Window icon_window;
+    Ecore_X_Window window_group;
+    Eina_Bool is_urgent;
+
+    ecore_x_icccm_hints_get (elm_win_xwindow_get (win),
+                             &accepts_focus, &initial_state, &icon_pixmap, &icon_mask, &icon_window, &window_group, &is_urgent);
+    ecore_x_icccm_hints_set (elm_win_xwindow_get (win),
+                             0, initial_state, icon_pixmap, icon_mask, icon_window, window_group, is_urgent);
+}
+
 static Evas_Object* create_win(void *data, const char *name)
 {
 	struct appdata *ad = (struct appdata *) data;
@@ -94,6 +110,9 @@ static Evas_Object* create_win(void *data, const char *name)
 		{   //disable window effect
 			utilx_set_window_effect_state(dpy, elm_win_xwindow_get(eo), 0);
 			ecore_x_icccm_name_class_set(elm_win_xwindow_get(eo), "NORMAL_WINDOW", "NORMAL_WINDOW");
+//			elm_win_keyboard_win_set (eo, EINA_TRUE);
+//			ecore_x_icccm_name_class_set(elm_win_xwindow_get(eo), "Virtual Keyboard", "ISF");
+//			disable_focus_for_app_window(eo);
 		}
 	}
 
