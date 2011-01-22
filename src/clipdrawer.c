@@ -19,6 +19,9 @@ static const char *g_images_path[] = {
 #define GRID_IMAGE_LIMIT_W 91
 #define GRID_IMAGE_LIMIT_H 113
 
+#define ANIM_DURATION 120 // 2 seconds
+#define ANIM_FLOPS (1.0/60)
+
 // gic should live at gengrid callback functions
 Elm_Gengrid_Item_Class gic;
 
@@ -84,6 +87,9 @@ static void
 _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emission, const char *source)
 {
 	struct appdata *ad = g_get_main_appdata();
+
+	if (ad->anim_status != STATUS_NONE)
+		return;
 
 	Elm_Gengrid_Item *sgobj = NULL;
 	sgobj = elm_gengrid_selected_item_get(ad->hig);
@@ -317,6 +323,9 @@ static void _grid_longpress(void *data, Evas_Object *obj, void *event_info)
 static void _grid_click_paste(void *data, Evas_Object *obj, void *event_info)
 {
 	struct appdata *ad = data;
+	if (ad->anim_status != STATUS_NONE)
+		return;
+
 	Elm_Gengrid_Item *sgobj = NULL;
 	sgobj = elm_gengrid_selected_item_get(ad->hig);
 	griditem_t *ti = NULL;
@@ -394,6 +403,9 @@ clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 {
 	struct appdata *ad = data;
 
+	if (ad->anim_status != STATUS_NONE)
+		return;
+
 	#define EDJE_CLOSE_PART_PREFIX "background/close"
 	if (!strncmp(source, EDJE_CLOSE_PART_PREFIX, strlen(EDJE_CLOSE_PART_PREFIX)))
 	{
@@ -406,6 +418,7 @@ int clipdrawer_init(void *data)
 	struct appdata *ad = data;
 	double cdy, cdw;
 
+	ad->windowshow = EINA_FALSE;
 	ad->hicount = 0;
 	ad->pastetextonly = EINA_TRUE;
 	ad->anim_status = STATUS_NONE;
@@ -495,61 +508,59 @@ Eina_Bool anim_pos_calc_cb(void *data)
 	struct appdata *ad = data;
 
 	static int anim_count = 0;
-	static int anim_end = 120;
 	int anim_starty, anim_endy, deltay;
-//	if (anim_count == 0)
-//	{
-		switch (ad->anim_status)
-		{
-			case HIDE_ANIM:
-				anim_starty = (int)((1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
-				anim_endy = ad->root_h;
-				anim_starty = anim_endy - anim_starty;
-				break;
-			case SHOW_ANIM:
-				anim_starty = ad->root_h;
-				anim_endy = (int)((1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
-				anim_endy = anim_starty-anim_endy;
-				break;
-			default:
-				return EINA_FALSE;
-		}
+	double posprop;
 
-//	}
+	switch (ad->anim_status)
+	{
+		case HIDE_ANIM:
+			anim_starty = (int)((1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
+			anim_endy = ad->root_h;
+			anim_starty = anim_endy - anim_starty;
+			break;
+		case SHOW_ANIM:
+			anim_starty = ad->root_h;
+			anim_endy = (int)((1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
+			anim_endy = anim_starty-anim_endy;
+			break;
+		default:
+			return EINA_FALSE;
+	}
 
-	double posprop = 1.0*anim_count/anim_end;
-	if (ad->anim_status == HIDE_ANIM)
-		deltay = (int)((anim_endy-anim_starty)*posprop);
-	else
-		deltay = (int)((anim_starty-anim_endy)*posprop);
-
-	if (anim_count > anim_end)
+	if (anim_count > ANIM_DURATION)
 	{
 		anim_count = 0;
-		ad->anim_status = STATUS_NONE;
 		if (ad->anim_status == HIDE_ANIM)
 		{
 			evas_object_hide(ad->win_main);
 			elm_win_lower(ad->win_main);
 		}
+		ad->anim_status = STATUS_NONE;
 		return EINA_FALSE;
 	}
 
-	if (ad->anim_status == HIDE_ANIM)
-		evas_object_move(ad->win_main, 0, anim_starty+deltay);
-	else
-		evas_object_move(ad->win_main, 0, anim_starty-deltay);
+	posprop = 1.0*anim_count/ANIM_DURATION;
+	switch (ad->anim_status)
+	{
+		case HIDE_ANIM:
+			deltay = (int)((anim_endy-anim_starty)*posprop);
+			evas_object_move(ad->win_main, 0, anim_starty+deltay);
+			//fprintf(stderr, "## cur pos y = %d\n", anim_starty+deltay);
+			break;
+		case SHOW_ANIM:
+			deltay = (int)((anim_starty-anim_endy)*posprop);
+			evas_object_move(ad->win_main, 0, anim_starty-deltay);
+			//fprintf(stderr, "## cur pos y = %d\n", anim_starty-deltay);
+			break;
+		default:
+			return EINA_FALSE;
+	}
+
 	anim_count++;
-
-	if (ad->anim_status == HIDE_ANIM)
-		fprintf(stderr, "## cur pos y = %d\n", anim_starty+deltay);
-	else
-		fprintf(stderr, "## cur pos y = %d\n", anim_starty-deltay);
-
 	return EINA_TRUE;
 }
 
-void clipdrawer_anim_show_effect(void *data)
+void clipdrawer_anim_effect(void *data, anim_status_t atype)
 {
 	struct appdata *ad = data;
 
@@ -559,22 +570,8 @@ void clipdrawer_anim_show_effect(void *data)
 		return;
 	}
 
-	ad->anim_status = SHOW_ANIM;
-	ecore_timer_add(1.0/60, anim_pos_calc_cb, ad);
-}
-
-void clipdrawer_anim_hide_effect(void *data)
-{
-	struct appdata *ad = data;
-
-	if (ad->anim_status != STATUS_NONE)
-	{
-		DTRACE("ERR: another animation is showing\n");
-		return;
-	}
-
-	ad->anim_status = HIDE_ANIM;
-	ecore_timer_add(1.0/60, anim_pos_calc_cb, ad);
+	ad->anim_status = atype;
+	ecore_timer_add(ANIM_FLOPS, anim_pos_calc_cb, ad);
 }
 
 void clipdrawer_activate_view(void *data)
@@ -585,8 +582,9 @@ void clipdrawer_activate_view(void *data)
 	{
 		set_transient_for(ad);
 		evas_object_show(ad->win_main);
-//		clipdrawer_anim_show_effect(ad);
+		clipdrawer_anim_effect(ad, SHOW_ANIM);
 		elm_win_activate(ad->win_main);
+		ad->windowshow = EINA_TRUE;
 	}
 }
 
@@ -594,12 +592,13 @@ void clipdrawer_lower_view(void *data)
 {
 	struct appdata *ad = data;
 	
-	if (ad->win_main)
+	if (ad->win_main && ad->windowshow)
 	{
 		unset_transient_for(ad);
-//		clipdrawer_anim_hide_effect(ad);
-		evas_object_hide(ad->win_main);
-		elm_win_lower(ad->win_main);
+		clipdrawer_anim_effect(ad, HIDE_ANIM);
+		ad->windowshow = EINA_FALSE;
+//		evas_object_hide(ad->win_main);
+//		elm_win_lower(ad->win_main);
 	}
 }
 
