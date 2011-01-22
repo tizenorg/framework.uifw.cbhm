@@ -534,6 +534,7 @@ Eina_Bool anim_pos_calc_cb(void *data)
 		{
 			evas_object_hide(ad->win_main);
 			elm_win_lower(ad->win_main);
+			unset_transient_for(ad);
 		}
 		ad->anim_status = STATUS_NONE;
 		return EINA_FALSE;
@@ -594,11 +595,8 @@ void clipdrawer_lower_view(void *data)
 	
 	if (ad->win_main && ad->windowshow)
 	{
-		unset_transient_for(ad);
 		clipdrawer_anim_effect(ad, HIDE_ANIM);
 		ad->windowshow = EINA_FALSE;
-//		evas_object_hide(ad->win_main);
-//		elm_win_lower(ad->win_main);
 	}
 }
 
