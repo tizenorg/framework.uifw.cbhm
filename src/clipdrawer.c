@@ -19,7 +19,7 @@ static const char *g_images_path[] = {
 #define GRID_IMAGE_LIMIT_W 91
 #define GRID_IMAGE_LIMIT_H 113
 
-#define ANIM_DURATION 120 // 2 seconds
+#define ANIM_DURATION 60 // 2 seconds
 #define ANIM_FLOPS (1.0/60)
 
 // gic should live at gengrid callback functions
