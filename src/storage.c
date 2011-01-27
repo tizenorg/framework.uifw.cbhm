@@ -1,6 +1,15 @@
 #include "common.h"
 #include "storage.h"
 
+/*
+   file structure 
+
+   /---------------------------------------------------------------------------
+    |header|current_position|total_count|item_header|item_body(512kib)|item...|
+    --------------------------------------------------------------------------/
+
+*/
+
 #define STORAGE_FILEPATH "/opt/var/.savecbh"
 #define STORAGE_MAX_ITEMS HISTORY_QUEUE_MAX_ITEMS
 #define HEADER_ITEM_SIZE (sizeof(int)) 
