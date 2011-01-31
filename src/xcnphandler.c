@@ -3,6 +3,7 @@
 #include "xcnphandler.h"
 #include "storage.h"
 #include "clipdrawer.h"
+#include "scrcapture.h"
 
 static Ecore_Event_Handler *xsel_clear_handler = NULL;
 static Ecore_Event_Handler *xsel_request_handler = NULL;
