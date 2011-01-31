@@ -48,9 +48,9 @@ int clipdrawer_update_contents(void *data)
 		if (pos < 0)
 			pos = pos+HISTORY_QUEUE_MAX_ITEMS;
 
-		if (get_item_contents_by_pos(pos) != NULL && strlen(get_item_contents_by_pos(pos)) > 0)
+		if (clipdrawer_get_item_data(ad, pos) != NULL && strlen(clipdrawer_get_item_data(ad, pos)) > 0)
 		{
-			unesc = clipdrawer_get_plain_string_from_escaped(get_item_contents_by_pos(pos));
+			unesc = clipdrawer_get_plain_string_from_escaped(clipdrawer_get_item_data(ad, pos));
 			unesc = unesc ? unesc : "";
 			elm_list_item_append(ad->txtlist, unesc, NULL, NULL, NULL, ad);
 			free(unesc);
@@ -330,8 +330,6 @@ static void _grid_click_paste(void *data, Evas_Object *obj, void *event_info)
 	sgobj = elm_gengrid_selected_item_get(ad->hig);
 	griditem_t *ti = NULL;
 	ti = elm_gengrid_item_data_get(sgobj);
-
-	fprintf(stderr, "## grid_click_paste = 0x%x\n", event_info);
 }
 
 void _grid_del(const void *data, Evas_Object *obj)
@@ -342,6 +340,36 @@ void _grid_del(const void *data, Evas_Object *obj)
 	else
 		eina_stringshare_del(ti->ipathdata);
 	free(ti);
+}
+
+char* clipdrawer_get_item_data(void *data, int pos)
+{
+	struct appdata *ad = data;
+	griditem_t *ti = NULL;
+	griditem_t *newgi = NULL;
+	int count = 0;
+
+	if (pos < 0 || pos > ad->hicount)
+		return NULL;
+
+	Elm_Gengrid_Item *item = elm_gengrid_first_item_get(ad->hig);
+	while (item)	
+	{
+		ti = elm_gengrid_item_data_get(item);
+		if (count == pos)
+		{
+			if (!ti)
+				break;
+			if (ti->itype == GI_TEXT)
+				return (char*)eina_strbuf_string_get(ti->istrdata);
+			else
+				return ti->ipathdata;
+		}
+		count++;
+		item = elm_gengrid_item_next_get(item);	     
+	}
+
+	return NULL;
 }
 
 // FIXME: how to remove calling g_get_main_appdata()? 
@@ -381,7 +409,6 @@ int clipdrawer_add_item(char *idata, int type)
 			}
 			item = elm_gengrid_item_next_get(item);	     
 		}
-
 		newgi->ipathdata = eina_stringshare_add(idata);
 	}
 
