@@ -573,12 +573,10 @@ Eina_Bool anim_pos_calc_cb(void *data)
 		case HIDE_ANIM:
 			deltay = (int)((anim_endy-anim_starty)*posprop);
 			evas_object_move(ad->win_main, 0, anim_starty+deltay);
-			//fprintf(stderr, "## cur pos y = %d\n", anim_starty+deltay);
 			break;
 		case SHOW_ANIM:
 			deltay = (int)((anim_starty-anim_endy)*posprop);
 			evas_object_move(ad->win_main, 0, anim_starty-deltay);
-			//fprintf(stderr, "## cur pos y = %d\n", anim_starty-deltay);
 			break;
 		default:
 			return EINA_FALSE;
@@ -631,8 +629,6 @@ void _change_gengrid_paste_textonly_mode(void *data)
 {
 	struct appdata *ad = data;
 
-	fprintf(stderr, "## _change_gengrid_paste_textonly_mode = %d\n", clipdrawer_paste_textonly_get(ad));
-
 	Elm_Gengrid_Item *item;
 	griditem_t *ti = NULL;
 
@@ -645,8 +641,6 @@ void _change_gengrid_paste_textonly_mode(void *data)
 			ti = elm_gengrid_item_data_get(item);
 			if ((ti->itype == GI_IMAGE) && (ti->ilayout))
 			{
-				fprintf(stderr, "## sig to hide delbtn\n");
-
 				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,hide,delbtn", "elm");
 				Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(ad->hig));
 				evas_object_color_set(rect, 0, 0, 0, 200);
@@ -663,12 +657,8 @@ void _change_gengrid_paste_textonly_mode(void *data)
 		while (item)	
 		{
 			ti = elm_gengrid_item_data_get(item);
-			fprintf(stderr, "## itype = %d\n", ti->itype);
-			fprintf(stderr, "## ilayout = 0x%x\n", ti->ilayout);
 			if ((ti->itype == GI_IMAGE) && (ti->ilayout))
 			{
-				fprintf(stderr, "## sig to show delbtn\n");
-
 				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,show,delbtn", "elm");
 				Evas_Object *rect = elm_layout_content_unset(ti->ilayout, "elm.swallow.cover");
 				evas_object_hide(rect);
