@@ -12,8 +12,8 @@ static const char *g_images_path[] = {
 #define N_IMAGES (1)
 
 #define GRID_ITEM_SPACE_W 6
-#define GRID_ITEM_SINGLE_W 187
-#define GRID_ITEM_SINGLE_H 151
+#define GRID_ITEM_SINGLE_W 185
+#define GRID_ITEM_SINGLE_H 161
 #define GRID_ITEM_W (GRID_ITEM_SINGLE_W+(GRID_ITEM_SPACE_W*2))
 #define GRID_ITEM_H (GRID_ITEM_SINGLE_H)
 #define GRID_IMAGE_LIMIT_W 91
@@ -521,7 +521,7 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-//	clipdrawer_activate_view(ad);
+	clipdrawer_activate_view(ad);
 
 //	clipdrawer_anim_show_effect(ad);
 
