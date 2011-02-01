@@ -203,6 +203,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			eina_strbuf_replace_all(strent, " absize=240x180 ", " absize=52x39 ");
 			if (strcnt > 100)
 				eina_strbuf_append(strent, "...");
+			eina_strbuf_prepend(strent, "<font_size=18>");
 
 			elm_scrolled_entry_entry_set(ientry, eina_strbuf_string_get(strent));
 			elm_scrolled_entry_editable_set(ientry, EINA_FALSE);
