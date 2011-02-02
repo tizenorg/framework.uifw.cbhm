@@ -1,3 +1,11 @@
+cbhm (0.1.0-73) unstable; urgency=low
+
+  * Rollback to Jan. 27.
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-73
+
+ -- Juyung Seo <juyung.seo@samsung.com>  Wed, 02 Feb 2011 14:33:29 +0900
+
 cbhm (0.1.0-72) unstable; urgency=low
 
   * Git: 165.213.180.234:slp/pkgs/c/cbhm
