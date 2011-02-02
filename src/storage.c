@@ -1,5 +1,4 @@
 #include "common.h"
-#include "cbhm_main.h"
 #include "storage.h"
 
 /*
@@ -19,50 +18,62 @@
 #define STORAGE_BODY_SIZE (STORAGE_MAX_ITEMS * BODY_ITEM_SIZE) 
 #define TOTAL_STORAGE_SIZE (STORAGE_HEADER_SIZE+STORAGE_BODY_SIZE)
 
-#define GET_HEADER_ADDR_BY_POSITION(pos) (STORAGE_HEADER_SIZE+pos*(HEADER_ITEM_SIZE+BODY_ITEM_SIZE))
-#define GET_BODY_ADDR_BY_POSITION(pos) (GET_HEADER_ADDR_BY_POSITION(pos)+HEADER_ITEM_SIZE)
+#define GET_ITEM_ADDR_BY_POSITION(map, pos) (map+STORAGE_HEADER_SIZE+pos*BODY_ITEM_SIZE)
 
-static FILE *g_storage_file = NULL;
+static int g_storage_fd = 0;
 static unsigned int g_storage_serial_number = 0;
+static char *g_map = NULL;
 
-int init_storage(void *data)
+int init_storage()
 {
-	struct appdata *ad = data;
-
 	int i;
 	int result = 0;
 
-	if (g_storage_file)
+	if (g_storage_fd != 0)
 		return 1;
 
-	g_storage_file = fopen(STORAGE_FILEPATH, "r+");
-	if (!g_storage_file)
-	{  // making data savefile
-		g_storage_file = fopen(STORAGE_FILEPATH, "w+");
-
-		if (!g_storage_file)
-		{
-			close_storage(ad);
-			DTRACE("Error : failed openning file for writing\n");
-			return -1;
-		}
-
-		result = fseek(g_storage_file, TOTAL_STORAGE_SIZE-1, SEEK_SET);
-		if (!result) 
-		{
-			close_storage(ad);
-			DTRACE("Error : failed moving file position to file's end\n");
-			return -1;
-		}
-
-		result = fputc(0, g_storage_file);
-		if (result == EOF)
-		{
-		DTRACE("Error : failed writing to file's end\n");
+	g_storage_fd = open(STORAGE_FILEPATH, O_RDWR | O_CREAT, (mode_t)0600);
+	if (g_storage_fd == -1)
+	{
+		g_storage_fd = 0;
+		close_storage();
+		DTRACE("Error : failed openning file for writing\n");
 		return -1;
-		}
 	}
 
+    result = lseek(g_storage_fd, TOTAL_STORAGE_SIZE-1, SEEK_SET);
+    if (result == -1) 
+	{
+		close_storage();
+		DTRACE("Error : failed moving file position to file's end\n");
+		return -1;
+    }
+    
+    result = write(g_storage_fd, "", 1);
+    if (result != 1) 
+	{
+		close_storage();
+		DTRACE("Error : failed writing to file's end\n");
+		return -1;
+    }
+
+	g_map = mmap(0, TOTAL_STORAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, g_storage_fd, 0);
+	if (g_map == MAP_FAILED)
+	{
+		close_storage();
+		DTRACE("Error : failed mmapping the file\n");
+		return -1;
+	}
+
+	// FIXME : do not unconditionaly initialize, maybe old data can be
+	// at here
+	int *header = g_map;
+	for (i = 0; i < STORAGE_MAX_ITEMS; i++)
+	{
+		char d = 0;
+		header[i] = 0;
+		memcpy(GET_ITEM_ADDR_BY_POSITION(g_map, i), &d, 1);
+	}
 	DTRACE("Success : storage init is done\n");
 
 	g_storage_serial_number = 0;
@@ -70,61 +81,82 @@ int init_storage(void *data)
 	return 0;
 }
 
-int sync_storage(void *data)
+int sync_storage()
 {
-//	struct appdata *ad = data;
-
-	if (!g_storage_file)
+	if (g_map == NULL)
 	{
-		DTRACE("g_storage_file is null\n");
+		DTRACE("g_map is null\n");
 		return -1;
 	}
-	fsync(g_storage_file);
+	msync(g_map, TOTAL_STORAGE_SIZE, MS_ASYNC);
 
 	return 0;
 }
 
-unsigned int get_storage_serial_code(void *data)
+int get_total_storage_size()
 {
-//	struct appdata *ad = data;
+	return TOTAL_STORAGE_SIZE;
+}
 
+unsigned int get_storage_serial_code()
+{
 	return g_storage_serial_number;
 }
 
-int adding_item_to_storage(void *data, int pos, char *idata)
+int adding_item_to_storage(int pos, char *data)
 {
-//	struct appdata *ad = data;
+	int *header = get_storage_start_addr();
 
-	if (!g_storage_file)
+	if (g_map == NULL)
 	{
-		DTRACE("g_storage_file is null\n");
+		DTRACE("g_map is null");
 		return -1;
 	}
-
-	int result;
-	result = fseek(g_storage_file, GET_HEADER_ADDR_BY_POSITION(pos), SEEK_SET);
-	// FIXME : replace from fprintf to fwrite
-	fprintf(g_storage_file, "%d", strlen(idata));
-	fprintf(g_storage_file, "%s", idata);
-	
+	// saving relative addr at header
+	header[pos] = STORAGE_HEADER_SIZE+pos*BODY_ITEM_SIZE; 
+	memcpy(GET_ITEM_ADDR_BY_POSITION(g_map, pos), data, BODY_ITEM_SIZE);
 	g_storage_serial_number++;
 	return 0;
 }
 
-int get_item_counts(void *data)
+char *get_storage_start_addr()
 {
-	struct appdata *ad = data;
-
-	return ad->hicount;
+	return g_map;
 }
 
-int close_storage(void *data)
+int get_item_counts()
 {
-	struct appdata *ad = data;
+	int i, count;
+	int *header = get_storage_start_addr();
 
-	if (g_storage_file)
-		fclose(g_storage_file);
-	g_storage_file = NULL;
+	count = 0;
+	for (i = 0; i < STORAGE_MAX_ITEMS; i++)
+	{
+		if (header[i] != 0)
+			count++;
+	}
+	return count;
+}
+
+char *get_item_contents_by_pos(int pos)
+{
+	if (g_map == NULL)
+	{
+		DTRACE("g_map is null");
+		return NULL;
+	}
+	return GET_ITEM_ADDR_BY_POSITION(g_map, pos);
+}
+
+int close_storage()
+{
+	if (g_map)
+		munmap(g_map, TOTAL_STORAGE_SIZE);
+	g_map = NULL;
+
+	if (g_storage_fd)
+		close(g_storage_fd);
+	g_storage_fd = 0;
 	g_storage_serial_number = 0;
 
 	return 0;

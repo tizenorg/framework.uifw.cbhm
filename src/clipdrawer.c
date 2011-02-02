@@ -12,8 +12,8 @@ static const char *g_images_path[] = {
 #define N_IMAGES (1)
 
 #define GRID_ITEM_SPACE_W 6
-#define GRID_ITEM_SINGLE_W 185
-#define GRID_ITEM_SINGLE_H 161
+#define GRID_ITEM_SINGLE_W 187
+#define GRID_ITEM_SINGLE_H 151
 #define GRID_ITEM_W (GRID_ITEM_SINGLE_W+(GRID_ITEM_SPACE_W*2))
 #define GRID_ITEM_H (GRID_ITEM_SINGLE_H)
 #define GRID_IMAGE_LIMIT_W 91
@@ -48,9 +48,9 @@ int clipdrawer_update_contents(void *data)
 		if (pos < 0)
 			pos = pos+HISTORY_QUEUE_MAX_ITEMS;
 
-		if (clipdrawer_get_item_data(ad, pos) != NULL && strlen(clipdrawer_get_item_data(ad, pos)) > 0)
+		if (get_item_contents_by_pos(pos) != NULL && strlen(get_item_contents_by_pos(pos)) > 0)
 		{
-			unesc = clipdrawer_get_plain_string_from_escaped(clipdrawer_get_item_data(ad, pos));
+			unesc = clipdrawer_get_plain_string_from_escaped(get_item_contents_by_pos(pos));
 			unesc = unesc ? unesc : "";
 			elm_list_item_append(ad->txtlist, unesc, NULL, NULL, NULL, ad);
 			free(unesc);
@@ -203,7 +203,6 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			eina_strbuf_replace_all(strent, " absize=240x180 ", " absize=52x39 ");
 			if (strcnt > 100)
 				eina_strbuf_append(strent, "...");
-			eina_strbuf_prepend(strent, "<font_size=18>");
 
 			elm_scrolled_entry_entry_set(ientry, eina_strbuf_string_get(strent));
 			elm_scrolled_entry_editable_set(ientry, EINA_FALSE);
@@ -331,6 +330,8 @@ static void _grid_click_paste(void *data, Evas_Object *obj, void *event_info)
 	sgobj = elm_gengrid_selected_item_get(ad->hig);
 	griditem_t *ti = NULL;
 	ti = elm_gengrid_item_data_get(sgobj);
+
+	fprintf(stderr, "## grid_click_paste = 0x%x\n", event_info);
 }
 
 void _grid_del(const void *data, Evas_Object *obj)
@@ -341,36 +342,6 @@ void _grid_del(const void *data, Evas_Object *obj)
 	else
 		eina_stringshare_del(ti->ipathdata);
 	free(ti);
-}
-
-char* clipdrawer_get_item_data(void *data, int pos)
-{
-	struct appdata *ad = data;
-	griditem_t *ti = NULL;
-	griditem_t *newgi = NULL;
-	int count = 0;
-
-	if (pos < 0 || pos > ad->hicount)
-		return NULL;
-
-	Elm_Gengrid_Item *item = elm_gengrid_first_item_get(ad->hig);
-	while (item)	
-	{
-		ti = elm_gengrid_item_data_get(item);
-		if (count == pos)
-		{
-			if (!ti)
-				break;
-			if (ti->itype == GI_TEXT)
-				return (char*)eina_strbuf_string_get(ti->istrdata);
-			else
-				return ti->ipathdata;
-		}
-		count++;
-		item = elm_gengrid_item_next_get(item);	     
-	}
-
-	return NULL;
 }
 
 // FIXME: how to remove calling g_get_main_appdata()? 
@@ -410,6 +381,7 @@ int clipdrawer_add_item(char *idata, int type)
 			}
 			item = elm_gengrid_item_next_get(item);	     
 		}
+
 		newgi->ipathdata = eina_stringshare_add(idata);
 	}
 
@@ -522,7 +494,7 @@ int clipdrawer_create_view(void *data)
 
 	// for debug
 	// at starting, showing app view
-	clipdrawer_activate_view(ad);
+//	clipdrawer_activate_view(ad);
 
 //	clipdrawer_anim_show_effect(ad);
 
@@ -574,10 +546,12 @@ Eina_Bool anim_pos_calc_cb(void *data)
 		case HIDE_ANIM:
 			deltay = (int)((anim_endy-anim_starty)*posprop);
 			evas_object_move(ad->win_main, 0, anim_starty+deltay);
+			//fprintf(stderr, "## cur pos y = %d\n", anim_starty+deltay);
 			break;
 		case SHOW_ANIM:
 			deltay = (int)((anim_starty-anim_endy)*posprop);
 			evas_object_move(ad->win_main, 0, anim_starty-deltay);
+			//fprintf(stderr, "## cur pos y = %d\n", anim_starty-deltay);
 			break;
 		default:
 			return EINA_FALSE;
@@ -630,6 +604,8 @@ void _change_gengrid_paste_textonly_mode(void *data)
 {
 	struct appdata *ad = data;
 
+	fprintf(stderr, "## _change_gengrid_paste_textonly_mode = %d\n", clipdrawer_paste_textonly_get(ad));
+
 	Elm_Gengrid_Item *item;
 	griditem_t *ti = NULL;
 
@@ -642,6 +618,8 @@ void _change_gengrid_paste_textonly_mode(void *data)
 			ti = elm_gengrid_item_data_get(item);
 			if ((ti->itype == GI_IMAGE) && (ti->ilayout))
 			{
+				fprintf(stderr, "## sig to hide delbtn\n");
+
 				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,hide,delbtn", "elm");
 				Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(ad->hig));
 				evas_object_color_set(rect, 0, 0, 0, 200);
@@ -658,8 +636,12 @@ void _change_gengrid_paste_textonly_mode(void *data)
 		while (item)	
 		{
 			ti = elm_gengrid_item_data_get(item);
+			fprintf(stderr, "## itype = %d\n", ti->itype);
+			fprintf(stderr, "## ilayout = 0x%x\n", ti->ilayout);
 			if ((ti->itype == GI_IMAGE) && (ti->ilayout))
 			{
+				fprintf(stderr, "## sig to show delbtn\n");
+
 				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,show,delbtn", "elm");
 				Evas_Object *rect = elm_layout_content_unset(ti->ilayout, "elm.swallow.cover");
 				evas_object_hide(rect);

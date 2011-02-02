@@ -65,8 +65,8 @@ collections
 				description
 				{
 					state: "default" 0.0;
-					rel1 { relative: 0.005 0.033; to: "background"; }
-					rel2 { relative: 0.995 0.954; to: "background"; }
+					rel1 { relative: 0.005 0.035; to: "background"; }
+					rel2 { relative: 0.995 0.88; to: "background"; }
 				}
 			}
 
@@ -80,8 +80,8 @@ collections
 				description 
 				{
 					state: "default" 0.0;
-					rel1 { relative: 0.0 0.92; to: "background";}
-					rel2 { relative: 1.0 1.00; to: "background";}
+					rel1 { relative: 0.0 0.89; to: "background";}
+					rel2 { relative: 1.0 0.99; to: "background";}
 					color: 0 0 0 0;
 				}
 			}
@@ -97,7 +97,7 @@ collections
 					state: "default" 0.0;
 					rel1 { relative: 0.0 0.0; to: "background/close";}
 					rel2 { relative: 1.0 1.0; to: "background/close";}
-					align: 0.5 0.4;
+					align: 0.5 0.5;
 					min: 18 12;
 					max: 18 12;
 					image

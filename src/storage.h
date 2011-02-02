@@ -6,12 +6,14 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 
-int init_storage(void *data);
-int sync_storage(void *data);
-unsigned int get_storage_serial_code(void *data);
-int adding_item_to_storage(void *data, int pos, char *idata);
-int get_item_counts(void *data);
-int close_storage(void *data);
+int init_storage();
+int sync_storage();
+unsigned int get_storage_serial_code();
+int adding_item_to_storage(int pos, char *data);
+char *get_storage_start_addr();
+int get_item_counts();
+char *get_item_contents_by_pos(int pos);
+int close_storage();
 
 int check_regular_file(char *path);
 

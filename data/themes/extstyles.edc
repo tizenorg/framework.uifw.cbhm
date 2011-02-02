@@ -299,7 +299,7 @@ group
 				state: "default" 0.0;
 				rel1.to: "elm.swallow.icon";
 				rel2.to: "elm.swallow.icon";
-				align: 1.0 0.0;
+				align: 0.95 0.01;
 				min: 46 40;
 				max: 46 40;
 				color:  0 0 0 0;
