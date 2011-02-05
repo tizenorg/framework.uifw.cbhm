@@ -1,3 +1,11 @@
+cbhm (0.1.0-74) unstable; urgency=low
+
+  * reapply item saving method, ui changes
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-74
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Sat, 05 Feb 2011 17:32:26 +0900
+
 cbhm (0.1.0-73) unstable; urgency=low
 
   * Rollback to Jan. 27.
