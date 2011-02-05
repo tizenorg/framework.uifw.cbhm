@@ -24,6 +24,7 @@ void clipdrawer_lower_view(void *data);
 
 const char* clipdrawer_get_plain_string_from_escaped(char *escstr);
 
+char *clipdrawer_get_item_data(void *data, int pos);
 int clipdrawer_add_item(char *idata, int type);
 
 void clipdrawer_paste_textonly_set(void *data, Eina_Bool textonly);

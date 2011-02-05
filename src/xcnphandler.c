@@ -3,6 +3,7 @@
 #include "xcnphandler.h"
 #include "storage.h"
 #include "clipdrawer.h"
+#include "scrcapture.h"
 
 static Ecore_Event_Handler *xsel_clear_handler = NULL;
 static Ecore_Event_Handler *xsel_request_handler = NULL;
@@ -115,20 +116,21 @@ int add_to_storage_buffer(void *data, char *src, int len)
 	if (len <= 0)
 		return -1;
 
-	if (g_lastest_content == NULL)
-		g_lastest_content = malloc(sizeof(char)*(HISTORY_QUEUE_ITEM_SIZE));
+//	if (g_lastest_content == NULL)
+//		g_lastest_content = malloc(sizeof(char)*(HISTORY_QUEUE_ITEM_SIZE));
 	if (g_history_pos >= HISTORY_QUEUE_MAX_ITEMS)
 		g_history_pos = 0;
 
 	// FIXME: remove g_lasteset_content
 	//strcpy(g_lastest_content, src);
-	memcpy(g_lastest_content, src, len);
-	g_lastest_content[len] = '\0';
-	adding_item_to_storage(g_history_pos, g_lastest_content);
+//	memcpy(g_lastest_content, src, len);
+//	g_lastest_content[len] = '\0';
+	g_lastest_content = src;
+	adding_item_to_storage(ad, g_history_pos, g_lastest_content);
 	increment_current_history_position();
 
 	int nserial = 0;
-	nserial = get_storage_serial_code();
+	nserial = get_storage_serial_code(ad);
 	Atom atomCbhmSerial = XInternAtom(g_disp, "CBHM_SERIAL_NUMBER", False);
 	XChangeProperty(g_disp, g_evtwin, atomCbhmSerial, XA_INTEGER,
 					32, PropModeReplace,
@@ -138,8 +140,10 @@ int add_to_storage_buffer(void *data, char *src, int len)
 	return 0;
 }
 
-int print_storage_buffer()
+int print_storage_buffer(void *data)
 {
+	struct appdata *ad = data;
+
 	int pos;
 	int i = 0;
 	for (i = 0; i < HISTORY_QUEUE_MAX_ITEMS; i++)
@@ -147,7 +151,8 @@ int print_storage_buffer()
 		pos = get_current_history_position()+i;
 		if (pos > HISTORY_QUEUE_MAX_ITEMS-1)
 			pos = pos-HISTORY_QUEUE_MAX_ITEMS;
-		DTRACE("%d: %s\n", i, get_item_contents_by_pos(pos) != NULL ? get_item_contents_by_pos(pos) : "NULL");
+		DTRACE("%d: %s\n", i, 
+			   clipdrawer_get_item_data(ad, pos) != NULL ? clipdrawer_get_item_data(ad, pos) : "NULL");
 	}
 }
 
@@ -264,12 +269,12 @@ int get_selection_content(void *data)
 		check_regular_file(cbbuf+7))
 	{
 		DTRACE("clipdrawer add path = %s\n", cbbuf+7);
-		clipdrawer_add_item(cbbuf+7, GI_IMAGE);
+		clipdrawer_add_item(ad, cbbuf+7, GI_IMAGE);
 	}
 	else
 	{
 		add_to_storage_buffer(ad, cbbuf, unesc_len);
-		clipdrawer_add_item(cbbuf, GI_TEXT);
+		clipdrawer_add_item(ad, cbbuf, GI_TEXT);
 	}
 	DTRACE("len = %ld, data = %s\n", unesc_len, cbbuf);
 #endif
@@ -295,7 +300,7 @@ int get_selection_content(void *data)
 #endif
 
 	DTRACE("\n");
-	print_storage_buffer();
+	print_storage_buffer(ad);
 	DTRACE("\n");
 
 	XFree(cbbuf);
@@ -415,7 +420,7 @@ static int _cbhm_init(void *data)
 
 	_set_cbhmwin_prop();
     _init_atoms();
-	init_storage();
+	init_storage(ad);
 
 	DTRACE("_cbhm_init ok\n");
 
@@ -428,7 +433,9 @@ static int _cbhm_init(void *data)
 
 static void _cbhm_fini()
 {
-	close_storage();
+	struct appdata *ad = g_get_main_appdata();
+
+	close_storage(ad);
 
 	return;
 }
@@ -523,7 +530,7 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 
 	if (strcmp("get count", ev->data.b) == 0)
 	{
-		int icount = get_item_counts();
+		int icount = get_item_counts(ad);
 		char countbuf[10];
 		DTRACE("## cbhm count : %d\n", icount);
 		sprintf(countbuf, "%d", icount);
@@ -550,12 +557,12 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 			// FIXME : handle with correct atom
 			sprintf(atomname, "CBHM_c%d", num);
 			cbhm_atoms[0] = XInternAtom(g_disp, atomname, False);
-			if (get_item_contents_by_pos(num) != NULL)
+			if (clipdrawer_get_item_data(ad, num) != NULL)
 			{
 				XChangeProperty(g_disp, reqwin, cbhm_atoms[0], atomUTF8String, 
 								8, PropModeReplace, 
-								(unsigned char *) get_item_contents_by_pos(num), 
-								(int) strlen(get_item_contents_by_pos(num)));
+								(unsigned char *) clipdrawer_get_item_data(ad, num), 
+								(int) strlen(clipdrawer_get_item_data(ad, num)));
 			}
 		}
 	}
@@ -568,12 +575,12 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 			DTRACE("## %d -> %d\n", i, pos);
 			sprintf(atomname, "CBHM_c%d", i);
 			cbhm_atoms[i] = XInternAtom(g_disp, atomname, False);
-			if (get_item_contents_by_pos(pos) != NULL)
+			if (clipdrawer_get_item_data(ad, pos) != NULL)
 			{
 				XChangeProperty(g_disp, reqwin, cbhm_atoms[i], atomUTF8String, 
 								8, PropModeReplace, 
-								(unsigned char *) get_item_contents_by_pos(pos) , 
-								(int) strlen(get_item_contents_by_pos(pos)));
+								(unsigned char *) clipdrawer_get_item_data(ad, pos),
+								(int) strlen(clipdrawer_get_item_data(ad, pos)));
 			}
 			pos--;
 			if (pos < 0)
@@ -582,6 +589,7 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 	}
 	else if (strcmp("get raw", ev->data.b) == 0)
 	{
+/*
 		if (get_storage_start_addr != NULL)
 		{
 			XChangeProperty(g_disp, reqwin, atomCBHM_cRAW, atomUTF8String, 
@@ -589,6 +597,7 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 							(unsigned char *) get_storage_start_addr(),
 							(int) get_total_storage_size());
 		}
+*/
 	}
 	else if (strncmp("show", ev->data.b, 4) == 0)
 	{
