@@ -94,7 +94,6 @@ unsigned int get_storage_serial_code(void *data)
 int adding_item_to_storage(void *data, int pos, char *idata)
 {
 //	struct appdata *ad = data;
-
 	if (!g_storage_file)
 	{
 		DTRACE("g_storage_file is null\n");

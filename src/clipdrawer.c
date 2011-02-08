@@ -311,14 +311,12 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 		return ti->delbtn;
 	}
 */
-	   
 	return NULL;
 }
 
 static void _grid_longpress(void *data, Evas_Object *obj, void *event_info)
 {
 	struct appdata *ad = data;
-	clipdrawer_change_mode(ad);
 }
 
 static void _grid_click_paste(void *data, Evas_Object *obj, void *event_info)

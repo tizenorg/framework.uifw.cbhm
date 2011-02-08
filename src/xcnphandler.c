@@ -116,16 +116,15 @@ int add_to_storage_buffer(void *data, char *src, int len)
 	if (len <= 0)
 		return -1;
 
-//	if (g_lastest_content == NULL)
-//		g_lastest_content = malloc(sizeof(char)*(HISTORY_QUEUE_ITEM_SIZE));
+	if (g_lastest_content != NULL)
+		free(g_lastest_content);
+	g_lastest_content = malloc(sizeof(char)*(len+1));
 	if (g_history_pos >= HISTORY_QUEUE_MAX_ITEMS)
 		g_history_pos = 0;
 
 	// FIXME: remove g_lasteset_content
-	//strcpy(g_lastest_content, src);
-//	memcpy(g_lastest_content, src, len);
-//	g_lastest_content[len] = '\0';
-	g_lastest_content = src;
+	memcpy(g_lastest_content, src, len);
+	g_lastest_content[len] = '\0';
 	adding_item_to_storage(ad, g_history_pos, g_lastest_content);
 	increment_current_history_position();
 
@@ -239,8 +238,8 @@ int get_selection_content(void *data)
 		unesc_len = 0;
 
 #endif
+
 #ifdef _DEMO
-	add_to_storage_buffer(ad, cbbuf, cbitems);
 	DTRACE("len = %ld, data = %s\n", cbitems, cbbuf);
 
 	if (cbbuf != NULL)
@@ -292,6 +291,7 @@ int get_selection_content(void *data)
 	}
 	else
 	{
+		DTRACE("clipdrawer add string = %s\n", unesc);
 		add_to_storage_buffer(ad, unesc, unesc_len);
 		clipdrawer_add_item(unesc, GI_TEXT);
 	}
