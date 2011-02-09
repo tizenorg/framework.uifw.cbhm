@@ -24,6 +24,7 @@ static const char *g_images_path[] = {
 
 // gic should live at gengrid callback functions
 Elm_Gengrid_Item_Class gic;
+Ecore_Timer *tm_anim;
 
 typedef struct tag_griditem
 {
@@ -524,8 +525,6 @@ int clipdrawer_create_view(void *data)
 
 	return 0;
 }
-
-Ecore_Timer *tm_anim;
 
 Eina_Bool anim_pos_calc_cb(void *data)
 {
