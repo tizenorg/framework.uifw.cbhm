@@ -25,6 +25,7 @@
 static pthread_mutex_t g_sound_lock = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t g_sound_cond = PTHREAD_COND_INITIALIZER;
 static Eina_Bool g_shot = EINA_FALSE;
+static int g_stop = 0;
 
 typedef struct tag_captureimginfo
 {
@@ -48,26 +49,19 @@ static Eina_Bool get_image_filename_with_date(char *dstr)
 	return EINA_TRUE;
 }
 
-static void _sound_callback(void *data)
+void _stop_callback(void* data)
 {
-		DTRACE("_sound_callback\n");
-        pthread_cond_broadcast(&g_sound_cond);
-        return;
+        printf("Stop callback\n");
+//        pthread_cond_broadcast(&g_sound_cond);
+        g_stop = 1;
 }
 
 static void _play_capture_sound()
 {
 	int ret, step, handle;
-	MMSoundParamType pparam = {0,};
 	Eina_Bool sync = EINA_FALSE;
 	struct timespec timeout;
 	struct timeval tv;
-	ret = mm_sound_set_path(MM_SOUND_GAIN_CAMERA, MM_SOUND_PATH_SPK, MM_SOUND_PATH_NONE, MM_SOUND_PATH_OPTION_NONE);	 
-	if (ret != MM_ERROR_NONE)
-	{
-		DTRACE("mm_sound_set_path is failed\n");
-		return;
-	}
 	ret = mm_sound_volume_get_step(VOLUME_TYPE_FIXED, &step);
 	if (ret != MM_ERROR_NONE)
 	{
@@ -79,34 +73,23 @@ static void _play_capture_sound()
 		DTRACE("trylock is fail - g_sound_lock\n");
 		return;
 	}
-	pparam.filename = CAPTURE_SOUND_FILE;
-	pparam.loop = 1;
-	pparam.volume = step-1;
-	pparam.callback = _sound_callback;
 
-	if (mm_sound_play_loud_solo_sound(CAPTURE_SOUND_FILE, 
-									  VOLUME_TYPE_FIXED, _sound_callback, 
-									  NULL, &handle) 
-		== MM_ERROR_NONE)
+	ret = mm_sound_play_sound(CAPTURE_SOUND_FILE, VOLUME_TYPE_SYSTEM, _stop_callback, NULL, &handle);
+	if(ret < 0)
 	{
-		if(sync)
-		{
-			gettimeofday(&tv, NULL);
-			timeout.tv_sec = tv.tv_sec + CAPTURE_SOUND_TIMEOUT_SEC;
-			timeout.tv_nsec = tv.tv_usec;
-			if(ETIMEDOUT == pthread_cond_timedwait(&g_sound_cond, &g_sound_lock, &timeout))
-			{
-				if(handle>0)
-					mm_sound_stop_sound(handle);
-			}
-		}
+		DTRACE("play file failed\n");
 	}
 	else
 	{
-		DTRACE("effect sound play failed\n");
-		pthread_mutex_unlock(&g_sound_lock);
-		return;
+		DTRACE("play file success\n");
 	}
+/*
+	while(g_stop == 0)
+	{
+		sleep(1);
+	}
+*/
+	DTRACE("play stopped\n");
 	pthread_mutex_unlock(&g_sound_lock);
 	DTRACE("sound play success\n");
 }
