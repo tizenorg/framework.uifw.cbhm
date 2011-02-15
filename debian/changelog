@@ -1,3 +1,11 @@
+cbhm (0.1.0-76) unstable; urgency=low
+
+  * changing sound path
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-76
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Tue, 15 Feb 2011 15:29:43 +0900
+
 cbhm (0.1.0-75) unstable; urgency=low
 
   * changing recent item saving method
