@@ -185,7 +185,7 @@ int get_selection_content(void *data)
 	unsigned long cbsize, cbitems;
 	unsigned char *cbbuf;
 	struct appdata *ad = data;
-	const char *unesc;
+	char *unesc = NULL;
 	size_t unesc_len = 0;
 	int i;
 
@@ -216,7 +216,7 @@ int get_selection_content(void *data)
 #define _NORMAL
 #ifdef _NORMAL
 	unesc = clipdrawer_get_plain_string_from_escaped(cbbuf);
-	if (unesc != NULL)
+	if (unesc)
 	{
 		unesc_len = strlen(unesc);
 		// FIXME: invent more clever way to right trim the string
