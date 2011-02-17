@@ -1,3 +1,11 @@
+cbhm (0.1.0-78) unstable; urgency=low
+
+  * change internal string saving storage type
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-78
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Thu, 17 Feb 2011 17:34:43 +0900
+
 cbhm (0.1.0-77) unstable; urgency=low
 
   * version up
