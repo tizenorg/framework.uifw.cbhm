@@ -115,6 +115,8 @@ int add_to_storage_buffer(void *data, char *src, int len)
 
 	if (len <= 0)
 		return -1;
+	if (len > HISTORY_QUEUE_ITEM_SIZE)
+		len = HISTORY_QUEUE_ITEM_SIZE;
 
 	if (g_lastest_content != NULL)
 		free(g_lastest_content);
