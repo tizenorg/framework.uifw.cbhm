@@ -1,3 +1,19 @@
+cbhm (0.1.0-80) unstable; urgency=low
+
+  * version up
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-80
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Mon, 28 Feb 2011 16:03:50 +0900
+
+cbhm (0.1.0-79) unstable; urgency=low
+
+  * change content buffer copying method
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-79
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Mon, 28 Feb 2011 15:41:18 +0900
+
 cbhm (0.1.0-78) unstable; urgency=low
 
   * change internal string saving storage type
