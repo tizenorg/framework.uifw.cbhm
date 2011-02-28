@@ -125,7 +125,8 @@ int add_to_storage_buffer(void *data, char *src, int len)
 		g_history_pos = 0;
 
 	// FIXME: remove g_lasteset_content
-	memcpy(g_lastest_content, src, len);
+	strncpy(g_lastest_content, src, len);
+	//memcpy(g_lastest_content, src, len);
 	g_lastest_content[len] = '\0';
 	adding_item_to_storage(ad, g_history_pos, g_lastest_content);
 	increment_current_history_position();
