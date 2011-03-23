@@ -267,7 +267,7 @@ int get_selection_content(void *data)
 		unesc_len = 0;
 
 	if (!strncmp(cbbuf, "file://", 7) && 
-		(strcasestr(cbbuf,".png") || strcasestr(cbbuf,".jpg") || strcasestr(cbbuf,".bmp")) &&
+		//(strcasestr(cbbuf,".png") || strcasestr(cbbuf,".jpg") || strcasestr(cbbuf,".bmp")) &&
 		check_regular_file(cbbuf+7))
 	{
 		DTRACE("clipdrawer add path = %s\n", cbbuf+7);
@@ -286,7 +286,7 @@ int get_selection_content(void *data)
                1. does the file exist?
                2. dose the file wanted type? */
 	if (!strncmp(unesc, "file://", 7) && 
-		(strcasestr(unesc,".png") || strcasestr(unesc,".jpg") || strcasestr(unesc,".bmp")) &&
+		//(strcasestr(unesc,".png") || strcasestr(unesc,".jpg") || strcasestr(unesc,".bmp")) &&
 		check_regular_file(unesc+7))
 	{
 		DTRACE("clipdrawer add path = %s\n", unesc+7);
