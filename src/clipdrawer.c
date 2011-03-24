@@ -560,6 +560,7 @@ Eina_Bool anim_pos_calc_cb(void *data)
 			unset_transient_for(ad);
 		}
 		ad->anim_status = STATUS_NONE;
+		set_focus_for_app_window(ad->win_main, EINA_FALSE);
 		return EINA_FALSE;
 	}
 
@@ -599,13 +600,15 @@ void clipdrawer_anim_effect(void *data, anim_status_t atype)
 void clipdrawer_activate_view(void *data)
 {
 	struct appdata *ad = data;
-	
+
+	set_focus_for_app_window(ad->win_main, EINA_TRUE);
 	if (ad->win_main)
 	{
 		set_transient_for(ad);
 		evas_object_show(ad->win_main);
-		clipdrawer_anim_effect(ad, SHOW_ANIM);
 		elm_win_activate(ad->win_main);
+//		elm_win_raise(ad->win_main);
+		clipdrawer_anim_effect(ad, SHOW_ANIM);
 		ad->windowshow = EINA_TRUE;
 	}
 }

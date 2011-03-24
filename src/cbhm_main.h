@@ -36,6 +36,7 @@ struct appdata
 };
 
 void* g_get_main_appdata();
+void set_focus_for_app_window(Evas_Object *win, Eina_Bool enable);
 
 #endif /* _cbhm_main_h_ */
 

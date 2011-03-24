@@ -633,7 +633,8 @@ void set_transient_for(void *data)
 	struct appdata *ad = data;
 
 	Ecore_X_Window xwin_active = None;
-	Atom atomActive = XInternAtom(g_disp, "_NET_ACTIVE_WINDOW", False);
+//	Atom atomActive = XInternAtom(g_disp, "_NET_ACTIVE_WINDOW", False);
+	Atom atomActive = XInternAtom(g_disp, "_ISF_ACTIVE_WINDOW", False);
 
 	if (ecore_x_window_prop_window_get(DefaultRootWindow(g_disp), 
 									   atomActive, &xwin_active, 1) != -1)

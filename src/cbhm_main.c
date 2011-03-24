@@ -74,7 +74,7 @@ int init_appview(void *data)
 	return 0;
 }
 
-void disable_focus_for_app_window (Evas_Object *win)
+void set_focus_for_app_window(Evas_Object *win, Eina_Bool enable)
 {
     Eina_Bool accepts_focus;
     Ecore_X_Window_State_Hint initial_state;
@@ -87,7 +87,8 @@ void disable_focus_for_app_window (Evas_Object *win)
     ecore_x_icccm_hints_get (elm_win_xwindow_get (win),
                              &accepts_focus, &initial_state, &icon_pixmap, &icon_mask, &icon_window, &window_group, &is_urgent);
     ecore_x_icccm_hints_set (elm_win_xwindow_get (win),
-                             0, initial_state, icon_pixmap, icon_mask, icon_window, window_group, is_urgent);
+                             enable, initial_state, icon_pixmap, icon_mask, icon_window, window_group, is_urgent);
+	DTRACE("set focus mode = %d\n", enable);
 }
 
 static Evas_Object* create_win(void *data, const char *name)
@@ -110,9 +111,10 @@ static Evas_Object* create_win(void *data, const char *name)
 		{   //disable window effect
 			utilx_set_window_effect_state(dpy, elm_win_xwindow_get(eo), 0);
 			ecore_x_icccm_name_class_set(elm_win_xwindow_get(eo), "NORMAL_WINDOW", "NORMAL_WINDOW");
+			elm_object_focus_allow_set(eo, EINA_FALSE);
 //			elm_win_keyboard_win_set (eo, EINA_TRUE);
 //			ecore_x_icccm_name_class_set(elm_win_xwindow_get(eo), "Virtual Keyboard", "ISF");
-//			disable_focus_for_app_window(eo);
+			set_focus_for_app_window(eo, EINA_FALSE);
 		}
 	}
 
