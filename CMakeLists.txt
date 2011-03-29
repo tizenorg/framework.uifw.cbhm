@@ -16,8 +16,7 @@ pkg_check_modules(pkgs REQUIRED elementary appcore-efl appcore-common x11 ecore-
 FOREACH(flag ${pkgs_CFLAGS})
 	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
 ENDFOREACH(flag)
-#for XV extension screenshot
-SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} -L/usr/lib -lscreenshot")
+SET(EXTRA_CFLAGS "${EXTRA_CFLAGS}")
 #SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} -finstrument-functions")
 
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
@@ -28,7 +27,9 @@ ADD_DEFINITIONS("-DTARGET")
 ADD_DEFINITIONS("-DSLP_DEBUG")
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${SRCS})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkgs_LDFLAGS} "-L/usr/lib -lscreenshot")
+#for XV extension screenshot
+SET(pkgs_LDFLAGS "${pkgs_LDFLAGS} -L/usr/lib -lscreenshot")
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkgs_LDFLAGS})
 
 ADD_CUSTOM_TARGET(cbhmdrawer.edj 
 		COMMAND edje_cc 
