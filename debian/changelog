@@ -1,3 +1,11 @@
+cbhm (0.1.0-85) unstable; urgency=low
+
+  * add rotation feature
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-85
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Tue, 12 Apr 2011 17:05:24 +0900
+
 cbhm (0.1.0-84) unstable; urgency=low
 
   * version up

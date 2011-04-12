@@ -668,7 +668,6 @@ Eina_Bool _do_anim_delta_pos(void *data, int sp, int ep, int ac, int *dp)
 				delta = (int)((ep-sp)*posprop);
 				evas_object_move(ad->win_main, 0, sp+delta);
 			}
-
 			break;
 		case SHOW_ANIM:
 			if (angle == 180) // reverse
