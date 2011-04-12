@@ -440,6 +440,47 @@ clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 	}
 }
 
+void set_rotation_to_clipdrawer(void *data, int angle)
+{
+	struct appdata *ad = data;
+	double wh, wy;
+	int wposx, wwidth;
+
+	if (angle == 180) // reverse
+	{
+		wh = (1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h;
+		wy = 0;
+		wwidth = ad->root_w;
+		wposx = CLIPDRAWER_POS_X;
+	}
+	else if (angle == 90) // right rotate
+	{
+		wh = (1.0*CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w;
+		wy = (1.0*CLIPDRAWER_POS_X/SCREEN_WIDTH)*ad->root_w;
+		wwidth = ad->root_h;
+		wposx = CLIPDRAWER_WIDTH-CLIPDRAWER_HEIGHT_LANDSCAPE;
+	}
+	else if (angle == -90) // left rotate
+	{
+		wh = (1.0*CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w;
+		wy = (1.0*CLIPDRAWER_POS_X/SCREEN_WIDTH)*ad->root_w;
+		wwidth = ad->root_h;
+		wposx = CLIPDRAWER_POS_X;
+	}
+	else // angle == 0
+	{
+		wh = (1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h;
+		wy = (1.0*CLIPDRAWER_POS_Y/SCREEN_HEIGHT)*ad->root_h;
+		wwidth = ad->root_w;
+		wposx = CLIPDRAWER_POS_X;
+ 	}
+
+	evas_object_resize(ad->win_main, wwidth, (int)wh);
+	evas_object_move(ad->win_main, wposx, (int)wy);
+	evas_object_resize(ad->ly_main, wwidth, (int)wh);
+	evas_object_move(ad->ly_main, wposx, (int)wy);
+}
+
 int clipdrawer_init(void *data)
 {
 	struct appdata *ad = data;
@@ -453,13 +494,7 @@ int clipdrawer_init(void *data)
 	// for elm_check
 	elm_theme_extension_add(NULL, APP_EDJ_FILE);
 
-	cdy = (1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h;
-	cdw = (1.0*CLIPDRAWER_POS_Y/SCREEN_HEIGHT)*ad->root_h;
-
-	evas_object_resize(ad->win_main, ad->root_w, (int)cdy);
-	evas_object_move(ad->win_main, CLIPDRAWER_POS_X, (int)cdw);
-	evas_object_resize(ad->ly_main, ad->root_w, (int)cdy);
-	evas_object_move(ad->ly_main, CLIPDRAWER_POS_X, (int)cdw);
+	set_rotation_to_clipdrawer(ad, get_rotation_degree());
 
 	edje_object_signal_callback_add(elm_layout_edje_get(ad->ly_main), 
 									"mouse,up,1", "*", clipdrawer_ly_clicked, ad);
@@ -526,29 +561,152 @@ int clipdrawer_create_view(void *data)
 	return 0;
 }
 
+Eina_Bool _get_anim_pos(void *data, int *sp, int *ep)
+{
+	if (!sp || !ep)
+		return EINA_FALSE;
+
+	struct appdata *ad = data;
+	int angle = get_rotation_degree();
+	int anim_start, anim_end, delta;
+
+	switch (ad->anim_status)
+	{
+		case HIDE_ANIM:
+			if (angle == 180) // reverse
+			{
+				anim_start = 0;
+				anim_end = (int)(((double)CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
+				anim_end = ad->root_h-anim_end;
+				anim_end = -anim_end;
+			}
+			else if (angle == 90) // right rotate
+			{
+				anim_end = ad->root_w;
+				anim_start = (int)(((double)CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w);
+				anim_start = ad->root_w-anim_start;
+			}
+			else if (angle == -90) // left rotate
+			{
+				anim_start = 0;
+				anim_end = (int)(((double)CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w);
+				anim_end = ad->root_w-anim_end;
+				anim_end = -anim_end;
+			}
+			else // angle == 0
+			{
+				anim_start = (int)((1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
+				anim_end = ad->root_h;
+				anim_start = anim_end-anim_start;
+			}
+			break;
+		case SHOW_ANIM:
+			if (angle == 180) // reverse
+			{
+				anim_start = (int)(((double)CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
+				anim_start = ad->root_h - anim_start;
+				anim_start = -anim_start;
+				anim_end = 0;
+			}
+			else if (angle == 90) // right rotate
+			{
+				anim_start = ad->root_w;
+				anim_end = (int)(((double)CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w);
+				anim_end = anim_start-anim_end;
+			}
+			else if (angle == -90) // left rotate
+			{
+				anim_start = (int)(((double)CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w);
+				anim_start = ad->root_w-anim_start;
+				anim_start = -anim_start;
+				anim_end = 0;
+			}
+			else // angle == 0
+			{
+				anim_start = ad->root_h;
+				anim_end = (int)(((double)CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
+				anim_end = anim_start-anim_end;
+			}
+			break;
+	}
+	*sp = anim_start;
+	*ep = anim_end;
+	return EINA_TRUE;
+}
+
+Eina_Bool _do_anim_delta_pos(void *data, int sp, int ep, int ac, int *dp)
+{
+	if (!dp)
+		return EINA_FALSE;
+
+	struct appdata *ad = data;
+	int angle = get_rotation_degree();
+	int delta;
+	double posprop;
+	posprop = 1.0*ac/ANIM_DURATION;
+
+	switch (ad->anim_status)
+	{
+		case HIDE_ANIM:
+			if (angle == 180) // reverse
+			{
+				delta = (int)((sp-ep)*posprop);
+				evas_object_move(ad->win_main, 0, sp-delta);
+			}
+			else if (angle == 90) // right rotate
+			{
+				delta = (int)((sp-ep)*posprop);
+				evas_object_move(ad->win_main, sp-delta, 0);
+			}
+			else if (angle == -90) // left rotate
+			{
+				delta = (int)((sp-ep)*posprop);
+				evas_object_move(ad->win_main, sp-delta, 0);
+			}
+			else // angle == 0
+			{
+				delta = (int)((ep-sp)*posprop);
+				evas_object_move(ad->win_main, 0, sp+delta);
+			}
+
+			break;
+		case SHOW_ANIM:
+			if (angle == 180) // reverse
+			{
+				delta = (int)((ep-sp)*posprop);
+				evas_object_move(ad->win_main, 0, sp+delta);
+			}
+			else if (angle == 90) // right rotate
+			{
+				delta = (int)((ep-sp)*posprop);
+				evas_object_move(ad->win_main, sp+delta, 0);
+			}
+			else if (angle == -90) // left rotate
+			{
+				delta = (int)((ep-sp)*posprop);
+				evas_object_move(ad->win_main, sp+delta, 0);
+			}
+			else // angle == 0
+			{
+				delta = (int)((sp-ep)*posprop);
+				evas_object_move(ad->win_main, 0, sp-delta);
+			}
+			break;
+	}
+	
+	*dp = delta;
+
+	return EINA_TRUE;
+}
+
 Eina_Bool anim_pos_calc_cb(void *data)
 {
 	struct appdata *ad = data;
 
 	static int anim_count = 0;
-	int anim_starty, anim_endy, deltay;
-	double posprop;
+	int anim_start, anim_end, delta;
 
-	switch (ad->anim_status)
-	{
-		case HIDE_ANIM:
-			anim_starty = (int)((1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
-			anim_endy = ad->root_h;
-			anim_starty = anim_endy - anim_starty;
-			break;
-		case SHOW_ANIM:
-			anim_starty = ad->root_h;
-			anim_endy = (int)((1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
-			anim_endy = anim_starty-anim_endy;
-			break;
-		default:
-			return EINA_FALSE;
-	}
+	_get_anim_pos(ad, &anim_start, &anim_end);
 
 	if (anim_count > ANIM_DURATION)
 	{
@@ -564,20 +722,7 @@ Eina_Bool anim_pos_calc_cb(void *data)
 		return EINA_FALSE;
 	}
 
-	posprop = 1.0*anim_count/ANIM_DURATION;
-	switch (ad->anim_status)
-	{
-		case HIDE_ANIM:
-			deltay = (int)((anim_endy-anim_starty)*posprop);
-			evas_object_move(ad->win_main, 0, anim_starty+deltay);
-			break;
-		case SHOW_ANIM:
-			deltay = (int)((anim_starty-anim_endy)*posprop);
-			evas_object_move(ad->win_main, 0, anim_starty-deltay);
-			break;
-		default:
-			return EINA_FALSE;
-	}
+	_do_anim_delta_pos(ad, anim_start, anim_end, anim_count, &delta);
 
 	anim_count++;
 	return EINA_TRUE;

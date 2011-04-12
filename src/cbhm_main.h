@@ -3,8 +3,17 @@
 
 #include <Elementary.h>
 
-#define APPNAME "Clipboard History Manager"
-#define LOCALEDIR "/usr/share/locale"
+#if !defined(PACKAGE)
+#  define PACKAGE "CBHM"
+#endif
+
+#if !defined(APPNAME)
+#  define APPNAME "Clipboard History Manager"
+#endif
+
+#if !defined(LOCALEDIR)
+#  define LOCALEDIR "/usr/share/locale"
+#endif
 
 #define EDJ_PATH "/usr/share/edje"
 #define APP_EDJ_FILE EDJ_PATH"/cbhmdrawer.edj"
@@ -36,6 +45,7 @@ struct appdata
 };
 
 void* g_get_main_appdata();
+
 void set_focus_for_app_window(Evas_Object *win, Eina_Bool enable);
 
 #endif /* _cbhm_main_h_ */

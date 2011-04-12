@@ -2,10 +2,11 @@
 #define _clipdrawer_h_
 
 #define CLIPDRAWER_POS_X 0
-#define CLIPDRAWER_POS_Y 465
+#define CLIPDRAWER_POS_Y 440
 #define CLIPDRAWER_WIDTH 480
-//#define CLIPDRAWER_HEIGHT 335
 #define CLIPDRAWER_HEIGHT 360
+#define CLIPDRAWER_HEIGHT_LANDSCAPE 288
+#define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 800
 
 enum {
@@ -21,6 +22,8 @@ int clipdrawer_create_view(void *data);
 void clipdrawer_activate_view(void *data);
 //void clipdrawer_hide_view(void *data);
 void clipdrawer_lower_view(void *data);
+
+void set_rotation_to_clipdrawer(void *data, int angle);
 
 const char* clipdrawer_get_plain_string_from_escaped(char *escstr);
 
