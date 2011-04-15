@@ -790,7 +790,7 @@ void _change_gengrid_paste_textonly_mode(void *data)
 				evas_object_show(rect);
 				elm_layout_content_set(ti->ilayout, "elm.swallow.cover", rect);
 			}
-			item = elm_gengrid_item_next_get(item);	     
+			item = elm_gengrid_item_next_get(item);
 		}
 	}
 	else

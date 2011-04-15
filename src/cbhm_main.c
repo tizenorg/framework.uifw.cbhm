@@ -270,11 +270,16 @@ static int app_terminate(void *data)
 
 static int app_pause(void *data)
 {
+	appcore_unset_rotation_cb();
 	return 0;
 }
 
 static int app_resume(void *data)
 {
+	struct appdata *ad = data;
+
+	appcore_set_rotation_cb(_rotation_cb, ad);
+
 	return 0;
 }
 
