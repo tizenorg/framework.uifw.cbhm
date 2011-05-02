@@ -16,6 +16,7 @@
 #include "clipdrawer.h"
 #include "scrcapture.h"
 
+#include <vconf.h>
 #include <appcore-efl.h>
 
 // FIXME: how to remove g_main_ad? 
@@ -101,6 +102,13 @@ int get_rotation_degree()
 {
 	int angle;
 	enum appcore_rm mode;
+
+	if (!vconf_get_bool(VCONFKEY_SETAPPL_ROTATE_LOCK_BOOL, &rotate_lock))
+	{
+		if (SETTING_ON_OFF_BTN_ON == rotate_lock)
+			return 0;
+	}
+
 	appcore_get_rotation_state(&mode);
 	if (mode == -1)
 		return 0;
