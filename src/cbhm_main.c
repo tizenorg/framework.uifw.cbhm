@@ -102,6 +102,7 @@ int get_rotation_degree()
 {
 	int angle;
 	enum appcore_rm mode;
+	int rotate_lock;
 
 	if (!vconf_get_bool(VCONFKEY_SETAPPL_ROTATE_LOCK_BOOL, &rotate_lock))
 	{
