@@ -76,7 +76,23 @@ static void _grid_del_response_cb(void *data, Evas_Object *obj, void *event_info
 	evas_object_del(obj);
 
 	if((int)event_info == ELM_POPUP_RESPONSE_OK)
+	{
+		struct appdata *ad = g_get_main_appdata();
 		elm_gengrid_item_del(it);
+		ad->hicount--;
+		if (ad->hicount < 0)
+		{
+			int cnt = 0;
+			Elm_Gengrid_Item *trail = elm_gengrid_first_item_get(ad->hig);
+			while(trail)
+			{
+				cnt++;
+				elm_gengrid_item_next_get(trail);
+			}
+			ad->hicount = cnt;
+			DTRACE("ERR: cbhm history cnt < 0, gengrid item cnt: %d\n", cnt);
+		}
+	}
 }
 
 static void _grid_click_delete(void *data, Evas_Object *obj, void *event_info)

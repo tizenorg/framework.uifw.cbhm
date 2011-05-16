@@ -466,6 +466,9 @@ static int _xsel_clear_cb(void *data, int ev_type, void *event)
 static int _xsel_request_cb(void *data, int ev_type, void *event)
 {
 	Ecore_X_Event_Selection_Request *ev = (Ecore_X_Event_Selection_Request *)event;
+	struct appdata *ad = data;
+	if (!ad->hicount)
+		return TRUE;
 
 	if (ev->selection != atomClipboard)
 		return TRUE;
