@@ -40,6 +40,7 @@ struct appdata
 	unsigned int hicount; // history item count
 	Evas_Object *txtlist;
 	anim_status_t anim_status;
+	int anim_count;
 	Eina_Bool windowshow;
 	Eina_Bool pastetextonly;
 };
