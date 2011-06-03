@@ -57,15 +57,11 @@ int init_appview(void *data)
 		return -1;
 	ad->evas = evas_object_evas_get(win);
 	ad->win_main = win;
-
-//  avoid focus but it can't be used. because grap keys
-//	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
-//	ecore_x_icccm_hints_set(xwin, 0, 0, 0, 0, 0, 0, 0);
+	set_focus_for_app_window(win, EINA_TRUE);
 
 	ly = load_edj(win, APP_EDJ_FILE, GRP_MAIN);
 	if (ly == NULL)
 		return -1; 
-	elm_win_resize_object_add(win, ly);
 	ad->ly_main = ly;
 
 	evas_object_show(ly);
@@ -192,10 +188,6 @@ static Evas_Object* create_win(void *data, const char *name)
 		{   //disable window effect
 			utilx_set_window_effect_state(dpy, elm_win_xwindow_get(eo), 0);
 			ecore_x_icccm_name_class_set(elm_win_xwindow_get(eo), "NORMAL_WINDOW", "NORMAL_WINDOW");
-			elm_object_focus_allow_set(eo, EINA_FALSE);
-//			elm_win_keyboard_win_set (eo, EINA_TRUE);
-//			ecore_x_icccm_name_class_set(elm_win_xwindow_get(eo), "Virtual Keyboard", "ISF");
-			set_focus_for_app_window(eo, EINA_FALSE);
 		}
 	}
 

@@ -36,33 +36,6 @@ typedef struct tag_griditem
 	Evas_Object *ilayout;
 } griditem_t;
 
-
-int clipdrawer_update_contents(void *data)
-{
-	struct appdata *ad = data;
-	int i, pos;
-	char *unesc = NULL;
-
-	for (i = 0; i < HISTORY_QUEUE_MAX_ITEMS; i++)
-	{
-		pos = get_current_history_position() - i;
-		if (pos < 0)
-			pos = pos+HISTORY_QUEUE_MAX_ITEMS;
-
-		if (clipdrawer_get_item_data(ad, pos) != NULL && strlen(clipdrawer_get_item_data(ad, pos)) > 0)
-		{
-			unesc = clipdrawer_get_plain_string_from_escaped(clipdrawer_get_item_data(ad, pos));
-			unesc = unesc ? unesc : "";
-			elm_list_item_append(ad->txtlist, unesc, NULL, NULL, NULL, ad);
-			free(unesc);
-		}
-	}
-
-	/* FIXME : sometimes when list update, screen isn't updated */
-
-	return 0;
-}
-
 const char* clipdrawer_get_plain_string_from_escaped(char *escstr)
 {
 	/* TODO : is it should be here? besides, remove dependency for entry */
@@ -694,7 +667,6 @@ Eina_Bool anim_pos_calc_cb(void *data)
 			elm_win_lower(ad->win_main);
 			unset_transient_for(ad);
 			stop_animation(data);
-			//set_focus_for_app_window(ad->win_main, EINA_FALSE);
 			return EINA_FALSE;
 		}
 		_do_anim_delta_pos(ad, anim_start, anim_end, ad->anim_count, &delta);
@@ -733,13 +705,11 @@ void clipdrawer_activate_view(void *data)
 {
 	struct appdata *ad = data;
 
-	set_focus_for_app_window(ad->win_main, EINA_TRUE);
 	if (ad->win_main)
 	{
 		set_transient_for(ad);
 		evas_object_show(ad->win_main);
 		elm_win_activate(ad->win_main);
-//		elm_win_raise(ad->win_main);
 		if (clipdrawer_anim_effect(ad, SHOW_ANIM))
 			ad->windowshow = EINA_TRUE;
 	}
