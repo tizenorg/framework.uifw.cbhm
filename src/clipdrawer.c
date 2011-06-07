@@ -493,8 +493,6 @@ void set_rotation_to_clipdrawer(void *data, int angle)
 
 	evas_object_resize(ad->win_main, wwidth, (int)wh);
 	evas_object_move(ad->win_main, wposx, (int)wy);
-	evas_object_resize(ad->ly_main, wwidth, (int)wh);
-	evas_object_move(ad->ly_main, wposx, (int)wy);
 }
 
 int clipdrawer_init(void *data)
