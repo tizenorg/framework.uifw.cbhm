@@ -189,7 +189,6 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 					break;
 			}
 			eina_strbuf_append_n(strent, strdata, i);
-//			eina_strbuf_append(strent, strdata);
 			eina_strbuf_replace_all(strent, " absize=240x180 ", " absize=52x39 ");
 			if (strcnt > 100)
 				eina_strbuf_append(strent, "...");
@@ -233,74 +232,9 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 
 			ti->ilayout = layout;
 			return layout;
-
-/*
-			Evas_Object *icon = elm_icon_add(obj);
-			elm_icon_file_set(icon, ti->ipathdata, NULL);
-			evas_object_size_hint_aspect_set(icon, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
-			evas_object_show(icon);
-*/
-
-/*
-			Ecore_Evas *my_ee;
-			Evas *my_e;
-			Evas_Object *fgimg;
-			Evas_Object *bgrect;
-			Evas_Object *delbtn;
-			Evas_Object *icon;
-			my_ee = ecore_evas_buffer_new(GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
-			my_e = ecore_evas_get(my_ee);
-
-			bgrect = evas_object_rectangle_add(my_e);
-			evas_object_color_set(bgrect, 255, 255, 255, 255);
-			evas_object_resize(bgrect, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
-			evas_object_move(bgrect, 0, 0);
-			evas_object_show(bgrect);
-
-#define BORDER_SIZE 1
-			fgimg = evas_object_image_add(my_e);
-			evas_object_image_load_size_set(fgimg, GRID_ITEM_SINGLE_W-BORDER_SIZE*2, GRID_ITEM_SINGLE_H-BORDER_SIZE*2);
-			evas_object_image_file_set(fgimg, ti->ipathdata, NULL);
-			evas_object_image_fill_set(fgimg, 0, 0, GRID_ITEM_SINGLE_W-BORDER_SIZE*2, GRID_ITEM_SINGLE_H-BORDER_SIZE*2);
-			evas_object_image_filled_set(fgimg, 1);
-			int x,y;
-			evas_object_image_size_get(fgimg, &x, &y);
-			//fprintf(stderr, "## img x = %d, y = %d\n", x, y);
-			evas_object_resize(fgimg, GRID_ITEM_SINGLE_W-BORDER_SIZE*2, GRID_ITEM_SINGLE_H-BORDER_SIZE*2);
-			evas_object_move(fgimg, BORDER_SIZE, BORDER_SIZE);
-			evas_object_show(fgimg);
-
-			icon = evas_object_image_add(evas_object_evas_get(obj));
-
-			evas_object_image_data_set(icon, NULL);
-			evas_object_image_size_set(icon, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
-			evas_object_image_fill_set(icon, 0, 0, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
-			evas_object_image_filled_set(icon, EINA_TRUE);
-			evas_object_image_data_copy_set(icon, (int *)ecore_evas_buffer_pixels_get(my_ee));
-			evas_object_image_data_update_add(icon, 0, 0, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
-
-			evas_object_del(bgrect);
-			evas_object_del(fgimg);
-			ecore_evas_free(my_ee);
-
-			return icon;
-*/
 		}
+	}
 
-//		return icon;
-	}
-/*
-	else if (!strcmp(part, "elm.swallow.end"))
-	{
-		ti->delbtn = elm_check_add(obj);
-		elm_object_style_set(ti->delbtn, "extended/itemcheck");
-		//evas_object_propagate_events_set(ti->delbtn, 0);
-		elm_check_state_set(ti->delbtn, tcm);
-		evas_object_smart_callback_add(ti->delbtn, "changed", _grid_item_check_changed, data);
-		evas_object_show(ti->delbtn);
-		return ti->delbtn;
-	}
-*/
 	return NULL;
 }
 
