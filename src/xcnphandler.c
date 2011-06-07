@@ -14,6 +14,32 @@ static Ecore_Event_Handler *xfocus_out_handler = NULL;
 char *g_lastest_content = NULL;
 int g_history_pos = 0;
 
+/* From elemantary/elm_cnp_helper.c */
+typedef enum _Elm_Sel_Type
+{
+	ELM_SEL_PRIMARY,
+	ELM_SEL_SECONDARY,
+	ELM_SEL_CLIPBOARD,
+	ELM_SEL_XDND,
+
+	ELM_SEL_MAX,
+} Elm_Sel_Type;
+
+typedef enum _Elm_Sel_Format
+{
+	/** Plain unformated text: Used for things that don't want rich markup */
+	ELM_SEL_FORMAT_TEXT		= 0x01,
+	/** Edje textblock markup, including inline images */
+	ELM_SEL_FORMAT_MARKUP	= 0x02,
+	/** Images */
+	ELM_SEL_FORMAT_IMAGE	= 0x04,
+	/** Vcards */
+	ELM_SEL_FORMAT_VCARD	= 0x08,
+	/** Raw HTMLish things for widgets that want that stuff (hello webkit!) */
+	ELM_SEL_FORMAT_HTML		= 0x10,
+} Elm_Sel_Format;
+
+
 int xcnp_init(void *data)
 {
 	struct appdata *ad = data;
@@ -27,7 +53,7 @@ int xcnp_init(void *data)
 
 	//Adding Event Handlers
 	xsel_clear_handler = ecore_event_handler_add(ECORE_X_EVENT_SELECTION_CLEAR, _xsel_clear_cb, ad);
-	xsel_request_handler = ecore_event_handler_add(ECORE_X_EVENT_SELECTION_REQUEST, _xsel_request_cb, ad);
+//	xsel_request_handler = ecore_event_handler_add(ECORE_X_EVENT_SELECTION_REQUEST, _xsel_request_cb, ad);
 	xsel_notify_handler = ecore_event_handler_add(ECORE_X_EVENT_SELECTION_NOTIFY, _xsel_notify_cb, ad);
 	xclient_msg_handler = ecore_event_handler_add(ECORE_X_EVENT_CLIENT_MESSAGE, _xclient_msg_cb, ad);
 	xfocus_out_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_FOCUS_OUT, _xfocus_out_cb, ad);
@@ -160,7 +186,9 @@ int print_storage_buffer(void *data)
 
 int send_convert_selection()
 {
-	XConvertSelection(g_disp, atomClipboard, atomUTF8String, atomCBOut, g_evtwin, CurrentTime);
+	//XConvertSelection(g_disp, atomClipboard, atomUTF8String, atomCBOut, g_evtwin, CurrentTime);
+	/* TODO: change XConvertSelection to elm_selection_get */
+	XConvertSelection(g_disp, atomClipboard, atomHtmltext, atomCBOut, g_evtwin, CurrentTime);
 	DTRACE("sent convert selection\n");
 	return 0;
 }
@@ -306,6 +334,7 @@ int get_selection_content(void *data)
 	print_storage_buffer(ad);
 	DTRACE("\n");
 
+	elm_selection_set(ELM_SEL_CLIPBOARD, ad->win_main, ELM_SEL_FORMAT_HTML, cbbuf);
 	XFree(cbbuf);
 
 	return 0;
@@ -458,7 +487,10 @@ static int _xsel_clear_cb(void *data, int ev_type, void *event)
 	ecore_x_flush();
 	/* TODO : set selection request is should after convert selection
 	 * is done */
-	set_selection_owner();
+	//set_selection_owner();
+	if (!g_lastest_content)
+		g_lastest_content = strdup("");
+	elm_selection_set(ELM_SEL_CLIPBOARD, ad->win_main, ELM_SEL_FORMAT_HTML, g_lastest_content);
 
 	return TRUE;
 }
@@ -614,6 +646,8 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 
 		clipdrawer_activate_view(ad);
 	}
+	else if (!strcmp("cbhm_hide", ev->data.b))
+		clipdrawer_lower_view(ad);
 
 	XFlush(g_disp);
 
