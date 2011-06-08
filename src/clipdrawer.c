@@ -363,11 +363,12 @@ clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 	}
 }
 
-void set_rotation_to_clipdrawer(void *data, int angle)
+void set_rotation_to_clipdrawer(void *data)
 {
 	struct appdata *ad = data;
 	double wh, wy;
 	int wposx, wwidth;
+	int angle = ad->o_degree;
 
 	if (angle == 180) // reverse
 	{
@@ -383,7 +384,7 @@ void set_rotation_to_clipdrawer(void *data, int angle)
 		wwidth = ad->root_h;
 		wposx = CLIPDRAWER_WIDTH-CLIPDRAWER_HEIGHT_LANDSCAPE;
 	}
-	else if (angle == -90) // left rotate
+	else if (angle == 270) // left rotate
 	{
 		wh = (1.0*CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w;
 		wy = (1.0*CLIPDRAWER_POS_X/SCREEN_WIDTH)*ad->root_w;
@@ -415,8 +416,6 @@ int clipdrawer_init(void *data)
 
 	// for elm_check
 	elm_theme_extension_add(NULL, APP_EDJ_FILE);
-
-	set_rotation_to_clipdrawer(ad, get_rotation_degree());
 
 	edje_object_signal_callback_add(elm_layout_edje_get(ad->ly_main), 
 									"mouse,up,1", "*", clipdrawer_ly_clicked, ad);
@@ -489,7 +488,7 @@ Eina_Bool _get_anim_pos(void *data, int *sp, int *ep)
 		return EINA_FALSE;
 
 	struct appdata *ad = data;
-	int angle = get_rotation_degree();
+	int angle = ad->o_degree;
 	int anim_start, anim_end, delta;
 
 	if (angle == 180) // reverse
@@ -505,7 +504,7 @@ Eina_Bool _get_anim_pos(void *data, int *sp, int *ep)
 		anim_end = (int)(((double)CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w);
 		anim_end = anim_start-anim_end;
 	}
-	else if (angle == -90) // left rotate
+	else if (angle == 270) // left rotate
 	{
 		anim_start = (int)(((double)CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w);
 		anim_start = ad->root_w-anim_start;
@@ -530,7 +529,7 @@ Eina_Bool _do_anim_delta_pos(void *data, int sp, int ep, int ac, int *dp)
 		return EINA_FALSE;
 
 	struct appdata *ad = data;
-	int angle = get_rotation_degree();
+	int angle = ad->o_degree;
 	int delta;
 	double posprop;
 	posprop = 1.0*ac/ANIM_DURATION;
@@ -545,7 +544,7 @@ Eina_Bool _do_anim_delta_pos(void *data, int sp, int ep, int ac, int *dp)
 		delta = (int)((ep-sp)*posprop);
 		evas_object_move(ad->win_main, sp+delta, 0);
 	}
-	else if (angle == -90) // left rotate
+	else if (angle == 270) // left rotate
 	{
 		delta = (int)((ep-sp)*posprop);
 		evas_object_move(ad->win_main, sp+delta, 0);
@@ -642,6 +641,9 @@ void clipdrawer_activate_view(void *data)
 	if (ad->win_main)
 	{
 		set_transient_for(ad);
+		ad->o_degree = get_active_window_degree(ad->active_win);
+		elm_win_rotation_set(ad->win_main, ad->o_degree);
+		set_rotation_to_clipdrawer(data);
 		evas_object_show(ad->win_main);
 		elm_win_activate(ad->win_main);
 		if (clipdrawer_anim_effect(ad, SHOW_ANIM))

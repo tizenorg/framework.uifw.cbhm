@@ -23,7 +23,7 @@ void clipdrawer_activate_view(void *data);
 //void clipdrawer_hide_view(void *data);
 void clipdrawer_lower_view(void *data);
 
-void set_rotation_to_clipdrawer(void *data, int angle);
+void set_rotation_to_clipdrawer(void *data);
 
 const char* clipdrawer_get_plain_string_from_escaped(char *escstr);
 
