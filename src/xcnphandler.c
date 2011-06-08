@@ -10,6 +10,7 @@ static Ecore_Event_Handler *xsel_request_handler = NULL;
 static Ecore_Event_Handler *xsel_notify_handler = NULL;
 static Ecore_Event_Handler *xclient_msg_handler = NULL;
 static Ecore_Event_Handler *xfocus_out_handler = NULL;
+static Ecore_Event_Handler *xproperty_notify_handler = NULL;
 
 char *g_lastest_content = NULL;
 int g_history_pos = 0;
@@ -57,6 +58,7 @@ int xcnp_init(void *data)
 	xsel_notify_handler = ecore_event_handler_add(ECORE_X_EVENT_SELECTION_NOTIFY, _xsel_notify_cb, ad);
 	xclient_msg_handler = ecore_event_handler_add(ECORE_X_EVENT_CLIENT_MESSAGE, _xclient_msg_cb, ad);
 	xfocus_out_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_FOCUS_OUT, _xfocus_out_cb, ad);
+	xproperty_notify_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_PROPERTY, _xproperty_notify_cb, ad);
 
 	if(!xsel_clear_handler)
 		DTRACE("Failed to add ECORE_X_EVENT_SELECTION_CLEAR handler\n");
@@ -68,6 +70,8 @@ int xcnp_init(void *data)
 		DTRACE("Failed to add ECORE_X_EVENT_CLIENT_MESSAGE handler\n");
 	if(!xfocus_out_handler)
 		DTRACE("Failed to add ECORE_X_EVENT_WINDOW_FOCUS_OUT handler\n");
+	if(!xproperty_notify_handler)
+		DTRACE("Failed to add ECORE_X_EVENT_WINDOW_PROPERTY handler\n");
 
 	return TRUE;
 }
@@ -80,12 +84,14 @@ int xcnp_shutdown()
 	ecore_event_handler_del(xsel_notify_handler);
 	ecore_event_handler_del(xclient_msg_handler);
 	ecore_event_handler_del(xfocus_out_handler);
+	ecore_event_handler_del(xproperty_notify_handler);
 
 	xsel_clear_handler = NULL;
 	xsel_request_handler = NULL;
 	xsel_notify_handler = NULL;
 	xclient_msg_handler = NULL;
 	xfocus_out_handler = NULL;
+	xproperty_notify_handler = NULL;
 
 	_cbhm_fini();
 
@@ -105,6 +111,8 @@ static int _init_atoms()
 	atomTargets = XInternAtom(g_disp, "TARGETS", False);
 	atomUTF8String = XInternAtom(g_disp, "UTF8_STRING", False);
 	atomHtmltext = XInternAtom(g_disp, "text/html;charset=utf-8", False);
+	atomWindowRotate = ecore_x_atom_get("_E_ILLUME_ROTATE_WINDOW_ANGLE");
+
 
 	return TRUE;
 }
@@ -124,6 +132,21 @@ int increment_current_history_position()
 		pos = 0;
 	g_history_pos = pos;
 	return pos;
+}
+
+int get_active_window_degree(Ecore_X_Window active)
+{
+	//ECORE_X_ATOM_E_ILLUME_ROTATE_WINDOW_ANGLE
+
+	int rotation = 0;
+	unsigned char *prop_data = NULL;
+	int count;
+	int ret  = ecore_x_window_prop_property_get(
+			active, ECORE_X_ATOM_E_ILLUME_ROTATE_WINDOW_ANGLE,
+			ECORE_X_ATOM_CARDINAL, 32, &prop_data, &count);
+	if (ret && prop_data) memcpy(&rotation, prop_data, sizeof(int));
+	if (prop_data) free(prop_data);
+	return rotation;
 }
 
 int get_current_history_position()
@@ -495,6 +518,28 @@ static int _xsel_clear_cb(void *data, int ev_type, void *event)
 	return TRUE;
 }
 
+static Eina_Bool _xproperty_notify_cb(void *data, int ev_type, void *event)
+{
+	Ecore_X_Event_Window_Property *pevent = (Ecore_X_Event_Window_Property *)event;
+	struct appdata *ad = data;
+
+	if (ad->active_win != pevent->win)
+		return EINA_TRUE;
+
+	if (atomWindowRotate == pevent->atom)
+	{
+		int angle = get_active_window_degree(ad->active_win);
+		if (angle != ad->o_degree)
+		{
+			ad->o_degree = angle;
+			elm_win_rotation_set(ad->win_main, angle);
+			set_rotation_to_clipdrawer(data);
+		}
+	}
+
+	return EINA_TRUE;
+}
+
 static int _xsel_request_cb(void *data, int ev_type, void *event)
 {
 	Ecore_X_Event_Selection_Request *ev = (Ecore_X_Event_Selection_Request *)event;
@@ -673,11 +718,14 @@ void set_transient_for(void *data)
 //	Atom atomActive = XInternAtom(g_disp, "_NET_ACTIVE_WINDOW", False);
 	Atom atomActive = XInternAtom(g_disp, "_ISF_ACTIVE_WINDOW", False);
 
-	if (ecore_x_window_prop_window_get(DefaultRootWindow(g_disp), 
-									   atomActive, &xwin_active, 1) != -1)
+	if (ecore_x_window_prop_window_get(DefaultRootWindow(g_disp),
+				atomActive, &xwin_active, 1) != -1)
 	{
 		ecore_x_icccm_transient_for_set (elm_win_xwindow_get(ad->win_main), xwin_active);
 		DTRACE("Success to set transient_for active window = 0x%X\n", xwin_active);
+		ecore_x_event_mask_set(xwin_active, ECORE_X_EVENT_MASK_WINDOW_PROPERTY);
+
+		ad->active_win = xwin_active;
 	}
 	else
 	{
@@ -689,6 +737,7 @@ void unset_transient_for(void *data)
 {
 	struct appdata *ad = data;
 
+	ecore_x_event_mask_unset(ad->active_win, ECORE_X_EVENT_MASK_WINDOW_PROPERTY);
 	ecore_x_icccm_transient_for_unset(elm_win_xwindow_get(ad->win_main));
 }
 

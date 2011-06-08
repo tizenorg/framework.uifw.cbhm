@@ -43,6 +43,9 @@ struct appdata
 	int anim_count;
 	Eina_Bool windowshow;
 	Eina_Bool pastetextonly;
+
+	Ecore_X_Window active_win;
+	int o_degree;
 };
 
 void* g_get_main_appdata();

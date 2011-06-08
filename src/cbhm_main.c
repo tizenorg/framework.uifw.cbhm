@@ -94,80 +94,6 @@ void set_focus_for_app_window(Evas_Object *win, Eina_Bool enable)
 	DTRACE("set focus mode = %d\n", enable);
 }
 
-int get_rotation_degree()
-{
-	int angle;
-	enum appcore_rm mode;
-	int rotate_lock;
-
-	if (!vconf_get_bool(VCONFKEY_SETAPPL_ROTATE_LOCK_BOOL, &rotate_lock))
-	{
-		if (SETTING_ON_OFF_BTN_ON == rotate_lock)
-			return 0;
-	}
-
-	appcore_get_rotation_state(&mode);
-	if (mode == -1)
-		return 0;
-
-	switch (mode) 
-	{
-		case APPCORE_RM_LANDSCAPE_NORMAL:
-			angle = -90;
-			break;
-
-		case APPCORE_RM_LANDSCAPE_REVERSE:
-			angle = 90;
-			break;
-
-		case APPCORE_RM_PORTRAIT_REVERSE:
-			angle = 180;
-			break;
-
-		case APPCORE_RM_UNKNOWN:
-		case APPCORE_RM_PORTRAIT_NORMAL:
-		default:
-			angle = 0;
-			break;
-	}
-
-	return angle;
-}
-
-static int _rotation_cb(enum appcore_rm mode, void *data)
-{
-	struct appdata *ad = (struct appdata *)data;
-	int angle;
-
-	switch (mode) 
-	{
-		case APPCORE_RM_LANDSCAPE_NORMAL:
-			angle = -90;
-			break;
-
-		case APPCORE_RM_LANDSCAPE_REVERSE:
-			angle = 90;
-			break;
-
-		case APPCORE_RM_PORTRAIT_REVERSE:
-			angle = 180;
-			break;
-
-		case APPCORE_RM_UNKNOWN:
-		case APPCORE_RM_PORTRAIT_NORMAL:
-		default:
-			angle = 0;
-			break;
-	}
-
-	elm_win_rotation_set(ad->win_main, angle);
-
-	// This is need for customized rotation process.
-	set_rotation_to_clipdrawer(ad, angle);
-
-	return 0;
-}
-
 static Evas_Object* create_win(void *data, const char *name)
 {
 	struct appdata *ad = (struct appdata *) data;
@@ -271,16 +197,11 @@ static int app_terminate(void *data)
 
 static int app_pause(void *data)
 {
-	appcore_unset_rotation_cb();
 	return 0;
 }
 
 static int app_resume(void *data)
 {
-	struct appdata *ad = data;
-
-	appcore_set_rotation_cb(_rotation_cb, ad);
-
 	return 0;
 }
 
@@ -327,7 +248,6 @@ int main(int argc, char *argv[])
 	ops.data = &ad;
 
 	appcore_set_i18n(PACKAGE, LOCALEDIR);
-	appcore_set_rotation_cb(_rotation_cb, &ad);
 
 	return appcore_efl_main(PACKAGE, &argc, &argv, &ops);
 }

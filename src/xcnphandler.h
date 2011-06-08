@@ -27,6 +27,7 @@ int set_clipboard_manager_owner();
 int set_selection_owner();
 int get_selection_content(void *data);
 int processing_selection_request(Ecore_X_Event_Selection_Request *ev);
+int get_active_window_degree(Ecore_X_Window active);
 
 void set_transient_for(void *data);
 void unset_transient_for(void *data);
@@ -38,9 +39,10 @@ static int _xsel_request_cb(void *data, int ev_type, void *event);
 static int _xsel_notify_cb(void *data, int ev_type, void *event);
 static int _xclient_msg_cb(void *data, int ev_type, void *event);
 static int _xfocus_out_cb(void *data, int ev_type, void *event);
+static Eina_Bool _xproperty_notify_cb(void *data, int ev_type, void *event);
 static Ecore_X_Window get_selection_secondary_target_win();
 int set_selection_secondary_data(char *sdata);
-	
+
 #define ATOM_CLIPBOARD_NAME "CLIPBOARD"
 #define ATOM_CLIPBOARD_MANAGER_NAME "CLIPBOARD_MANAGER"
 #define ATOM_CBHM_OUTBUF "CBHM_BUF"
@@ -61,6 +63,7 @@ static Atom atomInc;
 static Atom atomTargets;
 static Atom atomUTF8String;
 static Atom atomHtmltext;
+static Atom atomWindowRotate;
 
 #endif //_xcnphandler_h_
 
