@@ -1,3 +1,11 @@
+cbhm (0.1.0-89) unstable; urgency=low
+
+  * fixing black-out-screen, and rotation bugs
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-89
+
+ -- Hyoyoung Chang <hyoyoung.chang@samsung.com>  Wed, 08 Jun 2011 15:34:01 +0900
+
 cbhm (0.1.0-88) unstable; urgency=low
 
   * repackaging for upload
