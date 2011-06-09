@@ -36,11 +36,38 @@ typedef struct tag_griditem
 	Evas_Object *ilayout;
 } griditem_t;
 
+const char *
+remove_tags(const char *p)
+{
+   char *q,*ret;
+   int i;
+   if (!p) return NULL;
+
+   q = malloc(strlen(p) + 1);
+   if (!q) return NULL;
+   ret = q;
+
+   while (*p)
+     {
+        if ((*p != '<')) *q++ = *p++;
+        else if (*p == '<')
+          {
+             if ((p[1] == 'b') && (p[2] == 'r') &&
+                 ((p[3] == ' ') || (p[3] == '/') || (p[3] == '>')))
+               *q++ = '\n';
+             while ((*p) && (*p != '>')) p++;
+             p++;
+          }
+     }
+   *q = 0;
+
+   return ret;
+}
+
 const char* clipdrawer_get_plain_string_from_escaped(char *escstr)
 {
-	/* TODO : is it should be here? besides, remove dependency for entry */
 	/* NOTE : return string should be freed */
-	return elm_entry_markup_to_utf8(escstr);
+	return remove_tags(escstr);
 }
 
 static void _grid_del_response_cb(void *data, Evas_Object *obj, void *event_info)
