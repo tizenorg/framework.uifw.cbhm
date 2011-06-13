@@ -11,6 +11,7 @@ static Ecore_Event_Handler *xsel_notify_handler = NULL;
 static Ecore_Event_Handler *xclient_msg_handler = NULL;
 static Ecore_Event_Handler *xfocus_out_handler = NULL;
 static Ecore_Event_Handler *xproperty_notify_handler = NULL;
+static Ecore_Event_Handler *xwindow_destroy_handler = NULL;
 
 char *g_lastest_content = NULL;
 int g_history_pos = 0;
@@ -59,6 +60,8 @@ int xcnp_init(void *data)
 	xclient_msg_handler = ecore_event_handler_add(ECORE_X_EVENT_CLIENT_MESSAGE, _xclient_msg_cb, ad);
 	xfocus_out_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_FOCUS_OUT, _xfocus_out_cb, ad);
 	xproperty_notify_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_PROPERTY, _xproperty_notify_cb, ad);
+	xwindow_destroy_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_DESTROY, _xwin_destroy_cb, ad);
+
 
 	if(!xsel_clear_handler)
 		DTRACE("Failed to add ECORE_X_EVENT_SELECTION_CLEAR handler\n");
@@ -72,6 +75,8 @@ int xcnp_init(void *data)
 		DTRACE("Failed to add ECORE_X_EVENT_WINDOW_FOCUS_OUT handler\n");
 	if(!xproperty_notify_handler)
 		DTRACE("Failed to add ECORE_X_EVENT_WINDOW_PROPERTY handler\n");
+	if(!xwindow_destroy_handler)
+		DTRACE("Failed to add ECORE_X_EVENT_WINDOW_DESTROY handler\n");
 
 	return TRUE;
 }
@@ -85,6 +90,7 @@ int xcnp_shutdown()
 	ecore_event_handler_del(xclient_msg_handler);
 	ecore_event_handler_del(xfocus_out_handler);
 	ecore_event_handler_del(xproperty_notify_handler);
+	ecore_event_handler_del(xwindow_destroy_handler);
 
 	xsel_clear_handler = NULL;
 	xsel_request_handler = NULL;
@@ -92,6 +98,7 @@ int xcnp_shutdown()
 	xclient_msg_handler = NULL;
 	xfocus_out_handler = NULL;
 	xproperty_notify_handler = NULL;
+	xwindow_destroy_handler = NULL;
 
 	_cbhm_fini();
 
@@ -540,6 +547,16 @@ static Eina_Bool _xproperty_notify_cb(void *data, int ev_type, void *event)
 	return EINA_TRUE;
 }
 
+static Eina_Bool _xwin_destroy_cb(void *data, int ev_type, void *event)
+{
+	Ecore_X_Event_Window_Destroy *pevent = event;
+	struct appdata *ad = data;
+
+	if (ad->active_win != pevent->win)
+		return EINA_TRUE;
+	clipdrawer_lower_view(ad);
+}
+
 static int _xsel_request_cb(void *data, int ev_type, void *event)
 {
 	Ecore_X_Event_Selection_Request *ev = (Ecore_X_Event_Selection_Request *)event;
@@ -723,7 +740,8 @@ void set_transient_for(void *data)
 	{
 		ecore_x_icccm_transient_for_set (elm_win_xwindow_get(ad->win_main), xwin_active);
 		DTRACE("Success to set transient_for active window = 0x%X\n", xwin_active);
-		ecore_x_event_mask_set(xwin_active, ECORE_X_EVENT_MASK_WINDOW_PROPERTY);
+		ecore_x_event_mask_set(xwin_active,
+				ECORE_X_EVENT_MASK_WINDOW_PROPERTY | ECORE_X_EVENT_MASK_WINDOW_CONFIGURE);
 
 		ad->active_win = xwin_active;
 	}
@@ -737,8 +755,10 @@ void unset_transient_for(void *data)
 {
 	struct appdata *ad = data;
 
-	ecore_x_event_mask_unset(ad->active_win, ECORE_X_EVENT_MASK_WINDOW_PROPERTY);
+	ecore_x_event_mask_unset(ad->active_win,
+			ECORE_X_EVENT_MASK_WINDOW_PROPERTY | ECORE_X_EVENT_MASK_WINDOW_CONFIGURE);
 	ecore_x_icccm_transient_for_unset(elm_win_xwindow_get(ad->win_main));
+	ad->active_win = 0;
 }
 
 static Ecore_X_Window get_selection_secondary_target_win()

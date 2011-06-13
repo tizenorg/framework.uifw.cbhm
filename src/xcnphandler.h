@@ -40,6 +40,7 @@ static int _xsel_notify_cb(void *data, int ev_type, void *event);
 static int _xclient_msg_cb(void *data, int ev_type, void *event);
 static int _xfocus_out_cb(void *data, int ev_type, void *event);
 static Eina_Bool _xproperty_notify_cb(void *data, int ev_type, void *event);
+static Eina_Bool _xwin_destroy_cb(void *data, int ev_type, void *event);
 static Ecore_X_Window get_selection_secondary_target_win();
 int set_selection_secondary_data(char *sdata);
 
