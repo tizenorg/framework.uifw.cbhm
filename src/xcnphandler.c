@@ -701,6 +701,7 @@ static int _xclient_msg_cb(void *data, int ev_type, void *event)
 	}
 	else if (strncmp("show", ev->data.b, 4) == 0)
 	{
+		ad->active_win = reqwin;
 		if (ev->data.b[4] != NULL && ev->data.b[4] == '1')
 			clipdrawer_paste_textonly_set(ad, EINA_FALSE);
 		else
@@ -731,24 +732,24 @@ void set_transient_for(void *data)
 {
 	struct appdata *ad = data;
 
-	Ecore_X_Window xwin_active = None;
+//	Ecore_X_Window xwin_active = None;
 //	Atom atomActive = XInternAtom(g_disp, "_NET_ACTIVE_WINDOW", False);
-	Atom atomActive = XInternAtom(g_disp, "_ISF_ACTIVE_WINDOW", False);
+//	Atom atomActive = XInternAtom(g_disp, "_ISF_ACTIVE_WINDOW", False);
 
-	if (ecore_x_window_prop_window_get(DefaultRootWindow(g_disp),
+/*	if (ecore_x_window_prop_window_get(DefaultRootWindow(g_disp),
 				atomActive, &xwin_active, 1) != -1)
-	{
-		ecore_x_icccm_transient_for_set (elm_win_xwindow_get(ad->win_main), xwin_active);
-		DTRACE("Success to set transient_for active window = 0x%X\n", xwin_active);
-		ecore_x_event_mask_set(xwin_active,
+	{*/
+		ecore_x_icccm_transient_for_set (elm_win_xwindow_get(ad->win_main), ad->active_win);
+//		DTRACE("Success to set transient_for active window = 0x%X\n", xwin_active);
+		ecore_x_event_mask_set(ad->active_win,
 				ECORE_X_EVENT_MASK_WINDOW_PROPERTY | ECORE_X_EVENT_MASK_WINDOW_CONFIGURE);
 
-		ad->active_win = xwin_active;
-	}
+//		ad->active_win = xwin_active;
+/*	}
 	else
 	{
 		DTRACE("Failed to find active window for transient_for\n");
-	}
+	}*/
 }
 
 void unset_transient_for(void *data)
