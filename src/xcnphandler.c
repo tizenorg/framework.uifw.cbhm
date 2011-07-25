@@ -41,6 +41,7 @@ typedef enum _Elm_Sel_Format
 	ELM_SEL_FORMAT_HTML		= 0x10,
 } Elm_Sel_Format;
 
+Elm_Sel_Format g_lastest_content_type;
 
 int xcnp_init(void *data)
 {
@@ -348,11 +349,13 @@ int get_selection_content(void *data)
 		check_regular_file(unesc+7))
 	{
 		DTRACE("clipdrawer add path = %s\n", unesc+7);
+		g_lastest_content_type = ELM_SEL_FORMAT_IMAGE;
 		clipdrawer_add_item(unesc+7, GI_IMAGE);
 	}
 	else
 	{
 		DTRACE("clipdrawer add string = %s\n", unesc);
+		g_lastest_content_type = ELM_SEL_FORMAT_HTML;
 		add_to_storage_buffer(ad, unesc, unesc_len);
 		clipdrawer_add_item(unesc, GI_TEXT);
 	}
@@ -364,7 +367,7 @@ int get_selection_content(void *data)
 	print_storage_buffer(ad);
 	DTRACE("\n");
 
-	elm_selection_set(ELM_SEL_CLIPBOARD, ad->win_main, ELM_SEL_FORMAT_HTML, cbbuf);
+	elm_selection_set(ELM_SEL_CLIPBOARD, ad->win_main, g_lastest_content_type, cbbuf);
 	XFree(cbbuf);
 
 	return 0;
@@ -519,8 +522,11 @@ static int _xsel_clear_cb(void *data, int ev_type, void *event)
 	 * is done */
 	//set_selection_owner();
 	if (!g_lastest_content)
+	{
 		g_lastest_content = strdup("");
-	elm_selection_set(ELM_SEL_CLIPBOARD, ad->win_main, ELM_SEL_FORMAT_HTML, g_lastest_content);
+		g_lastest_content_type = ELM_SEL_FORMAT_TEXT;
+	}
+	elm_selection_set(ELM_SEL_CLIPBOARD, ad->win_main, g_lastest_content_type, g_lastest_content);
 
 	return TRUE;
 }
