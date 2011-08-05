@@ -1,10 +1,10 @@
-cbhm (0.1.0-89) unstable; urgency=low
+cbhm (0.1.0-90) unstable; urgency=low
 
   * fixing paste image
   * Git: 165.213.180.234:slp/pkgs/c/cbhm
   * Tag: cbhm_0.1.0-90 
 
- -- Deasung Kim <deasung.kim@samsung.com> Fri, 05 Aug 2011 15:22:01 +0900
+ -- Deasung.Kim <deasung.kim@samsung.com>  Fri, 05 Aug 2011 15:28:55 +0900
 
 cbhm (0.1.0-89) unstable; urgency=low
 
