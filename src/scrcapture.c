@@ -16,7 +16,7 @@
 #define IMAGE_SAVE_FILE_TYPE ".png"
 #define CAPTURE_SOUND_FILE "/usr/share/cbhm/sounds/14_screen_capture.wav"
 #define CAPTURE_SOUND_TIMEOUT_SEC 2
-		        
+
 #include <mmf/mm_sound_private.h>
 #include <pthread.h>
 #include <errno.h>
@@ -40,7 +40,7 @@ static Eina_Bool get_image_filename_with_date(char *dstr)
 	struct tm *now = localtime(&tim);
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
-	sprintf(dstr, "%s/screen-%d%02d%02d%02d%02d%02d%0ld%s", 
+	sprintf(dstr, "%s/screen-%d%02d%02d%02d%02d%02d%0ld%s",
 			IMAGE_SAVE_DIR,
 			now->tm_year+1900, now->tm_mon+1, now->tm_mday,
 			now->tm_hour, now->tm_min,
@@ -100,7 +100,7 @@ static Eina_Bool _scrcapture_capture_postprocess(void* data)
 
 	DTIME("start capture postprocess - %s\n", capimginfo->filename);
 
-	if (!evas_object_image_save(capimginfo->eo, capimginfo->filename, NULL, "compress=1")) 
+	if (!evas_object_image_save(capimginfo->eo, capimginfo->filename, NULL, "compress=1"))
 	{
 		DTRACE("screen capture save fail\n");
 		g_shot = EINA_FALSE;
@@ -116,7 +116,7 @@ static Eina_Bool _scrcapture_capture_postprocess(void* data)
 	DTRACE("add to image history = %s\n", imgpath+strlen("file://"));
 	clipdrawer_add_item(imgpath+strlen("file://"), GI_IMAGE);
 	free(imgpath);
-        
+
 	evas_object_del(capimginfo->eo);
 	free(capimginfo->imgdata);
 	free(capimginfo);
@@ -236,12 +236,12 @@ static int get_window_attribute(Window id, int *depth, Visual **visual, int *wid
 	XWindowAttributes attr;
 
 	DTRACE("XGetWindowAttributes\n");
-	if (!XGetWindowAttributes(get_display(), id, &attr)) 
+	if (!XGetWindowAttributes(get_display(), id, &attr))
 	{
 		return -1;
 	}
 
-	if (attr.map_state == IsViewable && attr.class == InputOutput) 
+	if (attr.map_state == IsViewable && attr.class == InputOutput)
 	{
 		*depth = attr.depth;
 		*width = attr.width;
@@ -261,12 +261,12 @@ static Window _get_parent_window( Window id )
 
 	DTRACE("XQeuryTree\n");
 
-	if (!XQueryTree(get_display(), id, &root, &parent, &children, &num)) 
+	if (!XQueryTree(get_display(), id, &root, &parent, &children, &num))
 	{
 		return 0;
 	}
 
-	if (children) 
+	if (children)
 	{
 		DTRACE("XFree\n");
 		XFree(children);
@@ -275,33 +275,33 @@ static Window _get_parent_window( Window id )
 	return parent;
 }
 
-static Window find_capture_available_window( Window id, Visual** visual, int* depth, int* width, int* height) 
+static Window find_capture_available_window( Window id, Visual** visual, int* depth, int* width, int* height)
 {
 	XWindowAttributes attr;
 	Window parent = id;
 	Window orig_id = id;
-	
-	if (id == 0) 
+
+	if (id == 0)
 	{
 		return (Window) -1;
 	}
 
-	do 
+	do
 	{
-		id = parent;	
+		id = parent;
 		DTRACE("find_capture - XGetWindowAttributes\n");
 
-		if (!XGetWindowAttributes(get_display(), id, &attr)) 
+		if (!XGetWindowAttributes(get_display(), id, &attr))
 		{
 			return (Window) -1;
 		}
-		
+
 		parent = _get_parent_window( id );
 
 		if (attr.map_state == IsViewable
-			       	&& attr.override_redirect == True
-			       	&& attr.class == InputOutput && parent == attr.root )
-       	{
+				&& attr.override_redirect == True
+				&& attr.class == InputOutput && parent == attr.root )
+		{
 			*depth = attr.depth;
 			*width = attr.width;
 			*height = attr.height;
@@ -309,7 +309,7 @@ static Window find_capture_available_window( Window id, Visual** visual, int* de
 			return id;
 		}
 	} while( parent != attr.root && parent != 0 ); //Failed finding a redirected window 
-	
+
 
 	DTRACE( "find_capture - cannot find id\n");
 	XGetWindowAttributes (get_display(), orig_id, &attr);
@@ -317,9 +317,9 @@ static Window find_capture_available_window( Window id, Visual** visual, int* de
 	*width = attr.width;
 	*height = attr.height;
 	*visual = attr.visual;
-		
+
 	return (Window) 0;
-	
+
 }
 
 char *scrcapture_screen_capture(Window oid, int *size)
@@ -333,13 +333,13 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	Visual *visual;
 	char *captured_image;
 	Window id;
-	
+
 	id = find_capture_available_window(ecore_x_window_focus_get(), &visual, &depth, &width, &height);
 
 	if (id == 0 || id == -1 || id == oid)
 	{
 		DTRACE("Window : 0x%lX\n", id);
-		if (get_window_attribute(id, &depth, &visual, &width, &height) < 0) 
+		if (get_window_attribute(id, &depth, &visual, &width, &height) < 0)
 		{
 			DTRACE("Failed to get the attributes from 0x%x\n", (unsigned int)id);
 			return NULL;
@@ -351,14 +351,14 @@ char *scrcapture_screen_capture(Window oid, int *size)
 
 	// NOTE: just add one more depth....
 	si.shmid = shmget(IPC_PRIVATE, width * height * ((depth >> 3)+1), IPC_CREAT | 0666);
-	if (si.shmid < 0) 
+	if (si.shmid < 0)
 	{
 		DTRACE("error at shmget\n");
 		return NULL;
 	}
 	si.readOnly = False;
 	si.shmaddr = shmat(si.shmid, NULL, 0);
-	if (si.shmaddr == (char*)-1) 
+	if (si.shmaddr == (char*)-1)
 	{
 		shmdt(si.shmaddr);
 		shmctl(si.shmid, IPC_RMID, 0);
@@ -392,7 +392,7 @@ char *scrcapture_screen_capture(Window oid, int *size)
 
 	DTRACE("XShmCreateImage\n");
 	xim = XShmCreateImage(get_display(), visual, depth, ZPixmap, NULL, &si, width, height);
-	if (!xim) 
+	if (!xim)
 	{
 		shmdt(si.shmaddr);
 		shmctl(si.shmid, IPC_RMID, 0);
@@ -427,11 +427,11 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	//sleep(1);
 	// We can optimize this!
 	captured_image = calloc(1, *size);
-	if (captured_image) 
+	if (captured_image)
 	{
 		memcpy(captured_image, xim->data, *size);
-	} 
-	else 
+	}
+	else
 	{
 		DTRACE("calloc error");
 	}
@@ -466,7 +466,7 @@ char *scrcapture_capture_screen_by_x11(Window xid, int *size)
 
 
 	DTRACE("Window : 0x%lX\n", xid);
-	if (get_window_attribute(xid, &depth, &visual, &width, &height) < 0) 
+	if (get_window_attribute(xid, &depth, &visual, &width, &height) < 0)
 	{
 		DTRACE("Failed to get the attributes from 0x%x\n", (unsigned int)xid);
 		return NULL;
@@ -481,11 +481,11 @@ char *scrcapture_capture_screen_by_x11(Window xid, int *size)
 	*size = xim->bytes_per_line * xim->height;
 
 	captured_image = calloc(1, *size);
-	if (captured_image) 
+	if (captured_image)
 	{
 		memcpy(captured_image, xim->data, *size);
-	} 
-	else 
+	}
+	else
 	{
 		DTRACE("calloc error");
 	}
@@ -495,10 +495,10 @@ char *scrcapture_capture_screen_by_x11(Window xid, int *size)
 
 char *scrcapture_capture_screen_by_xv_ext(int w, int h)
 {
-	return createScreenShot(w, h);
+	return createScreenShotSW(get_display(), w, h);
 }
 
 void scrcapture_release_screen_by_xv_ext(const char *s)
 {
-	releaseScreenShot(s);
+	releaseScreenShotSW(s);
 }

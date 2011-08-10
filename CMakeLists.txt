@@ -28,7 +28,7 @@ ADD_DEFINITIONS("-DSLP_DEBUG")
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${SRCS})
 #for XV extension screenshot
-SET(pkgs_LDFLAGS "${pkgs_LDFLAGS} -L/usr/lib -lscreenshot")
+SET(pkgs_LDFLAGS "${pkgs_LDFLAGS} -L/usr/lib -lscreenshot_sw")
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkgs_LDFLAGS})
 
 ADD_CUSTOM_TARGET(cbhmdrawer.edj 
