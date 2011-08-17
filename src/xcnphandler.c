@@ -354,10 +354,10 @@ int get_selection_content(void *data)
 	}
 	else
 	{
-		DTRACE("clipdrawer add string = %s\n", unesc);
+		DTRACE("clipdrawer add string = %s\n", cbbuf);
 		g_lastest_content_type = ELM_SEL_FORMAT_HTML;
-		add_to_storage_buffer(ad, unesc, unesc_len);
-		clipdrawer_add_item(unesc, GI_TEXT);
+		add_to_storage_buffer(ad, cbbuf, strlen(cbbuf));
+		clipdrawer_add_item(cbbuf, GI_TEXT);
 	}
 	DTRACE("len = %ld, data = %s\n", unesc_len, unesc);
 	free(unesc);

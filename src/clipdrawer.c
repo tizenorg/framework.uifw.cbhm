@@ -128,7 +128,7 @@ _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 		{
 			char *p = strdup(eina_strbuf_string_get(ti->istrdata));
 
-			elm_selection_set(1, ad->hig, /*ELM_SEL_FORMAT_TEXT*/1, p);
+			elm_selection_set(1, ad->hig, /*ELM_SEL_FORMAT_HTML*/0x10, p);
 		}
 		else //if (ti->itype == GI_IMAGE)
 		{
