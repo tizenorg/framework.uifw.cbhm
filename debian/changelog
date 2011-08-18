@@ -1,3 +1,11 @@
+cbhm (0.1.0-92) unstable; urgency=low
+
+  * bugfix: paste image in text using cbhm UI
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-92
+
+ -- Deasung.Kim <deasung.kim@samsung.com>  Thu, 18 Aug 2011 15:25:18 +0900
+
 cbhm (0.1.0-91) unstable; urgency=low
 
   * changed screenshot-related API names according to the x11-server-utils-ex package changes
