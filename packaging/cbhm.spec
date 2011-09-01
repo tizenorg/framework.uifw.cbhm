@@ -15,6 +15,9 @@ BuildRequires:  pkgconfig(ecore)
 BuildRequires:  pkgconfig(utilX)
 BuildRequires:  pkgconfig(mm-sound)
 BuildRequires:  pkgconfig(mm-common)
+BuildRequires:  pkgconfig(xext)
+BuildRequires:  pkgconfig(xcomposite)
+BuildRequires:  pkgconfig(xi)
 
 
 
@@ -35,16 +38,13 @@ make %{?jobs:-j%jobs}
 rm -rf %{buildroot}
 %make_install
 
-mkdir -p %{buildroot}%{_sysconfdir}/rc.d/rc5.d/
-ln -s %{_sysconfdir}/init.d/system_server.sh %{buildroot}%{_sysconfdir}/rc.d/rc5.d/S00system-server
-
 %post 
 ln -s /etc/init.d/cbhm /etc/rc.d/rc3.d/S95cbhm
 
 
 %files 
 %defattr(-,root,root,-)
-%dir %{_sysconfdir}/init.d/cbhm
+%{_sysconfdir}/init.d/cbhm
 %{_bindir}/cbhm
 %{_datadir}/cbhm/sounds/14_screen_capture.wav
 %{_datadir}/cbhm/icons/cbhm_default_img.png
