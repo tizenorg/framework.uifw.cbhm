@@ -188,7 +188,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			elm_layout_content_set(layout, "elm.swallow.icon", rect);
 
 			// FIXME: add string length check
-			Evas_Object *ientry = elm_scrolled_entry_add(obj);
+			Evas_Object *ientry = elm_entry_add(obj);
 			evas_object_size_hint_weight_set(ientry, 0, 0);
 			Eina_Strbuf *strent = NULL;
 			char *strdata = eina_strbuf_string_get(ti->istrdata);
@@ -220,10 +220,10 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			if (strcnt > 100)
 				eina_strbuf_append(strent, "...");
 			eina_strbuf_prepend(strent, "<font_size=18>");
-
-			elm_scrolled_entry_entry_set(ientry, eina_strbuf_string_get(strent));
-			elm_scrolled_entry_editable_set(ientry, EINA_FALSE);
-			elm_scrolled_entry_context_menu_disabled_set(ientry, EINA_TRUE);
+			elm_entry_scrollable_set(ientry, EINA_TRUE);
+			elm_object_text_part_set(ientry, NULL, eina_strbuf_string_get(strent));
+			elm_entry_editable_set(ientry, EINA_FALSE);
+			elm_entry_context_menu_disabled_set(ientry, EINA_TRUE);
 			evas_object_show(ientry);
 			elm_layout_content_set(layout, "elm.swallow.inner", ientry);
 
