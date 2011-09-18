@@ -70,6 +70,99 @@ const char* clipdrawer_get_plain_string_from_escaped(char *escstr)
 	return remove_tags(escstr);
 }
 
+static char* _get_string_for_entry(char *str)
+{
+	if (!str)
+		return NULL;
+
+	Eina_Strbuf *strbuf = eina_strbuf_new();
+	if (!strbuf)
+		return strdup(str);
+	eina_strbuf_prepend(strbuf, "<font_size=18>");
+
+	char *trail = str;
+
+	while (trail && *trail)
+	{
+		char *pretrail = trail;
+		unsigned long length;
+		char *temp;
+		char *endtag;
+
+		trail = strchr(trail, '<');
+		if (!trail)
+		{
+			eina_strbuf_append(strbuf, pretrail);
+			break;
+		}
+		endtag = strchr(trail, '>');
+		if (!endtag)
+			break;
+
+		length = trail - pretrail;
+
+		temp = strndup(pretrail, length);
+		if (!temp)
+		{
+			trail++;
+			continue;
+		}
+
+		DTRACE("temp str: %s \n", temp);
+		eina_strbuf_append(strbuf, temp);
+		free(temp);
+		trail++;
+
+		if (trail[0] == '/')
+		{
+			trail = endtag + 1;
+			continue;
+		}
+
+		if (strncmp(trail, "br", 2) == 0)
+		{
+			eina_strbuf_append(strbuf, "<br>");
+			trail = endtag + 1;
+			continue;
+		}
+
+		if (strncmp(trail, "img", 3) == 0)
+		{
+			char *src = strstr(trail, "file://");
+			char *src_endtag = strchr(trail, '>');
+			if (!src || !src_endtag || src_endtag < src)
+				continue;
+
+			length = src_endtag - src;
+
+			src = strndup(src, length);
+			if (!src)
+			{
+				trail = endtag + 1;
+				continue;
+			}
+			temp = src;
+			while(*temp)
+			{
+				if (*temp == '\"' || *temp == '>')
+					*temp = '\0';
+				else
+					temp++;
+			}
+
+			eina_strbuf_append_printf(strbuf, "<item absize=66x62 href=%s></item>", src);
+			DTRACE("src str: %s \n", src);
+			free(src);
+		}
+		trail = endtag + 1;
+	}
+
+	char *ret = eina_strbuf_string_steal(strbuf);
+	eina_strbuf_free(strbuf);
+	DTRACE("result str: %s \n", ret);
+	return ret;
+}
+
 static void _grid_del_response_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	Elm_Gengrid_Item *it = (Elm_Gengrid_Item *)data;
@@ -219,9 +312,14 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			eina_strbuf_replace_all(strent, " absize=240x180 ", " absize=52x39 ");
 			if (strcnt > 100)
 				eina_strbuf_append(strent, "...");
-			eina_strbuf_prepend(strent, "<font_size=18>");
 			elm_entry_scrollable_set(ientry, EINA_TRUE);
-			elm_object_text_part_set(ientry, NULL, eina_strbuf_string_get(strent));
+			char *entry_text = eina_strbuf_string_get(strent);
+			entry_text = _get_string_for_entry(entry_text);
+			if (entry_text)
+			{
+				elm_object_text_part_set(ientry, NULL, entry_text);
+				free(entry_text);
+			}
 			elm_entry_editable_set(ientry, EINA_FALSE);
 			elm_entry_context_menu_disabled_set(ientry, EINA_TRUE);
 			evas_object_show(ientry);
