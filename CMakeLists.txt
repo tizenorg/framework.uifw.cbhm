@@ -11,7 +11,7 @@ SET(SRCS src/cbhm_main.c
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 INCLUDE(FindPkgConfig)
-pkg_check_modules(pkgs REQUIRED elementary appcore-efl appcore-common x11 ecore-x utilX mm-common mm-sound eina evas ecore ecore-evas edje ecore-input xext xcomposite)
+pkg_check_modules(pkgs REQUIRED elementary appcore-efl appcore-common x11 ecore-x utilX eina evas ecore ecore-evas edje ecore-input xext xcomposite svi)
 
 FOREACH(flag ${pkgs_CFLAGS})
 	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
@@ -28,7 +28,7 @@ ADD_DEFINITIONS("-DSLP_DEBUG")
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${SRCS})
 #for XV extension screenshot
-SET(pkgs_LDFLAGS "${pkgs_LDFLAGS} -L/usr/lib -lscreenshot_sw")
+SET(pkgs_LDFLAGS "${pkgs_LDFLAGS} -L/usr/lib -lscreenshot_sw -L/usr/lib -lsvi")
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkgs_LDFLAGS})
 
 ADD_CUSTOM_TARGET(cbhmdrawer.edj 
@@ -43,5 +43,4 @@ ADD_DEPENDENCIES(${PROJECT_NAME} cbhmdrawer.edj)
 INSTALL(TARGETS ${PROJECT_NAME} DESTINATION bin)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/data/themes/cbhmdrawer.edj DESTINATION share/edje)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/data/images/cbhm_default_img.png DESTINATION share/cbhm/icons)
-INSTALL(FILES ${CMAKE_BINARY_DIR}/data/sounds/14_screen_capture.wav DESTINATION share/cbhm/sounds)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/data/init_script/cbhm DESTINATION /etc/init.d PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
