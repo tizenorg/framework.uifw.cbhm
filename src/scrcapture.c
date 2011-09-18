@@ -14,18 +14,13 @@
 
 #define IMAGE_SAVE_DIR "/opt/media/Images and videos/My photo clips"
 #define IMAGE_SAVE_FILE_TYPE ".png"
-#define CAPTURE_SOUND_FILE "/usr/share/cbhm/sounds/14_screen_capture.wav"
-#define CAPTURE_SOUND_TIMEOUT_SEC 2
 
-#include <mmf/mm_sound_private.h>
-#include <pthread.h>
 #include <errno.h>
 #include <sys/time.h>
+#include <svi/svi.h>
 
-static pthread_mutex_t g_sound_lock = PTHREAD_MUTEX_INITIALIZER;
-static pthread_cond_t g_sound_cond = PTHREAD_COND_INITIALIZER;
+static int svi_handle = -1;
 static Eina_Bool g_shot = EINA_FALSE;
-static int g_stop = 0;
 
 typedef struct tag_captureimginfo
 {
@@ -49,33 +44,14 @@ static Eina_Bool get_image_filename_with_date(char *dstr)
 	return EINA_TRUE;
 }
 
-void _stop_callback(void* data)
-{
-        printf("Stop callback\n");
-//        pthread_cond_broadcast(&g_sound_cond);
-        g_stop = 1;
-}
-
 static void _play_capture_sound()
 {
-	int ret, step, handle;
-	Eina_Bool sync = EINA_FALSE;
-	struct timespec timeout;
-	struct timeval tv;
-	ret = mm_sound_volume_get_step(VOLUME_TYPE_FIXED, &step);
-	if (ret != MM_ERROR_NONE)
-	{
-		DTRACE("mm_sound_volume_get_step is failed\n");
-		return;
-	}
-	if (pthread_mutex_trylock(&g_sound_lock) == EBUSY)
-	{
-		DTRACE("trylock is fail - g_sound_lock\n");
-		return;
-	}
+	int ret = SVI_ERROR;
 
-	ret = mm_sound_play_sound(CAPTURE_SOUND_FILE, VOLUME_TYPE_SYSTEM, _stop_callback, NULL, &handle);
-	if(ret < 0)
+	if (svi_handle != -1)
+		ret = svi_play(svi_handle, SVI_VIB_OPERATION_SHUTTER, SVI_SND_OPERATION_SCRCAPTURE);
+
+	if (ret != SVI_SUCCESS)
 	{
 		DTRACE("play file failed\n");
 	}
@@ -83,15 +59,6 @@ static void _play_capture_sound()
 	{
 		DTRACE("play file success\n");
 	}
-/*
-	while(g_stop == 0)
-	{
-		sleep(1);
-	}
-*/
-	DTRACE("play stopped\n");
-	pthread_mutex_unlock(&g_sound_lock);
-	DTRACE("sound play success\n");
 }
 
 static Eina_Bool _scrcapture_capture_postprocess(void* data)
@@ -124,7 +91,6 @@ static Eina_Bool _scrcapture_capture_postprocess(void* data)
 	DTIME("end current capture\n");
 
 	_play_capture_sound();
-
 	g_shot = EINA_FALSE;
 
 	return EINA_FALSE;
@@ -202,13 +168,17 @@ int init_scrcapture(void *data)
 	int result = 0;
 
 	/* Key Grab */
-	Ecore_X_Display *xdisp = ecore_x_display_get();
-	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
+//	Ecore_X_Display *xdisp = ecore_x_display_get();
+//	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
 
 	ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, scrcapture_keydown_cb, ad);
 
-	pthread_mutex_init(&g_sound_lock, NULL);
-	pthread_cond_init(&g_sound_cond, NULL);
+	if (svi_init(&svi_handle) != SVI_SUCCESS)
+	{
+		DTRACE("svi init failed\n");
+		svi_handle = -1;
+		return -1;
+	}
 
 	return 0;
 }
@@ -217,11 +187,11 @@ void close_scrcapture(void *data)
 {
 	struct appdata *ad = data;
 
-	Ecore_X_Display *xdisp = ecore_x_display_get();
-	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
+//	Ecore_X_Display *xdisp = ecore_x_display_get();
+//	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
 
-	pthread_mutex_destroy(&g_sound_lock);
-	pthread_cond_destroy(&g_sound_cond);
+	if(svi_handle != -1)
+		svi_fini(svi_handle);
 }
 
 
