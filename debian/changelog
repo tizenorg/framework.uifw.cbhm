@@ -1,3 +1,11 @@
+cbhm (0.1.0-94) unstable; urgency=low
+
+  * Add libsvi-dev library to control
+  * Git: git:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-94
+
+ -- Myoungwoon Kim <myoungwoon.kim@samsung.com>  Mon, 19 Sep 2011 12:52:03 +0900
+
 cbhm (0.1.0-93) unstable; urgency=low
 
   * bugfix: paste image in text using cbhm UI
