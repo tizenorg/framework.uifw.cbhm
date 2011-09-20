@@ -4,7 +4,7 @@ Version:    0.1.0
 Release:    1
 Group:      TO_BE/FILLED_IN
 License:    Proprietary
-Source0:    cbhm-%{version}.tar.gz
+Source0:    %{name}-%{version}.tar.gz
 BuildRequires:  cmake
 BuildRequires:  x11-xserver-utils-ex
 BuildRequires:  pkgconfig(elementary)
@@ -19,6 +19,7 @@ BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xcomposite)
 BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(svi)
+BuildRequires:  edje-tools
 
 %description
 Description: cbhm application
@@ -35,14 +36,13 @@ make %{?jobs:-j%jobs}
 rm -rf %{buildroot}
 %make_install
 
-%post 
+%post
 ln -s /etc/init.d/cbhm /etc/rc.d/rc3.d/S95cbhm
 
 
-%files 
+%files
 %defattr(-,root,root,-)
 %{_sysconfdir}/init.d/cbhm
 %{_bindir}/cbhm
-%{_datadir}/cbhm/sounds/14_screen_capture.wav
 %{_datadir}/cbhm/icons/cbhm_default_img.png
 %{_datadir}/edje/cbhmdrawer.edj
