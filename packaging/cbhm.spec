@@ -5,7 +5,7 @@ Release:    1
 Group:      TO_BE/FILLED_IN
 License:    TO_BE/FILLED_IN
 Source0:    cbhm-%{version}.tar.gz
-BuildRequires:  cmake
+BuildRequires:  cmake, edje-bin, embryo-bin
 BuildRequires:  x11-xserver-utils-ex
 BuildRequires:  pkgconfig(elementary)
 BuildRequires:  pkgconfig(appcore-efl)
