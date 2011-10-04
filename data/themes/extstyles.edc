@@ -291,6 +291,17 @@ group
                         }
                 }
 		part {
+			name: "elm.swallow.cover";
+			type: SWALLOW;
+			scale: 1;
+			mouse_events: 0;
+			description {
+				state: "default" 0.0;
+				rel1.to: "cliprect";
+				rel2.to: "cliprect";
+			}
+		}
+		part {
 			name: "delbtn";
 			type: RECT;
 			mouse_events: 1;
@@ -332,21 +343,9 @@ group
 				rel2.to: "delbtn";
 				visible: 0;
 			}
-                }
-                part {
-                        name: "elm.swallow.cover";
-                        type: SWALLOW;
-			scale: 1;
-			mouse_events: 0;
-                        description {
-                                state: "default" 0.0;
-				rel1.to: "cliprect";
-				rel2.to: "cliprect";
-                        }
-		} // part
-        } // parts
-	programs
-	{
+		}
+	} // parts
+	programs {
 		program { name: "pressed";
 			signal: "mouse,down,1";
 			source: "delbtn/img";

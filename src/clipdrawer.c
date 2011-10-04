@@ -348,7 +348,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			
 			if (!clipdrawer_paste_textonly_get(ad))
 			{
-				edje_object_signal_emit(elm_layout_edje_get(layout), "elm,state,hide,delbtn", "elm");
+//				edje_object_signal_emit(elm_layout_edje_get(layout), "elm,state,hide,delbtn", "elm");
 				Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(obj));
 				evas_object_color_set(rect, 0, 0, 0, 200);
 				evas_object_show(rect);
@@ -803,7 +803,7 @@ void _change_gengrid_paste_textonly_mode(void *data)
 			ti = elm_gengrid_item_data_get(item);
 			if ((ti->itype == GI_IMAGE) && (ti->ilayout))
 			{
-				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,hide,delbtn", "elm");
+//				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,hide,delbtn", "elm");
 				Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(ad->hig));
 				evas_object_color_set(rect, 0, 0, 0, 200);
 				evas_object_show(rect);
@@ -821,7 +821,7 @@ void _change_gengrid_paste_textonly_mode(void *data)
 			ti = elm_gengrid_item_data_get(item);
 			if ((ti->itype == GI_IMAGE) && (ti->ilayout))
 			{
-				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,show,delbtn", "elm");
+//				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,show,delbtn", "elm");
 				Evas_Object *rect = elm_layout_content_unset(ti->ilayout, "elm.swallow.cover");
 				evas_object_hide(rect);
 				evas_object_del(rect);
