@@ -1,3 +1,11 @@
+cbhm (0.1.0-95) unstable; urgency=low
+
+  * Packaging for upload
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-95
+
+ -- Myungjae Lee <mjae.lee@samsung.com>  Thu, 06 Oct 2011 20:47:27 +0900
+
 cbhm (0.1.0-94) unstable; urgency=low
 
   * Add libsvi-dev library to control
