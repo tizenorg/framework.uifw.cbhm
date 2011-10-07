@@ -1,3 +1,11 @@
+cbhm (0.1.0-97) unstable; urgency=low
+
+  * bugfix: sometimes image shown when textonly setted & dim move from evas_rect(c) to edje(edc)
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-97
+
+ -- Deasung Kim <deasung.kim@samsung.com>  Fri, 07 Oct 2011 20:46:14 +0900
+
 cbhm (0.1.0-96) unstable; urgency=low
 
   * using ecore_x_e_illume_sliding_win_geometry_set().
