@@ -345,14 +345,10 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 
 			struct appdata *ad = g_get_main_appdata();
 			
-			if (!clipdrawer_paste_textonly_get(ad))
-			{
-//				edje_object_signal_emit(elm_layout_edje_get(layout), "elm,state,hide,delbtn", "elm");
-				Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(obj));
-				evas_object_color_set(rect, 0, 0, 0, 200);
-				evas_object_show(rect);
-				elm_layout_content_set(layout, "elm.swallow.cover", rect);
-			}
+			if (clipdrawer_paste_textonly_get(ad))
+				edje_object_signal_emit(elm_layout_edje_get(layout), "elm,state,show,dim", "elm");
+			else
+				edje_object_signal_emit(elm_layout_edje_get(layout), "elm,state,hide,dim", "elm");
 
 			ti->ilayout = layout;
 			return layout;
@@ -400,7 +396,7 @@ char* clipdrawer_get_item_data(void *data, int pos)
 		return NULL;
 
 	Elm_Gengrid_Item *item = elm_gengrid_first_item_get(ad->hig);
-	while (item)	
+	while (item)
 	{
 		ti = elm_gengrid_item_data_get(item);
 		if (count == pos)
@@ -413,7 +409,7 @@ char* clipdrawer_get_item_data(void *data, int pos)
 				return ti->ipathdata;
 		}
 		count++;
-		item = elm_gengrid_item_next_get(item);	     
+		item = elm_gengrid_item_next_get(item);
 	}
 
 	return NULL;
@@ -446,7 +442,7 @@ int clipdrawer_add_item(char *idata, int type)
 			return -1;
 		}
 
-		while (item)	
+		while (item)
 		{
 			ti = elm_gengrid_item_data_get(item);
 			if ((ti->itype == type) && !strcmp(ti->ipathdata, idata))
@@ -454,7 +450,7 @@ int clipdrawer_add_item(char *idata, int type)
 				DTRACE("Error : duplicated file path = %s\n", idata);
 				return -1;
 			}
-			item = elm_gengrid_item_next_get(item);	     
+			item = elm_gengrid_item_next_get(item);
 		}
 		newgi->ipathdata = eina_stringshare_add(idata);
 	}
@@ -828,43 +824,21 @@ void _change_gengrid_paste_textonly_mode(void *data)
 {
 	struct appdata *ad = data;
 
-	Elm_Gengrid_Item *item;
 	griditem_t *ti = NULL;
 
-	if (clipdrawer_paste_textonly_get(ad))
-	{ // textonly paste mode
-		Elm_Gengrid_Item *item = elm_gengrid_first_item_get(ad->hig);
+	Elm_Gengrid_Item *item = elm_gengrid_first_item_get(ad->hig);
 
-		while (item)	
+	while (item)
+	{
+		ti = elm_gengrid_item_data_get(item);
+		if ((ti->itype == GI_IMAGE) && (ti->ilayout))
 		{
-			ti = elm_gengrid_item_data_get(item);
-			if ((ti->itype == GI_IMAGE) && (ti->ilayout))
-			{
-//				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,hide,delbtn", "elm");
-				Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(ad->hig));
-				evas_object_color_set(rect, 0, 0, 0, 200);
-				evas_object_show(rect);
-				elm_layout_content_set(ti->ilayout, "elm.swallow.cover", rect);
-			}
-			item = elm_gengrid_item_next_get(item);
+			if (clipdrawer_paste_textonly_get(ad))
+				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,show,dim", "elm");
+			else
+				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,hide,dim", "elm");
 		}
-	}
-	else
-	{ // text+image paste mode
-		Elm_Gengrid_Item *item = elm_gengrid_first_item_get(ad->hig);
-
-		while (item)	
-		{
-			ti = elm_gengrid_item_data_get(item);
-			if ((ti->itype == GI_IMAGE) && (ti->ilayout))
-			{
-//				edje_object_signal_emit(elm_layout_edje_get(ti->ilayout), "elm,state,show,delbtn", "elm");
-				Evas_Object *rect = elm_layout_content_unset(ti->ilayout, "elm.swallow.cover");
-				evas_object_hide(rect);
-				evas_object_del(rect);
-			}
-			item = elm_gengrid_item_next_get(item);	     
-		}
+		item = elm_gengrid_item_next_get(item);
 	}
 }
 
