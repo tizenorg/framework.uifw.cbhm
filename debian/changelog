@@ -1,3 +1,11 @@
+cbhm (0.1.0-95ubuntu1) lucid; urgency=low
+
+  * using ecore_x_e_illume_sliding_win_geometry_set().
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-96
+
+ -- Deasung Kim <deasung.kim@samsung.com>  Fri, 07 Oct 2011 16:28:26 +0900
+
 cbhm (0.1.0-95) unstable; urgency=low
 
   * Packaging for upload
