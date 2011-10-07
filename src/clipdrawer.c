@@ -496,14 +496,14 @@ static void set_sliding_win_geometry(void *data)
 
 	if (ad->o_degree == 90 || ad->o_degree == 270)
 	{
-		h = ad->anim_count/30.0 * CLIPDRAWER_HEIGHT_LANDSCAPE;
+		h = ad->anim_count * CLIPDRAWER_HEIGHT_LANDSCAPE / ANIM_DURATION;
 		x = 0;
 		y = ad->root_w - h;
 		w = ad->root_h;
 	}
 	else
 	{
-		h = ad->anim_count/30.0 * CLIPDRAWER_HEIGHT;
+		h = ad->anim_count * CLIPDRAWER_HEIGHT / ANIM_DURATION;
 		x = 0;
 		y = ad->root_h - h;
 		w = ad->root_w;
@@ -520,41 +520,40 @@ static void set_sliding_win_geometry(void *data)
 void set_rotation_to_clipdrawer(void *data)
 {
 	struct appdata *ad = data;
-	double wh, wy;
-	int wposx, wwidth;
 	int angle = ad->o_degree;
+	int x, y, w, h;
 
 	if (angle == 180) // reverse
 	{
-		wh = (1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h;
-		wy = 0;
-		wwidth = ad->root_w;
-		wposx = CLIPDRAWER_POS_X;
+		h = CLIPDRAWER_HEIGHT;
+		x = 0;
+		y = 0;
+		w = ad->root_w;
 	}
 	else if (angle == 90) // right rotate
 	{
-		wh = (1.0*CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w;
-		wy = (1.0*CLIPDRAWER_POS_X/SCREEN_WIDTH)*ad->root_w;
-		wwidth = ad->root_h;
-		wposx = CLIPDRAWER_WIDTH-CLIPDRAWER_HEIGHT_LANDSCAPE;
+		h = CLIPDRAWER_HEIGHT_LANDSCAPE;
+		x = ad->root_w - h;
+		y = 0;
+		w = ad->root_h;
 	}
 	else if (angle == 270) // left rotate
 	{
-		wh = (1.0*CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w;
-		wy = (1.0*CLIPDRAWER_POS_X/SCREEN_WIDTH)*ad->root_w;
-		wwidth = ad->root_h;
-		wposx = CLIPDRAWER_POS_X;
+		h = CLIPDRAWER_HEIGHT_LANDSCAPE;
+		x = 0;
+		y = 0;
+		w = ad->root_h;
 	}
 	else // angle == 0
 	{
-		wh = (1.0*CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h;
-		wy = (1.0*CLIPDRAWER_POS_Y/SCREEN_HEIGHT)*ad->root_h;
-		wwidth = ad->root_w;
-		wposx = CLIPDRAWER_POS_X;
+		h = CLIPDRAWER_HEIGHT;
+		x = 0;
+		y = ad->root_h - h;
+		w = ad->root_w;
  	}
 
-	evas_object_resize(ad->win_main, wwidth, (int)wh);
-	evas_object_move(ad->win_main, wposx, (int)wy);
+	evas_object_resize(ad->win_main, w, h);
+	evas_object_move(ad->win_main, x, y);
 	if (ad->anim_count == ANIM_DURATION)
 		set_sliding_win_geometry(data);
 }
@@ -645,33 +644,27 @@ Eina_Bool _get_anim_pos(void *data, int *sp, int *ep)
 
 	struct appdata *ad = data;
 	int angle = ad->o_degree;
-	int anim_start, anim_end, delta;
+	int anim_start, anim_end;
 
 	if (angle == 180) // reverse
 	{
-		anim_start = (int)(((double)CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
-		anim_start = ad->root_h - anim_start;
-		anim_start = -anim_start;
+		anim_start = -(ad->root_h - CLIPDRAWER_HEIGHT);
 		anim_end = 0;
 	}
 	else if (angle == 90) // right rotate
 	{
 		anim_start = ad->root_w;
-		anim_end = (int)(((double)CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w);
-		anim_end = anim_start-anim_end;
+		anim_end = anim_start - CLIPDRAWER_HEIGHT_LANDSCAPE;
 	}
 	else if (angle == 270) // left rotate
 	{
-		anim_start = (int)(((double)CLIPDRAWER_HEIGHT_LANDSCAPE/SCREEN_WIDTH)*ad->root_w);
-		anim_start = ad->root_w-anim_start;
-		anim_start = -anim_start;
+		anim_start = -(ad->root_w - CLIPDRAWER_HEIGHT_LANDSCAPE);
 		anim_end = 0;
 	}
 	else // angle == 0
 	{
 		anim_start = ad->root_h;
-		anim_end = (int)(((double)CLIPDRAWER_HEIGHT/SCREEN_HEIGHT)*ad->root_h);
-		anim_end = anim_start-anim_end;
+		anim_end = anim_start - CLIPDRAWER_HEIGHT;
 	}
 
 	*sp = anim_start;

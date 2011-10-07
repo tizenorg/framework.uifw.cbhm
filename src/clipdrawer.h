@@ -1,13 +1,8 @@
 #ifndef _clipdrawer_h_
 #define _clipdrawer_h_
 
-#define CLIPDRAWER_POS_X 0
-#define CLIPDRAWER_POS_Y 440
-#define CLIPDRAWER_WIDTH 480
 #define CLIPDRAWER_HEIGHT 360
 #define CLIPDRAWER_HEIGHT_LANDSCAPE 228
-#define SCREEN_WIDTH 480
-#define SCREEN_HEIGHT 800
 
 enum {
 	GI_TEXT = 0,
