@@ -238,7 +238,6 @@ _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 				DTRACE("ERR: cbhm image paste mode is false\n");
 			}
 		}
-
 		return;
 	}
 
@@ -488,6 +487,40 @@ clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const 
 	}
 }
 
+static void set_sliding_win_geometry(void *data)
+{
+	struct appdata *ad = data;
+	Ecore_X_Window zone, xwin;
+	Evas_Coord x, y, w, h;
+	xwin = elm_win_xwindow_get(ad->win_main);
+	zone = ecore_x_e_illume_zone_get(xwin);
+	DTRACE("[CBHM] xwin:%x, zone:%x\n", xwin, zone);
+
+//	ecore_evas_geometry_get(ecore_evas_ecore_evas_get(evas_object_evas_get(ad->win_main)), &x, &y, &w, &h);
+
+	if (ad->o_degree == 90 || ad->o_degree == 270)
+	{
+		h = ad->anim_count/30.0 * CLIPDRAWER_HEIGHT_LANDSCAPE;
+		x = 0;
+		y = ad->root_w - h;
+		w = ad->root_h;
+	}
+	else
+	{
+		h = ad->anim_count/30.0 * CLIPDRAWER_HEIGHT;
+		x = 0;
+		y = ad->root_h - h;
+		w = ad->root_w;
+	}
+
+	if (!h)
+		w = 0;
+
+	DTRACE("[CBHM] change degree geometry... (%d, %d, %d x %d)\n", x, y, w, h);
+	ecore_x_e_illume_sliding_win_geometry_set(zone, x, y, w, h);
+	ecore_x_e_illume_sliding_win_state_set(zone, ad->anim_count != 0);
+}
+
 void set_rotation_to_clipdrawer(void *data)
 {
 	struct appdata *ad = data;
@@ -526,6 +559,8 @@ void set_rotation_to_clipdrawer(void *data)
 
 	evas_object_resize(ad->win_main, wwidth, (int)wh);
 	evas_object_move(ad->win_main, wposx, (int)wy);
+	if (ad->anim_count == ANIM_DURATION)
+		set_sliding_win_geometry(data);
 }
 
 int clipdrawer_init(void *data)
@@ -695,6 +730,8 @@ static void stop_animation(void *data)
 		ecore_timer_del(anim_timer);
 		anim_timer = NULL;
 	}
+
+	set_sliding_win_geometry(data);
 }
 
 Eina_Bool anim_pos_calc_cb(void *data)
