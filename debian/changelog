@@ -1,3 +1,11 @@
+cbhm (0.1.0-98) unstable; urgency=low
+
+  * bugfix: apply scale value
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-98
+
+ -- Deasung Kim <deasung.kim@samsung.com>  Thu, 20 Oct 2011 15:45:49 +0900
+
 cbhm (0.1.0-97) unstable; urgency=low
 
   * bugfix: sometimes image shown when textonly setted & dim move from evas_rect(c) to edje(edc)
