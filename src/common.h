@@ -34,8 +34,9 @@
 #ifndef _EDJ
 #define _EDJ(ly) elm_layout_edje_get(ly)
 #endif
+#define DEFAULT_WIDTH 720
 
-#define DEBUG 
+#define DEBUG
 
 #ifdef DEBUG
 #define DTRACE(fmt, args...) \
