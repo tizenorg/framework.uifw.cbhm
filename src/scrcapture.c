@@ -117,6 +117,13 @@ static Eina_Bool _scrcapture_capture_postprocess(void* data)
 Eina_Bool capture_current_screen(void *data)
 {
 	struct appdata *ad = data;
+	if (!utilx_get_screen_capture(XOpenDisplay(NULL)))
+	{
+		DTRACE("utilx_get_screen_capture: disable\n");
+		return EINA_FALSE;
+	}
+	else
+		DTRACE("utilx_get_screen_capture: enable\n");
 
 	if (g_shot)
 	{
