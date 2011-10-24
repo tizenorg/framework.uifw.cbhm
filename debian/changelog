@@ -1,3 +1,11 @@
+cbhm (0.1.0-99) unstable; urgency=low
+
+  * using utilx_get_screen_capture function for MDM
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-99
+
+ -- Deasung Kim <deasung.kim@samsung.com>  Mon, 24 Oct 2011 15:47:23 +0900
+
 cbhm (0.1.0-98) unstable; urgency=low
 
   * bugfix: apply scale value
