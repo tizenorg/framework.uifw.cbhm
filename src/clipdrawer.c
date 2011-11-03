@@ -96,7 +96,7 @@ static char* _get_string_for_entry(char *str)
 	Eina_Strbuf *strbuf = eina_strbuf_new();
 	if (!strbuf)
 		return strdup(str);
-	eina_strbuf_prepend(strbuf, "<font_size=18>");
+	eina_strbuf_prepend(strbuf, "<font_size=18><color=#000000FF>");
 
 	char *trail = str;
 
