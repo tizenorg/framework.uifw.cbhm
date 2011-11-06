@@ -62,6 +62,8 @@ struct appdata
 	Eina_Bool windowshow;
 	Eina_Bool pastetextonly;
 
+	Ecore_Timer *selection_check_timer;
+
 	Ecore_X_Window active_win;
 	int o_degree;
 };

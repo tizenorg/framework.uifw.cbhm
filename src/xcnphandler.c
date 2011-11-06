@@ -33,6 +33,7 @@ static Ecore_Event_Handler *xwindow_destroy_handler = NULL;
 
 char *g_lastest_content = NULL;
 int g_history_pos = 0;
+static Eina_Bool is_cbhm_selection_owner(struct appdata *ad);
 
 /* From elemantary/elm_cnp_helper.c */
 typedef enum _Elm_Sel_Type
@@ -258,6 +259,18 @@ int set_selection_owner()
 	return 0;
 }
 
+Eina_Bool selection_check_cb(void *data)
+{
+	struct appdata *ad = data;
+	DTRACE("called\n");
+	elm_selection_set(ELM_SEL_CLIPBOARD, ad->win_main, g_lastest_content_type, g_lastest_content);
+	if (!is_cbhm_selection_owner(data))
+		return ECORE_CALLBACK_RENEW;
+	ecore_timer_del(ad->selection_check_timer);
+	ad->selection_check_timer = NULL;
+	return ECORE_CALLBACK_CANCEL;
+}
+
 int get_selection_content(void *data)
 {
 	Atom cbtype;
@@ -386,6 +399,16 @@ int get_selection_content(void *data)
 	DTRACE("\n");
 
 	elm_selection_set(ELM_SEL_CLIPBOARD, ad->win_main, g_lastest_content_type, cbbuf);
+	if (!is_cbhm_selection_owner(ad))
+	{
+		DTRACE("selection timer add\n");
+		ad->selection_check_timer = ecore_timer_add(0.5, selection_check_cb, ad);
+	}
+	else if (ad->selection_check_timer)
+	{
+		ecore_timer_del(ad->selection_check_timer);
+		ad->selection_check_timer = NULL;
+	}
 	XFree(cbbuf);
 
 	return 0;
@@ -523,6 +546,21 @@ static void _cbhm_fini()
 	return;
 }
 
+static Eina_Bool is_cbhm_selection_owner(struct appdata *ad)
+{
+	Ecore_X_Atom sel = ECORE_X_ATOM_SELECTION_CLIPBOARD;
+	Ecore_X_Window owner = XGetSelectionOwner(g_disp, sel);
+	Evas_Object *top = elm_widget_top_get(ad->win_main);
+	if (top)
+	{
+		Ecore_X_Window xwin = elm_win_xwindow_get(top);
+		DTRACE("selection owner: 0x%x, widget_xwin: 0x%x, g_evtwin: 0x%x\n", owner, xwin, g_evtwin);
+		return xwin == owner/* || g_evtwin == owner*/;
+	}
+	DTRACE("selection owner: 0x%x, g_evtwin: 0x%x\n", owner, g_evtwin);
+	return EINA_FALSE/*g_evtwin == owner*/;
+}
+
 static int _xsel_clear_cb(void *data, int ev_type, void *event)
 {
 	struct appdata *ad = data;
@@ -545,6 +583,17 @@ static int _xsel_clear_cb(void *data, int ev_type, void *event)
 		g_lastest_content_type = ELM_SEL_FORMAT_TEXT;
 	}
 	elm_selection_set(ELM_SEL_CLIPBOARD, ad->win_main, g_lastest_content_type, g_lastest_content);
+	if (!is_cbhm_selection_owner(ad))
+	{
+		DTRACE("selection timer add\n");
+		ad->selection_check_timer = ecore_timer_add(0.5, selection_check_cb, ad);
+	}
+	else if (ad->selection_check_timer)
+	{
+		ecore_timer_del(ad->selection_check_timer);
+		ad->selection_check_timer = NULL;
+	}
+
 
 	return TRUE;
 }
