@@ -1,3 +1,11 @@
+cbhm (0.1.0-101) unstable; urgency=low
+
+  * add clipboard selection check timer
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-101
+
+ -- Deasung Kim <deasung.kim@samsung.com>  Mon, 07 Nov 2011 13:08:56 +0900
+
 cbhm (0.1.0-100) unstable; urgency=low
 
   * change clipboard text color to black
