@@ -613,7 +613,7 @@ int clipdrawer_init(void *data)
 	gic.func.state_get = NULL;
 	gic.func.del = _grid_del;
 
-	int i;
+/*	int i;
 	griditem_t *newgi;
 
 	for (i = 0; i < N_IMAGES; i++)
@@ -621,7 +621,7 @@ int clipdrawer_init(void *data)
 		clipdrawer_add_item(g_images_path[0], GI_IMAGE);
 	}
 
-	clipdrawer_add_item("clipboard history", GI_TEXT);
+	clipdrawer_add_item("clipboard history", GI_TEXT);*/
 
 	evas_object_show (ad->hig);
 
