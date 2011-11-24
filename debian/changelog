@@ -1,3 +1,12 @@
+cbhm (0.1.0-102) unstable; urgency=low
+
+  * remove default item
+  * change screen capture effect
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-102
+
+ -- Deasung Kim <deasung.kim@samsung.com>  Thu, 24 Nov 2011 16:42:38 +0900
+
 cbhm (0.1.0-101) unstable; urgency=low
 
   * add clipboard selection check timer
