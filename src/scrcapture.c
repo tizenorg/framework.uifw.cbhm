@@ -62,6 +62,7 @@ static Eina_Bool get_image_filename_with_date(char *dstr)
 	return EINA_TRUE;
 }
 
+
 static void _play_capture_sound()
 {
 	int ret = SVI_ERROR;
@@ -77,6 +78,39 @@ static void _play_capture_sound()
 	{
 		DTRACE("play file success\n");
 	}
+}
+
+static Eina_Bool hide_small_popup(void *data)
+{
+	struct appdata *ad = data;
+	ad->popup_timer = NULL;
+	evas_object_hide(ad->small_popup);
+	return ECORE_CALLBACK_CANCEL;
+}
+
+static void show_small_popup(struct appdata *ad, char* msg)
+{
+	if (!ad->small_popup)
+		ad->small_popup = elm_tickernoti_add(NULL);
+	if (!ad->small_win)
+		ad->small_win = elm_tickernoti_win_get(ad->small_popup);
+
+	elm_object_style_set(ad->small_popup, "info");
+	elm_tickernoti_label_set(ad->small_popup, msg);
+	elm_tickernoti_orientation_set(ad->small_popup, ELM_TICKERNOTI_ORIENT_BOTTOM);
+	evas_object_show(ad->small_popup);
+	ad->popup_timer = ecore_timer_add(2, hide_small_popup, ad);
+}
+
+static void play_screen_capture_effect()
+{
+	struct appdata *ad = g_get_main_appdata();
+	show_small_popup(ad, "Screen capture success");
+	Ecore_X_Display *disp = ecore_x_display_get();
+	Ecore_X_Window root_win = ecore_x_window_root_first_get();
+	DTRACE("disp: 0x%x, root_win: 0x%x\n", disp, root_win);
+	utilx_show_capture_effect(disp, root_win);
+	_play_capture_sound();
 }
 
 static Eina_Bool _scrcapture_capture_postprocess(void* data)
@@ -105,10 +139,9 @@ static Eina_Bool _scrcapture_capture_postprocess(void* data)
 	evas_object_del(capimginfo->eo);
 	free(capimginfo->imgdata);
 	free(capimginfo);
-
+	play_screen_capture_effect();
 	DTIME("end current capture\n");
 
-	_play_capture_sound();
 	g_shot = EINA_FALSE;
 
 	return EINA_FALSE;
@@ -119,6 +152,7 @@ Eina_Bool capture_current_screen(void *data)
 	struct appdata *ad = data;
 	if (!utilx_get_screen_capture(XOpenDisplay(NULL)))
 	{
+		show_small_popup(ad, "Screen capture disabled");
 		DTRACE("utilx_get_screen_capture: disable\n");
 		return EINA_FALSE;
 	}
@@ -215,8 +249,12 @@ void close_scrcapture(void *data)
 //	Ecore_X_Display *xdisp = ecore_x_display_get();
 //	Ecore_X_Window xwin = (Ecore_X_Window)ecore_evas_window_get(ecore_evas_ecore_evas_get(ad->evas));
 
-	if(svi_handle != -1)
+	if (svi_handle != -1)
 		svi_fini(svi_handle);
+	if (ad->small_popup)
+		evas_object_del(ad->small_popup);
+	if (ad->small_win)
+		evas_object_del(ad->small_win);
 }
 
 
