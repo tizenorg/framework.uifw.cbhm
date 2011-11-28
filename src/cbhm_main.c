@@ -64,7 +64,7 @@ int init_appview(void *data)
 		return -1;
 	ad->evas = evas_object_evas_get(win);
 	ad->win_main = win;
-	set_focus_for_app_window(win, EINA_TRUE);
+	set_focus_for_app_window(win, EINA_FALSE);
 
 	ly = load_edj(win, APP_EDJ_FILE, GRP_MAIN);
 	if (ly == NULL)
@@ -99,6 +99,7 @@ void set_focus_for_app_window(Evas_Object *win, Eina_Bool enable)
 	ecore_x_icccm_hints_set (elm_win_xwindow_get (win),
 							 enable, initial_state, icon_pixmap, icon_mask, icon_window, window_group, is_urgent);
 	DTRACE("set focus mode = %d\n", enable);
+	ecore_x_flush();
 }
 
 static Evas_Object* create_win(void *data, const char *name)

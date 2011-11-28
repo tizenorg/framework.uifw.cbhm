@@ -809,6 +809,7 @@ void clipdrawer_activate_view(void *data)
 
 	if (ad->win_main)
 	{
+		set_focus_for_app_window(ad->win_main, EINA_TRUE);
 		set_transient_for(ad);
 		ad->o_degree = get_active_window_degree(ad->active_win);
 		elm_win_rotation_set(ad->win_main, ad->o_degree);
@@ -826,6 +827,7 @@ void clipdrawer_lower_view(void *data)
 	
 	if (ad->win_main && ad->windowshow)
 	{
+		set_focus_for_app_window(ad->win_main, EINA_FALSE);
 		if (clipdrawer_anim_effect(ad, HIDE_ANIM))
 			ad->windowshow = EINA_FALSE;
 	}
