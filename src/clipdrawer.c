@@ -334,7 +334,7 @@ Evas_Object* _grid_icon_get(const void *data, Evas_Object *obj, const char *part
 			entry_text = _get_string_for_entry(entry_text);
 			if (entry_text)
 			{
-				elm_object_text_part_set(ientry, NULL, entry_text);
+				elm_object_part_text_set(ientry, NULL, entry_text);
 				free(entry_text);
 			}
 			elm_entry_editable_set(ientry, EINA_FALSE);
@@ -609,7 +609,7 @@ int clipdrawer_init(void *data)
 
 	gic.item_style = "default_grid";
 	gic.func.label_get = NULL;
-	gic.func.icon_get = _grid_icon_get;
+	gic.func.content_get = _grid_icon_get;
 	gic.func.state_get = NULL;
 	gic.func.del = _grid_del;
 
