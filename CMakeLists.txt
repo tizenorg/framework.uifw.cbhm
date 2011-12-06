@@ -11,7 +11,7 @@ SET(SRCS src/cbhm_main.c
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 INCLUDE(FindPkgConfig)
-pkg_check_modules(pkgs REQUIRED elementary appcore-efl appcore-common x11 ecore-x utilX eina evas ecore ecore-evas edje ecore-input xext xcomposite svi)
+pkg_check_modules(pkgs REQUIRED elementary appcore-efl appcore-common x11 ecore-x utilX eina evas ecore ecore-evas edje ecore-input xext xcomposite svi pixman-1)
 
 FOREACH(flag ${pkgs_CFLAGS})
 	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
@@ -28,7 +28,7 @@ ADD_DEFINITIONS("-DSLP_DEBUG")
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${SRCS})
 #for XV extension screenshot
-SET(pkgs_LDFLAGS "${pkgs_LDFLAGS} -L/usr/lib -lscreenshot_sw -L/usr/lib -lsvi")
+SET(pkgs_LDFLAGS "${pkgs_LDFLAGS} -L/usr/lib -lsvi")
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkgs_LDFLAGS})
 
 ADD_CUSTOM_TARGET(cbhmdrawer.edj 

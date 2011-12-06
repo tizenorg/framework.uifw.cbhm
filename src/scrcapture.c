@@ -35,9 +35,20 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <svi/svi.h>
+#include <sys/types.h>
+
+#include <X11/Xutil.h>
+#include <X11/extensions/XShm.h>
+#include <X11/Xatom.h>
+#include <X11/extensions/Xrandr.h>
+#include <pixman.h>
 
 static int svi_handle = -1;
 static Eina_Bool g_shot = EINA_FALSE;
+static XImage *ximage;
+static XShmSegmentInfo x_shm_info;
+static char *rot_buffer;
+
 
 typedef struct tag_captureimginfo
 {
@@ -46,6 +57,8 @@ typedef struct tag_captureimginfo
 	char *imgdata;
 } captureimginfo_t;
 
+static const char *createScreenShotSW(Display *d, int width, int height);
+void releaseScreenShotSW(Display *d, const char * ss);
 static Eina_Bool get_image_filename_with_date(char *dstr)
 {
 	time_t tim = time(NULL);
@@ -179,10 +192,10 @@ Eina_Bool capture_current_screen(void *data)
 	capimginfo->eo = evas_object_image_add(ad->evas);
 
 	char *scrimage = NULL;
-	scrimage = scrcapture_capture_screen_by_xv_ext(width, height);
+	scrimage = createScreenShotSW(ecore_x_display_get(), width, height);
 	if (scrimage)
 		memcpy(capimginfo->imgdata, scrimage, width*height*4);
-	scrcapture_release_screen_by_xv_ext(scrimage);
+	releaseScreenShotSW(ecore_x_display_get(), scrimage);
 
 	if (scrimage == NULL || capimginfo->eo == NULL || capimginfo->imgdata == NULL) 
 	{
@@ -256,19 +269,13 @@ void close_scrcapture(void *data)
 		evas_object_del(ad->small_win);
 }
 
-
-inline static Ecore_X_Display *get_display(void)
-{
-	return ecore_x_display_get();
-}
-
 static int get_window_attribute(Window id, int *depth, Visual **visual, int *width, int *height)
 {
 //	assert(id);
 	XWindowAttributes attr;
 
 	DTRACE("XGetWindowAttributes\n");
-	if (!XGetWindowAttributes(get_display(), id, &attr))
+	if (!XGetWindowAttributes(ecore_x_display_get(), id, &attr))
 	{
 		return -1;
 	}
@@ -293,7 +300,7 @@ static Window _get_parent_window( Window id )
 
 	DTRACE("XQeuryTree\n");
 
-	if (!XQueryTree(get_display(), id, &root, &parent, &children, &num))
+	if (!XQueryTree(ecore_x_display_get(), id, &root, &parent, &children, &num))
 	{
 		return 0;
 	}
@@ -323,7 +330,7 @@ static Window find_capture_available_window( Window id, Visual** visual, int* de
 		id = parent;
 		DTRACE("find_capture - XGetWindowAttributes\n");
 
-		if (!XGetWindowAttributes(get_display(), id, &attr))
+		if (!XGetWindowAttributes(ecore_x_display_get(), id, &attr))
 		{
 			return (Window) -1;
 		}
@@ -344,7 +351,7 @@ static Window find_capture_available_window( Window id, Visual** visual, int* de
 
 
 	DTRACE( "find_capture - cannot find id\n");
-	XGetWindowAttributes (get_display(), orig_id, &attr);
+	XGetWindowAttributes (ecore_x_display_get(), orig_id, &attr);
 	*depth = attr.depth;
 	*width = attr.width;
 	*height = attr.height;
@@ -417,13 +424,13 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	if (need_redirecting) 
 	{
 		printf("XCompositeRedirectWindow");
-		XCompositeRedirectWindow(get_display(), id, CompositeRedirectManual);
+		XCompositeRedirectWindow(ecore_x_display_get(), id, CompositeRedirectManual);
 	}
 */
 
 
 	DTRACE("XShmCreateImage\n");
-	xim = XShmCreateImage(get_display(), visual, depth, ZPixmap, NULL, &si, width, height);
+	xim = XShmCreateImage(ecore_x_display_get(), visual, depth, ZPixmap, NULL, &si, width, height);
 	if (!xim)
 	{
 		shmdt(si.shmaddr);
@@ -433,7 +440,7 @@ char *scrcapture_screen_capture(Window oid, int *size)
 		if (need_redirecting) 
 		{
 			printf("XCompositeUnredirectWindow");
-			XCompositeUnredirectWindow(get_display(), id, CompositeRedirectManual);
+			XCompositeUnredirectWindow(ecore_x_display_get(), id, CompositeRedirectManual);
 		}
 */
 		return NULL;
@@ -443,18 +450,18 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	xim->data = si.shmaddr;
 
 	DTRACE("XCompositeNameWindowPixmap\n");
-	pix = XCompositeNameWindowPixmap(get_display(), id);
+	pix = XCompositeNameWindowPixmap(ecore_x_display_get(), id);
 
 	DTRACE("XShmAttach\n");
-	XShmAttach(get_display(), &si);
+	XShmAttach(ecore_x_display_get(), &si);
 
 	DTRACE("XShmGetImage\n");
-	XShmGetImage(get_display(), pix, xim, 0, 0, 0xFFFFFFFF);
+	XShmGetImage(ecore_x_display_get(), pix, xim, 0, 0, 0xFFFFFFFF);
 
 	//XUnmapWindow(disp, id);
 	//XMapWindow(disp, id);
 	DTRACE("XSync\n");
-	XSync(get_display(), False);
+	XSync(ecore_x_display_get(), False);
 
 	//sleep(1);
 	// We can optimize this!
@@ -469,16 +476,16 @@ char *scrcapture_screen_capture(Window oid, int *size)
 	}
 
 	DTRACE("XShmDetach");
-	XShmDetach(get_display(), &si);
+	XShmDetach(ecore_x_display_get(), &si);
 	DTRACE("XFreePixmap\n");
-	XFreePixmap(get_display(), pix);
+	XFreePixmap(ecore_x_display_get(), pix);
 	DTRACE("XDestroyImage\n");
 	XDestroyImage(xim);
 
 /*
 	if (need_redirecting) {
 		printf("XCompositeUnredirectWindow");
-		XCompositeUnredirectWindow(get_display(), id, CompositeRedirectManual);
+		XCompositeUnredirectWindow(ecore_x_display_get(), id, CompositeRedirectManual);
 	}
 */
 
@@ -507,7 +514,7 @@ char *scrcapture_capture_screen_by_x11(Window xid, int *size)
 	DTRACE("WxH : %dx%d\n", width, height);
 	DTRACE("Depth : %d\n", depth >> 3);
 
-	xim = XGetImage(get_display(), xid, 0, 0,
+	xim = XGetImage(ecore_x_display_get(), xid, 0, 0,
 					 width, height, AllPlanes, ZPixmap);
 
 	*size = xim->bytes_per_line * xim->height;
@@ -525,12 +532,236 @@ char *scrcapture_capture_screen_by_x11(Window xid, int *size)
 	return captured_image;
 }
 
-char *scrcapture_capture_screen_by_xv_ext(int w, int h)
+#define return_if_fail(cond)          {if (!(cond)) { printf ("%s : '%s' failed.\n", __FUNCTION__, #cond); return; }}
+#define return_val_if_fail(cond, val) {if (!(cond)) { printf ("%s : '%s' failed.\n", __FUNCTION__, #cond); return val; }}
+#define goto_if_fail(cond, dst)       {if (!(cond)) { printf ("%s : '%s' failed.\n", __FUNCTION__, #cond); goto dst; }}
+
+int convert_image (uint32_t       *srcbuf,
+               uint32_t       *dstbuf,
+               pixman_format_code_t src_format,
+               pixman_format_code_t dst_format,
+               int src_width, int src_height,
+               int dst_width, int dst_height,
+               int             rotate)
 {
-	return createScreenShotSW(get_display(), w, h);
+	pixman_image_t *   src_img;
+	pixman_image_t *   dst_img;
+	pixman_transform_t transform;
+	pixman_region16_t  clip;
+	int                src_stride, dst_stride;
+	int                src_bpp;
+	int                dst_bpp;
+	pixman_op_t        op;
+	int                rotate_step;
+	int                ret = False;
+
+	return_val_if_fail (srcbuf != NULL, False);
+	return_val_if_fail (dstbuf != NULL, False);
+	return_val_if_fail (rotate <= 360 && rotate >= -360, False);
+
+	op = PIXMAN_OP_SRC;
+
+	src_bpp = PIXMAN_FORMAT_BPP (src_format) / 8;
+	return_val_if_fail (src_bpp > 0, False);
+
+	dst_bpp = PIXMAN_FORMAT_BPP (dst_format) / 8;
+	return_val_if_fail (dst_bpp > 0, False);
+
+	rotate_step = (rotate + 360) / 90 % 4;
+
+	src_stride = src_width * src_bpp;
+	dst_stride = dst_width * dst_bpp;
+
+	src_img = pixman_image_create_bits (src_format, src_width, src_height, srcbuf, src_stride);
+	dst_img = pixman_image_create_bits (dst_format, dst_width, dst_height, dstbuf, dst_stride);
+
+	goto_if_fail (src_img != NULL, CANT_CONVERT);
+	goto_if_fail (dst_img != NULL, CANT_CONVERT);
+
+	pixman_transform_init_identity (&transform);
+
+	if (rotate_step > 0)
+	{
+		int c, s, tx = 0, ty = 0;
+		switch (rotate_step)
+		{
+		case 1:
+			/* 270 degrees */
+			c = 0;
+			s = -pixman_fixed_1;
+			ty = pixman_int_to_fixed (dst_width);
+			break;
+		case 2:
+			/* 180 degrees */
+			c = -pixman_fixed_1;
+			s = 0;
+			tx = pixman_int_to_fixed (dst_width);
+			ty = pixman_int_to_fixed (dst_height);
+			break;
+		case 3:
+			/* 90 degrees */
+			c = 0;
+			s = pixman_fixed_1;
+			tx = pixman_int_to_fixed (dst_height);
+			break;
+		default:
+			/* 0 degrees */
+			c = 0;
+			s = 0;
+			break;
+		}
+		pixman_transform_rotate (&transform, NULL, c, s);
+		pixman_transform_translate (&transform, NULL, tx, ty);
+	}
+
+	pixman_image_set_transform (src_img, &transform);
+
+	pixman_image_composite (op, src_img, NULL, dst_img,
+	                        0, 0, 0, 0, 0, 0, dst_width, dst_height);
+
+	ret = True;
+
+CANT_CONVERT:
+	if (src_img)
+		pixman_image_unref (src_img);
+	if (dst_img)
+		pixman_image_unref (dst_img);
+
+	return ret;
 }
 
-void scrcapture_release_screen_by_xv_ext(const char *s)
+int
+getXwindowProperty (Display *d, Window          xwindow,
+                    Atom            prop_atom,
+                    Atom            type_atom,
+                    unsigned char  *value,
+                    int             nvalues)
 {
-	releaseScreenShotSW(s);
+	int    ret = 0;
+	Atom    ret_type = None;
+	int    ret_format;
+	unsigned long  ret_nitems;
+	unsigned long  ret_bytes_after;
+	unsigned char *data = NULL;
+	int    result;
+
+	result = XGetWindowProperty (d,  xwindow,
+	                             prop_atom, 0, 0x7fffffff, False, type_atom,
+	                             &ret_type, &ret_format, &ret_nitems, &ret_bytes_after,
+	                             &data);
+
+	if (result != Success)
+	{
+		DTRACE("Getting a property is failed!");
+		ret = 0;
+	}
+	else if (type_atom != ret_type)
+		ret = 0;
+	else if (ret_format != 32)
+	{
+		DTRACE("Format is not matched! (%d)", ret_format);
+		ret = 0;
+	}
+	else if (ret_nitems == 0 || !data)
+		ret = 0;
+	else
+	{
+		if (ret_nitems < nvalues)
+			nvalues = ret_nitems;
+
+		memcpy (value, data, nvalues*sizeof(int));
+		ret = nvalues;
+	}
+
+	if (data)
+		XFree(data);
+
+	return ret;
+}
+
+const char *createScreenShotSW(Display *d, int width, int height)
+{
+	Window  root;
+	int     rotate;
+	Atom    atom_rotaion;
+	char   *ret = NULL;
+
+	if (ximage)
+	{
+		XDestroyImage (ximage);
+		ximage = NULL;
+	}
+
+	root  = RootWindow (d, DefaultScreen(d));
+
+	ximage = XShmCreateImage (d, DefaultVisualOfScreen (DefaultScreenOfDisplay (d)), 24, ZPixmap, NULL,
+	                          &x_shm_info, (unsigned int)width, (unsigned int)height);
+	if (!ximage)
+	{
+		DTRACE("XShmCreateImage failed !\n");
+		return NULL;
+	}
+
+	x_shm_info.shmid    = shmget (IPC_PRIVATE,
+	                              ximage->bytes_per_line * ximage->height,
+	                              IPC_CREAT | 0777);
+	x_shm_info.shmaddr  = ximage->data = shmat (x_shm_info.shmid, 0, 0);
+	x_shm_info.readOnly = False;
+
+	if (!XShmAttach (d, &x_shm_info))
+	{
+		DTRACE("XShmAttach failed !\n");
+		return NULL;
+	}
+
+	if (!XShmGetImage (d, root, ximage, 0, 0, AllPlanes))
+	{
+		DTRACE("XShmGetImage failed !\n");
+		return NULL;
+	}
+
+	ret = ximage->data;
+
+	atom_rotaion = XInternAtom (d, "X_SCREEN_ROTATION", True);
+	if (!atom_rotaion ||
+		!getXwindowProperty (d, root, atom_rotaion, XA_CARDINAL, (unsigned char*)&rotate, 1))
+	{
+		rotate = RR_Rotate_0;
+	}
+
+	if (rotate == RR_Rotate_90 || rotate == RR_Rotate_270)
+	{
+		rot_buffer = calloc (ximage->bytes_per_line * ximage->height, 1);
+
+		convert_image ((uint32_t*)ximage->data,
+                       (uint32_t*)rot_buffer,
+                       PIXMAN_x8b8g8r8, PIXMAN_x8b8g8r8,
+                       height, width, width, height,
+                       (rotate == RR_Rotate_90) ? 90 : 270);
+
+		ret = rot_buffer;
+	}
+
+	XSync (d, False);
+
+	return ret;
+}
+
+void releaseScreenShotSW(Display *d, const char * ss)
+{
+	if (ximage)
+	{
+		XShmDetach (d, &x_shm_info);
+		shmdt (x_shm_info.shmaddr);
+		shmctl (x_shm_info.shmid, IPC_RMID, NULL);
+
+		XDestroyImage (ximage);
+		ximage = NULL;
+
+		if (rot_buffer)
+		{
+			free (rot_buffer);
+			rot_buffer = NULL;
+		}
+	}
 }
