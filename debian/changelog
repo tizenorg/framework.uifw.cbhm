@@ -1,3 +1,11 @@
+cbhm (0.1.0-104) unstable; urgency=low
+
+  * import screen capture routine for remove xsever-util-ex package
+  * Git: 165.213.180.234:slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-104
+
+ -- Deasung Kim <deasung.kim@samsung.com>  Tue, 06 Dec 2011 15:19:48 +0900
+
 cbhm (0.1.0-103) unstable; urgency=low
 
   * [CQ:H0100137365] set to can't get focus when cbhm window is disappear.
