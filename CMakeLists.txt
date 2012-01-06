@@ -1,17 +1,19 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(cbhm C)
 
-SET(SRCS src/cbhm_main.c
+SET(SRCS src/main.c
+	src/item_manager.c
+	src/xconverter.c
+	src/xhandler.c
 	src/clipdrawer.c
-	src/storage.c
-	src/xcnphandler.c
 	src/scrcapture.c
+	src/storage.c
 )
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 INCLUDE(FindPkgConfig)
-pkg_check_modules(pkgs REQUIRED elementary appcore-efl appcore-common x11 ecore-x utilX eina evas ecore ecore-evas edje ecore-input xext xcomposite svi pixman-1)
+pkg_check_modules(pkgs REQUIRED elementary eet appcore-efl appcore-common x11 ecore-x utilX eina evas ecore ecore-file ecore-evas edje ecore-input xext xcomposite svi pixman-1)
 
 FOREACH(flag ${pkgs_CFLAGS})
 	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")

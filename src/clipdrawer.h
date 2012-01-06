@@ -15,34 +15,45 @@
  *
  */
 
-#ifndef _clipdrawer_h_
-#define _clipdrawer_h_
+#ifndef _CLIPDRAWER_H_
+#define _CLIPDRAWER_H_
 
-#define CLIPDRAWER_HEIGHT 360
-#define CLIPDRAWER_HEIGHT_LANDSCAPE 228
+#include <Ecore_X.h>
+#include <Elementary.h>
 
-enum {
-	GI_TEXT = 0,
-	GI_IMAGE,
-
-	GI_MAX_ITEMS,
+typedef enum _AnimStatus AnimStatus;
+enum _AnimStatus {
+	STATUS_NONE = 0,
+	SHOW_ANIM,
+	HIDE_ANIM
 };
 
-/* view maintains */
-int clipdrawer_init(void *data);
-int clipdrawer_create_view(void *data);
-void clipdrawer_activate_view(void *data);
-//void clipdrawer_hide_view(void *data);
-void clipdrawer_lower_view(void *data);
+struct _ClipdrawerData {
+	Evas_Object *main_win;
+	Ecore_X_Window x_main_win;
+	Evas_Object *gengrid;
+	Evas_Object *main_layout;
+	Elm_Gengrid_Item_Class gic;
 
-void set_rotation_to_clipdrawer(void *data);
+	int o_degree;
 
-const char* clipdrawer_get_plain_string_from_escaped(char *escstr);
+	int root_w;
+	int root_h;
 
-char *clipdrawer_get_item_data(void *data, int pos);
-int clipdrawer_add_item(char *idata, int type);
+	Ecore_Event_Handler *keydown_handler;
+	Evas *evas;
 
-void clipdrawer_paste_textonly_set(void *data, Eina_Bool textonly);
-Eina_Bool clipdrawer_paste_textonly_get(void *data);
+	Ecore_Timer *anim_timer;
+	AnimStatus anim_status;
+	int anim_count;
+	Eina_Bool paste_text_only:1;
+};
 
-#endif // _clipdrawer_h_
+#include "cbhm.h"
+
+void set_rotation_to_clipdrawer(ClipdrawerData *ad);
+void clipdrawer_activate_view(AppData* ad);
+void clipdrawer_lower_view(AppData* ad);
+ClipdrawerData *init_clipdrawer(AppData *ad);
+void depose_clipdrawer(ClipdrawerData *cd);
+#endif // _CLIPDRAWER_H_

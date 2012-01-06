@@ -15,24 +15,21 @@
  *
  */
 
-#ifndef _STORAGE_H_
-#define _STORAGE_H_
+#ifndef _storage_h_
+#define _storage_h_
 
-#include <Eet.h>
-#include <Eina.h>
-#include <Ecore.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/mman.h>
 
-#include "item_manager.h"
+int init_storage(void *data);
+int sync_storage(void *data);
+unsigned int get_storage_serial_code(void *data);
+int adding_item_to_storage(void *data, int pos, char *idata);
+int get_item_counts(void *data);
+int close_storage(void *data);
 
-typedef double indexType; /* Ecore_Time */
+int check_regular_file(char *path);
 
-#define STORAGE_ITEM_CNT 12
-struct _StorageData {
-	Eet_File *ef;
-	indexType indexTable[STORAGE_ITEM_CNT];
-	CNP_ITEM *itemTable[STORAGE_ITEM_CNT];
-};
-
-StorageData *init_storage(AppData *ad);
-void depose_storage(StorageData *sd);
-#endif
+#endif // _storage_h_

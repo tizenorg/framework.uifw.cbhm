@@ -15,26 +15,24 @@
  *
  */
 
-#ifndef _scrcapture_h_
-#define _scrcapture_h_
+#ifndef _SCRCAPTURE_H_
+#define _SCRCAPTURE_H_
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/Xcomposite.h>
-#include <X11/extensions/XShm.h>
-#include <X11/Xatom.h>
+#include <Elementary.h>
 
-// XV extension API - start 
-const char* createScreenShot(int width, int height);
-void releaseScreenShot(const char *ss);
-// XV extension API - end
+struct _SCaptureData {
+	int svi_handle;
 
-Eina_Bool capture_current_screen(void *data);
-char *scrcapture_capture_screen_by_x11(Window xid, int *size);
-char *scrcapture_capture_screen_by_xv_ext(int width, int height);
-void scrcapture_release_screen_by_xv_ext(const char *s);
+	Evas_Object *spopup;
+	Evas_Object *swin;
+	Ecore_Timer *stimer;
 
-int init_scrcapture(void *data);
-void close_scrcapture(void *data);
+	Eina_Bool svi_init:1;
+};
 
-#endif // _scrcapture_h_
+#include "cbhm.h"
+
+SCaptureData *init_screencapture(AppData *ad);
+void depose_screencapture(SCaptureData *sd);
+void capture_current_screen(AppData *ad);
+#endif // _SCRCAPTURE_H_
