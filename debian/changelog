@@ -1,3 +1,11 @@
+cbhm (0.1.0-105) unstable; urgency=low
+
+  * change screen capture directory
+  * Git: slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-105
+
+ -- Deasung Kim <deasung.kim@samsung.com>  Thu, 26 Jan 2012 14:12:18 +0900
+
 cbhm (0.1.0-104) unstable; urgency=low
 
   * import screen capture routine for remove xsever-util-ex package
