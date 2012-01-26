@@ -29,7 +29,8 @@
 #include <Ecore_Input.h>
 #include <utilX.h>
 
-#define IMAGE_SAVE_DIR "/opt/media/Images and videos/My photo clips"
+//#define IMAGE_SAVE_DIR "/opt/media/Images and videos/My photo clips"
+#define IMAGE_SAVE_DIR "/opt/media/Images"
 #define IMAGE_SAVE_FILE_TYPE ".png"
 
 #include <errno.h>
