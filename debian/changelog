@@ -1,3 +1,11 @@
+cbhm (0.1.0-106) unstable; urgency=low
+
+  * Refactoring(add convert function)
+  * Git: slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-106
+
+ -- Deasung Kim <deasung.kim@samsung.com>  Mon, 06 Feb 2012 17:53:50 +0900
+
 cbhm (0.1.0-105) unstable; urgency=low
 
   * change screen capture directory
