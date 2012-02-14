@@ -34,6 +34,7 @@ struct _XHandlerData {
 	Ecore_X_Atom atomWindowRotate;
 
 	Ecore_X_Atom atomCBHM_MSG;
+	Ecore_X_Atom atomCBHM_ITEM;
 	Ecore_X_Atom atomXKey_MSG;
 
 	Ecore_X_Atom atomUTF8String;

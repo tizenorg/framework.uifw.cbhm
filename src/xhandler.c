@@ -461,6 +461,50 @@ static Eina_Bool _xclient_msg_cb(void *data, int type, void *event)
 				countbuf,
 				strlen(countbuf));
 	}
+	/* for OSP */
+	else if (strncmp("GET_ITEM", ev->data.b, 8) == 0)
+	{
+		int itempos = 0;
+		int index = 8;
+		xd->atomCBHM_ITEM = ecore_x_atom_get("CBHM_ITEM");
+
+		while ('0' <= ev->data.b[index] && ev->data.b[index] <= '9')
+		{
+			itempos = (itempos * 10) + (ev->data.b[index] - '0');
+			index++;
+		}
+
+		CNP_ITEM *item = item_get_by_index(ad, itempos);
+		if (!item)
+		{
+			Ecore_X_Atom itemtype = ecore_x_atom_get("CBHM_ERROR");
+
+			char error_buf[] = "OUT OF BOUND";
+			int bufsize = sizeof(error_buf);
+			ecore_x_window_prop_property_set(
+					ev->win,
+					xd->atomCBHM_ITEM,
+					itemtype,
+					8,
+					error_buf,
+					bufsize);
+			DMSG("GET ITEM ERROR msg: %s, index: %d, item count: %d\n",
+					ev->data.b, itempos, item_count_get(ad));
+		}
+		else
+		{
+			ecore_x_window_prop_property_set(
+					ev->win,
+					xd->atomCBHM_ITEM,
+					ad->targetAtoms[item->type_index].atom[0],
+					8,
+					item->data,
+					item->len);
+			DMSG("GET ITEM index: %d, item type: %d, item data: %s, item->len: %d\n",
+					itempos, ad->targetAtoms[item->type_index].atom[0],
+					item->data, item->len);
+		}
+	}
 /*	else if (strncmp("get #", ev->data.b, 5) == 0)
 	{
 		// FIXME : handle greater than 9
@@ -587,6 +631,7 @@ XHandlerData *init_xhandler(AppData *ad)
 	xd->atomInc = ecore_x_atom_get("INCR");
 	xd->atomWindowRotate = ecore_x_atom_get("_E_ILLUME_ROTATE_WINDOW_ANGLE");
 	xd->atomCBHM_MSG = ecore_x_atom_get("CBHM_MSG");
+	xd->atomCBHM_ITEM = ecore_x_atom_get("CBHM_ITEM");
 	xd->atomXKey_MSG = ecore_x_atom_get("_XKEY_COMPOSITION");
 	xd->atomCBHMCount = ecore_x_atom_get("CBHM_cCOUNT");
 	xd->atomUTF8String = ecore_x_atom_get("UTF8_STRING");
