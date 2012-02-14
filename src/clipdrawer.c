@@ -52,7 +52,7 @@ static void _change_gengrid_paste_textonly_mode(ClipdrawerData *cd)
 {
 	CNP_ITEM *item = NULL;
 
-	Elm_Gengrid_Item *gitem = elm_gengrid_first_item_get(cd->gengrid);
+	Elm_Object_Item *gitem = elm_gengrid_first_item_get(cd->gengrid);
 
 	while (gitem)
 	{
@@ -158,7 +158,7 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 	elm_gengrid_clear(cd->gengrid);
 
 	cd->gic.item_style = "default_grid";
-	cd->gic.func.label_get = NULL;
+	cd->gic.func.text_get = NULL;
 	cd->gic.func.content_get = _grid_content_get;
 	cd->gic.func.state_get = NULL;
 	cd->gic.func.del = _grid_del;
@@ -190,7 +190,7 @@ static Eina_Bool clipdrawer_add_item(AppData *ad, CNP_ITEM *item)
 	ClipdrawerData *cd = ad->clipdrawer;
 	if (item->type_index == ATOM_INDEX_IMAGE)
 	{
-		Elm_Gengrid_Item *gitem = elm_gengrid_first_item_get(cd->gengrid);
+		Elm_Object_Item *gitem = elm_gengrid_first_item_get(cd->gengrid);
 		while (gitem)
 		{
 			CNP_ITEM *gitem_data = elm_gengrid_item_data_get(gitem);
@@ -327,7 +327,7 @@ static void _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emis
 	if (cd->anim_status != STATUS_NONE)
 		return;
 
-	Elm_Gengrid_Item *sgobj = NULL;
+	Elm_Object_Item *sgobj = NULL;
 	sgobj = elm_gengrid_selected_item_get(cd->gengrid);
 	item = elm_gengrid_item_data_get(sgobj);
 

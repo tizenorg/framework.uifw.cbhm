@@ -25,7 +25,7 @@ struct _CNP_ITEM {
 	void *data;
 	size_t len;
 
-	Elm_Gengrid_Item *gitem;
+	Elm_Object_Item *gitem;
 	Evas_Object *layout;
 	AppData *ad;
 };
