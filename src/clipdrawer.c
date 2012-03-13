@@ -56,7 +56,7 @@ static void _change_gengrid_paste_textonly_mode(ClipdrawerData *cd)
 
 	while (gitem)
 	{
-		item = elm_gengrid_item_data_get(gitem);
+		item = elm_object_item_data_get(gitem);
 		if ((item->type_index == ATOM_INDEX_IMAGE) && (item->layout))
 		{
 			if (cd->paste_text_only)
@@ -146,7 +146,7 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 			"mouse,up,1", "*", clipdrawer_ly_clicked, ad);
 
 	cd->gengrid = elm_gengrid_add(cd->main_win);
-	elm_layout_content_set(cd->main_layout, "historyitems", cd->gengrid);
+	elm_object_part_content_set(cd->main_layout, "historyitems", cd->gengrid);
 	elm_gengrid_item_size_set(cd->gengrid, GRID_ITEM_W+2, GRID_ITEM_H);
 	elm_gengrid_align_set(cd->gengrid, 0.5, 0.5);
 	elm_gengrid_horizontal_set(cd->gengrid, EINA_TRUE);
@@ -193,7 +193,7 @@ static Eina_Bool clipdrawer_add_item(AppData *ad, CNP_ITEM *item)
 		Elm_Object_Item *gitem = elm_gengrid_first_item_get(cd->gengrid);
 		while (gitem)
 		{
-			CNP_ITEM *gitem_data = elm_gengrid_item_data_get(gitem);
+			CNP_ITEM *gitem_data = elm_object_item_data_get(gitem);
 			gitem = elm_gengrid_item_next_get(gitem);
 			if ((gitem_data->type_index == item->type_index) && (!strcmp(item->data, gitem_data->data)))
 			{
@@ -211,7 +211,7 @@ static Eina_Bool clipdrawer_add_item(AppData *ad, CNP_ITEM *item)
 static Eina_Bool clipdrawer_del_item(AppData *ad, CNP_ITEM *item)
 {
 	if (item->gitem)
-		elm_gengrid_item_del(item->gitem);
+		elm_object_item_del(item->gitem);
 	return EINA_TRUE;
 }
 
@@ -243,7 +243,7 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 		evas_object_image_file_set(sicon, item->data, NULL);
 		evas_object_image_fill_set(sicon, 0, 0, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
 		evas_object_resize(sicon, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
-		elm_layout_content_set(layout, "elm.swallow.icon", sicon);
+		elm_object_part_content_set(layout, "elm.swallow.icon", sicon);
 
 		if (cd->paste_text_only)
 			edje_object_signal_emit(elm_layout_edje_get(layout), "elm,state,show,dim", "elm");
@@ -262,7 +262,7 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 		evas_object_resize(rect, GRID_ITEM_W, GRID_ITEM_H);
 		evas_object_color_set(rect, 242, 233, 183, 255);
 		evas_object_show(rect);
-		elm_layout_content_set(layout, "elm.swallow.icon", rect);
+		elm_object_part_content_set(layout, "elm.swallow.icon", rect);
 
 		Evas_Object *ientry = elm_entry_add(obj);
 		evas_object_size_hint_weight_set(ientry, 0, 0);
@@ -281,7 +281,7 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 		elm_entry_editable_set(ientry, EINA_FALSE);
 		elm_entry_context_menu_disabled_set(ientry, EINA_TRUE);
 		evas_object_show(ientry);
-		elm_layout_content_set(layout, "elm.swallow.inner", ientry);
+		elm_object_part_content_set(layout, "elm.swallow.inner", ientry);
 
 		item->layout = layout;
 	}
@@ -312,7 +312,7 @@ static void _grid_del_response_cb(void *data, Evas_Object *obj, void *event_info
 	/* delete popup */
 	evas_object_del(obj);
 
-	if((int)event_info == ELM_POPUP_RESPONSE_OK)
+	if (data)
 	{
 		item_delete_by_CNP_ITEM(ad, item);
 	}
@@ -329,7 +329,7 @@ static void _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emis
 
 	Elm_Object_Item *sgobj = NULL;
 	sgobj = elm_gengrid_selected_item_get(cd->gengrid);
-	item = elm_gengrid_item_data_get(sgobj);
+	item = elm_object_item_data_get(sgobj);
 
 	if (!sgobj || !item)
 	{
@@ -354,12 +354,9 @@ static void _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emis
 		Evas_Object *popup = elm_popup_add(cd->main_win);
 		elm_popup_timeout_set(popup, 5);
 		evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-		elm_popup_desc_set(popup, "Are you sure delete this?");
-		elm_popup_buttons_add(popup, 2,
-				"Yes", ELM_POPUP_RESPONSE_OK,
-				"No", ELM_POPUP_RESPONSE_CANCEL,
-				NULL);
-		evas_object_smart_callback_add(popup, "response", _grid_del_response_cb, item);
+		elm_object_text_set(popup, "Are you sure delete this?");
+		elm_popup_item_append(popup, "Yes", NULL, _grid_del_response_cb, item);
+		elm_popup_item_append(popup, "No", NULL, _grid_del_response_cb, NULL);
 		evas_object_show(popup);
 	}
 }

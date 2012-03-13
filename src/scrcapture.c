@@ -170,15 +170,18 @@ static void launch_cbhm_syspopup(SCaptureData *sd, int type)
 #else
 static Eina_Bool hide_spopup(void *data)
 {
+	/*
 	SCaptureData *sd = data;
 	ecore_timer_del(sd->stimer);
 	sd->stimer = NULL;
 	evas_object_hide(sd->spopup);
 	return ECORE_CALLBACK_CANCEL;
+	*/
 }
 
 static void show_spopup(SCaptureData *sd, char *msg)
 {
+	/*
 	if (!sd->spopup)
 		sd->spopup = elm_tickernoti_add(NULL);
 	if (!sd->swin)
@@ -189,6 +192,7 @@ static void show_spopup(SCaptureData *sd, char *msg)
 	elm_tickernoti_orientation_set(sd->spopup, ELM_TICKERNOTI_ORIENT_BOTTOM);
 	evas_object_show(sd->spopup);
 	sd->stimer = ecore_timer_add(2, hide_spopup, sd);
+	*/
 }
 #endif
 
