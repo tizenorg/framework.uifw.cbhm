@@ -1,3 +1,11 @@
+cbhm (0.1.0-108) unstable; urgency=low
+
+  * package upload for efl migration
+  * Git: slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-108
+
+ -- Deasung Kim <deasung.kim@samsung.com>  Fri, 16 Mar 2012 15:46:15 +0900
+
 cbhm (0.1.0-107) unstable; urgency=low
 
   * change Elm_Gengrid_Item to Elm_Object_Item for EFL migration
