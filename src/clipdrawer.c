@@ -308,11 +308,12 @@ static void _grid_del_response_cb(void *data, Evas_Object *obj, void *event_info
 	CNP_ITEM *item = data;
 	AppData *ad = item->ad;
 	ClipdrawerData *cd = ad->clipdrawer;
+	char *label = elm_object_item_text_get(event_info);
 
 	/* delete popup */
 	evas_object_del(obj);
 
-	if (data)
+	if (!strcmp(label, "Yes"))
 	{
 		item_delete_by_CNP_ITEM(ad, item);
 	}
@@ -356,7 +357,7 @@ static void _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emis
 		evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 		elm_object_text_set(popup, "Are you sure delete this?");
 		elm_popup_item_append(popup, "Yes", NULL, _grid_del_response_cb, item);
-		elm_popup_item_append(popup, "No", NULL, _grid_del_response_cb, NULL);
+		elm_popup_item_append(popup, "No", NULL, _grid_del_response_cb, item);
 		evas_object_show(popup);
 	}
 }
