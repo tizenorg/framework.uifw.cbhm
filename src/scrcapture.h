@@ -23,10 +23,6 @@
 struct _SCaptureData {
 	int svi_handle;
 
-	Evas_Object *spopup;
-	Evas_Object *swin;
-	Ecore_Timer *stimer;
-
 	Eina_Bool svi_init:1;
 };
 

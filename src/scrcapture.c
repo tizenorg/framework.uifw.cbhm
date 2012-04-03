@@ -34,6 +34,8 @@
 #include "cbhm.h"
 #include "item_manager.h"
 
+#include <E_Notify.h>
+
 //#define IMAGE_SAVE_DIR "/opt/media/Images and videos/My photo clips"
 #define IMAGE_SAVE_DIR "/opt/media/Images"
 #define IMAGE_SAVE_FILE_TYPE ".png"
@@ -75,13 +77,8 @@ void depose_screencapture(SCaptureData *sd)
 {
 	if (sd->svi_init)
 		svi_fini(sd->svi_handle);
-	if (sd->stimer)
-		ecore_timer_del(sd->stimer);
-	if (sd->spopup)
-		evas_object_del(sd->spopup);
-	if (sd->swin)
-		evas_object_del(sd->swin);
 	FREE(sd);
+	e_notification_shutdown();
 }
 
 static char *get_image_filename_with_date()
@@ -168,31 +165,14 @@ static void launch_cbhm_syspopup(SCaptureData *sd, int type)
 	return;
 }
 #else
-static Eina_Bool hide_spopup(void *data)
-{
-	/*
-	SCaptureData *sd = data;
-	ecore_timer_del(sd->stimer);
-	sd->stimer = NULL;
-	evas_object_hide(sd->spopup);
-	return ECORE_CALLBACK_CANCEL;
-	*/
-}
-
 static void show_spopup(SCaptureData *sd, char *msg)
 {
-	/*
-	if (!sd->spopup)
-		sd->spopup = elm_tickernoti_add(NULL);
-	if (!sd->swin)
-		sd->swin = elm_tickernoti_win_get(sd->spopup);
-
-	elm_object_style_set(sd->spopup, "info");
-	elm_tickernoti_label_set(sd->spopup, msg);
-	elm_tickernoti_orientation_set(sd->spopup, ELM_TICKERNOTI_ORIENT_BOTTOM);
-	evas_object_show(sd->spopup);
-	sd->stimer = ecore_timer_add(2, hide_spopup, sd);
-	*/
+	E_Notification *n;
+	e_notification_init();
+	n = e_notification_new();
+	e_notification_timeout_set(n, 2000);
+	e_notification_summary_set(n, msg);
+	e_notification_send(n, NULL, NULL);
 }
 #endif
 
