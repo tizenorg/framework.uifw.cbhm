@@ -36,6 +36,9 @@
 #define GRID_ITEM_H (GRID_ITEM_SINGLE_H)
 #define GRID_IMAGE_LIMIT_W 91
 #define GRID_IMAGE_LIMIT_H 113
+#define GRID_IMAGE_INNER 10
+#define GRID_IMAGE_REAL_W (GRID_ITEM_SINGLE_W - (2*GRID_IMAGE_INNER))
+#define GRID_IMAGE_REAL_H (GRID_ITEM_SINGLE_H - (2*GRID_IMAGE_INNER))
 
 static Evas_Object *create_win(ClipdrawerData *cd, const char *name);
 static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *part);
@@ -148,7 +151,7 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 	cd->gengrid = elm_gengrid_add(cd->main_win);
 	elm_object_part_content_set(cd->main_layout, "historyitems", cd->gengrid);
 	elm_gengrid_item_size_set(cd->gengrid, GRID_ITEM_W+2, GRID_ITEM_H);
-	elm_gengrid_align_set(cd->gengrid, 0.5, 0.5);
+	elm_gengrid_align_set(cd->gengrid, 0.5, 0.0);
 	elm_gengrid_horizontal_set(cd->gengrid, EINA_TRUE);
 	elm_gengrid_bounce_set(cd->gengrid, EINA_TRUE, EINA_FALSE);
 	elm_gengrid_multi_select_set(cd->gengrid, EINA_FALSE);
@@ -201,6 +204,11 @@ static Eina_Bool clipdrawer_add_item(AppData *ad, CNP_ITEM *item)
 				item_delete_by_CNP_ITEM(ad, gitem_data);
 			}
 		}
+		cd->gic.item_style = "clipboard_photo_style";
+	}
+	else
+	{
+		cd->gic.item_style = "default_grid";
 	}
 
 	item->gitem = elm_gengrid_item_prepend(cd->gengrid, &cd->gic, item, NULL, NULL);
@@ -232,17 +240,42 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 		return NULL;
 	if (item->type_index == ATOM_INDEX_IMAGE) /* text/uri */
 	{
+		int w, h, iw, ih;
+
 		Evas_Object *layout = elm_layout_add(obj);
-		elm_layout_theme_set(layout, "gengrid", "widestyle", "horizontal_layout");
+		elm_layout_theme_set(layout, "gengrid", "item", "clipboard_style");
 		edje_object_signal_callback_add(elm_layout_edje_get(layout),
 				"mouse,up,1", "*", _grid_item_ly_clicked, data);
 
+
 		Evas_Object *sicon;
 		sicon = evas_object_image_add(evas_object_evas_get(obj));
-		evas_object_image_load_size_set(sicon, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
+		evas_object_image_load_size_set(sicon, GRID_IMAGE_REAL_W, GRID_IMAGE_REAL_H);
 		evas_object_image_file_set(sicon, item->data, NULL);
-		evas_object_image_fill_set(sicon, 0, 0, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
-		evas_object_resize(sicon, GRID_ITEM_SINGLE_W, GRID_ITEM_SINGLE_H);
+		evas_object_image_size_get(sicon, &w, &h);
+
+		if (w > GRID_IMAGE_REAL_W || h > GRID_IMAGE_REAL_H)
+		{
+			if (w >= h)
+			{
+				iw = GRID_IMAGE_REAL_W;
+				ih = (float)GRID_IMAGE_REAL_W / w * h;
+			}
+			else
+			{
+				iw = (float)GRID_IMAGE_REAL_H / h * w;
+				ih = GRID_IMAGE_REAL_H;
+			}
+		}
+		else
+		{
+			iw = w;
+			ih = h;
+		}
+
+		evas_object_image_fill_set(sicon, 0, 0, iw, ih);
+		evas_object_resize(sicon, iw, ih);
+		evas_object_size_hint_min_set(sicon, iw, ih);
 		elm_object_part_content_set(layout, "elm.swallow.icon", sicon);
 
 		if (cd->paste_text_only)
@@ -308,7 +341,7 @@ static void _grid_del_response_cb(void *data, Evas_Object *obj, void *event_info
 	CNP_ITEM *item = data;
 	AppData *ad = item->ad;
 	ClipdrawerData *cd = ad->clipdrawer;
-	char *label = elm_object_item_text_get(event_info);
+	const char *label = elm_object_item_text_get(event_info);
 
 	/* delete popup */
 	evas_object_del(obj);
@@ -347,6 +380,7 @@ static void _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emis
 		{
 			set_selection_owner(ad, ECORE_X_SELECTION_SECONDARY, item);
 		}
+		clipdrawer_lower_view(ad);
 	}
 	else
 	{
