@@ -380,7 +380,6 @@ static void _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emis
 		{
 			set_selection_owner(ad, ECORE_X_SELECTION_SECONDARY, item);
 		}
-		clipdrawer_lower_view(ad);
 	}
 	else
 	{
