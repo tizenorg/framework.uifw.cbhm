@@ -486,8 +486,13 @@ static void set_sliding_win_geometry(ClipdrawerData *cd)
 		w = 0;
 
 	DTRACE("[CBHM] change degree geometry... (%d, %d, %d x %d)\n", x, y, w, h);
-	ecore_x_e_illume_sliding_win_geometry_set(zone, x, y, w, h);
-	ecore_x_e_illume_sliding_win_state_set(zone, cd->anim_count != 0);
+	int clipboard_state;
+	if (cd->anim_count)
+		clipboard_state = ECORE_X_ILLUME_CLIPBOARD_STATE_ON;
+	else
+		clipboard_state = ECORE_X_ILLUME_CLIPBOARD_STATE_OFF;
+	ecore_x_e_illume_clipboard_geometry_set(zone, x, y, w, h);
+	ecore_x_e_illume_clipboard_state_set(zone, clipboard_state);
 }
 
 void set_rotation_to_clipdrawer(ClipdrawerData *cd)
