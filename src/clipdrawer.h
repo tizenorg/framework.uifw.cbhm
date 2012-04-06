@@ -34,6 +34,7 @@ struct _ClipdrawerData {
 	Evas_Object *gengrid;
 	Evas_Object *main_layout;
 	Elm_Gengrid_Item_Class gic;
+	Evas_Object *popup;
 
 	int o_degree;
 

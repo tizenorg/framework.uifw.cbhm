@@ -341,10 +341,11 @@ static void _grid_del_response_cb(void *data, Evas_Object *obj, void *event_info
 	CNP_ITEM *item = data;
 	AppData *ad = item->ad;
 	ClipdrawerData *cd = ad->clipdrawer;
-	const char *label = elm_object_item_text_get(event_info);
+	const char *label = elm_object_text_get(obj);
 
 	/* delete popup */
-	evas_object_del(obj);
+	evas_object_del(cd->popup);
+	cd->popup = NULL;
 
 	if (!strcmp(label, "Yes"))
 	{
@@ -386,11 +387,18 @@ static void _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emis
 		elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
 
 		Evas_Object *popup = elm_popup_add(cd->main_win);
+		cd->popup = popup;
 		elm_popup_timeout_set(popup, 5);
 		evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 		elm_object_text_set(popup, "Are you sure delete this?");
-		elm_popup_item_append(popup, "Yes", NULL, _grid_del_response_cb, item);
-		elm_popup_item_append(popup, "No", NULL, _grid_del_response_cb, item);
+		Evas_Object *btn1 = elm_button_add(popup);
+		elm_object_text_set(btn1, "Yes");
+		elm_object_part_content_set(popup, "button1", btn1);
+		evas_object_smart_callback_add(btn1, "clicked", _grid_del_response_cb, item);
+		Evas_Object *btn2 = elm_button_add(popup);
+		elm_object_text_set(btn2, "No");
+		elm_object_part_content_set(popup, "button2", btn2);
+		evas_object_smart_callback_add(btn2, "clicked", _grid_del_response_cb, item);
 		evas_object_show(popup);
 	}
 }
