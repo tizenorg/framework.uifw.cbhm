@@ -1,3 +1,11 @@
+cbhm (0.1.0-110) unstable; urgency=low
+
+  * modified cbhm GUI and replaced tickernotif as notification
+  * Git: slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-110
+
+ -- Minseok Kim <minseok3.kim@samsung.com>  Fri, 06 Apr 2012 10:08:20 +0900
+
 cbhm (0.1.0-109) unstable; urgency=low
 
   * fixed cbhm package upload for NabiS1-2106 issue
