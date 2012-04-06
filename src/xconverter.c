@@ -1035,160 +1035,6 @@ static char *do_not_convert(AppData *ad, int type_index, const char *str)
    }
  */
 
-/*
- * remove_tags, mark_up function from elm_cnp_helper
- */
-
-typedef struct _Escape {
-	char *escape;
-	char *value;
-} Escape;
-
-#define _PARAGRAPH_SEPARATOR "\xE2\x80\xA9"
-
-/* Optimisation: Turn this into a 256 byte table:
- *  *  then can lookup in one index, not N checks */
-static const Escape escapes[] = {
-	{ "<ps>",  _PARAGRAPH_SEPARATOR },
-	{ "<br>",  "\n" },
-	{ "<\t>",  "\t" },
-	{ "&gt;",   ">" },
-	{ "&lt;",    "<" },
-	{ "&amp;",   "&" },
-	{ "&quot;",  "'" },
-	{ "&dquot;", "\"" }
-};
-#define N_ESCAPES ((int)(sizeof(escapes) / sizeof(escapes[0])))
-
-static char *remove_tags(const char *p, int *len)
-{
-   char *q,*ret;
-   int i;
-   if (!p) return NULL;
-
-   q = malloc(strlen(p) + 1);
-   if (!q) return NULL;
-   ret = q;
-
-   while (*p)
-     {
-        Eina_Bool esc = EINA_TRUE;
-        const char *x;
-        switch (p[0])
-          {
-           case '<':
-             x = strchr(p + 3, '>');
-             if (!x)
-               {
-                  strcpy(q, p);
-                  if (len) *len = strlen(ret);
-                  return ret;
-               }
-             if (memcmp(p + 1, "br", 2) && memcmp(p + 1, "ps", 2))
-               {
-                  strncpy(q, p, x - p + 1);
-                  p = x + 1;
-                  break;
-               }
-             i = x - p - 1;
-             if (p[i] == '/') i--;
-             for (; i > 2; i++)
-               {
-                  if (p[i] != ' ')
-                    {
-                       esc = EINA_FALSE;
-                       break;
-                    }
-               }
-             if (!esc)
-               {
-                  strncpy(q, p, x - p + 1);
-                  p = x + 1;
-                  break;
-               }
-             if (p[1] == 'b')
-               *q++ = '\n';
-             else
-               {
-                  strcpy(q, _PARAGRAPH_SEPARATOR);
-                  q += sizeof(_PARAGRAPH_SEPARATOR) - 1;
-               }
-             p = x + 1;
-             break;
-           case '&':
-             for (i = 3 ; i < N_ESCAPES ; i++)
-               {
-                  if (strncmp(p, escapes[i].escape, strlen(escapes[i].escape)))
-                    continue;
-                  p += strlen(escapes[i].escape);
-                  strcpy(q, escapes[i].value);
-                  q += strlen(escapes[i].value);
-                  break;
-               }
-             if (i == N_ESCAPES) *q ++= '&';
-             break;
-           default:
-             *q++ = *p++;
-          }
-     }
-   *q = 0;
-   if (len) *len = q - ret;
-   return ret;
-}
-
-/* Mark up */
-static char *mark_up(const char *start, int inlen, int *lenp)
-{
-   int l, i;
-   const char *p;
-   char *q, *ret;
-   const char *endp = NULL;
-
-   if (!start) return NULL;
-   if (inlen >= 0) endp = start + inlen;
-   /* First pass: Count characters */
-   for (l = 0, p = start; ((!endp) || (p < endp)) && (*p); p++)
-     {
-        for (i = 0 ; i < N_ESCAPES ; i ++)
-          {
-             if (*p == escapes[i].value[0])
-               {
-                  if (!strncmp(p, escapes[i].value, strlen(escapes[i].value)))
-                    l += strlen(escapes[i].escape);
-                  break;
-               }
-          }
-        if (i == N_ESCAPES) l++;
-     }
-
-   q = ret = malloc(l + 1);
-
-   /* Second pass: Change characters */
-   for (p = start; ((!endp) || (p < endp)) && (*p); )
-     {
-        for (i = 0; i < N_ESCAPES; i++)
-          {
-             if (*p == escapes[i].value[0])
-               {
-                  if (!strncmp(p, escapes[i].value, strlen(escapes[i].value)))
-                    {
-                       strcpy(q, escapes[i].escape);
-                       q += strlen(escapes[i].escape);
-                       p += strlen(escapes[i].value);
-                    }
-                  break;
-               }
-          }
-        if (i == N_ESCAPES) *q++ = *p++;
-     }
-   *q = 0;
-
-   if (lenp) *lenp = l;
-   return ret;
-}
-
-
-
 #define IMAGE_DEFAULT_WIDTH "240"
 #define IMAGE_DEFAULT_HEIGHT "180"
 static char *make_image_path_tag(int type_index, const char *str)
@@ -1366,7 +1212,8 @@ static char *image_path_to_entry(AppData *ad, int type_index, const char *str)
 static char *text_to_entry(AppData *ad, int type_index, const char *str)
 {
 	DMSG("str: %s\n", str);
-	char *markup = mark_up(str, strlen(str), NULL);
+	char *markup = NULL;
+	markup = _elm_util_text_to_mkup(str);
 	char *for_entry = markup_to_entry(ad, type_index, markup);
 	FREE(markup);
 	return for_entry;
@@ -1442,7 +1289,8 @@ static char *efl_to_html(AppData *ad, int type_index, const char *str)
 static char *text_to_html(AppData *ad, int type_index, const char *str)
 {
 	DMSG("str: %s\n", str);
-	char *markup = mark_up(str, strlen(str), NULL);
+	char *markup = NULL;
+	markup = _elm_util_text_to_mkup(str);
 	char *html = efl_to_html(ad, ATOM_INDEX_EFL, markup);
 	FREE(markup);
 	return html;
@@ -1451,26 +1299,32 @@ static char *text_to_html(AppData *ad, int type_index, const char *str)
 static char *text_to_efl(AppData *ad, int type_index, const char *str)
 {
 	DMSG("str: %s\n", str);
-	return mark_up(str, strlen(str), NULL);
+	char *ret = NULL;
+	ret = _elm_util_text_to_mkup(str);
+	return ret;
 }
 
 static char *to_text(AppData *ad, int type_index, const char *str)
 {
 	DMSG("str: %s\n", str);
+	char *text = NULL;
 	if (type_index == ATOM_INDEX_HTML)
 	{
 		Eina_Strbuf *buf = eina_strbuf_new();
 		if (buf)
 		{
-			char *text, *html;
+			char *html;
 			eina_strbuf_append(buf, str);
 			eina_strbuf_replace_all(buf, "&nbsp;", " ");
 			html = eina_strbuf_string_steal(buf);
 			eina_strbuf_free(buf);
-			text = remove_tags(html, NULL);
+			text = _elm_util_mkup_to_text(html);
 			free(html);
 			return text;
 		}
 	}
-	return remove_tags(str, NULL);
+
+	text = _elm_util_mkup_to_text(str);
+	return text;
 }
+
