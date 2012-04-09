@@ -1,0 +1,13 @@
+Source: cbhm
+Section: devel
+Priority: extra
+Maintainer: Minseok Kim <minseok3.kim@samsung.com>, Deasung Kim <deasung.kim@samsung.com>, Hyoyoung Chang <hyoyoung.chang@samsung.com>
+Uploaders: Juyung Seo <juyung.seo@samsung.com>, Myungjae Lee <mjae.lee@samsung.com>, ChunEon Park <chuneon.park@samsung.com>
+Build-Depends: debhelper (>= 5), libelm-dev, libappcore-efl-dev, libappcore-common-dev, libx11-dev, libecore-dev, libslp-utilx-dev, libmm-common-dev, libmm-sound-dev, libsvi-dev, libpixman-1-dev
+Standards-Version: 0.1.1
+
+Package: cbhm
+Section: admin
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: cbhm application
