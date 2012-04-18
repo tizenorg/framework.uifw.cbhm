@@ -353,11 +353,7 @@ _get_next_node(PTagNode prev)
 
 	int tagLength = tagNameEnd - tagStart - 1;
 	char *tagName = NULL;
-	if (!strncmp(&tagStart[1], "color", tagLength))
-		tagName = strndup("font", 4);
-	else if (!strncmp(&tagStart[1], "/color", tagLength))
-		tagName = strndup("/font", 5);
-	else if (!strncmp(&tagStart[1], "/item", tagLength))
+	if (!strncmp(&tagStart[1], "/item", tagLength))
 		tagName = strdup("");
 	else
 		tagName = strndup(&tagStart[1], tagLength);
@@ -426,7 +422,7 @@ _link_match_tags(Eina_List *nodes)
 	{
 		if (!trail->tag || trail->tag[0] == '\0')
 			continue;
-		if (!strcmp("br", trail->tag))
+		if (!strcmp("br/", trail->tag))
 		{
 			trail->tagPosType = TAGPOS_ALONE;
 			continue;
@@ -626,7 +622,7 @@ _set_EFL_tag_data(Eina_List* nodes)
 	{
 		if (!trail->tag)
 			continue;
-		if (!strcmp("font", trail->tag))
+		if (!strcmp("font", trail->tag) || !strcmp("color", trail->tag))
 			trail->tagData = _set_EFL_font_data(trail->tagData, trail->tag_str);
 		else if (!strcmp("item", trail->tag))
 			trail->tagData = _set_EFL_item_data(trail->tagData, trail->tag_str);
@@ -698,7 +694,7 @@ _set_HTML_tag_data(Eina_List* nodes)
 	{
 		if (!trail->tag)
 			continue;
-		if (!strcmp("font", trail->tag))
+		if (!strcmp("font", trail->tag) || !strcmp("color", trail->tag))
 			trail->tagData = _set_HTML_font_data(trail->tagData, trail->tag_str);
 		else if (!strcmp("img", trail->tag))
 			trail->tagData = _set_HTML_img_data(trail->tagData, trail->tag_str);
@@ -980,9 +976,14 @@ static char *make_close_tag(Eina_List* nodes)
 	{
 		if (trail->tag)
 		{
-			eina_strbuf_append(tag_str, "<");
-			eina_strbuf_append(tag_str, trail->tag);
-			eina_strbuf_append(tag_str, ">");
+			if (trail->tag_str)
+				eina_strbuf_append(tag_str, trail->tag_str);
+			else
+			{
+				eina_strbuf_append(tag_str, "<");
+				eina_strbuf_append(tag_str, trail->tag);
+				eina_strbuf_append(tag_str, ">");
+			}
 		}
 		if (trail->str)
 			eina_strbuf_append(tag_str, trail->str);
