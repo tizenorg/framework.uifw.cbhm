@@ -31,7 +31,7 @@ static char *text_to_efl(AppData *ad, int type_index, const char *str);
 static char *to_text(AppData *ad, int type_index, const char *str);
 static char *image_path_to_html(AppData *ad, int type_index, const char *str);
 static char *image_path_to_efl(AppData *ad, int type_index, const char *str);
-static char *image_path_to_text(AppData *ad, int type_index, const char *str);
+//static char *image_path_to_text(AppData *ad, int type_index, const char *str);
 //static char *efl_to_efl(AppData *ad, int type_index, const char *str);
 //static char *html_to_html(AppData *ad, int type_index, const char *str);
 static char *image_path_to_image_path(AppData *ad, int type_index, const char *str);
@@ -69,7 +69,7 @@ void init_target_atoms(AppData *ad)
 		{NULL, do_not_convert, text_to_html, text_to_efl, NULL},
 		{NULL, to_text, do_not_convert, html_to_efl, NULL},
 		{NULL, to_text, efl_to_html, do_not_convert, NULL},
-		{NULL, image_path_to_text, image_path_to_html, image_path_to_efl, image_path_to_image_path}
+		{NULL, NULL, image_path_to_html, image_path_to_efl, image_path_to_image_path}
 	};
 
 	int i, j;
@@ -1067,11 +1067,13 @@ static char *make_image_path_tag(int type_index, const char *str)
 	return ret;
 }
 
+/*
 static char *image_path_to_text(AppData *ad, int type_index, const char *str)
 {
 	DMSG("str: %s\n", str);
 	return make_image_path_tag(ATOM_INDEX_TEXT, str);
 }
+*/
 
 static char *image_path_to_html(AppData *ad, int type_index, const char *str)
 {
