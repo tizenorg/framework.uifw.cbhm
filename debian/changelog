@@ -1,3 +1,11 @@
+cbhm (0.1.113) unstable; urgency=low
+
+  * Package Upload
+  * Git: slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.113
+
+ -- Jeonghyun Yun <jh0506.yun@samsung.com>  Fri, 27 Apr 2012 13:56:23 +0900
+
 cbhm (0.1.0-112) unstable; urgency=low
 
   * fixed copy&paste error in webkit and S1-2158, S1-2290 issue
