@@ -1,3 +1,19 @@
+cbhm (0.1.0-112) unstable; urgency=low
+
+  * fixed copy&paste error in webkit and S1-2158, S1-2290 issue
+  * Git: slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-112
+
+ -- Minseok Kim <minseok3.kim@samsung.com>  Fri, 20 Apr 2012 17:28:20 +0900
+
+cbhm (0.1.0-111) unstable; urgency=low
+
+  * fixed N_SE-326, N_SE-398, S1-1584 issue 
+  * Git: slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.0-111
+
+ -- Minseok Kim <minseok3.kim@samsung.com>  Fri, 06 Apr 2012 10:08:20 +0900
+
 cbhm (0.1.0-110) unstable; urgency=low
 
   * modified cbhm GUI and replaced tickernotif as notification

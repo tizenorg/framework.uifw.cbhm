@@ -31,7 +31,7 @@ static char *text_to_efl(AppData *ad, int type_index, const char *str);
 static char *to_text(AppData *ad, int type_index, const char *str);
 static char *image_path_to_html(AppData *ad, int type_index, const char *str);
 static char *image_path_to_efl(AppData *ad, int type_index, const char *str);
-static char *image_path_to_text(AppData *ad, int type_index, const char *str);
+//static char *image_path_to_text(AppData *ad, int type_index, const char *str);
 //static char *efl_to_efl(AppData *ad, int type_index, const char *str);
 //static char *html_to_html(AppData *ad, int type_index, const char *str);
 static char *image_path_to_image_path(AppData *ad, int type_index, const char *str);
@@ -69,7 +69,7 @@ void init_target_atoms(AppData *ad)
 		{NULL, do_not_convert, text_to_html, text_to_efl, NULL},
 		{NULL, to_text, do_not_convert, html_to_efl, NULL},
 		{NULL, to_text, efl_to_html, do_not_convert, NULL},
-		{NULL, image_path_to_text, image_path_to_html, image_path_to_efl, image_path_to_image_path}
+		{NULL, NULL, image_path_to_html, image_path_to_efl, image_path_to_image_path}
 	};
 
 	int i, j;
@@ -353,11 +353,7 @@ _get_next_node(PTagNode prev)
 
 	int tagLength = tagNameEnd - tagStart - 1;
 	char *tagName = NULL;
-	if (!strncmp(&tagStart[1], "color", tagLength))
-		tagName = strndup("font", 4);
-	else if (!strncmp(&tagStart[1], "/color", tagLength))
-		tagName = strndup("/font", 5);
-	else if (!strncmp(&tagStart[1], "/item", tagLength))
+	if (!strncmp(&tagStart[1], "/item", tagLength))
 		tagName = strdup("");
 	else
 		tagName = strndup(&tagStart[1], tagLength);
@@ -426,7 +422,7 @@ _link_match_tags(Eina_List *nodes)
 	{
 		if (!trail->tag || trail->tag[0] == '\0')
 			continue;
-		if (!strcmp("br", trail->tag))
+		if (!strcmp("br/", trail->tag))
 		{
 			trail->tagPosType = TAGPOS_ALONE;
 			continue;
@@ -626,7 +622,7 @@ _set_EFL_tag_data(Eina_List* nodes)
 	{
 		if (!trail->tag)
 			continue;
-		if (!strcmp("font", trail->tag))
+		if (!strcmp("font", trail->tag) || !strcmp("color", trail->tag))
 			trail->tagData = _set_EFL_font_data(trail->tagData, trail->tag_str);
 		else if (!strcmp("item", trail->tag))
 			trail->tagData = _set_EFL_item_data(trail->tagData, trail->tag_str);
@@ -698,7 +694,7 @@ _set_HTML_tag_data(Eina_List* nodes)
 	{
 		if (!trail->tag)
 			continue;
-		if (!strcmp("font", trail->tag))
+		if (!strcmp("font", trail->tag) || !strcmp("color", trail->tag))
 			trail->tagData = _set_HTML_font_data(trail->tagData, trail->tag_str);
 		else if (!strcmp("img", trail->tag))
 			trail->tagData = _set_HTML_img_data(trail->tagData, trail->tag_str);
@@ -980,9 +976,14 @@ static char *make_close_tag(Eina_List* nodes)
 	{
 		if (trail->tag)
 		{
-			eina_strbuf_append(tag_str, "<");
-			eina_strbuf_append(tag_str, trail->tag);
-			eina_strbuf_append(tag_str, ">");
+			if (trail->tag_str)
+				eina_strbuf_append(tag_str, trail->tag_str);
+			else
+			{
+				eina_strbuf_append(tag_str, "<");
+				eina_strbuf_append(tag_str, trail->tag);
+				eina_strbuf_append(tag_str, ">");
+			}
 		}
 		if (trail->str)
 			eina_strbuf_append(tag_str, trail->str);
@@ -1066,11 +1067,13 @@ static char *make_image_path_tag(int type_index, const char *str)
 	return ret;
 }
 
+/*
 static char *image_path_to_text(AppData *ad, int type_index, const char *str)
 {
 	DMSG("str: %s\n", str);
 	return make_image_path_tag(ATOM_INDEX_TEXT, str);
 }
+*/
 
 static char *image_path_to_html(AppData *ad, int type_index, const char *str)
 {
