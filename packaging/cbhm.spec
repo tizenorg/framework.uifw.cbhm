@@ -7,7 +7,6 @@ Group:      TO_BE/FILLED_IN
 License:    Proprietary
 Source0:    %{name}-%{version}.tar.gz
 BuildRequires:  cmake
-BuildRequires:  x11-xserver-utils-ex
 BuildRequires:  pkgconfig(elementary)
 BuildRequires:  pkgconfig(appcore-efl)
 BuildRequires:  pkgconfig(appcore-common)
