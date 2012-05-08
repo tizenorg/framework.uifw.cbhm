@@ -19,8 +19,8 @@
 	group { 
 		name: "elm/check/base/extended/itemcheck";
      	   	images {
-                	image: "clipboard_button_delete.png" COMP;
-                	image: "clipboard_button_delete_press.png" COMP;
+                	image: "B12_button_delete.png" COMP;
+                	image: "B12_button_delete_press.png" COMP;
      	   	}
 		parts {
 			part { 
@@ -69,7 +69,7 @@
 					rel2.to: "bg2";
 					visible: 1;
 					image {
-						normal: "clipboard_button_delete.png";
+						normal: "B12_button_delete.png";
 						//border: 16 12 14 14;
 						//middle: 1;
 						//border_scale: 1;
@@ -84,7 +84,7 @@
 				description { state: "pressed" 0.0;
 					inherit: "default" 0.0;
 					image {
-						normal: "clipboard_button_delete_press.png";
+						normal: "B12_button_delete_press.png";
 					}
 				}
 				description { state: "visible_pressed" 0.0;
@@ -237,8 +237,8 @@ group
 {
         name: "elm/gengrid/widestyle/horizontal_layout";
 	images {
-		image: "clipboard_button_delete.png" COMP;
-		image: "clipboard_button_delete_press.png" COMP;
+		image: "B12_button_delete.png" COMP;
+		image: "B12_button_delete_press.png" COMP;
 	}
 
         parts {
@@ -249,9 +249,8 @@ group
                         scale: 1;
                         description {
                                 state: "default" 0.0;
-                                rel1 { relative: 0.0 0.0; offset: 0 0; }
-                                rel2 { relative: 1.0 1.0; offset: -2 -2; }
-                                //rel2 { relative: 1.0 1.0; offset: -1 -1; }
+                                rel1 { relative: 0.0 0.0; }
+                                rel2 { relative: 1.0 1.0; }
                                 color: 0 0 0 0;
                         }
                 }
@@ -263,12 +262,9 @@ group
 			mouse_events: 0;
                         description {
                                 state: "default" 0.0;
-                                //color: 255 255 255 255;
-                                color: 0 0 0 0;
+                                color: 255 255 255 255;
                                 rel1 { relative: 0.0 0.0; to: "bg"; }
                                 rel2 { relative: 1.0 1.0; to: "bg"; }
-                                //rel1 { relative: (((W-PL)/2)/W) (((H-PS)/2)/H); to: "bg"; }
-                                //rel2 { relative: ((W-(W-PL)/2)/W) ((H-(H-PS)/2)/H); to: "bg"; }
                         }
                 }
 
@@ -279,10 +275,8 @@ group
 			mouse_events: 0;
                         description {
                                 state: "default" 0.0;
-                                rel1 { relative: 0.0 0.0; offset: INNER 0; to: "icon_bg"; }
-                                rel2 { relative: 1.0 1.0; offset: (-INNER-1) 0; to: "icon_bg"; }
-                                //rel1 { relative: 0.0 0.0; offset: INNER INNER; to: "icon_bg"; }
-                                //rel2 { relative: 1.0 1.0; offset: (-INNER-1) (-INNER-1); to: "icon_bg"; }
+                                rel1 { relative: 0.0 0.0; offset: 1 1; to: "icon_bg"; }
+                                rel2 { relative: 1.0 1.0; offset: -2 -2; to: "icon_bg"; }
                         }
                 }
                 part {
@@ -328,17 +322,19 @@ group
 		part {
 			name: "delbtn";
 			type: RECT;
-			mouse_events: 1;
+			mouse_events: 0;
 			scale: 1;
 			description {
 				state: "default" 0.0;
 				rel1.to: "elm.swallow.icon";
+				rel1.offset: -3 3;
 				rel2.to: "elm.swallow.icon";
+				rel2.offset: -3 3;
 				align: 1.0 0.0;
-				min: 46 40;
-				max: 46 40;
+				min: 60 58;
+				max: 60 58;
 				color:  0 0 0 0;
-				visible: 1;
+				visible: 0;
 			}
 		}
 		part { 
@@ -351,14 +347,14 @@ group
 				rel2.to: "delbtn";
 				visible: 1;
 				image {
-					normal: "clipboard_button_delete.png";
+					normal: "B12_button_delete.png";
 				}
 			}
 			description { 
 				state: "pressed" 0.0;
 				inherit: "default" 0.0;
 				image {
-					normal: "clipboard_button_delete_press.png";
+					normal: "B12_button_delete_press.png";
 				}
 			}
 			description { 

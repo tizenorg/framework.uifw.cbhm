@@ -1216,7 +1216,7 @@ static char *text_to_entry(AppData *ad, int type_index, const char *str)
 {
 	DMSG("str: %s\n", str);
 	char *markup = NULL;
-	markup = _elm_util_text_to_mkup(str);
+	markup = (char*)_elm_util_text_to_mkup(str);
 	char *for_entry = markup_to_entry(ad, type_index, markup);
 	FREE(markup);
 	return for_entry;
@@ -1293,7 +1293,7 @@ static char *text_to_html(AppData *ad, int type_index, const char *str)
 {
 	DMSG("str: %s\n", str);
 	char *markup = NULL;
-	markup = _elm_util_text_to_mkup(str);
+	markup = (char*)_elm_util_text_to_mkup(str);
 	char *html = efl_to_html(ad, ATOM_INDEX_EFL, markup);
 	FREE(markup);
 	return html;
@@ -1303,7 +1303,7 @@ static char *text_to_efl(AppData *ad, int type_index, const char *str)
 {
 	DMSG("str: %s\n", str);
 	char *ret = NULL;
-	ret = _elm_util_text_to_mkup(str);
+	ret = (char*)_elm_util_text_to_mkup(str);
 	return ret;
 }
 
@@ -1321,13 +1321,13 @@ static char *to_text(AppData *ad, int type_index, const char *str)
 			eina_strbuf_replace_all(buf, "&nbsp;", " ");
 			html = eina_strbuf_string_steal(buf);
 			eina_strbuf_free(buf);
-			text = _elm_util_mkup_to_text(html);
+			text = (char*)_elm_util_mkup_to_text(html);
 			free(html);
 			return text;
 		}
 	}
 
-	text = _elm_util_mkup_to_text(str);
+	text = (char*)_elm_util_mkup_to_text(str);
 	return text;
 }
 

@@ -52,9 +52,13 @@ struct _ClipdrawerData {
 
 #include "cbhm.h"
 
+Eina_Bool delete_mode;
+
 void set_rotation_to_clipdrawer(ClipdrawerData *ad);
 void clipdrawer_activate_view(AppData* ad);
 void clipdrawer_lower_view(AppData* ad);
 ClipdrawerData *init_clipdrawer(AppData *ad);
 void depose_clipdrawer(ClipdrawerData *cd);
+void _delete_mode_set(AppData *ad, Eina_Bool del_mode);
+
 #endif // _CLIPDRAWER_H_
