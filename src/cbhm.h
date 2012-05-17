@@ -86,7 +86,7 @@ void *d_malloc(char *func, int line, size_t size);
 void *d_calloc(char *func, int line, size_t n, size_t size);
 void d_free(char *func, int line, void *m);
 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #define DTRACE(fmt, args...) \
@@ -105,6 +105,7 @@ void d_free(char *func, int line, void *m);
 #define FREE(p) free(p)
 #endif
 #else
+#define DTRACE(fmt, args...)
 #define DMSG(fmt, args...)
 #define CALLED()
 #define DTIME(fmt, args...)

@@ -33,7 +33,7 @@ static CNP_ITEM *storage_item_load(StorageData *sd, int index);
 #ifdef DEBUG
 static void dump_items(StorageData *sd);
 #else
-#define dunp_items(a)
+#define dump_items(a)
 #endif
 
 static int getMinIndex(indexType *indexTable, int len)
