@@ -1,3 +1,11 @@
+cbhm (0.1.115) unstable; urgency=low
+
+  * remove debug message(S1-3110)
+  * Git: slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.115
+
+ -- Minseok Kim <minseok3.kim@samsung.com>  Tue, 18 May 2012 16:04:20 +0900
+
 cbhm (0.1.114) unstable; urgency=low
 
   * modify cbhm GUI
