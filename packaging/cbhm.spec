@@ -6,6 +6,7 @@ Release:    1
 Group:      TO_BE/FILLED_IN
 License:    Proprietary
 Source0:    %{name}-%{version}.tar.gz
+Source1001: packaging/cbhm.manifest 
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(elementary)
 BuildRequires:  pkgconfig(appcore-efl)
@@ -33,6 +34,7 @@ cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
 
 
 %build
+cp %{SOURCE1001} .
 make %{?jobs:-j%jobs}
 
 
@@ -52,6 +54,7 @@ sync
 
 
 %files
+%manifest cbhm.manifest
 %defattr(-,root,root,-)
 %{_sysconfdir}/init.d/cbhm
 %{_bindir}/cbhm
