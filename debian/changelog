@@ -1,3 +1,11 @@
+cbhm (0.1.116) unstable; urgency=low
+
+  * remove delete popup 
+  * Git: slp/pkgs/c/cbhm
+  * Tag: cbhm_0.1.116
+
+ -- Minseok Kim <minseok3.kim@samsung.com>  Tue, 19 Jun 2012 16:04:20 +0900
+
 cbhm (0.1.115) unstable; urgency=low
 
   * remove debug message(S1-3110)
