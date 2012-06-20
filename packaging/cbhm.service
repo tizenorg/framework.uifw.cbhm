@@ -1,0 +1,13 @@
+
+[Unit]
+Description=Start the cbhm service
+After=xorg.target
+
+[Service]
+ExecStart=/usr/bin/cbhm
+Nice=5
+OOMScoreAdjust=100
+
+[Install]
+WantedBy=tizen-mobile.target
+

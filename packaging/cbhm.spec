@@ -7,6 +7,7 @@ Group:      TO_BE/FILLED_IN
 License:    Proprietary
 Source0:    %{name}-%{version}.tar.gz
 Source1001: packaging/cbhm.manifest 
+Source1:    cbhm.service
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(elementary)
 BuildRequires:  pkgconfig(appcore-efl)
@@ -30,10 +31,10 @@ Description: cbhm application
 
 %prep
 %setup -q
-cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
 
 
 %build
+cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
 cp %{SOURCE1001} .
 make %{?jobs:-j%jobs}
 
@@ -42,21 +43,22 @@ make %{?jobs:-j%jobs}
 rm -rf %{buildroot}
 %make_install
 
+mkdir -p %{buildroot}%{_libdir}/systemd/user/tizen-mobile.target.wants
+install -m 0644 %SOURCE1 %{buildroot}%{_libdir}/systemd/user/cbhm.service
+ln -s ../cbhm.service %{buildroot}%{_libdir}/systemd/user/tizen-mobile.target.wants/cbhm.service
 
-%preun
-rm /etc/rc.d/rc3.d/S95cbhm
-sync
-
-
-%post
-ln -s /etc/init.d/cbhm /etc/rc.d/rc3.d/S95cbhm
-sync
+mkdir -p %{buildroot}/etc/rc.d/rc3.d
+ln -sf ../../init.d/cbhm %{buildroot}/etc/rc.d/rc3.d/S95cbhm
 
 
 %files
 %manifest cbhm.manifest
 %defattr(-,root,root,-)
 %{_sysconfdir}/init.d/cbhm
+%{_sysconfdir}/rc.d/rc3.d/S95cbhm
 %{_bindir}/cbhm
 %{_datadir}/cbhm/icons/cbhm_default_img.png
 %{_datadir}/edje/cbhmdrawer.edj
+%{_libdir}/systemd/user/cbhm.service
+%{_libdir}/systemd/user/tizen-mobile.target.wants/cbhm.service
+
