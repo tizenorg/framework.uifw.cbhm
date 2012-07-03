@@ -117,20 +117,24 @@ static Eina_Bool targets_converter(AppData *ad, Ecore_X_Atom reqAtom, CNP_ITEM *
 	int count;
 	int i, j;
 
+	int item_type_index = ATOM_INDEX_TEXT;
+	if (item)
+		item_type_index = item->type_index;
+
 	for (i = 0, count = 0; i < ATOM_INDEX_MAX; i++)
 	{
-		if (ad->targetAtoms[item->type_index].convert_to_target[i])
+		if (ad->targetAtoms[item_type_index].convert_to_target[i])
 			count += ad->targetAtoms[i].atom_cnt;
 	}
 
 	*data_ret = MALLOC(sizeof(Ecore_X_Atom) * count);
-	DMSG("item_type: %d, target Atom cnt: %d\n", item->type_index, count);
+	DMSG("item_type: %d, target Atom cnt: %d\n", item_type_index, count);
 	if (!*data_ret)
 		return EINA_FALSE;
 
 	for (i = 0, count = 0; i < ATOM_INDEX_MAX; i++)
 	{
-		if (ad->targetAtoms[item->type_index].convert_to_target[i])
+		if (ad->targetAtoms[item_type_index].convert_to_target[i])
 		{
 			for(j = 0; j < ad->targetAtoms[i].atom_cnt; j++)
 			{
@@ -154,15 +158,21 @@ Eina_Bool generic_converter(AppData *ad, Ecore_X_Atom reqAtom, CNP_ITEM *item, v
 		return targets_converter(ad, reqAtom, item, data_ret, size_ret, ttype, tsize);
 
 	int req_index = atom_type_index_get(ad, reqAtom);
-	int type_index = item->type_index;
-
-	if (ad->targetAtoms[type_index].convert_to_target[req_index])
+	int item_type_index = ATOM_INDEX_TEXT;
+	void *item_data = "";
+	if (item)
 	{
-		*data_ret = ad->targetAtoms[type_index].convert_to_target[req_index](ad, type_index, item->data);
+		item_type_index = item->type_index;
+		item_data = item->data;
+	}
+
+	if (ad->targetAtoms[item_type_index].convert_to_target[req_index])
+	{
+		*data_ret = ad->targetAtoms[item_type_index].convert_to_target[req_index](ad, item_type_index, item_data);
 		if (!*data_ret)
 			return EINA_FALSE;
 		if (size_ret) *size_ret = strlen(*data_ret);
-		if (ttype) *ttype = ad->targetAtoms[item->type_index].atom[0];
+		if (ttype) *ttype = ad->targetAtoms[item_type_index].atom[0];
 		if (tsize) *tsize = 8;
 		return EINA_TRUE;
 	}

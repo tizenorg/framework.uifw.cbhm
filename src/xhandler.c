@@ -151,10 +151,6 @@ static Eina_Bool _xsel_request_cb(void *data, int type, void *event)
 	else
 		return ECORE_CALLBACK_PASS_ON;
 
-	if (!item)
-		return ECORE_CALLBACK_PASS_ON;
-
-
 	Ecore_X_Atom property = None;
 	void *data_ret = NULL;
 	int size_ret;
