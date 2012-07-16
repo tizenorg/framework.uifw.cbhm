@@ -50,6 +50,9 @@ struct _XHandlerData {
 XHandlerData *init_xhandler(AppData *data);
 void depose_xhandler(XHandlerData *xd);
 Eina_Bool set_selection_owner(AppData *ad, Ecore_X_Selection selection, CNP_ITEM *item);
-#define SELECTION_CHECK_TIME 2.5
+void slot_property_set(AppData *ad, int index);
+void slot_item_count_set(AppData *ad);
+
+#define SELECTION_CHECK_TIME 10.0
 
 #endif

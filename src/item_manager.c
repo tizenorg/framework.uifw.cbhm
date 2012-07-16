@@ -17,8 +17,6 @@
 
 #include "item_manager.h"
 
-#define ITEM_CNT_MAX 12
-
 static void item_free(CNP_ITEM *item)
 {
 	CALLED();
@@ -65,6 +63,9 @@ CNP_ITEM *item_add_by_CNP_ITEM(AppData *ad, CNP_ITEM *item)
 		ad->item_list = eina_list_remove(ad->item_list, ditem);
 		item_free(ditem);
 	}
+
+	slot_property_set(ad, -1);
+	slot_item_count_set(ad);
 
 	return item;
 }
@@ -140,6 +141,8 @@ void item_delete_by_CNP_ITEM(AppData *ad, CNP_ITEM *item)
 	DMSG("item: 0x%x, item->gitem: 0x%x\n", item, item->gitem);
 	ad->item_list = eina_list_remove(ad->item_list, item);
 	item_free(item);
+	slot_property_set(ad, -1);
+	slot_item_count_set(ad);
 }
 
 void item_delete_by_data(AppData *ad, void *data)

@@ -114,4 +114,6 @@ void d_free(char *func, int line, void *m);
 #define FREE(p) free(p)
 #endif
 
+#define ITEM_CNT_MAX 12
+
 #endif // _CBHM_H_

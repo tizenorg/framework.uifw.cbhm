@@ -501,6 +501,57 @@ static Eina_Bool _xclient_msg_cb(void *data, int type, void *event)
 					item->data, item->len);
 		}
 	}
+	else if (strncmp("SET_ITEM", ev->data.b, 8) == 0)
+	{
+		int ret = 0;
+		int size_ret = 0;
+		int num_ret = 0;
+		long unsigned int bytes = 0;
+		unsigned char *item_data = NULL;
+		unsigned char *prop_ret = NULL;
+		Ecore_X_Atom format = 0;
+		int i;
+		xd->atomCBHM_ITEM = ecore_x_atom_get("CBHM_ITEM");
+		ret = XGetWindowProperty(ecore_x_display_get(), ad->x_event_win, xd->atomCBHM_ITEM, 0, LONG_MAX, False, ecore_x_window_prop_any_type(),
+				(Atom*)&format, &size_ret, &num_ret, &bytes, &prop_ret);
+		if (ret != Success)
+		{
+			DMSG("Failed Set Item\n");
+			return EINA_FALSE;
+		}
+		if (!num_ret)
+		{
+			XFree(prop_ret);
+			return EINA_FALSE;
+		}
+
+		if (!(item_data = malloc(num_ret * size_ret / 8)))
+		{
+			XFree(item_data);
+			return EINA_FALSE;
+		}
+
+		switch (size_ret)
+		{
+			case 8:
+				for (i = 0; i < num_ret; i++)
+					item_data[i] = prop_ret[i];
+				break;
+			case 16:
+				for (i = 0; i < num_ret; i++)
+					((unsigned short *)item_data)[i] = ((unsigned short *)prop_ret)[i];
+				break;
+			case 32:
+				for (i = 0; i < num_ret; i++)
+					((unsigned int *)item_data)[i] = ((unsigned long *)prop_ret)[i];
+				break;
+		}
+
+		XFree(prop_ret);
+
+		DMSG("item_data:%s format:%s(%d)\n", item_data, ecore_x_atom_name_get(format), format);
+		item_add_by_data(ad, format, item_data, strlen(item_data) + 1);
+	}
 /*	else if (strncmp("get #", ev->data.b, 5) == 0)
 	{
 		// FIXME : handle greater than 9
@@ -631,6 +682,15 @@ XHandlerData *init_xhandler(AppData *ad)
 	xd->atomXKey_MSG = ecore_x_atom_get("_XKEY_COMPOSITION");
 	xd->atomCBHMCount = ecore_x_atom_get("CBHM_cCOUNT");
 	xd->atomUTF8String = ecore_x_atom_get("UTF8_STRING");
+
+	int i;
+	for (i = 0; i < ITEM_CNT_MAX; i++)
+	{
+		char buf[12];
+		snprintf(buf, sizeof(buf), "CBHM_ITEM%d", i);
+		xd->atomCBHM_ITEM = ecore_x_atom_get(buf);
+	}
+
 	return xd;
 }
 
@@ -659,4 +719,95 @@ int get_active_window_degree(Ecore_X_Window active)
 	if (ret && prop_data) memcpy(&rotation, prop_data, sizeof(int));
 	if (prop_data) FREE(prop_data);
 	return rotation;
+}
+
+void slot_property_set(AppData *ad, int index)
+{
+	XHandlerData *xd = ad->xhandler;
+
+	if (index < 0)
+	{
+		int i = 0;
+		char buf[12];
+		CNP_ITEM *item;
+		Eina_List *l;
+
+		EINA_LIST_FOREACH(ad->item_list, l, item)
+		{
+			snprintf(buf, sizeof(buf), "CBHM_ITEM%d", i);
+			xd->atomCBHM_ITEM = ecore_x_atom_get(buf);
+			if (item)
+			{
+				ecore_x_window_prop_property_set(
+					ad->x_event_win,
+					xd->atomCBHM_ITEM,
+					ad->targetAtoms[item->type_index].atom[0],
+					8,
+					item->data,
+					item->len);
+			DMSG("GET ITEM index: %d, item type: %d, item data: %s, item->len: %d\n",
+					i, ad->targetAtoms[item->type_index].atom[0],
+					item->data, item->len);
+			}
+
+			i++;
+		}
+	}
+	else if (index < ITEM_CNT_MAX)
+	{
+		char buf[12];
+		snprintf(buf, sizeof(buf), "CBHM_ITEM%d", index);
+		xd->atomCBHM_ITEM = ecore_x_atom_get(buf);
+
+		CNP_ITEM *item = item_get_by_index(ad, index);
+		if (!item)
+		{
+			Ecore_X_Atom itemtype = ecore_x_atom_get("CBHM_ERROR");
+
+			char error_buf[] = "OUT OF BOUND";
+			int bufsize = sizeof(error_buf);
+			ecore_x_window_prop_property_set(
+					ad->x_event_win,
+					xd->atomCBHM_ITEM,
+					itemtype,
+					8,
+					error_buf,
+					bufsize);
+			DMSG("CBHM Error: index: %d, item count: %d\n",
+					index, item_count_get(ad));
+		}
+		else
+		{
+			ecore_x_window_prop_property_set(
+					ad->x_event_win,
+					xd->atomCBHM_ITEM,
+					ad->targetAtoms[item->type_index].atom[0],
+					8,
+					item->data,
+					item->len);
+			DMSG("GET ITEM index: %d, item type: %d, item data: %s, item->len: %d\n",
+					index, ad->targetAtoms[item->type_index].atom[0],
+					item->data, item->len);
+		}
+	}
+	else
+	{
+		DMSG("can't set property\n");
+	}
+}
+
+void slot_item_count_set(AppData *ad)
+{
+	XHandlerData *xd = ad->xhandler;
+
+	int icount = item_count_get(ad);
+	char countbuf[10];
+	snprintf(countbuf, 10, "%d", icount);
+	ecore_x_window_prop_property_set(
+			ad->x_event_win,
+			xd->atomCBHMCount,
+			xd->atomUTF8String,
+			8,
+			countbuf,
+			strlen(countbuf));
 }
