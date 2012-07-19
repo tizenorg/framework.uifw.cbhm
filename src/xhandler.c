@@ -143,13 +143,26 @@ static Eina_Bool _xsel_request_cb(void *data, int type, void *event)
 	FREE(names[2]);
 #endif
 
-	CNP_ITEM *item;
+	CNP_ITEM *item = NULL;
 	if (ev->selection == ECORE_X_ATOM_SELECTION_CLIPBOARD)
 		item = item_get_last(ad);
 	else if (ev->selection == ECORE_X_ATOM_SELECTION_SECONDARY)
 		item = ad->clip_selected_item;
 	else
 		return ECORE_CALLBACK_PASS_ON;
+
+	if (!item)
+	{
+		DMSG("has no item\n");
+		ecore_x_selection_notify_send(ev->requestor,
+				ev->selection,
+				None,
+				None,
+				CurrentTime);
+		DMSG("change property notify\n");
+		ecore_x_flush();
+		return ECORE_CALLBACK_DONE;
+	}
 
 	Ecore_X_Atom property = None;
 	void *data_ret = NULL;
