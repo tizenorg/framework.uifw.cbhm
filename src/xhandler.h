@@ -53,6 +53,6 @@ Eina_Bool set_selection_owner(AppData *ad, Ecore_X_Selection selection, CNP_ITEM
 void slot_property_set(AppData *ad, int index);
 void slot_item_count_set(AppData *ad);
 
-#define SELECTION_CHECK_TIME 15.0
+#define SELECTION_CHECK_TIME 10.0
 
 #endif

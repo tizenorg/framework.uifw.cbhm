@@ -200,6 +200,7 @@ TagTable _EFLtoHTMLConvertTable[] = {
 	{"underline", "del"},
 	{"strikethrough", "ins"},
 	{"br", "br"},
+	{"br/", "br"},
 	{"ps", "br"},
 	{"b", "b"},
 	{"item", "img"}

@@ -372,8 +372,9 @@ static Eina_Bool _xsel_notify_cb(void *data, int type, void *event)
 		case ECORE_X_SELECTION_CONTENT_TARGETS:
 			DMSG("ECORE_X_SELECTION_CONTENT_TARGETS\n");
 			send_convert_selection_target(ad, ev->data);
-			goto set_clipboard_selection_owner;
-			break;
+			if (!is_cbhm_selection_owner(ad, ECORE_X_SELECTION_CLIPBOARD))
+				xd->selection_timer = ecore_timer_add(SELECTION_CHECK_TIME, selection_timer_cb, ad);
+			return ECORE_CALLBACK_DONE;
 		case ECORE_X_SELECTION_CONTENT_CUSTOM:
 			DMSG("ECORE_X_SELECTION_CONTENT_CUSTOM\n");
 			break;
