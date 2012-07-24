@@ -4,7 +4,7 @@ Summary:    cbhm application
 Version:    0.1.108
 Release:    1
 Group:      TO_BE/FILLED_IN
-License:    Proprietary
+License:    Flora Software License
 Source0:    %{name}-%{version}.tar.gz
 Source1001: packaging/cbhm.manifest 
 Source1:    cbhm.service
