@@ -469,7 +469,7 @@ static Eina_Bool _xclient_msg_cb(void *data, int type, void *event)
 				xd->atomUTF8String,
 				8,
 				countbuf,
-				strlen(countbuf));
+				strlen(countbuf)+1);
 	}
 	/* for OSP */
 	else if (strncmp("GET_ITEM", ev->data.b, 8) == 0)
@@ -823,5 +823,5 @@ void slot_item_count_set(AppData *ad)
 			xd->atomUTF8String,
 			8,
 			countbuf,
-			strlen(countbuf));
+			strlen(countbuf)+1);
 }

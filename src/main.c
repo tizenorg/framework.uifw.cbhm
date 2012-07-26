@@ -115,6 +115,7 @@ static int app_create(void *data)
 	if (!(ad->xhandler = init_xhandler(ad))) return EXIT_FAILURE;
 	if (!(ad->screencapture = init_screencapture(ad))) return EXIT_FAILURE;
 	if (!(ad->storage = init_storage(ad))) return EXIT_FAILURE;
+	slot_item_count_set(ad);
 
 	set_selection_owner(ad, ECORE_X_SELECTION_CLIPBOARD, NULL);
 	return 0;
