@@ -687,6 +687,7 @@ void clipdrawer_activate_view(AppData* ad)
 		cd->o_degree = get_active_window_degree(ad->x_active_win);
 		elm_win_rotation_set(cd->main_win, cd->o_degree);
 		set_rotation_to_clipdrawer(cd);
+		evas_object_show(cd->main_win);
 		elm_win_activate(cd->main_win);
 		clipdrawer_anim_effect(ad, SHOW_ANIM);
 	}
