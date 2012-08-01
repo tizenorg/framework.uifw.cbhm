@@ -528,6 +528,7 @@ static Eina_Bool _xclient_msg_cb(void *data, int type, void *event)
 		xd->atomCBHM_ITEM = ecore_x_atom_get("CBHM_ITEM");
 		ret = XGetWindowProperty(ecore_x_display_get(), ad->x_event_win, xd->atomCBHM_ITEM, 0, LONG_MAX, False, ecore_x_window_prop_any_type(),
 				(Atom*)&format, &size_ret, &num_ret, &bytes, &prop_ret);
+		ecore_x_sync();
 		if (ret != Success)
 		{
 			DMSG("Failed Set Item\n");

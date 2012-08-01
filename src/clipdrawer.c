@@ -26,19 +26,8 @@
 
 #define ANIM_DURATION 30 // 1 seconds
 #define ANIM_FLOPS (0.5/30)
-#define CLIPDRAWER_HEIGHT 360
-#define CLIPDRAWER_HEIGHT_LANDSCAPE 228
 #define DEFAULT_WIDTH 720
-#define GRID_ITEM_SPACE_W 6
-#define GRID_ITEM_SINGLE_W 185
-#define GRID_ITEM_SINGLE_H 140
-#define GRID_ITEM_W (GRID_ITEM_SINGLE_W+(GRID_ITEM_SPACE_W*2))
-#define GRID_ITEM_H (GRID_ITEM_SINGLE_H)
-#define GRID_IMAGE_LIMIT_W 91
-#define GRID_IMAGE_LIMIT_H 113
 #define GRID_IMAGE_INNER 10
-#define GRID_IMAGE_REAL_W (GRID_ITEM_SINGLE_W - (2*GRID_IMAGE_INNER))
-#define GRID_IMAGE_REAL_H (GRID_ITEM_SINGLE_H - (2*GRID_IMAGE_INNER))
 
 static Evas_Object *create_win(ClipdrawerData *cd, const char *name);
 static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *part);
@@ -143,6 +132,23 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 		return NULL;
 	}
 
+	Evas_Object* ly = elm_layout_edje_get(cd->main_layout);
+	if (cd->root_w == DEFAULT_WIDTH)
+	{
+		cd->height = atoi(edje_object_data_get(ly, "proxima_clipdrawer_height"));
+		cd->landscape_height = atoi(edje_object_data_get(ly, "proxima_clipdrawer_landscape_height"));
+		cd->grid_item_w = atoi(edje_object_data_get(ly, "proxima_grid_item_w"));
+		cd->grid_item_h = atoi(edje_object_data_get(ly, "proxima_grid_item_h"));
+	}
+	else
+	{
+		cd->height = atoi(edje_object_data_get(ly, "u1_clipdrawer_height"));
+		cd->landscape_height = atoi(edje_object_data_get(ly, "u1_clipdrawer_landscape_height"));
+		cd->grid_item_w = atoi(edje_object_data_get(ly, "u1_grid_item_w"));
+		cd->grid_item_h = atoi(edje_object_data_get(ly, "u1_grid_item_h"));
+	}
+	printf("height: %d , land_height:%d\n", cd->height, cd->landscape_height);
+
 	/* create and setting gengrid */
 	elm_theme_extension_add(NULL, APP_EDJ_FILE);
 	edje_object_signal_callback_add(elm_layout_edje_get(cd->main_layout),
@@ -153,7 +159,7 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 
 	cd->gengrid = elm_gengrid_add(cd->main_win);
 	elm_object_part_content_set(cd->main_layout, "historyitems", cd->gengrid);
-	elm_gengrid_item_size_set(cd->gengrid, GRID_ITEM_W, GRID_ITEM_H);
+	elm_gengrid_item_size_set(cd->gengrid, cd->grid_item_w, cd->grid_item_h);
 	elm_gengrid_align_set(cd->gengrid, 0.5, 0.0);
 	elm_gengrid_horizontal_set(cd->gengrid, EINA_TRUE);
 	elm_gengrid_bounce_set(cd->gengrid, EINA_TRUE, EINA_FALSE);
@@ -247,22 +253,26 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 
 
 		Evas_Object *sicon;
+		int grid_image_real_w;
+		int grid_image_real_h;
+		grid_image_real_w = cd->grid_item_w - (2*GRID_IMAGE_INNER);
+		grid_image_real_h = cd->grid_item_h - (2*GRID_IMAGE_INNER);
 		sicon = evas_object_image_add(evas_object_evas_get(obj));
-		evas_object_image_load_size_set(sicon, GRID_IMAGE_REAL_W, GRID_IMAGE_REAL_H);
+		evas_object_image_load_size_set(sicon, grid_image_real_w, grid_image_real_h);
 		evas_object_image_file_set(sicon, item->data, NULL);
 		evas_object_image_size_get(sicon, &w, &h);
 
-		if (w > GRID_IMAGE_REAL_W || h > GRID_IMAGE_REAL_H)
+		if (w > grid_image_real_w || h > grid_image_real_h)
 		{
 			if (w >= h)
 			{
-				iw = GRID_IMAGE_REAL_W;
-				ih = (float)GRID_IMAGE_REAL_W / w * h;
+				iw = grid_image_real_w;
+				ih = (float)grid_image_real_w / w * h;
 			}
 			else
 			{
-				iw = (float)GRID_IMAGE_REAL_H / h * w;
-				ih = GRID_IMAGE_REAL_H;
+				iw = (float)grid_image_real_h / h * w;
+				ih = grid_image_real_h;
 			}
 		}
 		else
@@ -290,7 +300,7 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 		edje_object_signal_callback_add(elm_layout_edje_get(layout), 
 				"mouse,up,1", "*", _grid_item_ly_clicked, data);
 		Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(obj));
-		evas_object_resize(rect, GRID_ITEM_W, GRID_ITEM_H);
+		evas_object_resize(rect, cd->grid_item_w, cd->grid_item_h);
 		evas_object_color_set(rect, 237, 233, 208, 255);
 		evas_object_show(rect);
 		elm_object_part_content_set(layout, "elm.swallow.icon", rect);
@@ -461,14 +471,14 @@ static void set_sliding_win_geometry(ClipdrawerData *cd)
 
 	if (cd->o_degree == 90 || cd->o_degree == 270)
 	{
-		h = cd->anim_count * CLIPDRAWER_HEIGHT_LANDSCAPE / ANIM_DURATION;
+		h = cd->anim_count * cd->landscape_height / ANIM_DURATION;
 		x = 0;
 		y = cd->root_w - h;
 		w = cd->root_h;
 	}
 	else
 	{
-		h = cd->anim_count * CLIPDRAWER_HEIGHT / ANIM_DURATION;
+		h = cd->anim_count * cd->height / ANIM_DURATION;
 		x = 0;
 		y = cd->root_h - h;
 		w = cd->root_w;
@@ -495,28 +505,28 @@ void set_rotation_to_clipdrawer(ClipdrawerData *cd)
 
 	if (angle == 180) // reverse
 	{
-		h = CLIPDRAWER_HEIGHT;
+		h = cd->height;
 		x = 0;
 		y = 0;
 		w = cd->root_w;
 	}
 	else if (angle == 90) // right rotate
 	{
-		h = CLIPDRAWER_HEIGHT_LANDSCAPE;
+		h = cd->landscape_height;
 		x = cd->root_w - h;
 		y = 0;
 		w = cd->root_h;
 	}
 	else if (angle == 270) // left rotate
 	{
-		h = CLIPDRAWER_HEIGHT_LANDSCAPE;
+		h = cd->landscape_height;
 		x = 0;
 		y = 0;
 		w = cd->root_h;
 	}
 	else // angle == 0
 	{
-		h = CLIPDRAWER_HEIGHT;
+		h = cd->height;
 		x = 0;
 		y = cd->root_h - h;
 		w = cd->root_w;
@@ -538,23 +548,23 @@ static Eina_Bool _get_anim_pos(ClipdrawerData *cd, int *sp, int *ep)
 
 	if (angle == 180) // reverse
 	{
-		anim_start = -(cd->root_h - CLIPDRAWER_HEIGHT);
+		anim_start = -(cd->root_h - cd->height);
 		anim_end = 0;
 	}
 	else if (angle == 90) // right rotate
 	{
 		anim_start = cd->root_w;
-		anim_end = anim_start - CLIPDRAWER_HEIGHT_LANDSCAPE;
+		anim_end = anim_start - cd->landscape_height;
 	}
 	else if (angle == 270) // left rotate
 	{
-		anim_start = -(cd->root_w - CLIPDRAWER_HEIGHT_LANDSCAPE);
+		anim_start = -(cd->root_w - cd->landscape_height);
 		anim_end = 0;
 	}
 	else // angle == 0
 	{
 		anim_start = cd->root_h;
-		anim_end = anim_start - CLIPDRAWER_HEIGHT;
+		anim_end = anim_start - cd->height;
 	}
 
 	*sp = anim_start;

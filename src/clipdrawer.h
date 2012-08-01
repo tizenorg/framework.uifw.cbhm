@@ -41,6 +41,11 @@ struct _ClipdrawerData {
 	int root_w;
 	int root_h;
 
+	int height;
+	int landscape_height;
+	int grid_item_w;
+	int grid_item_h;
+
 	Ecore_Event_Handler *keydown_handler;
 	Evas *evas;
 

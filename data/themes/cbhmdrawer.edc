@@ -26,8 +26,6 @@ collections
 	group 
 	{
 		name: "cbhmdrawer";
-		//min: MAIN_W MAIN_H;
-		//max: MAIN_W MAIN_H;
 		images
 		{
 				image: "B12_panel_title_bg.png" COMP;
@@ -35,12 +33,19 @@ collections
 		   		image: "B12_panel_icon_delete.png" COMP;
 				image: "B12_panel_icon_arrow.png" COMP;
 		}
+		data.item: "u1_clipdrawer_height" 360;
+		data.item: "u1_clipdrawer_landscape_height" 228;
+		data.item: "u1_grid_item_w" 195;
+		data.item: "u1_grid_item_h" 135;
+		data.item: "proxima_clipdrawer_height" 518;
+		data.item: "proxima_clipdrawer_landscape_height" 309;
+		data.item: "proxima_grid_item_w" 310;
+		data.item: "proxima_grid_item_h" 196;
 
 		parts 
 		{
 			part 
 			{ 
-				// width: 480, height: 360
 				name: "background";
 				type: RECT;
 				scale: 1;
@@ -56,7 +61,6 @@ collections
 
 			part 
 			{
-				// width: 427, height: 180
 				name: "historyitems";
 				type: SWALLOW;
 				scale: 1;
@@ -64,14 +68,13 @@ collections
 				description
 				{
 					state: "default" 0.0;
-					rel1 { relative: 0.0 0.14; to: "background"; }
+					rel1 { relative: 0.0 0.0; offset: 0 78; to: "background"; }
 					rel2 { relative: 1.0 1.0; to: "background"; }
 				}
 			}
 
 			part 
 			{ 
-				// width: 480, height: 30
 				name: "background/title";
 				type: RECT;
 				scale: 1;
@@ -80,7 +83,7 @@ collections
 				{
 					state: "default" 0.0;
 					rel1 { relative: 0.0 0.0; to: "background";}
-					rel2 { relative: 1.0 0.14; to: "background";}
+					rel2 { relative: 1.0 0.0; offset: 0 78; to: "background";}
 					color: 0 0 0 0;
 				}
 			}
@@ -91,7 +94,7 @@ collections
 				type: IMAGE;
 				scale: 1;
 				mouse_events: 1;
-				description 
+				description
 				{
 					state: "default" 0.0;
 					rel1 { relative: 0.0 0.0; to: "background/title";}
@@ -115,12 +118,12 @@ collections
 					color: 164 164 164 255;
 					text {
 						font: "Sans:style=Medium";
-						size: 30;
+						size: 32;
 						min: 0 1;
 						align: 0.0 0.5;
 					}
-					rel1 { relative: 0.02 0.0; to: "background/title";}
-					rel2 { relative: 0.3 1.0; to: "background/title";}
+					rel1 { relative: 0.0 0.0; offset: 16 0; to: "background/title";}
+					rel2 { relative: 1.0 1.0; to: "background/title";}
 			  	}
 			}
 			part
@@ -132,8 +135,8 @@ collections
 			  	description
 			  	{
 					state: "default" 0.0;
-	   				rel1 { relative: 0.66 0.0; to: "background/title"; }
-	   				rel2 { relative: 0.67 1.0; to: "background/title"; }
+	   				rel1 { relative: 0.0 0.0; offset: -4 0; to: "background/title/delete"; }
+	   				rel2 { relative: 0.0 1.0; to: "background/title/delete"; }
 					align: 0.5 0.5;
 					min: 4 40;
 					max: 4 40;
@@ -150,8 +153,8 @@ collections
 			  	description
 			  	{
 					state: "default" 0.0;
-	   				rel1 { relative: 0.67 0.0; to: "background/title"; }
-	   				rel2 { relative: 0.83 1.0; to: "background/title"; }
+	   				rel1 { relative: 0.0 0.0; offset: -112 0; to: "background/title/close_line"; }
+	   				rel2 { relative: 0.0 1.0; to: "background/title/close_line"; }
 					color: 0 0 0 0;
 			  	}
 			}
@@ -168,6 +171,7 @@ collections
 					align: 0.5 0.5;
 					min: 54 54;
 					max: 54 54;
+					fixed: 1 1;
 					visible: 1;
 	   				rel1 { relative: 0.0 0.0; to: "background/title/delete"; }
 	   				rel2 { relative: 1.0 1.0; to: "background/title/delete"; }
@@ -194,12 +198,12 @@ collections
 					visible: 0;
 					text {
 						font: "Sans:style=Roman";
-						size: 30;
+						size: 32;
 						min: 0 1;
 						align: 0.5 0.5;
 					}
-					rel1 { relative: 0.0 0.0; to: "background/title/delete";}
-					rel2 { relative: 1.0 1.0; to: "background/title/delete";}
+					rel1 { relative: 0.0 0.0; offset: 16 0; to: "background/title/delete";}
+					rel2 { relative: 1.0 1.0; offset: -16 0; to: "background/title/delete";}
 			  	}
 				description
 				{
@@ -218,8 +222,8 @@ collections
 			  	description
 			  	{
 					state: "default" 0.0;
-	   				rel1 { relative: 0.83 0.0; to: "background/title"; }
-	   				rel2 { relative: 0.84 1.0; to: "background/title"; }
+	   				rel1 { relative: 0.0 0.0; offset: -4 0; to: "background/title/close"; }
+	   				rel2 { relative: 0.0 1.0; to: "background/title/close"; }
 					align: 0.5 0.5;
 					min: 4 40;
 					max: 4 40;
@@ -236,7 +240,7 @@ collections
 		  		description
 			  	{
 					state: "default" 0.0;
-	   				rel1 { relative: 0.82 0.0; to: "background/title"; }
+	   				rel1 { relative: 1.0 0.0; offset: -112 0; to: "background/title"; }
 	   				rel2 { relative: 1.0 1.0; to: "background/title"; }
 					color: 0 0 0 0;
 			  	}
