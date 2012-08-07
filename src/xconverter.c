@@ -55,7 +55,7 @@ void init_target_atoms(AppData *ad)
 	};
 	char *targetAtomNames[][5] = {
 		{ "TARGETS" },
-		{ "UTF8-STRING", "STRING", "TEXT", "text/plain;charset=utf-8", "text/plain" },
+		{ "UTF8_STRING", "STRING", "TEXT", "text/plain;charset=utf-8", "text/plain" },
 		{ "text/html;charset=utf-8", "text/html" },
 		{ "application/x-elementary-markup" },
 		{ "text/uri", "text/uri-list" }

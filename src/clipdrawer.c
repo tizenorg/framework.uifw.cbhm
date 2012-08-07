@@ -160,7 +160,7 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 	cd->gengrid = elm_gengrid_add(cd->main_win);
 	elm_object_part_content_set(cd->main_layout, "historyitems", cd->gengrid);
 	elm_gengrid_item_size_set(cd->gengrid, cd->grid_item_w, cd->grid_item_h);
-	elm_gengrid_align_set(cd->gengrid, 0.5, 0.0);
+	elm_gengrid_align_set(cd->gengrid, 0.0, 0.0);
 	elm_gengrid_horizontal_set(cd->gengrid, EINA_TRUE);
 	elm_gengrid_bounce_set(cd->gengrid, EINA_TRUE, EINA_FALSE);
 	elm_gengrid_multi_select_set(cd->gengrid, EINA_FALSE);

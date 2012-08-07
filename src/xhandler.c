@@ -567,6 +567,19 @@ static Eina_Bool _xclient_msg_cb(void *data, int type, void *event)
 		DMSG("item_data:%s format:%s(%d)\n", item_data, ecore_x_atom_name_get(format), format);
 		item_add_by_data(ad, format, item_data, strlen(item_data) + 1);
 	}
+	else if (strncmp("DEL_ITEM", ev->data.b, 8) == 0)
+	{
+		int itempos = 0;
+		int index = 8;
+
+		while ('0' <= ev->data.b[index] && ev->data.b[index] <= '9')
+		{
+			itempos = (itempos * 10) + (ev->data.b[index] - '0');
+			index++;
+		}
+
+		item_delete_by_index(ad, itempos);
+	}
 /*	else if (strncmp("get #", ev->data.b, 5) == 0)
 	{
 		// FIXME : handle greater than 9
@@ -701,7 +714,7 @@ XHandlerData *init_xhandler(AppData *ad)
 	int i;
 	for (i = 0; i < ITEM_CNT_MAX; i++)
 	{
-		char buf[12];
+		char buf[20];
 		snprintf(buf, sizeof(buf), "CBHM_ITEM%d", i);
 		xd->atomCBHM_ITEM = ecore_x_atom_get(buf);
 	}
