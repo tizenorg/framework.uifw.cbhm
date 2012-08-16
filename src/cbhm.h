@@ -48,7 +48,6 @@ typedef char *(*text_converter_func)(AppData *ad, int type_index, const char *st
 #include "item_manager.h"
 #include "xhandler.h"
 #include "xconverter.h"
-#include "scrcapture.h"
 #include "storage.h"
 
 struct _TargetHandler {
@@ -75,7 +74,6 @@ struct _AppData {
 
 	ClipdrawerData *clipdrawer;
 	XHandlerData *xhandler;
-	SCaptureData *screencapture;
 	StorageData *storage;
 
 	CNP_ITEM *clip_selected_item;

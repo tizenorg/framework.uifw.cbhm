@@ -427,13 +427,6 @@ static Eina_Bool _xclient_msg_cb(void *data, int type, void *event)
 	};*/
 	Ecore_X_Event_Client_Message *ev = event;
 
-	if (ev->message_type == xd->atomXKey_MSG)
-	{
-		DTRACE("XE:ClientMessage for Screen capture\n");
-		capture_current_screen(ad);
-		return TRUE;
-	}
-
 	if (ev->message_type != xd->atomCBHM_MSG)
 		return -1;
 

@@ -6,7 +6,6 @@ SET(SRCS src/main.c
 	src/xconverter.c
 	src/xhandler.c
 	src/clipdrawer.c
-	src/scrcapture.c
 	src/storage.c
 )
 

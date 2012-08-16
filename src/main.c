@@ -113,7 +113,6 @@ static int app_create(void *data)
 	init_target_atoms(ad);
 	if (!(ad->clipdrawer = init_clipdrawer(ad))) return EXIT_FAILURE;
 	if (!(ad->xhandler = init_xhandler(ad))) return EXIT_FAILURE;
-	if (!(ad->screencapture = init_screencapture(ad))) return EXIT_FAILURE;
 	if (!(ad->storage = init_storage(ad))) return EXIT_FAILURE;
 	slot_item_count_set(ad);
 
@@ -127,7 +126,6 @@ static int app_terminate(void *data)
 
 	depose_clipdrawer(ad->clipdrawer);
 	depose_xhandler(ad->xhandler);
-	depose_screencapture(ad->screencapture);
 	depose_storage(ad->storage);
 	item_clear_all(ad);
 	depose_target_atoms(ad);
