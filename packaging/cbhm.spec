@@ -1,13 +1,12 @@
 #sbs-git:slp/pkgs/c/cbhm cbhm 0.1.0 a67e97190313d19025925d8b9fd0aa9da3d0dc6a
 Name:       cbhm
 Summary:    cbhm application
-Version:    0.1.123
+Version:    0.1.124
 Release:    1
 Group:      TO_BE/FILLED_IN
 License:    Proprietary
 Source0:    %{name}-%{version}.tar.gz
 BuildRequires:  cmake
-BuildRequires:  x11-xserver-utils-ex
 BuildRequires:  pkgconfig(elementary)
 BuildRequires:  pkgconfig(appcore-efl)
 BuildRequires:  pkgconfig(appcore-common)
