@@ -4,7 +4,7 @@ Summary:    cbhm application
 Version:    0.1.126
 Release:    1
 Group:      TO_BE/FILLED_IN
-License:    Proprietary
+License:    Flora License 
 Source0:    %{name}-%{version}.tar.gz
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(elementary)
