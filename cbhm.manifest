@@ -1,6 +1,9 @@
 <manifest>
 	<define>
 		<domain name="cbhm"/>
+		<request>
+			<smack request=“system::homedir” type=“rwxat”/>
+		</request>
 	</define>
 	<request>
 		<domain name="cbhm"/>
