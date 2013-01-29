@@ -2,7 +2,7 @@
 	<define>
 		<domain name="cbhm"/>
 		<request>
-			<smack request=“system::homedir” type=“rwxat”/>
+			<smack request="system::homedir" type="rwxat"/>
 		</request>
 	</define>
 	<request>
