@@ -119,6 +119,7 @@ static Eina_Bool keydown_cb(void *data, int type, void *event)
 ClipdrawerData* init_clipdrawer(AppData *ad)
 {
 	ClipdrawerData *cd = calloc(1, sizeof(ClipdrawerData));
+	const char *data;
 
 	/* create and setting window */
 	if (!cd)
@@ -140,10 +141,14 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 	}
 
 	Evas_Object* ly = elm_layout_edje_get(cd->main_layout);
-	cd->height = atoi(edje_object_data_get(ly, "clipboard_height"));
-	cd->landscape_height = atoi(edje_object_data_get(ly, "clipboard_landscape_height"));
-	cd->grid_item_w = atoi(edje_object_data_get(ly, "grid_item_w"));
-	cd->grid_item_h = atoi(edje_object_data_get(ly, "grid_item_h"));
+	data = edje_object_data_get(ly, "clipboard_height");
+	cd->height = data ? atoi(data) : 0;
+	data = atoi(edje_object_data_get(ly, "clipboard_landscape_height"));
+	cd->landscape_height = data ? atoi(data) : 0;
+	data = edje_object_data_get(ly, "grid_item_w");
+	cd->grid_item_w = data ? atoi(data) : 0;
+	data = edje_object_data_get(ly, "grid_item_h");
+	cd->grid_item_h = data ? atoi(data) : 0;
 	printf("height: %d , land_height:%d\n", cd->height, cd->landscape_height);
 
 	/* create and setting gengrid */

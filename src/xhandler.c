@@ -570,6 +570,7 @@ static Eina_Bool _xclient_msg_cb(void *data, int type, void *event)
 		switch (size_ret)
 		{
 			case 8:
+			default:
 				for (i = 0; i < num_ret; i++)
 					item_data[i] = prop_ret[i];
 				break;
