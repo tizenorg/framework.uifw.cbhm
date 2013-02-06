@@ -1,6 +1,12 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(cbhm C)
 
+SET(PREFIX ${CMAKE_INSTALL_PREFIX})
+SET(EXEC_PREFIX "\${prefix}")
+SET(LIBDIR "\${prefix}/lib")
+SET(INCLUDEDIR "\${prefix}/include")
+SET(VERSION 0.1.0)
+
 SET(SRCS src/main.c
 	src/item_manager.c
 	src/xconverter.c
@@ -17,24 +23,19 @@ pkg_check_modules(pkgs REQUIRED elementary eet appcore-efl appcore-common x11 ec
 FOREACH(flag ${pkgs_CFLAGS})
 	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
 ENDFOREACH(flag)
-SET(EXTRA_CFLAGS "${EXTRA_CFLAGS}")
-#SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} -finstrument-functions")
 
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS} -fvisibility=hidden -Wall -fPIC -s")
 
 ADD_DEFINITIONS("-DPREFIX=\"${CMAKE_INSTALL_PREFIX}\"")
-ADD_DEFINITIONS("-DFACTORYFS=\"$ENV{FACTORYFS}\"")
-ADD_DEFINITIONS("-DTARGET")
-ADD_DEFINITIONS("-DSLP_DEBUG")
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${SRCS})
 #for XV extension screenshot
 SET(pkgs_LDFLAGS "${pkgs_LDFLAGS} -L/usr/lib -lsvi")
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkgs_LDFLAGS})
 
-ADD_CUSTOM_TARGET(cbhmdrawer.edj 
-		COMMAND edje_cc 
-		-id ${CMAKE_CURRENT_SOURCE_DIR}/data/images		
+ADD_CUSTOM_TARGET(cbhmdrawer.edj
+		COMMAND edje_cc
+		-id ${CMAKE_CURRENT_SOURCE_DIR}/data/images
 		${CMAKE_SOURCE_DIR}/data/themes/cbhmdrawer.edc ${CMAKE_BINARY_DIR}/data/themes/cbhmdrawer.edj
 		DEPENDS ${CMAKE_SOURCE_DIR}/data/themes/cbhmdrawer.edc
 		DEPENDS ${CMAKE_SOURCE_DIR}/data/themes/extstyles.edc
