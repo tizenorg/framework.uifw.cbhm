@@ -17,24 +17,24 @@
 
 
 
-#ifndef _STORAGE_H_
-#define _STORAGE_H_
+#ifndef _X_ATOM_H_
+#define _X_ATOM_H_
 
-#include <Eet.h>
-#include <Eina.h>
-#include <Ecore.h>
-
-#include "item_manager.h"
-
-typedef double indexType; /* Ecore_Time */
-
-#define STORAGE_ITEM_CNT 12
-struct _StorageData {
-	Eet_File *ef;
-	indexType indexTable[STORAGE_ITEM_CNT];
-	CNP_ITEM *itemTable[STORAGE_ITEM_CNT];
+enum ATOM_INDEX {
+	ATOM_INDEX_TARGET = 0,
+	ATOM_INDEX_TEXT = 1,
+	ATOM_INDEX_HTML = 2,
+	ATOM_INDEX_EFL = 3,
+	ATOM_INDEX_IMAGE = 4,
+	ATOM_INDEX_MAX = 5
 };
 
-StorageData *init_storage(AppData *ad);
-void depose_storage(StorageData *sd);
+#include "cbhm.h"
+
+void init_target_atoms(AppData *ad);
+void depose_target_atoms(AppData *ad);
+int atom_type_index_get(AppData *ad, Ecore_X_Atom atom);
+char *string_for_entry_get(AppData *ad, int type_index, const char *str);
+Eina_Bool generic_converter(AppData *ad, Ecore_X_Atom reqAtom, CNP_ITEM *item, void **data_ret, int *size_ret, Ecore_X_Atom *ttype, int *tsize);
+
 #endif
