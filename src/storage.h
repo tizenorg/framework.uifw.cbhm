@@ -24,15 +24,14 @@
 #include <Eina.h>
 #include <Ecore.h>
 
-#include "item_manager.h"
+#include "cbhm.h"
 
 typedef double indexType; /* Ecore_Time */
 
-#define STORAGE_ITEM_CNT 12
 struct _StorageData {
 	Eet_File *ef;
-	indexType indexTable[STORAGE_ITEM_CNT];
-	CNP_ITEM *itemTable[STORAGE_ITEM_CNT];
+	indexType indexTable[ITEM_CNT_MAX];
+	CNP_ITEM *itemTable[ITEM_CNT_MAX];
 };
 
 StorageData *init_storage(AppData *ad);

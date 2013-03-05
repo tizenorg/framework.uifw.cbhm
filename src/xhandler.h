@@ -47,8 +47,6 @@ struct _XHandlerData {
 };
 
 #include "cbhm.h"
-#include "item_manager.h"
-#include "xconverter.h"
 
 XHandlerData *init_xhandler(AppData *data);
 void depose_xhandler(XHandlerData *xd);

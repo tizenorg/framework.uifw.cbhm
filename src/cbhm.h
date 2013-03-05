@@ -46,6 +46,8 @@ typedef struct _SCaptureData SCaptureData;
 typedef struct _StorageData StorageData;
 typedef char *(*text_converter_func)(AppData *ad, int type_index, const char *str);
 
+#define ITEM_CNT_MAX 20
+
 #include "clipdrawer.h"
 #include "item_manager.h"
 #include "xhandler.h"
@@ -113,7 +115,5 @@ void d_free(char *func, int line, void *m);
 #define CALLOC(n, size) calloc(n, size)
 #define FREE(p) free(p)
 #endif
-
-#define ITEM_CNT_MAX 12
 
 #endif // _CBHM_H_

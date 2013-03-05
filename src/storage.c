@@ -88,7 +88,7 @@ StorageData *init_storage(AppData *ad)
 		indexType *read_data;
 		read_data = eet_read(sd->ef, STORAGE_KEY_INDEX, &read_size);
 
-		int storage_size = sizeof(indexType) * STORAGE_ITEM_CNT;
+		int storage_size = sizeof(indexType) * ITEM_CNT_MAX;
 
 		int copy_size = storage_size < read_size ? storage_size : read_size;
 
@@ -153,7 +153,7 @@ static void dump_items(StorageData *sd)
 {
 	CALLED();
 	int i;
-	for (i = 0; i < STORAGE_ITEM_CNT; i++)
+	for (i = 0; i < ITEM_CNT_MAX; i++)
 	{
 		CNP_ITEM *item = storage_item_load(sd, i);
 		if (item)
@@ -195,7 +195,7 @@ static void storage_rewrite_all_items(StorageData *sd)
 	sd->ef = eet_open(STORAGE_FILEPATH, EET_FILE_MODE_READ_WRITE);
 
 	int i;
-	for (i = 0; i < STORAGE_ITEM_CNT; i++)
+	for (i = 0; i < ITEM_CNT_MAX; i++)
 	{
 		if ((sd->indexTable[i] != STORAGE_INDEX_ITEM_NONE) && (sd->itemTable[i]))
 			item_write(sd->ef, i, sd->itemTable[i]);
@@ -207,7 +207,7 @@ static Eina_Bool storage_item_write(AppData *ad, CNP_ITEM *item)
 {
 	CALLED();
 	StorageData *sd = ad->storage;
-	int index = getMinIndex(sd->indexTable, STORAGE_ITEM_CNT);
+	int index = getMinIndex(sd->indexTable, ITEM_CNT_MAX);
 	sd->indexTable[index] = ecore_time_unix_get();
 	sd->itemTable[index] = item;
 
@@ -222,13 +222,13 @@ static Eina_Bool storage_item_delete(AppData *ad, CNP_ITEM *item)
 	CALLED();
 	StorageData *sd = ad->storage;
 	int index;
-	for (index = 0; index < STORAGE_ITEM_CNT; index++)
+	for (index = 0; index < ITEM_CNT_MAX; index++)
 	{
 		if (sd->itemTable[index] == item)
 			break;
 	}
 
-	if (index < STORAGE_ITEM_CNT)
+	if (index < ITEM_CNT_MAX)
 	{
 		sd->indexTable[index] = STORAGE_INDEX_ITEM_NONE;
 		storage_index_write(sd);
@@ -243,15 +243,15 @@ static CNP_ITEM *storage_item_load(StorageData *sd, int index)
 		DMSG("eet_file is NULL\n");
 		return EINA_FALSE;
 	}
-	if (index >= STORAGE_ITEM_CNT)
+	if (index >= ITEM_CNT_MAX)
 		return NULL;
 
-	indexType copyTable[STORAGE_ITEM_CNT];
+	indexType copyTable[ITEM_CNT_MAX];
 	memcpy(copyTable, sd->indexTable, sizeof(copyTable));
 	int i;
 	for (i = 0; i < index; i++)
 	{
-		int maxIndex = getMaxIndex(copyTable, STORAGE_ITEM_CNT);
+		int maxIndex = getMaxIndex(copyTable, ITEM_CNT_MAX);
 		if (maxIndex == -1)
 			maxIndex = 0;
 		copyTable[maxIndex] = 0;
@@ -299,11 +299,11 @@ static Eina_Bool storage_index_write(StorageData *sd)
 		return EINA_FALSE;
 	}
 #ifdef DEBUG
-	for (ret = 0; ret < STORAGE_ITEM_CNT; ret++)
+	for (ret = 0; ret < ITEM_CNT_MAX; ret++)
 		printf(", index %d: %lf", ret, sd->indexTable[ret]);
 	printf("\n");
 #endif
-	ret = eet_write(sd->ef, STORAGE_KEY_INDEX, sd->indexTable, sizeof(indexType) * STORAGE_ITEM_CNT, 1);
+	ret = eet_write(sd->ef, STORAGE_KEY_INDEX, sd->indexTable, sizeof(indexType) * ITEM_CNT_MAX, 1);
 	if (ret)
 		eet_sync(sd->ef);
 	return ret != 0;
