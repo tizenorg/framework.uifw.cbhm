@@ -32,10 +32,10 @@ collections {
          image: "B12_panel_icon_arrow.png" COMP;
          image: "B12_panel_icon_arrow_press.png" COMP;
       }
-      data.item: "clipboard_height" 522;
+      data.item: "clipboard_height" 524;
       data.item: "clipboard_landscape_height" 315;
-      data.item: "grid_item_w" 310;
-      data.item: "grid_item_h" 196;
+      data.item: "grid_item_w" 326; // set item width + right padding (310 + 16)
+      data.item: "grid_item_h" 209; // set item height + bottom padding (196 + 13)
 
       parts {
          part { name: "background";
@@ -48,13 +48,18 @@ collections {
                color: 39 39 39 255;
             }
          }
-         part { name: "historyitems";
-            type: SWALLOW;
+         part { name: "left_top_padding";
+            type: RECT;
             scale: 1;
-            mouse_events: 1;
+            mouse_events: 0;
             description { state: "default" 0.0;
-               rel1 { relative: 0.0 0.0; offset: 0 84; to: "background"; }
-               rel2 { relative: 1.0 1.0; to: "background"; }
+               fixed: 1 1;
+               align: 0.0 0.0;
+               min: 12 12;
+               max: 12 12;
+               rel1 { relative: 0.0 0.0; to: "background"; }
+               rel2 { relative: 0.0 0.0; to: "background"; }
+               visible: 0;
             }
          }
          part { name: "background/title";
@@ -62,8 +67,11 @@ collections {
             scale: 1;
             mouse_events: 1;
             description { state: "default" 0.0;
-               rel1 { relative: 0.0 0.0; to: "background";}
-               rel2 { relative: 1.0 0.0; offset: 0 84; to: "background";}
+               fixed: 0 1;
+               align: 0.0 0.0;
+               min: 0 72;
+               rel1 { relative: 0.0 1.0; to_x: "background"; to_y: "left_top_padding"; }
+               rel2 { relative: 1.0 1.0; to_x: "background"; to_y: "left_top_padding"; }
                color: 0 0 0 0;
             }
          }
@@ -72,11 +80,55 @@ collections {
             scale: 1;
             mouse_events: 1;
             description { state: "default" 0.0;
-               rel1 { relative: 0.0 0.0; to: "background/title";}
+               rel1 { relative: 0.0 0.0; to: "background";}
                rel2 { relative: 1.0 1.0; to: "background/title";}
                image {
                   normal: "B12_panel_title_bg.png";
                }
+            }
+         }
+         part { name: "background/title/close";
+            type: RECT;
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 0.0 0.0;
+               min: 60 0;
+               rel1 { relative: 1.0 0.0; to_x: "left_top_padding"; to_y: "background/title"; }
+               rel2 { relative: 1.0 1.0; to_x: "left_top_padding"; to_y: "background/title"; }
+               color: 0 0 0 0;
+            }
+         }
+         part { name: "background/title/close/image";
+            type: IMAGE;
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.5 0.5;
+               min: 60 60;
+               max: 60 60;
+               rel1 { relative: 0.0 0.0; to: "background/title/close"; }
+               rel2 { relative: 1.0 1.0; to: "background/title/close"; }
+               image { normal: "B12_panel_icon_arrow.png"; }
+            }
+            description { state: "pressed" 0.0;
+               inherit: "default" 0.0;
+               image { normal: "B12_panel_icon_arrow_press.png"; }
+            }
+         }
+         part { name: "text_left_padding";
+            type: RECT;
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 0.0 0.0;
+               min: 10 0;
+               rel1 { relative: 1.0 0.0; to: "background/title/close"; }
+               rel2 { relative: 1.0 1.0; to: "background/title/close"; }
+               visible: 0;
             }
          }
          part { name: "panel_title";
@@ -90,7 +142,7 @@ collections {
                   min: 0 1;
                   align: 0.0 0.5;
                }
-               rel1 { relative: 0.0 0.0; offset: 82 12; to: "background/title";}
+               rel1 { relative: 1.0 0.0; to_x: "text_left_padding"; to_y: "background/title"; }
                rel2 { relative: 1.0 1.0; to: "background/title";}
             }
          }
@@ -104,6 +156,32 @@ collections {
                color: 255 0 0 0;
             }
          }
+         part { name: "delete_text_left_padding";
+            type: RECT;
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 1.0 0.5;
+               min: 28 0;
+               rel1 { relative: 0.0 0.0; to: "panel_function"; }
+               rel2 { relative: 0.0 1.0; to: "panel_function"; }
+               visible: 0;
+            }
+         }
+         part { name: "delete_text_right_padding";
+            type: RECT;
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 0.0 0.5;
+               min: 28 0;
+               rel1 { relative: 1.0 0.0; to: "panel_function"; }
+               rel2 { relative: 1.0 1.0; to: "panel_function"; }
+               visible: 0;
+            }
+         }
          part { name: "background/title/delete/image";
             type: IMAGE;
             scale: 1;
@@ -112,10 +190,10 @@ collections {
                align: 0.5 0.5;
                min: 62 60;
                max: 300 60;
-               fixed: 0 1;
+               fixed: 1 1;
                visible: 1;
-                  rel1 { relative: 0.0 0.0; offset: -28 0; to: "panel_function";}
-                  rel2 { relative: 1.0 1.0; offset: 28 0; to: "panel_function"; }
+                  rel1 { relative: 0.0 0.0; to: "delete_text_left_padding"; }
+                  rel2 { relative: 1.0 1.0; to: "delete_text_right_padding"; }
                   image { normal: "B12_panel_button.png";
                   border: 30 30 30 30; border_scale: 1;
                }
@@ -129,13 +207,12 @@ collections {
             type: RECT;
             scale: 1;
             mouse_events: 0;
-            description {
-               state: "default" 0.0;
+            description { state: "default" 0.0;
+               fixed: 1 1;
                align: 1.0 0.5;
                min: 40 60;
                max: 40 60;
-               fixed: 1 1;
-               rel1 { relative: 1.0 0.0; offset: 0 12; to: "background/title"; }
+               rel1 { relative: 1.0 0.0; to: "background/title"; }
                rel2 { relative: 1.0 1.0; to: "background/title"; }
                color: 0 0 255 0;
             }
@@ -160,32 +237,40 @@ collections {
                rel2 { relative: 0.0 1.0; to: "right_padding"; }
             }
          }
-         part { name: "background/title/close";
+         part { name: "historyitems_left_top_padding";
             type: RECT;
             scale: 1;
-            mouse_events: 1;
+            mouse_events: 0;
             description { state: "default" 0.0;
-               rel1 { relative: 0.0 0.0; offset: 12 12; to: "background/title"; }
-               rel2 { relative: 0.0 1.0; offset: 60 0; to: "background/title"; }
-               color: 0 0 0 0;
+               fixed: 1 1;
+               align: 0.0 0.0;
+               min: 16 16;
+               max: 16 16;
+               rel1 { relative: 0.0 1.0; to: "background/title"; }
+               rel2 { relative: 0.0 1.0; to: "background/title"; }
+               visible: 0;
             }
          }
-         part { name: "background/title/close/image";
-            type: IMAGE;
+         part { name: "historyitems_right_bottom_padding";
+            type: RECT;
             scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: 0 6;
+               max: 0 6;
+               rel1 { relative: 1.0 1.0; to: "background"; }
+               rel2 { relative: 1.0 1.0; to: "background"; }
+               visible: 0;
+            }
+         }
+         part { name: "historyitems";
+            type: SWALLOW;
             mouse_events: 1;
             description { state: "default" 0.0;
-               align: 0.5 0.5;
-               min: 60 60;
-               max: 60 60;
-               fixed: 1 1;
-               rel1 { relative: 0.0 0.0; to: "background/title/close"; }
-               rel2 { relative: 1.0 1.0; to: "background/title/close"; }
-               image { normal: "B12_panel_icon_arrow.png"; }
-            }
-            description { state: "pressed" 0.0;
-               inherit: "default" 0.0;
-               image { normal: "B12_panel_icon_arrow_press.png"; }
+               rel1 { relative: 1.0 1.0; to: "historyitems_left_top_padding"; }
+               rel2 { relative: 0.0 0.0; to: "historyitems_right_bottom_padding"; }
             }
          }
       }
@@ -265,33 +350,25 @@ collections {
                color: 0 0 0 0;
             }
          }
-         part { name: "left_top_padding";
-            type: RECT;
-            scale: 1;
-            description { state: "default" 0.0;
-               min: 10 24;
-               align: 0.0 0.0;
-               visible: 0;
-               rel1.to: "bg";
-               rel2 { relative: 0.0 0.0; to: "bg"; }
-            }
-         }
          part { name: "right_bottom_padding";
             type: RECT;
             scale: 1;
+            mouse_events: 0;
             description { state: "default" 0.0;
-               min: 10 0;
+               fixed: 1 1;
                align: 1.0 1.0;
-               visible: 0;
+               min: 16 13;
+               max: 16 13;
                rel1 { relative: 1.0 1.0; to: "bg"; }
                rel2.to: "bg";
+               visible: 0;
             }
          }
          part { name: "icon_bg";
             type: RECT;
             description { state: "default" 0.0;
                color: 0 0 0 0;
-               rel1 { relative: 1.0 1.0; to: "left_top_padding"; }
+               rel1 { relative: 0.0 0.0; to: "bg"; }
                rel2 { relative: 0.0 0.0; to: "right_bottom_padding"; }
             }
          }

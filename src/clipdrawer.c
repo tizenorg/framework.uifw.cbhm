@@ -140,15 +140,25 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 		return NULL;
 	}
 
+	double scale = elm_config_scale_get();
 	Evas_Object* ly = elm_layout_edje_get(cd->main_layout);
+
 	data = edje_object_data_get(ly, "clipboard_height");
 	cd->height = data ? atoi(data) : 0;
-	data = atoi(edje_object_data_get(ly, "clipboard_landscape_height"));
+	cd->height *= scale;
+
+	data = edje_object_data_get(ly, "clipboard_landscape_height");
 	cd->landscape_height = data ? atoi(data) : 0;
+	cd->landscape_height *= scale;
+
 	data = edje_object_data_get(ly, "grid_item_w");
 	cd->grid_item_w = data ? atoi(data) : 0;
+	cd->grid_item_w *= scale;
+
 	data = edje_object_data_get(ly, "grid_item_h");
 	cd->grid_item_h = data ? atoi(data) : 0;
+	cd->grid_item_h *= scale;
+
 	printf("height: %d , land_height:%d\n", cd->height, cd->landscape_height);
 
 	/* create and setting gengrid */
