@@ -1,0 +1,10 @@
+[Unit]
+Description=Clipboard helper module
+After=xorg.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/cbhm
+
+[Install]
+WantedBy=core-efl.target
