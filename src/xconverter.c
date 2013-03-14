@@ -1012,29 +1012,6 @@ static char *make_close_tag(Eina_List* nodes)
 static char *do_not_convert(AppData *ad, int type_index, const char *str)
 {
 	DMSG("str: %s\n", str);
-	if (type_index != ATOM_INDEX_TEXT)
-	{
-		Eina_List *nodeList = NULL;
-		PTagNode nodeData;
-
-		nodeData = _get_start_node(str);
-
-		while (nodeData)
-		{
-			nodeList = eina_list_append(nodeList, nodeData);
-			nodeData = _get_next_node(nodeData);
-		}
-
-		_link_match_tags(nodeList);
-
-#ifdef DEBUG
-		_dumpNode(nodeList);
-#endif
-		char *ret = make_close_tag(nodeList);
-		cleanup_tag_list(nodeList);
-		DMSG("convert str: %s\n", ret);
-		return ret;
-	}
 	return strdup(str);
 }
 /*
