@@ -480,14 +480,14 @@ static void set_sliding_win_geometry(ClipdrawerData *cd)
 
 	if (cd->o_degree == 90 || cd->o_degree == 270)
 	{
-		h = cd->anim_count * cd->landscape_height / ANIM_DURATION;
+		h = cd->landscape_height;
 		x = 0;
 		y = cd->root_w - h;
 		w = cd->root_h;
 	}
 	else
 	{
-		h = cd->anim_count * cd->height / ANIM_DURATION;
+		h = cd->height;
 		x = 0;
 		y = cd->root_h - h;
 		w = cd->root_w;
@@ -497,14 +497,8 @@ static void set_sliding_win_geometry(ClipdrawerData *cd)
 		w = 0;
 
 	DTRACE("[CBHM] change degree geometry... (%d, %d, %d x %d)\n", x, y, w, h);
-	int clipboard_state;
-	if (cd->anim_count)
-		clipboard_state = ECORE_X_ILLUME_CLIPBOARD_STATE_ON;
-	else
-		clipboard_state = ECORE_X_ILLUME_CLIPBOARD_STATE_OFF;
-	if (cd->anim_status != HIDE_ANIM)
-	   ecore_x_e_illume_clipboard_geometry_set(zone, x, y, w, h);
-	ecore_x_e_illume_clipboard_state_set(zone, clipboard_state);
+
+	ecore_x_e_illume_clipboard_geometry_set(zone, x, y, w, h);
 }
 
 void set_rotation_to_clipdrawer(ClipdrawerData *cd)
@@ -544,8 +538,7 @@ void set_rotation_to_clipdrawer(ClipdrawerData *cd)
 
 	evas_object_resize(cd->main_win, w, h);
 	evas_object_move(cd->main_win, x, y);
-	if (cd->anim_count == ANIM_DURATION)
-		set_sliding_win_geometry(cd);
+	set_sliding_win_geometry(cd);
 }
 
 static Eina_Bool _get_anim_pos(ClipdrawerData *cd, int *sp, int *ep)
@@ -713,7 +706,8 @@ void clipdrawer_activate_view(AppData* ad)
 		set_rotation_to_clipdrawer(cd);
 		evas_object_show(cd->main_win);
 		elm_win_activate(cd->main_win);
-		clipdrawer_anim_effect(ad, SHOW_ANIM);
+		Ecore_X_Window zone = ecore_x_e_illume_zone_get(cd->x_main_win);
+		ecore_x_e_illume_clipboard_state_set(zone, ECORE_X_ILLUME_CLIPBOARD_STATE_ON);
 	}
 }
 
@@ -721,16 +715,15 @@ void clipdrawer_lower_view(AppData* ad)
 {
 	CALLED();
 	ClipdrawerData *cd = ad->clipdrawer;
-	Ecore_X_Window zone;
-	if (cd->main_win && cd->anim_count)
+	if (cd->main_win)
 	{
-		set_focus_for_app_window(cd->x_main_win, EINA_FALSE);
-	//	if (clipdrawer_anim_effect(ad, HIDE_ANIM))
-	//		ad->windowshow = EINA_FALSE;
-	   zone = ecore_x_e_illume_zone_get(cd->x_main_win);
-	   ecore_x_e_illume_clipboard_geometry_set(zone, 0, 0, 0, 0);
-		clipdrawer_anim_effect(ad, HIDE_ANIM);
-		cbhm_send_event(ad, ad->x_active_win, "INIT_CNPDATA");
+		evas_object_hide(cd->main_win);
+		elm_win_lower(cd->main_win);
+		unset_transient_for(cd->x_main_win, ad->x_active_win);
+		_delete_mode_set(ad, EINA_FALSE);
+		Ecore_X_Window zone = ecore_x_e_illume_zone_get(cd->x_main_win);
+		ecore_x_e_illume_clipboard_state_set(zone, ECORE_X_ILLUME_CLIPBOARD_STATE_OFF);
+		ecore_x_e_illume_clipboard_geometry_set(zone, 0, 0, 0, 0);
 	}
 }
 
