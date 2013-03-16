@@ -730,10 +730,15 @@ void clipdrawer_lower_view(AppData* ad)
 void _delete_mode_set(AppData* ad, Eina_Bool del_mode)
 {
 	ClipdrawerData *cd = ad->clipdrawer;
+	Elm_Object_Item *gitem = elm_gengrid_first_item_get(cd->gengrid);
 	CNP_ITEM *item = NULL;
 
-	delete_mode = del_mode;
-	if (del_mode)
+	if (gitem)
+		delete_mode = del_mode;
+	else
+		delete_mode = EINA_FALSE;
+
+	if (delete_mode)
 	{
 		elm_object_part_text_set(cd->main_layout, "panel_function", S_DONE);
 	}
@@ -742,11 +747,10 @@ void _delete_mode_set(AppData* ad, Eina_Bool del_mode)
 		elm_object_part_text_set(cd->main_layout, "panel_function", S_DELETE);
 	}
 
-	Elm_Object_Item *gitem = elm_gengrid_first_item_get(cd->gengrid);
 	while (gitem)
 	{
 		item = elm_object_item_data_get(gitem);
-		if (del_mode)
+		if (delete_mode)
 			edje_object_signal_emit(elm_layout_edje_get(item->layout), "elm,state,show,delbtn", "elm");
 		else
 			edje_object_signal_emit(elm_layout_edje_get(item->layout), "elm,state,hide,delbtn", "elm");
