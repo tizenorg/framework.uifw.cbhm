@@ -32,8 +32,8 @@ collections {
          image: "B12_panel_icon_arrow.png" COMP;
          image: "B12_panel_icon_arrow_press.png" COMP;
       }
-      data.item: "clipboard_height" 524;
-      data.item: "clipboard_landscape_height" 315;
+      data.item: "clipboard_height" 528;
+      data.item: "clipboard_landscape_height" 400;
       data.item: "grid_item_w" 326; // set item width + right padding (310 + 16)
       data.item: "grid_item_h" 209; // set item height + bottom padding (196 + 13)
 

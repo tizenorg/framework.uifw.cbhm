@@ -730,7 +730,6 @@ XHandlerData *init_xhandler(AppData *ad)
 	xd->atomWindowRotate = ecore_x_atom_get("_E_ILLUME_ROTATE_WINDOW_ANGLE");
 	xd->atomCBHM_MSG = ecore_x_atom_get("CBHM_MSG");
 	xd->atomCBHM_ITEM = ecore_x_atom_get("CBHM_ITEM");
-	xd->atomXKey_MSG = ecore_x_atom_get("_XKEY_COMPOSITION");
 	xd->atomCBHMCount = ecore_x_atom_get("CBHM_cCOUNT");
 	xd->atomUTF8String = ecore_x_atom_get("UTF8_STRING");
 	xd->atomCBHM_SELECTED_ITEM = ecore_x_atom_get("CBHM_SELECTED_ITEM");
