@@ -29,7 +29,6 @@
 #define ANIM_DURATION 30 // 1 seconds
 #define ANIM_FLOPS (0.5/30)
 #define DEFAULT_WIDTH 720
-#define GRID_IMAGE_INNER 10
 
 #define MULTI_(id) dgettext("sys_string", #id)
 #define S_CLIPBOARD MULTI_(IDS_COM_BODY_CLIPBOARD)
@@ -151,15 +150,21 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 	cd->landscape_height = data ? atoi(data) : 0;
 	cd->landscape_height *= scale;
 
-	data = edje_object_data_get(ly, "grid_item_w");
-	cd->grid_item_w = data ? atoi(data) : 0;
-	cd->grid_item_w *= scale;
+	data = edje_object_data_get(ly, "grid_item_bg_w");
+	cd->grid_item_bg_w = data ? atoi(data) : 0;
+	cd->grid_item_bg_w *= scale;
 
-	data = edje_object_data_get(ly, "grid_item_h");
-	cd->grid_item_h = data ? atoi(data) : 0;
-	cd->grid_item_h *= scale;
+	data = edje_object_data_get(ly, "grid_item_bg_h");
+	cd->grid_item_bg_h = data ? atoi(data) : 0;
+	cd->grid_item_bg_h *= scale;
 
-	printf("height: %d , land_height:%d\n", cd->height, cd->landscape_height);
+	data = edje_object_data_get(ly, "grid_image_item_w");
+	cd->grid_image_item_w = data ? atoi(data) : 0;
+	cd->grid_image_item_w *= scale;
+
+	data = edje_object_data_get(ly, "grid_image_item_h");
+	cd->grid_image_item_h = data ? atoi(data) : 0;
+	cd->grid_image_item_h *= scale;
 
 	/* create and setting gengrid */
 	elm_theme_extension_add(NULL, APP_EDJ_FILE);
@@ -168,7 +173,7 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 
 	cd->gengrid = elm_gengrid_add(cd->main_win);
 	elm_object_part_content_set(cd->main_layout, "historyitems", cd->gengrid);
-	elm_gengrid_item_size_set(cd->gengrid, cd->grid_item_w, cd->grid_item_h);
+	elm_gengrid_item_size_set(cd->gengrid, cd->grid_item_bg_w, cd->grid_item_bg_h);
 	elm_gengrid_align_set(cd->gengrid, 0.0, 0.0);
 	elm_gengrid_horizontal_set(cd->gengrid, EINA_TRUE);
 	elm_gengrid_bounce_set(cd->gengrid, EINA_TRUE, EINA_FALSE);
@@ -178,7 +183,7 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 
 	elm_gengrid_clear(cd->gengrid);
 
-	cd->gic.item_style = "clipboard_photo_style";
+	cd->gic.item_style = "clipboard";
 	cd->gic.func.text_get = NULL;
 	cd->gic.func.content_get = _grid_content_get;
 	cd->gic.func.state_get = NULL;
@@ -251,32 +256,40 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 	AppData *ad = item->ad;
 	ClipdrawerData *cd = ad->clipdrawer;
 
-	if (item->type_index == ATOM_INDEX_IMAGE && !strcmp(part, "elm.swallow.icon")) /* text/uri */
+	if (item->type_index == ATOM_INDEX_IMAGE && !strcmp(part, "elm.swallow.icon")) /* uri */
 	{
 		int w, h, iw, ih;
 
 		Evas_Object *layout = elm_layout_add(obj);
-		elm_layout_theme_set(layout, "gengrid", "item", "clipboard_style");
+		elm_layout_file_set(layout, APP_EDJ_FILE, "elm/gengrid/item/clipboard_image/default");
 		edje_object_signal_callback_add(elm_layout_edje_get(layout),
 				"mouse,up,1", "*", _grid_item_ly_clicked, data);
 
+		int grid_image_real_w = cd->grid_image_item_w;
+		int grid_image_real_h = cd->grid_image_item_h;
 
-		Evas_Object *sicon;
-		int grid_image_real_w;
-		int grid_image_real_h;
-		grid_image_real_w = cd->grid_item_w - (2*GRID_IMAGE_INNER);
-		grid_image_real_h = cd->grid_item_h - (2*GRID_IMAGE_INNER);
-		sicon = evas_object_image_add(evas_object_evas_get(obj));
+		Evas_Object *sicon = evas_object_image_add(evas_object_evas_get(obj));
 		evas_object_image_load_size_set(sicon, grid_image_real_w, grid_image_real_h);
 		evas_object_image_file_set(sicon, item->data, NULL);
 		evas_object_image_size_get(sicon, &w, &h);
+
+		if (w <= 0 || h <= 0)
+			return NULL;
 
 		if (w > grid_image_real_w || h > grid_image_real_h)
 		{
 			if (w >= h)
 			{
-				iw = grid_image_real_w;
 				ih = (float)grid_image_real_w / w * h;
+				if (ih > grid_image_real_h)
+				{
+					iw = (float)grid_image_real_h / h * w;
+					ih = grid_image_real_h;
+				}
+				else
+				{
+					iw = grid_image_real_w;
+				}
 			}
 			else
 			{
@@ -302,17 +315,12 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 
 		item->layout = layout;
 	}
-	else if (item->type_index != ATOM_INDEX_IMAGE && !strcmp(part, "elm.swallow.entry")) /* text/uri */
+	else if (item->type_index != ATOM_INDEX_IMAGE && !strcmp(part, "elm.swallow.entry")) /* text */
 	{
 		Evas_Object *layout = elm_layout_add(obj);
-		elm_layout_theme_set(layout, "gengrid", "widestyle", "horizontal_layout");
-		edje_object_signal_callback_add(elm_layout_edje_get(layout), 
+		elm_layout_file_set(layout, APP_EDJ_FILE, "elm/gengrid/item/clipboard_text/default");
+		edje_object_signal_callback_add(elm_layout_edje_get(layout),
 				"mouse,up,1", "*", _grid_item_ly_clicked, data);
-		Evas_Object *rect = evas_object_rectangle_add(evas_object_evas_get(obj));
-		evas_object_resize(rect, cd->grid_item_w, cd->grid_item_h);
-		evas_object_color_set(rect, 237, 233, 208, 255);
-		evas_object_show(rect);
-		elm_object_part_content_set(layout, "elm.swallow.icon", rect);
 
 		Evas_Object *ientry = elm_entry_add(obj);
 		evas_object_size_hint_weight_set(ientry, 0, 0);
@@ -331,7 +339,7 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 		elm_entry_editable_set(ientry, EINA_FALSE);
 		elm_entry_context_menu_disabled_set(ientry, EINA_TRUE);
 		evas_object_show(ientry);
-		elm_object_part_content_set(layout, "elm.swallow.inner", ientry);
+		elm_object_part_content_set(layout, "elm.swallow.entry", ientry);
 
 		item->layout = layout;
 	}
@@ -353,8 +361,8 @@ static void clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emis
 	if (ad->clipdrawer->anim_status != STATUS_NONE)
 		return;
 
-#define EDJE_CLOSE_PART_PREFIX "background/title/close"
-#define EDJE_DELETE_MODE_PREFIX "background/title/delete"
+#define EDJE_CLOSE_PART_PREFIX "background/title/close/image"
+#define EDJE_DELETE_MODE_PREFIX "background/title/delete/image"
 	if (!strncmp(source, EDJE_CLOSE_PART_PREFIX, strlen(EDJE_CLOSE_PART_PREFIX)))
 	{
 		clipdrawer_lower_view(ad);
@@ -377,15 +385,20 @@ static void _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emis
 
 	Elm_Object_Item *sgobj = NULL;
 	sgobj = elm_gengrid_selected_item_get(cd->gengrid);
-	item = elm_object_item_data_get(sgobj);
+	if (!sgobj)
+	{
+		DTRACE("ERR: the gengrid item is unselected\n");
+		return;
+	}
 
-	if (!sgobj || !item)
+	item = elm_object_item_data_get(sgobj);
+	if (!item)
 	{
 		DTRACE("ERR: cbhm can't get the selected item\n");
 		return;
 	}
 
-	#define EDJE_DELBTN_PART_PREFIX "delbtn"
+	#define EDJE_DELBTN_PART_PREFIX "delbtn/img"
 	if (strncmp(source, EDJE_DELBTN_PART_PREFIX, strlen(EDJE_DELBTN_PART_PREFIX)))
 	{
 		elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
