@@ -112,7 +112,7 @@ static Eina_Bool keydown_cb(void *data, int type, void *event)
 	if (!strcmp(ev->keyname, KEY_END))
 		clipdrawer_lower_view(ad);
 
-	return ECORE_CALLBACK_PASS_ON;
+	return ECORE_CALLBACK_DONE;
 }
 
 ClipdrawerData* init_clipdrawer(AppData *ad)
@@ -205,6 +205,7 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 
 void depose_clipdrawer(ClipdrawerData *cd)
 {
+	utilx_ungrab_key(ecore_x_display_get(), cd->x_main_win, KEY_END);
 	evas_object_del(cd->main_win);
 	if (cd->anim_timer)
 		ecore_timer_del(cd->anim_timer);
@@ -460,7 +461,7 @@ void setting_win(Ecore_X_Display *x_disp, Ecore_X_Window x_main_win)
 	ecore_x_icccm_name_class_set(x_main_win, "NORMAL_WINDOW", "NORMAL_WINDOW");
 
 	set_focus_for_app_window(x_main_win, EINA_FALSE);
-
+	utilx_grab_key(x_disp, x_main_win, KEY_END, TOP_POSITION_GRAB);
 }
 
 Evas_Object *create_win(ClipdrawerData *cd, const char *name)
