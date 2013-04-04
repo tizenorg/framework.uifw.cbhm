@@ -702,6 +702,29 @@ static Eina_Bool _xproperty_notify_cb(void *data, int type, void *event)
 	return EINA_TRUE;
 }
 
+static Eina_Bool _xzone_init_cb(void *data, int type, void *event)
+{
+	CALLED();
+	if (!data || !event) return EINA_FALSE;
+	AppData *ad = data;
+	ClipdrawerData *cd = ad->clipdrawer;
+	XHandlerData *xd = ad->xhandler;
+	Ecore_X_Event_Window_Property *pevent = (Ecore_X_Event_Window_Property *)event;
+
+	if (pevent->atom == ECORE_X_ATOM_E_ILLUME_ZONE)
+	{
+		Ecore_X_Window zone;
+		int val_len = ecore_x_window_prop_window_get(cd->x_main_win, ECORE_X_ATOM_E_ILLUME_ZONE, &zone, 1);
+		if (val_len > 0)
+		{
+			ecore_event_handler_del(xd->xproperty_notify_handler);
+			xd->xproperty_notify_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_PROPERTY, _xproperty_notify_cb, ad);
+		}
+	}
+
+	return EINA_TRUE;
+}
+
 static Eina_Bool _xwin_destroy_cb(void *data, int type, void *event)
 {
 	CALLED();
@@ -723,8 +746,13 @@ XHandlerData *init_xhandler(AppData *ad)
 	xd->xsel_notify_handler = ecore_event_handler_add(ECORE_X_EVENT_SELECTION_NOTIFY, _xsel_notify_cb, ad);
 	xd->xclient_msg_handler = ecore_event_handler_add(ECORE_X_EVENT_CLIENT_MESSAGE, _xclient_msg_cb, ad);
 	xd->xfocus_out_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_FOCUS_OUT, _xfocus_out_cb, ad);
-	xd->xproperty_notify_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_PROPERTY, _xproperty_notify_cb, ad);
+	xd->xproperty_notify_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_PROPERTY, _xzone_init_cb, ad);
 	xd->xwindow_destroy_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_DESTROY, _xwin_destroy_cb, ad);
+
+	ClipdrawerData *cd = ad->clipdrawer;
+	/* initialize zone window */
+	evas_object_show(cd->main_win);
+	evas_object_hide(cd->main_win);
 
 	xd->atomInc = ecore_x_atom_get("INCR");
 	xd->atomWindowRotate = ecore_x_atom_get("_E_ILLUME_ROTATE_WINDOW_ANGLE");
