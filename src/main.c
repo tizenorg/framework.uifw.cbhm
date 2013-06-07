@@ -16,7 +16,7 @@
  */
 
 
-
+#include <systemd/sd-daemon.h>
 #include <appcore-efl.h>
 #include <Ecore_X.h>
 #include <X11/Xlib.h>
@@ -170,6 +170,9 @@ int main(int argc, char *argv[])
 	g_main_ad = ad;
 
 	appcore_set_i18n(PACKAGE, LOCALEDIR);
+
+	// Notyfication to systemd
+	sd_notify(1, "READY=1");
 
 	return appcore_efl_main(PACKAGE, &argc, &argv, &ops);
 }

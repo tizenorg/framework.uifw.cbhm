@@ -6,7 +6,6 @@ Release:    1
 Group:      TO_BE/FILLED_IN
 License:    APLv2
 Source0:    %{name}-%{version}.tar.gz
-Source1:    cbhm.service
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(elementary)
 BuildRequires:  pkgconfig(appcore-efl)
@@ -20,6 +19,8 @@ BuildRequires:  pkgconfig(xrandr)
 BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(enotify)
 BuildRequires:  edje-tools
+BuildRequires:    pkgconfig(libsystemd-daemon)
+%{?systemd_requires}
 
 %description
 Description: cbhm application
@@ -28,7 +29,6 @@ Description: cbhm application
 %prep
 %setup -q
 cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
-
 
 %build
 make %{?jobs:-j%jobs}
@@ -45,10 +45,16 @@ mkdir -p %{buildroot}%{_sysconfdir}/rc.d/rc3.d
 mkdir -p %{buildroot}/usr/lib/systemd/user/core-efl.target.wants
 
 ln -s /etc/init.d/cbhm %{buildroot}%{_sysconfdir}/rc.d/rc3.d/S95cbhm
-install -m 644 %{SOURCE1} %{buildroot}/usr/lib/systemd/user/cbhm.service
 mkdir -p %{buildroot}/etc/smack/accesses.d/
 cp %{_builddir}/%{buildsubdir}/cbhm.rule %{buildroot}/etc/smack/accesses.d/cbhm.rule
 ln -s ../cbhm.service  %{buildroot}/usr/lib/systemd/user/core-efl.target.wants/cbhm.service
+
+%post
+echo "INFO: System should be restarted or execute: systemctl --user daemon-reload from user session to finish service installation."
+
+%preun
+
+%postun
 
 %files
 %manifest %{name}.manifest
