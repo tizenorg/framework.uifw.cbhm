@@ -1,0 +1,6 @@
+cbhm system::vconf arwx
+cbhm system::use_internet r
+cbhm isf rx
+cbhm ail::db rw
+cbhm mobileprint x
+cbhm svi-data x

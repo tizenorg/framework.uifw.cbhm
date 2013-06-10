@@ -46,6 +46,8 @@ mkdir -p %{buildroot}/usr/lib/systemd/user/core-efl.target.wants
 
 ln -s /etc/init.d/cbhm %{buildroot}%{_sysconfdir}/rc.d/rc3.d/S95cbhm
 install -m 644 %{SOURCE1} %{buildroot}/usr/lib/systemd/user/cbhm.service
+mkdir -p %{buildroot}/etc/smack/accesses.d/
+cp %{_builddir}/%{buildsubdir}/cbhm.rule %{buildroot}/etc/smack/accesses.d/cbhm.rule
 ln -s ../cbhm.service  %{buildroot}/usr/lib/systemd/user/core-efl.target.wants/cbhm.service
 
 %files
@@ -59,3 +61,4 @@ ln -s ../cbhm.service  %{buildroot}/usr/lib/systemd/user/core-efl.target.wants/c
 /usr/lib/systemd/user/cbhm.service
 /usr/lib/systemd/user/core-efl.target.wants/cbhm.service
 /usr/share/license/%{name}
+/etc/smack/accesses.d/cbhm.rule
