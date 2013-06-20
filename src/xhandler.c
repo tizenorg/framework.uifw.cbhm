@@ -717,6 +717,8 @@ static Eina_Bool _xzone_init_cb(void *data, int type, void *event)
 		int val_len = ecore_x_window_prop_window_get(cd->x_main_win, ECORE_X_ATOM_E_ILLUME_ZONE, &zone, 1);
 		if (val_len > 0)
 		{
+			Ecore_X_Window zone = ecore_x_e_illume_zone_get(cd->x_main_win);
+			ecore_x_e_illume_clipboard_state_set(zone, ECORE_X_ILLUME_CLIPBOARD_STATE_OFF);
 			ecore_event_handler_del(xd->xproperty_notify_handler);
 			xd->xproperty_notify_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_PROPERTY, _xproperty_notify_cb, ad);
 		}
