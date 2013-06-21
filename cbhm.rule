@@ -1,3 +1,4 @@
+cbhm system::homedir rwxat
 cbhm system::vconf arwx
 cbhm system::use_internet r
 cbhm isf rx
