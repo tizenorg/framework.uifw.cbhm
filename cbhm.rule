@@ -5,3 +5,5 @@ cbhm isf rx
 cbhm ail::db rw
 cbhm mobileprint x
 cbhm svi-data x
+cbhm device::app_logging w
+cbhm device::sys_logging w
