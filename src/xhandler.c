@@ -436,6 +436,7 @@ static Eina_Bool _xclient_msg_cb(void *data, int type, void *event)
 	CALLED();
 	AppData *ad = data;
 	XHandlerData *xd = ad->xhandler;
+	ClipdrawerData *cd = ad->clipdrawer;
 
 	/*	struct _Ecore_X_Event_Client_Message {
 		Ecore_X_Window win;
@@ -466,13 +467,19 @@ static Eina_Bool _xclient_msg_cb(void *data, int type, void *event)
 	}
 	else if (strncmp("show", ev->data.b, 4) == 0)
 	{
-		ad->x_active_win = ev->win;
-		if (ev->data.b[4] == '1')
-			clipdrawer_paste_textonly_set(ad, EINA_FALSE);
-		else
-			clipdrawer_paste_textonly_set(ad, EINA_TRUE);
+		Ecore_X_Window zone = ecore_x_e_illume_zone_get(cd->x_main_win);
+		Ecore_X_Illume_Clipboard_State state = ecore_x_e_illume_clipboard_state_get(zone);
 
-		clipdrawer_activate_view(ad);
+		if ((state != ECORE_X_ILLUME_CLIPBOARD_STATE_ON || ad->x_active_win != ev->win))
+		{
+			ad->x_active_win = ev->win;
+			if (ev->data.b[4] == '1')
+				clipdrawer_paste_textonly_set(ad, EINA_FALSE);
+			else
+				clipdrawer_paste_textonly_set(ad, EINA_TRUE);
+
+			clipdrawer_activate_view(ad);
+		}
 	}
 	else if (!strcmp("cbhm_hide", ev->data.b))
 	{
