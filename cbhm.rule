@@ -1,7 +1,9 @@
 cbhm system::homedir rwxat
 cbhm system::vconf arwx
 cbhm system::use_internet r
-cbhm isf rx
+cbhm xorg rw
+cbhm isf rwx
+cbhm e17 rw
 cbhm ail::db rw
 cbhm mobileprint x
 cbhm svi-data x
