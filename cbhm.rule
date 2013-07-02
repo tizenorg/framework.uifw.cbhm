@@ -9,3 +9,6 @@ cbhm mobileprint x
 cbhm svi-data x
 cbhm device::app_logging w
 cbhm device::sys_logging w
+root cbhm rw---
+_default_ cbhm rw---
+cbhm popsync-agent::vconf rwxat
