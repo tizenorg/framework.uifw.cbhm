@@ -726,6 +726,9 @@ static Eina_Bool _xzone_init_cb(void *data, int type, void *event)
 		{
 			Ecore_X_Window zone = ecore_x_e_illume_zone_get(cd->x_main_win);
 			ecore_x_e_illume_clipboard_state_set(zone, ECORE_X_ILLUME_CLIPBOARD_STATE_OFF);
+
+			/* hide clipboard elm_win after initializing zone x_win */
+			evas_object_hide(cd->main_win);
 			ecore_event_handler_del(xd->xproperty_notify_handler);
 			xd->xproperty_notify_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_PROPERTY, _xproperty_notify_cb, ad);
 		}
@@ -759,9 +762,8 @@ XHandlerData *init_xhandler(AppData *ad)
 	xd->xwindow_destroy_handler = ecore_event_handler_add(ECORE_X_EVENT_WINDOW_DESTROY, _xwin_destroy_cb, ad);
 
 	ClipdrawerData *cd = ad->clipdrawer;
-	/* initialize zone window */
+	/* show clipboard elm_win to initialize zone x_win */
 	evas_object_show(cd->main_win);
-	evas_object_hide(cd->main_win);
 
 	xd->atomInc = ecore_x_atom_get("INCR");
 	xd->atomWindowRotate = ecore_x_atom_get("_E_ILLUME_ROTATE_WINDOW_ANGLE");
