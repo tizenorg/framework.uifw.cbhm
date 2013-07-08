@@ -40,11 +40,8 @@ rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/license
 cp %{_builddir}/%{buildsubdir}/LICENSE %{buildroot}/usr/share/license/%{name}
 
-mkdir -p %{buildroot}%{_sysconfdir}/init.d
-mkdir -p %{buildroot}%{_sysconfdir}/rc.d/rc3.d
 mkdir -p %{buildroot}/usr/lib/systemd/user/core-efl.target.wants
 
-ln -s /etc/init.d/cbhm %{buildroot}%{_sysconfdir}/rc.d/rc3.d/S95cbhm
 mkdir -p %{buildroot}/etc/smack/accesses.d/
 cp %{_builddir}/%{buildsubdir}/cbhm.rule %{buildroot}/etc/smack/accesses.d/cbhm.rule
 ln -s ../cbhm.service  %{buildroot}/usr/lib/systemd/user/core-efl.target.wants/cbhm.service
@@ -59,8 +56,6 @@ echo "INFO: System should be restarted or execute: systemctl --user daemon-reloa
 %files
 %manifest %{name}.manifest
 %defattr(-,root,root,-)
-%{_sysconfdir}/init.d/cbhm
-%{_sysconfdir}/rc.d/rc3.d/S95cbhm
 %{_bindir}/cbhm
 %{_datadir}/cbhm/icons/cbhm_default_img.png
 %{_datadir}/edje/cbhmdrawer.edj
