@@ -384,15 +384,6 @@ static void _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emis
 	if (cd->anim_status != STATUS_NONE)
 		return;
 
-	Elm_Object_Item *sgobj = NULL;
-	sgobj = elm_gengrid_selected_item_get(cd->gengrid);
-	if (!sgobj)
-	{
-		DTRACE("ERR: the gengrid item is unselected\n");
-		return;
-	}
-
-	item = elm_object_item_data_get(sgobj);
 	if (!item)
 	{
 		DTRACE("ERR: cbhm can't get the selected item\n");
@@ -402,8 +393,6 @@ static void _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emis
 	#define EDJE_DELBTN_PART_PREFIX "delbtn/img"
 	if (strncmp(source, EDJE_DELBTN_PART_PREFIX, strlen(EDJE_DELBTN_PART_PREFIX)))
 	{
-		elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
-
 		if (delete_mode)
 			return;
 
@@ -414,8 +403,6 @@ static void _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emis
 	}
 	else
 	{
-		elm_gengrid_item_selected_set(sgobj, EINA_FALSE);
-
 		item_delete_by_CNP_ITEM(ad, item);
 	}
 }
