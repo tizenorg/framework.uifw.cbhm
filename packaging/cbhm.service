@@ -1,6 +1,6 @@
 [Unit]
 Description=Clipboard helper module
-After=xorg.target
+After=xorg.target e17.service boot-animation.service
 
 [Service]
 Type=simple

@@ -465,7 +465,7 @@ Evas_Object *create_win(ClipdrawerData *cd, const char *name)
 	elm_win_borderless_set(win, EINA_TRUE);
 	ecore_x_window_size_get(ecore_x_window_root_first_get(), &cd->root_w, &cd->root_h);
 	DMSG("root_w: %d, root_h: %d\n", cd->root_w, cd->root_h);
-	evas_object_resize(win, cd->root_w, cd->root_h);
+	//evas_object_resize(win, cd->root_w, cd->root_h);
 
 	elm_config_scale_set((double)cd->root_w/DEFAULT_WIDTH);
 	return win;
