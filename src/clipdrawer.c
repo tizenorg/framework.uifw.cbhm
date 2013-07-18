@@ -169,7 +169,7 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 	/* create and setting gengrid */
 	elm_theme_extension_add(NULL, APP_EDJ_FILE);
 	edje_object_signal_callback_add(elm_layout_edje_get(cd->main_layout),
-			"mouse,up,1", "*", clipdrawer_ly_clicked, ad);
+			"mouse,clicked,1", "*", clipdrawer_ly_clicked, ad);
 
 	cd->gengrid = elm_gengrid_add(cd->main_win);
 	elm_object_part_content_set(cd->main_layout, "historyitems", cd->gengrid);
@@ -264,7 +264,7 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 		Evas_Object *layout = elm_layout_add(obj);
 		elm_layout_file_set(layout, APP_EDJ_FILE, "elm/gengrid/item/clipboard_image/default");
 		edje_object_signal_callback_add(elm_layout_edje_get(layout),
-				"mouse,up,1", "*", _grid_item_ly_clicked, data);
+				"mouse,clicked,1", "*", _grid_item_ly_clicked, data);
 
 		int grid_image_real_w = cd->grid_image_item_w;
 		int grid_image_real_h = cd->grid_image_item_h;
@@ -321,7 +321,7 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 		Evas_Object *layout = elm_layout_add(obj);
 		elm_layout_file_set(layout, APP_EDJ_FILE, "elm/gengrid/item/clipboard_text/default");
 		edje_object_signal_callback_add(elm_layout_edje_get(layout),
-				"mouse,up,1", "*", _grid_item_ly_clicked, data);
+				"mouse,clicked,1", "*", _grid_item_ly_clicked, data);
 
 		Evas_Object *ientry = elm_entry_add(obj);
 		evas_object_size_hint_weight_set(ientry, 0, 0);
