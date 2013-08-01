@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 
-
-
 #include <utilX.h>
 #include "clipdrawer.h"
 #include "item_manager.h"
@@ -37,7 +35,6 @@
 
 static Evas_Object *create_win(ClipdrawerData *cd, const char *name);
 static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *part);
-static void _grid_del(void *data, Evas_Object *obj);
 static Eina_Bool clipdrawer_add_item(AppData *ad, CNP_ITEM *item);
 static Eina_Bool clipdrawer_del_item(AppData *ad, CNP_ITEM *item);
 static void clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const char *source);
@@ -55,12 +52,14 @@ static void _change_gengrid_paste_textonly_mode(ClipdrawerData *cd)
 	while (gitem)
 	{
 		item = elm_object_item_data_get(gitem);
-		if ((item->type_index == ATOM_INDEX_IMAGE) && (item->layout))
+		if(!item)
+			return;
+		if ((item->type_index == ATOM_INDEX_IMAGE))
 		{
 			if (cd->paste_text_only)
-				edje_object_signal_emit(elm_layout_edje_get(item->layout), "elm,state,show,dim", "elm");
+				elm_object_signal_emit(item->layout, "elm,state,show,dim", "elm");
 			else
-				edje_object_signal_emit(elm_layout_edje_get(item->layout), "elm,state,hide,dim", "elm");
+				elm_object_signal_emit(item->layout, "elm,state,hide,dim", "elm");
 		}
 		gitem = elm_gengrid_item_next_get(gitem);
 	}
@@ -168,7 +167,7 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 
 	/* create and setting gengrid */
 	elm_theme_extension_add(NULL, APP_EDJ_FILE);
-	edje_object_signal_callback_add(elm_layout_edje_get(cd->main_layout),
+	elm_object_signal_callback_add(cd->main_layout,
 			"mouse,clicked,1", "*", clipdrawer_ly_clicked, ad);
 
 	cd->gengrid = elm_gengrid_add(cd->main_win);
@@ -187,7 +186,7 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 	cd->gic.func.text_get = NULL;
 	cd->gic.func.content_get = _grid_content_get;
 	cd->gic.func.state_get = NULL;
-	cd->gic.func.del = _grid_del;
+	cd->gic.func.del = NULL;
 
 	evas_object_show(cd->gengrid);
 
@@ -244,13 +243,6 @@ static Eina_Bool clipdrawer_del_item(AppData *ad, CNP_ITEM *item)
 	return EINA_TRUE;
 }
 
-static void _grid_del(void *data, Evas_Object *obj)
-{
-	CNP_ITEM *item = data;
-	item->gitem = NULL;
-	item->layout = NULL;
-}
-
 static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *part)
 {
 	CNP_ITEM *item = data;
@@ -263,7 +255,7 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 
 		Evas_Object *layout = elm_layout_add(obj);
 		elm_layout_file_set(layout, APP_EDJ_FILE, "elm/gengrid/item/clipboard_image/default");
-		edje_object_signal_callback_add(elm_layout_edje_get(layout),
+		elm_object_signal_callback_add(layout,
 				"mouse,clicked,1", "*", _grid_item_ly_clicked, data);
 
 		int grid_image_real_w = cd->grid_image_item_w;
@@ -310,9 +302,9 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 		elm_object_part_content_set(layout, "elm.swallow.icon", sicon);
 
 		if (cd->paste_text_only)
-			edje_object_signal_emit(elm_layout_edje_get(layout), "elm,state,show,dim", "elm");
+			elm_object_signal_emit(layout, "elm,state,show,dim", "elm");
 		else
-			edje_object_signal_emit(elm_layout_edje_get(layout), "elm,state,hide,dim", "elm");
+			elm_object_signal_emit(layout, "elm,state,hide,dim", "elm");
 
 		item->layout = layout;
 	}
@@ -320,7 +312,7 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 	{
 		Evas_Object *layout = elm_layout_add(obj);
 		elm_layout_file_set(layout, APP_EDJ_FILE, "elm/gengrid/item/clipboard_text/default");
-		edje_object_signal_callback_add(elm_layout_edje_get(layout),
+		elm_object_signal_callback_add(layout,
 				"mouse,clicked,1", "*", _grid_item_ly_clicked, data);
 
 		Evas_Object *ientry = elm_entry_add(obj);
@@ -348,9 +340,9 @@ static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *
 		return NULL;
 
 	if (delete_mode)
-		edje_object_signal_emit(elm_layout_edje_get(item->layout), "elm,state,show,delbtn", "elm");
+		elm_object_signal_emit(item->layout, "elm,state,show,delbtn", "elm");
 	else
-		edje_object_signal_emit(elm_layout_edje_get(item->layout), "elm,state,hide,delbtn", "elm");
+		elm_object_signal_emit(item->layout, "elm,state,hide,delbtn", "elm");
 
 	return item->layout;
 }
@@ -695,8 +687,11 @@ void clipdrawer_activate_view(AppData* ad)
 	CALLED();
 	ClipdrawerData *cd = ad->clipdrawer;
 
-	elm_object_part_text_set(cd->main_layout, "panel_title", S_CLIPBOARD);
-	elm_object_part_text_set(cd->main_layout, "panel_function", S_DELETE);
+	if(cd->main_layout)
+	{
+		elm_object_part_text_set(cd->main_layout, "panel_title", S_CLIPBOARD);
+		elm_object_part_text_set(cd->main_layout, "panel_function", S_DELETE);
+	}
 
 	if (cd->main_win)
 	{
@@ -738,6 +733,8 @@ void _delete_mode_set(AppData* ad, Eina_Bool del_mode)
 	else
 		delete_mode = EINA_FALSE;
 
+	if(!cd->main_layout)
+		return;
 	if (delete_mode)
 	{
 		elm_object_part_text_set(cd->main_layout, "panel_function", S_DONE);
@@ -750,10 +747,12 @@ void _delete_mode_set(AppData* ad, Eina_Bool del_mode)
 	while (gitem)
 	{
 		item = elm_object_item_data_get(gitem);
+		if(!item)
+			return;
 		if (delete_mode)
-			edje_object_signal_emit(elm_layout_edje_get(item->layout), "elm,state,show,delbtn", "elm");
+			elm_object_signal_emit(item->layout, "elm,state,show,delbtn", "elm");
 		else
-			edje_object_signal_emit(elm_layout_edje_get(item->layout), "elm,state,hide,delbtn", "elm");
+			elm_object_signal_emit(item->layout, "elm,state,hide,delbtn", "elm");
 
 		gitem = elm_gengrid_item_next_get(gitem);
 	}
