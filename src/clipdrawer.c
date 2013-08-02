@@ -27,6 +27,7 @@
 #define ANIM_DURATION 30 // 1 seconds
 #define ANIM_FLOPS (0.5/30)
 #define DEFAULT_WIDTH 720
+#define LOWER_VIEW_PREPARE_TIME 0.2
 
 #define MULTI_(id) dgettext("sys_string", #id)
 #define S_CLIPBOARD MULTI_(IDS_COM_BODY_CLIPBOARD)
@@ -196,6 +197,8 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 
 	cd->keydown_handler = ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, keydown_cb, ad);
 	cd->evas = evas_object_evas_get(cd->main_win);
+
+	cd->lower_view_timer = NULL;
 
 	delete_mode = EINA_FALSE;
 
@@ -706,19 +709,42 @@ void clipdrawer_activate_view(AppData* ad)
 	}
 }
 
-void clipdrawer_lower_view(AppData* ad)
+static Eina_Bool _lower_view_timer_cb(void *data)
 {
 	CALLED();
+	if (!data)
+		return ECORE_CALLBACK_PASS_ON;
+
+	AppData *ad = data;
 	ClipdrawerData *cd = ad->clipdrawer;
+	if (!cd)
+		return ECORE_CALLBACK_PASS_ON;
+	ecore_timer_del(cd->lower_view_timer);
+	cd->lower_view_timer = NULL;
+
 	if (cd->main_win)
 	{
 		evas_object_hide(cd->main_win);
 		elm_win_lower(cd->main_win);
 		unset_transient_for(cd->x_main_win, ad->x_active_win);
 		_delete_mode_set(ad, EINA_FALSE);
+		return ECORE_CALLBACK_DONE;
+	}
+	return ECORE_CALLBACK_PASS_ON;
+}
+
+void clipdrawer_lower_view(AppData* ad)
+{
+	CALLED();
+	ClipdrawerData *cd = ad->clipdrawer;
+
+	if (!cd->lower_view_timer)
+	{
 		Ecore_X_Window zone = ecore_x_e_illume_zone_get(cd->x_main_win);
 		ecore_x_e_illume_clipboard_state_set(zone, ECORE_X_ILLUME_CLIPBOARD_STATE_OFF);
 		ecore_x_e_illume_clipboard_geometry_set(zone, 0, 0, 0, 0);
+
+		cd->lower_view_timer = ecore_timer_add(LOWER_VIEW_PREPARE_TIME, _lower_view_timer_cb, ad);
 	}
 }
 

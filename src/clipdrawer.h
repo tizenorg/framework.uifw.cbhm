@@ -57,6 +57,8 @@ struct _ClipdrawerData {
 	AnimStatus anim_status;
 	int anim_count;
 	Eina_Bool paste_text_only:1;
+
+	Ecore_Timer *lower_view_timer;
 };
 
 #include "cbhm.h"
