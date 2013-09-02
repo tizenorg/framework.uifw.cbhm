@@ -699,6 +699,7 @@ void clipdrawer_activate_view(AppData* ad)
 	if (cd->main_win)
 	{
 		set_transient_for(cd->x_main_win, ad->x_active_win);
+		_delete_mode_set(ad, EINA_FALSE);
 		cd->o_degree = get_active_window_degree(ad->x_active_win);
 		elm_win_rotation_set(cd->main_win, cd->o_degree);
 		set_rotation_to_clipdrawer(cd);
