@@ -55,6 +55,10 @@ static Eina_Bool setClipboardManager(AppData *ad)
 {
 	ad->x_disp = ecore_x_display_get();
 	DMSG("x_disp: 0x%x\n", ad->x_disp);
+
+	 if(!ecore_file_mkpath(COPIED_DATA_STORAGE_DIR))
+		 DMSG("ecore_file_mkpath fail");
+
 	if (ad->x_disp)
 	{
 		Ecore_X_Atom clipboard_manager_atom = XInternAtom(ad->x_disp, ATOM_CLIPBOARD_MANAGER_NAME, False);

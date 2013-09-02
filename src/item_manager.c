@@ -36,7 +36,12 @@ static void item_free(CNP_ITEM *item)
 			item->ad->storage_item_del(item->ad, item);
 	}
 	if (item->data)
+	{
+		if(item->type_index == ATOM_INDEX_IMAGE)
+			ecore_file_remove(item->data);
+
 		FREE(item->data);
+	}
 
 	if (item->ad)
 	{
@@ -77,6 +82,10 @@ CNP_ITEM *item_add_by_CNP_ITEM(AppData *ad, CNP_ITEM *item)
 
 CNP_ITEM *item_add_by_data(AppData *ad, Ecore_X_Atom type, void *data, int len)
 {
+	char *copied_path = NULL;
+	char *filename = NULL;
+	int size_path=0;
+
 	if (!ad || !data)
 	{
 		DMSG("WRONG PARAMETER in %s\n", __func__);
@@ -87,6 +96,23 @@ CNP_ITEM *item_add_by_data(AppData *ad, Ecore_X_Atom type, void *data, int len)
 	if (!item)
 		return NULL;
 	item->type_index = atom_type_index_get(ad, type);
+
+	if(item->type_index == ATOM_INDEX_IMAGE)
+	{
+		filename = ecore_file_file_get(data);
+		size_path = snprintf(NULL, 0, COPIED_DATA_STORAGE_DIR"/%s", filename) + 1;
+		copied_path = MALLOC(sizeof(char) * size_path);
+
+		if(copied_path)
+			snprintf(copied_path, size_path, COPIED_DATA_STORAGE_DIR"/%s", filename);
+
+		if(!ecore_file_cp(data, copied_path))
+			DMSG("ecore_file_cp fail!");
+
+		data = copied_path;
+		len = strlen(copied_path) + 1;
+	}
+
 	item->data = data;
 	item->len = len;
 
