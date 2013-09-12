@@ -40,6 +40,7 @@ rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/license
 cp %{_builddir}/%{buildsubdir}/LICENSE %{buildroot}/usr/share/license/%{name}
 
+mkdir -p %{buildroot}/opt/var/.cbhm_files
 mkdir -p %{buildroot}/usr/lib/systemd/user/core-efl.target.wants
 
 mkdir -p %{buildroot}/etc/smack/accesses.d/
@@ -48,6 +49,8 @@ ln -s ../cbhm.service  %{buildroot}/usr/lib/systemd/user/core-efl.target.wants/c
 
 %post
 echo "INFO: System should be restarted or execute: systemctl --user daemon-reload from user session to finish service installation."
+//RSA Only for folder access control
+chown app:app /opt/var/.cbhm_files/
 
 %preun
 
@@ -63,3 +66,4 @@ echo "INFO: System should be restarted or execute: systemctl --user daemon-reloa
 /usr/lib/systemd/user/core-efl.target.wants/cbhm.service
 /usr/share/license/%{name}
 /etc/smack/accesses.d/cbhm.rule
+/opt/var/.cbhm_files
