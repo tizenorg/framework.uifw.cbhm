@@ -373,17 +373,18 @@ static void clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emis
 static void _grid_item_ly_clicked(void *data, Evas_Object *obj, const char *emission, const char *source)
 {
 	CNP_ITEM *item = data;
-	AppData *ad = item->ad;
-	ClipdrawerData *cd = ad->clipdrawer;
-
-	if (cd->anim_status != STATUS_NONE)
-		return;
 
 	if (!item)
 	{
 		DTRACE("ERR: cbhm can't get the selected item\n");
 		return;
 	}
+
+	AppData *ad = item->ad;
+	ClipdrawerData *cd = ad->clipdrawer;
+
+	if (cd->anim_status != STATUS_NONE)
+		return;
 
 	#define EDJE_DELBTN_PART_PREFIX "delbtn/img"
 	if (strncmp(source, EDJE_DELBTN_PART_PREFIX, strlen(EDJE_DELBTN_PART_PREFIX)))

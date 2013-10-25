@@ -103,8 +103,10 @@ CNP_ITEM *item_add_by_data(AppData *ad, Ecore_X_Atom type, void *data, int len)
 		size_path = snprintf(NULL, 0, COPIED_DATA_STORAGE_DIR"/%s", filename) + 1;
 		copied_path = MALLOC(sizeof(char) * size_path);
 
-		if(copied_path)
-			snprintf(copied_path, size_path, COPIED_DATA_STORAGE_DIR"/%s", filename);
+		if(!copied_path)
+			return NULL;
+
+		snprintf(copied_path, size_path, COPIED_DATA_STORAGE_DIR"/%s", filename);
 
 		if(!ecore_file_cp(data, copied_path))
 			DMSG("ecore_file_cp fail!");
