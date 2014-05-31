@@ -1,0 +1,10 @@
+[Unit]
+Description=Clipboard helper module
+After=xorg.target e17.service boot-animation.service
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/cbhm
+
+[Install]
+WantedBy=core-efl.target

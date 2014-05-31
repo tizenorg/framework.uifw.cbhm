@@ -1,0 +1,12 @@
+<manifest>
+	<define>
+		<domain name="cbhm"/>
+	</define>
+	<request>
+		<domain name="cbhm"/>
+	</request>
+	<assign>
+		<filesystem path="/usr/lib/systemd/user/cbhm.service" label="_" exec_label="none" />
+		<filesystem path="/usr/lib/systemd/user/core-efl.target.wants/cbhm.service" label="_" exec_label="none" />
+	</assign>
+</manifest>
