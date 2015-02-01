@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Yerinə yetirildi"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Bağla"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Sil"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Hamısı silindi"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Mübadilə buferinə köçürüldü."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Mübadilə buferi"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Ləğv et"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Artıq mövcuddur."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Hamısı silinsin?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Mübadilə buferindən sil"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Mübadilə buferinə bərkit"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Mübadilə buferindən çıxart"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Mübadilə buferi seçimləri"
+

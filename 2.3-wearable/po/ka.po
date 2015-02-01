@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "შესრულებულია"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "დახურვა"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "წაშლა"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "ყველას წაშლა"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "ასლი შენახულია ბუფერში."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "ბუფერული მეხს."
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "გაუქმება"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "უკვე არის."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "ყველა წაიშალოს?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "ბუფერული მეხსიერებიდან წაშლა"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "ბუფერულ მეხსიერებაში ჩაკეტვა"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "ბუფერული მეხსიერებიდან გახსნა"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "ბუფერული მეხსიერების პარამეტრები"
+

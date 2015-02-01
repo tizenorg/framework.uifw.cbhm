@@ -1,0 +1,1987 @@
+/*
+ * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+externals {
+   external: "elm";
+   external: "feedback";
+}
+
+collections {
+base_scale: 1.8;
+#include "scroller.edc"
+#include "popup_layout.edc"
+
+// Clipboard
+#define CLIPBOARD_H_INC 352
+#define CLIPBOARD_LANDSCAPE_H_INC 218
+#define CLIPBOARD_PANEL_TOP_PADDING_INC 0
+#define CLIPBOARD_PANEL_LEFT_PADDING_INC 6 // also used for RIGHT_PADDING
+#define CLIPBOARD_PANEL_H_INC 58
+#define CLIPBOARD_PANEL_LANDS_H_INC 48
+#define CLIPBOARD_CLOSE_BTN_BG_W_INC (CLIPBOARD_PANEL_LEFT_PADDING_INC + CLIPBOARD_CLOSE_BTN_W_INC + CLIPBOARD_PANEL_LEFT_PADDING_INC)
+#define CLIPBOARD_CLOSE_BTN_W_INC 46
+#define CLIPBOARD_CLOSE_BTN_H_INC 46
+#define CLIPBOARD_FUNCTION_BTN_MIN_W_INC 40
+#define CLIPBOARD_FUNCTION_BTN_MAX_W_INC 150
+#define CLIPBOARD_FUNCTION_BTN_LANDSCAPE_MAX_W_INC 337
+
+#define CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 8 // also used for BTN_RIGHT
+#define CLIPBOARD_FUNCTION_BTN_TEXT_MAX_W_INC (CLIPBOARD_FUNCTION_BTN_MAX_W_INC - CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC - CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC)
+#define CLIPBOARD_FUNCTION_BTN_TEXT_LANDSCAPE_MAX_W_INC (CLIPBOARD_FUNCTION_BTN_LANDSCAPE_MAX_W_INC - CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC - CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC)
+#define CLIPBOARD_FUNCTION_BTN_H_INC 58
+
+#define CLIPBOARD_CONTENT_TOP_LEFT_PADDING_INC 0 0
+#define CLIPBOARD_CONTENT_BOTTOM_RIGHT_PADDING_INC 0 0
+#define CLIPBOARD_TITLE_TOP_LEFT_PADDING_INC CLIPBOARD_PANEL_LEFT_PADDING_INC CLIPBOARD_PANEL_TOP_PADDING_INC
+#define CLIPBOARD_DIVIDER_WIDTH_HEIGHT 2 38
+
+// Grid Item
+#define GRID_ITEM_W_INC 140
+#define GRID_ITEM_H_INC 140
+#define GRID_IMAGE_ITEM_W_INC 126
+#define GRID_IMAGE_ITEM_H_INC 126
+#define GRID_ITEM_OUTER_LINE_SIZE_INC 2
+#define GRID_ITEM_INNER_BG_PADDING_INC 12
+#define GRID_TEXT_ITEM_FONT_SIZE_INC 21
+#define GRID_COMBINED_ITEM_FONT_SIZE_INC 20
+#define GRID_COMBINED_TOP_LEFT_PADDING_INC 4
+#define GRID_COMBINED_BOTTOM_PADDING_INC 6
+#define GRID_COMBINED_MAX_SIZE_INC 62 54
+#define GRID_COMBINED_SEPERATOR_PADDING_INC 2
+#define GRID_ITEM_DELETE_BTN_TOP_PADDING_INC 6 6
+#define GRID_ITEM_DELETE_BTN_SIZE_INC 36 36
+#define GRID_ITEM_LOCK_BTN_SIZE_INC 36 36
+#define GRID_ITEM_TEXT_TOP_LEFT_PADDING 8 6
+#define GRID_ITEM_TEXT_MAX_INC 114 96
+
+#define SCROLLER_BOTTOM_RIGHT_PADDING_INC 6
+#define SCROLLER_BOTTOM_PADDING_INC 7
+#define SCROLLER_LEFT_PADDING_INC 5
+#define SCROLLER_BOTTOM_LANDSCAPE_PADDING_INC 15
+
+#define GENGRID_ITEM_SELECT_VI_EFFECT \
+} \
+description { state: "pressed" 0.0; \
+   inherit: "default" 0.0; \
+   map { \
+      on: 1; \
+      perspective: "persp1"; \
+      smooth: 0; \
+   } \
+} \
+description { state: "selected" 0.0; \
+   inherit: "default" 0.0; \
+   map { \
+      on: 1; \
+      perspective: "persp"; \
+      smooth: 1; \
+   }
+
+#define GENGRID_PROGRAM_ITEM_SELECT_VI_EFFECT( TARGET ) \
+   program { name: "vi_pressed"; \
+      action: STATE_SET "pressed" 0.0; \
+      TARGET \
+      after: "vi_zoom_in"; \
+   } \
+   program { name: "vi_zoom_in"; \
+      action: STATE_SET "selected" 0.0; \
+      TARGET \
+      transition: SIN_FAC 0.167 1.1; \
+   } \
+   program { name: "vi_zoom_out"; \
+      action: STATE_SET "pressed" 0.0; \
+      TARGET \
+      transition: SIN_FAC 0.167 1.1; \
+      after: "vi_default"; \
+   } \
+   program { name: "vi_default"; \
+      action: STATE_SET "default" 0.0; \
+      TARGET \
+   }
+
+
+   sounds {
+      sample {
+         name: "touch_sound" RAW;
+         source: "button-pressed.wav";
+      }
+   }
+
+   plugins {
+      plugin {
+         name: "touch_sound";
+         source: "feedback";
+         param: "FEEDBACK_TYPE_SOUND FEEDBACK_PATTERN_TAP";
+      }
+   }
+
+   group { name: "cbhmdrawer";
+      images {
+         image: "clipboard_expand_close.png" COMP;
+         image: "clipboard_expand_press.#.png" COMP;
+         image: "clipboard_btn_press_bg.#.png" COMP;
+         image: "clipboard_title_divider.#.png" COMP;
+      }
+      data.item: "clipboard_height" CLIPBOARD_H_INC;
+      data.item: "clipboard_landscape_height" CLIPBOARD_LANDSCAPE_H_INC;
+      data.item: "grid_item_bg_w" GRID_ITEM_W_INC;
+      data.item: "grid_item_bg_h" GRID_ITEM_H_INC;
+      data.item: "grid_image_item_w" GRID_ITEM_W_INC;
+      data.item: "grid_image_item_h" GRID_ITEM_H_INC;
+
+      script {
+         public g_landscape = 0; // Flag for landscape mode
+      }
+
+      parts {
+         part { name: "background";
+            type: RECT;
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.0 0.0; }
+               rel2 { relative: 1.0 1.0; }
+               color_class: "AO002";
+            }
+         }
+         part { name: "top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.0 0.0;
+               min: CLIPBOARD_TITLE_TOP_LEFT_PADDING_INC;
+               max: CLIPBOARD_TITLE_TOP_LEFT_PADDING_INC;
+               rel1 { relative: 0.0 0.0; to: "background"; }
+               rel2 { relative: 0.0 0.0; to: "background"; }
+            }
+         }
+         part { name: "background/title";
+            type: SPACER;
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               align: 0.0 0.0;
+               min: CLIPBOARD_PANEL_TOP_PADDING_INC CLIPBOARD_PANEL_H_INC;
+               max: -1 CLIPBOARD_PANEL_H_INC;
+               rel1 { relative: 0.0 1.0; to_x: "background"; to_y: "top_left_padding"; }
+               rel2 { relative: 1.0 1.0; to_x: "background"; to_y: "top_left_padding"; }
+            }
+            description { state: "landscape" 0.0;
+               inherit: "default" 0.0;
+               min: CLIPBOARD_PANEL_TOP_PADDING_INC CLIPBOARD_PANEL_LANDS_H_INC;
+               max: -1 CLIPBOARD_PANEL_LANDS_H_INC;
+            }
+         }
+         part { name: "background/title/image";
+            type: RECT;
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               align: 0.0 0.0;
+               rel1 { relative: 0.0 0.0; to: "background";}
+               rel2 { relative: 1.0 1.0; to: "background/title";}
+               color_class: "AO001";
+            }
+         }
+         part { name: "background/title/close/bg";
+            type: RECT;
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 0.0 0.5;
+               min: CLIPBOARD_CLOSE_BTN_BG_W_INC 0;
+               max: CLIPBOARD_CLOSE_BTN_BG_W_INC -1;
+               color: 0 0 0 0;
+               rel1 { relative: 0.0 0.0; to: "background/title"; }
+               rel2 { relative: 0.0 1.0; to: "background/title"; }
+            }
+         }
+         part { name: "background/title/close/image/effect";
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               visible: 0;
+               min: CLIPBOARD_CLOSE_BTN_W_INC CLIPBOARD_CLOSE_BTN_H_INC;
+               max: CLIPBOARD_CLOSE_BTN_W_INC CLIPBOARD_CLOSE_BTN_H_INC;
+               rel1 { to: "background/title/close/bg"; }
+               rel2 { to: "background/title/close/bg"; }
+               color_class: "AO009E1";
+               image { normal: "clipboard_expand_press.#.png"; }
+            }
+            description { state: "pressed" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+            }
+         }
+         part { name: "background/title/close/image";
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.5 0.5;
+               min: CLIPBOARD_CLOSE_BTN_W_INC CLIPBOARD_CLOSE_BTN_H_INC;
+               max: CLIPBOARD_CLOSE_BTN_W_INC CLIPBOARD_CLOSE_BTN_H_INC;
+               rel1 { to: "background/title/close/bg"; }
+               rel2 { to: "background/title/close/bg"; }
+               color_class: "AO009";
+               image { normal: "clipboard_expand_close.png"; }
+            }
+            description { state: "disabled" 0.0;
+               inherit: "default" 0.0;
+               color_class: "AO009D";
+            }
+         }
+         part { name: "title_close_btn_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 0.0 0.5;
+               min: CLIPBOARD_PANEL_LEFT_PADDING_INC 0;
+               rel1 { relative: 1.0 0.0; to_x: "background/title/close/image"; to_y: "background/title"; }
+               rel2 { relative: 1.0 1.0; to_x: "background/title/close/image"; to_y: "background/title"; }
+            }
+         }
+         part { name: "panel_title";
+            type: TEXT;
+            scale: 1;
+            description { state: "default" 0.0;
+               align: 0.0 0.5;
+               text {
+                  min: 0 1;
+                  max: 1 0;
+                  align: 0.5 0.5;
+                  text_class: "ATO001";
+               }
+               rel1 { relative: 1.0 0.0; to_x: "title_close_btn_right_padding"; to_y: "background/title"; }
+               rel2 { relative: 0.0 1.0; to_x: "background/title/delete_all/divider"; to_y: "background/title"; }
+            }
+         }
+         part { name: "delete_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 1.0 0.0;
+               min: CLIPBOARD_PANEL_LEFT_PADDING_INC 0;
+               max: CLIPBOARD_PANEL_LEFT_PADDING_INC -1;
+               rel1 { relative: 1.0 0.0; to: "background/title/image"; }
+               rel2.to: "background/title/image";
+            }
+         }
+         part { name: "delete_text_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 1.0 0.0;
+               min: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
+               max: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
+               rel1 { relative: 0.0 0.0; to: "delete_right_padding"; }
+               rel2 { relative: 0.0 1.0; to: "delete_right_padding"; }
+            }
+         }
+         part { name: "delete_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 1.0 0.5;
+               min: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
+               max: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
+               rel1 { relative: 0.0 0.0; to: "delete_text_left_padding"; }
+               rel2 { relative: 0.0 1.0; to: "delete_text_left_padding"; }
+            }
+         }
+         part { name: "delete_text_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 1.0 0.5;
+               min: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
+               max: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
+               rel1 { relative: 0.0 0.0; to: "panel_function_delete"; }
+               rel2 { relative: 0.0 1.0; to: "panel_function_delete"; }
+            }
+         }
+         part { name: "background/title/delete/divider";
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               align: 1.0 0.5;
+               min: CLIPBOARD_DIVIDER_WIDTH_HEIGHT;
+               max: CLIPBOARD_DIVIDER_WIDTH_HEIGHT;
+               fixed: 1 1;
+               visible: 1;
+                  rel1 { relative: 0.0 0.0; to: "delete_left_padding"; }
+                  rel2 { relative: 0.0 1.0; to: "delete_left_padding"; }
+                  color_class: "AO004";
+                  image { normal: "clipboard_title_divider.#.png";
+               }
+            }
+         }
+         part { name: "background/title/delete/image1";
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               align: 0.0 0.5;
+               min: CLIPBOARD_FUNCTION_BTN_MIN_W_INC CLIPBOARD_FUNCTION_BTN_H_INC;
+               max: -1 CLIPBOARD_FUNCTION_BTN_H_INC;
+               fixed: 1 1;
+               visible: 0;
+               rel1 { relative: 1.0 0.0; to_x: "background/title/delete/divider"; to_y: "background/title"; }
+               rel2.to: "background/title/image";
+               image { normal: "clipboard_btn_press_bg.#.png"; }
+               color_class: "AO009E1";
+            }
+            description { state: "pressed" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+            }
+            description { state: "disabled" 0.0;
+               inherit: "default" 0.0;
+            }
+         }
+         part { name: "background/title/delete/image";
+            scale: 1;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.0 0.0; to: "background/title/delete/image1"; }
+               rel2 { relative: 1.0 1.0; to: "background/title/delete/image1"; }
+               color: 0 0 0 0;
+            }
+         }
+         part { name: "delete_text_bg";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 1.0 0.5;
+               min: CLIPBOARD_FUNCTION_BTN_TEXT_MAX_W_INC 0;
+               max: CLIPBOARD_FUNCTION_BTN_TEXT_MAX_W_INC -1;
+               rel1 { relative: 0.0 0.0; to: "delete_text_right_padding"; }
+               rel2 { relative: 0.0 1.0; to: "delete_text_right_padding"; }
+            }
+            description { state: "landscape" 0.0;
+               inherit: "default" 0.0;
+               min: CLIPBOARD_FUNCTION_BTN_TEXT_LANDSCAPE_MAX_W_INC 0;
+               max: CLIPBOARD_FUNCTION_BTN_TEXT_LANDSCAPE_MAX_W_INC -1;
+            }
+         }
+         part { name: "panel_function_delete";
+            type: TEXT;
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               align: 1.0 0.5;
+               text {
+                  min: 0 1;
+                  max: 1 0;
+                  align: 0.0 0.5;
+                  text_class: "ATO002";
+               }
+               rel1.to: "delete_text_bg";
+               rel2.to: "delete_text_bg";
+               color_class: "ATO002";
+            }
+            description { state: "disabled" 0.0;
+               inherit: "default" 0.0;
+               text.text_class: "ATO005";
+               color_class: "ATO005";
+            }
+         }
+         part { name: "delete_all_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 1.0 0.5;
+               min: 2*CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
+               max: 2*CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
+               rel1 { relative: 0.0 0.0; to: "background/title/delete/divider"; }
+               rel2 { relative: 0.0 1.0; to: "background/title/delete/divider"; }
+            }
+         }
+         part { name: "delete_all_text_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 0.0 0.5;
+               min: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
+               max: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
+               rel1 { relative: 0.0 0.0; to: "delete_all_right_padding"; }
+               rel2 { relative: 0.0 1.0; to: "delete_all_right_padding"; }
+            }
+         }
+         part { name: "delete_all_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 1.0 0.5;
+               min: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
+               max: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
+               rel1 { relative: 0.0 0.0; to: "delete_all_text_left_padding"; }
+               rel2 { relative: 0.0 1.0; to: "delete_all_text_left_padding"; }
+            }
+         }
+         part { name: "delete_all_text_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 1.0 0.5;
+               min: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
+               max: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
+               rel1 { relative: 0.0 0.0; to: "panel_function_delete_all"; }
+               rel2 { relative: 0.0 1.0; to: "panel_function_delete_all"; }
+            }
+         }
+         part { name: "background/title/delete_all/divider";
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               align: 1.0 0.5;
+               min: CLIPBOARD_DIVIDER_WIDTH_HEIGHT;
+               max: CLIPBOARD_DIVIDER_WIDTH_HEIGHT;
+               fixed: 1 1;
+               visible: 1;
+                  rel1 { relative: 0.0 0.0; to_x: "delete_all_left_padding"; to_y: "background/title/image"; }
+                  rel2 { relative: 0.0 1.0; to_x: "delete_all_left_padding"; to_y: "background/title/image"; }
+                  color_class: "AO004";
+                  image { normal: "clipboard_title_divider.#.png";
+               }
+            }
+            description { state: "hide" 0.0;
+               inherit: "default" 0.0;
+               visible: 0;
+            }
+         }
+         part { name: "background/title/delete_all/image1";
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               align: 0.0 0.5;
+               fixed: 1 1;
+               visible: 0;
+               min: CLIPBOARD_FUNCTION_BTN_MIN_W_INC CLIPBOARD_FUNCTION_BTN_H_INC;
+               max: -1 CLIPBOARD_FUNCTION_BTN_H_INC;
+               rel1 { relative: 1.0 0.5; to: "background/title/delete_all/divider"; }
+               rel2 { relative: 0.0 0.5; to_x: "background/title/delete/divider"; to_y: "delete_all_text_left_padding"; }
+               image { normal: "clipboard_btn_press_bg.#.png"; }
+               color_class: "AO009E1";
+            }
+            description { state: "pressed" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+            }
+            description { state: "hide" 0.0;
+               inherit: "default" 0.0;
+               visible: 0;
+            }
+         }
+         part { name: "background/title/delete_all/image";
+            scale: 1;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.0 0.0; to: "background/title/delete_all/image1"; }
+               rel2 { relative: 1.0 1.0; to: "background/title/delete_all/image1"; }
+               color: 0 0 0 0;
+            }
+            description { state: "hide" 0.0;
+               inherit: "default" 0.0;
+               visible: 0;
+            }
+         }
+         part { name: "delete_all_text_bg";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 0;
+               align: 1.0 0.5;
+               min: CLIPBOARD_FUNCTION_BTN_TEXT_MAX_W_INC 0;
+               max: CLIPBOARD_FUNCTION_BTN_TEXT_MAX_W_INC -1;
+               rel1 { relative: 0.0 0.0; to_y: "background/title/image"; }
+               rel2 { relative: 0.0 1.0; to_x: "delete_all_right_padding"; to_y: "background/title/image"; }
+            }
+            description { state: "landscape" 0.0;
+               inherit: "default" 0.0;
+               min: CLIPBOARD_FUNCTION_BTN_TEXT_LANDSCAPE_MAX_W_INC 0;
+               max: CLIPBOARD_FUNCTION_BTN_TEXT_LANDSCAPE_MAX_W_INC -1;
+            }
+         }
+         part { name: "panel_function_delete_all";
+            type: TEXT;
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               align: 1.0 0.5;
+               text {
+                  min: 0 1;
+                  max: 1 0;
+                  align: 0.5 0.5;
+                  text_class: "ATO002";
+               }
+               rel1.to: "delete_all_text_bg";
+               rel2.to: "delete_all_text_bg";
+               color_class: "ATO002";
+            }
+            description { state: "disabled" 0.0;
+               inherit: "default" 0.0;
+               text.text_class: "ATO005";
+               color_class: "ATO005";
+            }
+            description { state: "hide" 0.0;
+               inherit: "default" 0.0;
+               visible: 0;
+            }
+         }
+         part { name: "delete_disabler";
+            type: RECT;
+            description { state: "default" 0.0;
+               color: 0 0 0 0;
+               rel1.to: "background/title/delete/image";
+               rel2.to: "background/title/delete/image";
+               visible: 0;
+            }
+            description { state: "disabled" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+            }
+         }
+         part { name: "delete_all_disabler";
+            type: RECT;
+            description { state: "default" 0.0;
+               color: 0 0 0 0;
+               rel1.to: "background/title/delete_all/image";
+               rel2.to: "background/title/delete_all/image";
+               visible: 0;
+            }
+            description { state: "disabled" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+            }
+         }
+         part { name: "historyitems_top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.0 0.0;
+               min: CLIPBOARD_CONTENT_TOP_LEFT_PADDING_INC;
+               max: CLIPBOARD_CONTENT_TOP_LEFT_PADDING_INC;
+               rel1 { relative: 0.0 1.0; to: "background/title"; }
+               rel2 { relative: 0.0 1.0; to: "background/title"; }
+            }
+         }
+         part { name: "historyitems_bottom_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: CLIPBOARD_CONTENT_BOTTOM_RIGHT_PADDING_INC;
+               max: CLIPBOARD_CONTENT_BOTTOM_RIGHT_PADDING_INC;
+               rel1 { relative: 1.0 1.0; to: "background"; }
+               rel2 { relative: 1.0 1.0; to: "background"; }
+            }
+         }
+         part { name: "historyitems";
+            type: SWALLOW;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               rel1 { relative: 1.0 1.0; to: "historyitems_top_left_padding"; }
+               rel2 { relative: 1.0 1.0; to: "historyitems_bottom_right_padding"; }
+               visible: 1;
+            }
+            description { state: "hidden" 0.0;
+               inherit: "default" 0.0;
+               visible: 0;
+            }
+         }
+      }
+      programs {
+         program { name: "historyitems_hide";
+            signal: "elm,state,hide,historyitems";
+            source: "elm";
+            action: STATE_SET "hidden" 0.0;
+            target: "historyitems";
+         }
+         program { name: "historyitems_show";
+            signal: "elm,state,show,historyitems";
+            source: "elm";
+            action: STATE_SET "default" 0.0;
+            target: "historyitems";
+         }
+         program { name: "mouse_down_closebtn";
+            signal: "mouse,down,1";
+            source: "background/title/close/bg";
+            action: STATE_SET "pressed" 0.0;
+            target: "background/title/close/image";
+            target: "background/title/close/image/effect";
+         }
+         program { name: "mouse_out_closebtn";
+            signal: "mouse,out";
+            source: "background/title/close/bg";
+            action: STATE_SET "default" 0.0;
+            target: "background/title/close/image";
+            target: "background/title/close/image/effect";
+         }
+         program { name: "mouse_up_closebtn";
+            signal: "mouse,up,1";
+            source: "background/title/close/bg";
+            action: STATE_SET "default" 0.0;
+            target: "background/title/close/image";
+            target: "background/title/close/image/effect";
+         }
+         program { name: "play_sound_closebtn";
+            signal: "mouse,clicked,1";
+            source: "background/title/close/bg";
+            action: RUN_PLUGIN "touch_sound";
+         }
+         program { name: "mouse_down_delbtn";
+            signal: "mouse,down,1";
+            source: "background/title/delete/image";
+            action: STATE_SET "pressed" 0.0;
+            target: "background/title/delete/image1";
+         }
+         program { name: "mouse_out_delbtn";
+            signal: "mouse,out";
+            source: "background/title/delete/image";
+            action: STATE_SET "default" 0.0;
+            target: "background/title/delete/image1";
+         }
+         program { name: "mouse_up_delbtn";
+            signal: "mouse,up,1";
+            source: "background/title/delete/image";
+            action: STATE_SET "default" 0.0;
+            target: "background/title/delete/image1";
+         }
+         program { name: "mouse_down_del_all_btn";
+            signal: "mouse,down,1";
+            source: "background/title/delete_all/image";
+            action: STATE_SET "pressed" 0.0;
+            target: "background/title/delete_all/image1";
+         }
+         program { name: "mouse_out_del_all_btn";
+            signal: "mouse,out";
+            source: "background/title/delete_all/image";
+            action: STATE_SET "default" 0.0;
+            target: "background/title/delete_all/image1";
+         }
+         program { name: "mouse_up_del_all_btn";
+            signal: "mouse,up,1";
+            source: "background/title/delete_all/image";
+            action: STATE_SET "default" 0.0;
+            target: "background/title/delete_all/image1";
+         }
+         program { name: "play_sound_delbtn";
+            signal: "mouse,clicked,1";
+            source: "background/title/delete/image";
+            action: RUN_PLUGIN "touch_sound";
+         }
+         program { name: "play_sound_del_all_btn";
+            signal: "mouse,clicked,1";
+            source: "background/title/delete_all/image";
+            action: RUN_PLUGIN "touch_sound";
+         }
+         program { name: "show_panel_function";
+            source: "elm";
+            signal: "elm,state,show,function";
+            action: STATE_SET "show" 0.0;
+            target: "panel_function_delete_all";
+            target: "panel_function_delete";
+         }
+         program { name: "hide_panel_function";
+            source: "elm";
+            signal: "elm,state,hide,function";
+            action: STATE_SET "default" 0.0;
+            target: "panel_function_delete_all";
+            target: "panel_function_delete";
+         }
+         program { name: "hide_del_mode";
+            source: "elm";
+            signal: "elm,state,hide,delmode";
+            action: STATE_SET "hide" 0.0;
+            target: "background/title/delete/image1";
+         }
+         program { name: "show_del_mode";
+            source: "elm";
+            signal: "elm,state,show,delmode";
+            action: STATE_SET "default" 0.0;
+            target: "background/title/delete/image1";
+         }
+         program { name: "disable_del";
+            source: "elm";
+            signal: "elm,state,disable,del";
+            action: STATE_SET "disabled" 0.0;
+            target: "delete_disabler";
+            target: "delete_all_disabler";
+            target: "panel_function_delete_all";
+            target: "background/title/delete/image1";
+            target: "background/title/delete_all/image1";
+            target: "panel_function_delete";
+         }
+         program { name: "enable_del";
+            source: "elm";
+            signal: "elm,state,enable,del";
+            action: STATE_SET "default" 0.0;
+            target: "delete_disabler";
+            target: "delete_all_disabler";
+            target: "panel_function_delete_all";
+            target: "background/title/delete/image1";
+            target: "background/title/delete_all/image1";
+            target: "panel_function_delete";
+         }
+         program { name: "change_to_landscape";
+            script {
+               new st[32];
+               new Float:vl;
+
+               if (!get_int(g_landscape)) {
+                  get_state(PART:"delete_text_bg", st, 32, vl);
+                  if (!strcmp(st, "default")) {
+                     set_state(PART:"delete_text_bg", "landscape", 0.0);
+                     set_state(PART:"delete_all_text_bg", "landscape", 0.0);
+                     set_state(PART:"background/title", "landscape", 0.0);
+                  }
+                  set_int(g_landscape, 1);
+               }
+            }
+         }
+         program { name: "change_to_portrait";
+            script {
+               new st[32];
+               new Float:vl;
+               if (get_int(g_landscape)) {
+                  get_state(PART:"delete_text_bg", st, 32, vl);
+                  if (!strcmp(st, "landscape")) {
+                     set_state(PART:"delete_text_bg", "default", 0.0);
+                     set_state(PART:"delete_all_text_bg", "default", 0.0);
+                     set_state(PART:"background/title", "default", 0.0);
+                  }
+                  set_int(g_landscape, 0);
+               }
+            }
+         }
+         program { name: "delete_all_hide";
+            signal: "elm,state,hide,delete_all";
+            source: "elm";
+            action: STATE_SET "hide" 0.0;
+            target: "panel_function_delete_all";
+            target: "background/title/delete_all/divider";
+            target: "background/title/delete_all/image1";
+            target: "background/title/delete_all/image";
+         }
+         program { name: "delete_all_show";
+            signal: "elm,state,show,delete_all";
+            source: "elm";
+            action: STATE_SET "default" 0.0;
+            target: "panel_function_delete_all";
+            target: "background/title/delete_all/divider";
+            target: "background/title/delete_all/image1";
+            target: "background/title/delete_all/image";
+         }
+         program { name: "landscape_mode";
+            source: "elm";
+            signal: "elm,state,orient,90";
+            after: "change_to_landscape";
+         }
+         program { name: "landscape_mode2";
+            source: "elm";
+            signal: "elm,state,orient,270";
+            after: "change_to_landscape";
+         }
+         program { name: "portrait_mode";
+            source: "elm";
+            signal: "elm,state,orient,0";
+            after: "change_to_portrait";
+         }
+         program { name: "portrait_mode2";
+            source: "elm";
+            signal: "elm,state,orient,180";
+            after: "change_to_portrait";
+         }
+      }
+   }
+
+   group { name: "elm/scroller/base/grid_cbhm";
+      alias: "elm/gengrid/base/cbhm";
+      inherit: "elm/scroller/base/effect";
+
+      images {
+          image: "clipboard_scrollbar.#.png" COMP;
+      }
+      parts {
+         part { name: "padding.left";
+            type: SPACER;
+            scale:1 ;
+            description { state: "default" 0.0;
+               min: SCROLLER_LEFT_PADDING_INC SCROLLER_BOTTOM_PADDING_INC;
+               max: SCROLLER_LEFT_PADDING_INC SCROLLER_BOTTOM_PADDING_INC;
+               rel1 {
+                  relative: 0.0 0.0;
+                  to: "bg";
+               }
+               rel2.to: "bg";
+               fixed: 1 1;
+               align: 0.0 0.0;
+            }
+            description { state: "landscape" 0.0;
+               inherit: "default" 0.0;
+               min: SCROLLER_LEFT_PADDING_INC SCROLLER_BOTTOM_LANDSCAPE_PADDING_INC;
+               max: SCROLLER_LEFT_PADDING_INC SCROLLER_BOTTOM_LANDSCAPE_PADDING_INC;
+            }
+         }
+         part { name: "padding.right";
+            type: SPACER;
+            scale:1 ;
+            description { state: "default" 0.0;
+               min: SCROLLER_LEFT_PADDING_INC SCROLLER_BOTTOM_PADDING_INC;
+               max: SCROLLER_LEFT_PADDING_INC SCROLLER_BOTTOM_PADDING_INC;
+               rel1 {
+                   relative: 1.0 1.0;
+                   to: "bg";
+               }
+               rel2.to: "bg";
+               fixed: 1 1;
+               align: 1.0 1.0;
+            }
+            description { state: "landscape" 0.0;
+               inherit: "default" 0.0;
+               min: SCROLLER_LEFT_PADDING_INC SCROLLER_BOTTOM_LANDSCAPE_PADDING_INC;
+               max: SCROLLER_LEFT_PADDING_INC SCROLLER_BOTTOM_LANDSCAPE_PADDING_INC;
+            }
+         }
+         part { name: "elm.swallow.content";
+            description { state: "default" 0.0;
+               rel1 {
+                   relative: 1.0 1.0;
+                   to: "padding.left";
+               }
+               rel2 {
+                   relative: 0.0 0.0;
+                   to: "padding.right";
+               }
+            }
+         }
+         part { name: "sb_hbar_bottom_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               min: CLIPBOARD_PANEL_TOP_PADDING_INC SCROLLER_BOTTOM_RIGHT_PADDING_INC;
+               max: CLIPBOARD_PANEL_TOP_PADDING_INC SCROLLER_BOTTOM_RIGHT_PADDING_INC;
+               rel1.relative: 1.0 1.0;
+               rel2.relative: 1.0 1.0;
+               rel1.to: "bg";
+               rel2.to: "bg";
+               fixed: 1 1;
+               align: 1.0 1.0;
+            }
+         }
+         part { name: "sb_hbar_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               min: SCROLLER_BOTTOM_RIGHT_PADDING_INC 0;
+               max: SCROLLER_BOTTOM_RIGHT_PADDING_INC 0;
+               rel1.relative: 0.0 0.0;
+               rel2.relative: 0.0 1.0;
+               rel1.to: "bg";
+               rel2.to: "bg";
+               fixed: 1 1;
+               align: 0.0 1.0;
+            }
+         }
+         part { name: "elm.dragable.hbar";
+            description { state: "default" 0.0;
+               min: SCROLLER_DEFAULT_SCROLLBAR_HBAR_MIN_SIZE_INC;
+               max: SCROLLER_DEFAULT_SCROLLBAR_HBAR_MAX_SIZE_INC;
+               image {
+                  normal: "clipboard_scrollbar.#.png";
+                   middle: DEFAULT;
+               }
+               color_class: "AO008";
+            }
+         }
+      }
+      programs {
+         program { name: "landscape_mode";
+            source: "elm";
+            signal: "elm,state,orient,90";
+            action: STATE_SET "landscape" 0.0;
+            target: "padding.left";
+            target: "padding.right";
+         }
+         program { name: "landscape_mode2";
+            source: "elm";
+            signal: "elm,state,orient,270";
+            action: STATE_SET "landscape" 0.0;
+            target: "padding.left";
+            target: "padding.right";
+         }
+         program { name: "portrait_mode";
+            source: "elm";
+            signal: "elm,state,orient,0";
+            action: STATE_SET "default" 0.0;
+            target: "padding.left";
+            target: "padding.right";
+         }
+         program { name: "portrait_mode2";
+            source: "elm";
+            signal: "elm,state,orient,180";
+            action: STATE_SET "default" 0.0;
+            target: "padding.left";
+            target: "padding.right";
+         }
+      }
+   }
+
+   group { name: "elm/gengrid/item/clipboard/image_style/default";
+      data.item: "contents" "elm.swallow.content";
+
+      images {
+         image: "clipboard_thumb_bg.#.png" COMP;
+         image: "clipboard_thumb_line.#.png" COMP;
+         image: "clipboard_delete.png" COMP;
+         image: "clipboard_delete_press.png" COMP;
+      }
+
+      parts {
+         part { name: "persp";
+            type: RECT;
+            description { state: "default" 0.0;
+               min: 32 32;
+               max: 32 32;
+               fixed: 1 1;
+               align: 0.5 0.5;
+               color: 0 0 0 0;
+               visible: 1;
+               perspective {
+                  zplane: -70;
+                  focal: 1000;
+               }
+            }
+         }
+         part { name: "persp1";
+            type: RECT;
+            description { state: "default" 0.0;
+               min: 32 32;
+               max: 32 32;
+               fixed: 1 1;
+               align: 0.5 0.5;
+               color: 0 0 0 0;
+               visible: 1;
+               perspective {
+                  zplane: 0;
+                  focal: 1000;
+               }
+            }
+         }
+         part { name: "bg";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "item_outer_bg";
+            scale: 1;
+            description { state: "default" 0.0;
+               rel1.to: "item_outer_bg_top_left_padding";
+               rel2.to: "item_outer_bg_bottom_right_padding";
+               color_class: "AO007";
+               image.normal: "clipboard_thumb_bg.#.png";
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "item_outer_bg_line";
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               rel2.to: "item_outer_bg";
+               rel1.to: "item_outer_bg";
+               color_class: "AO007";
+               image.normal: "clipboard_thumb_line.#.png";
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "item_outer_bg_top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: GRID_ITEM_OUTER_LINE_SIZE_INC GRID_ITEM_OUTER_LINE_SIZE_INC;
+               max: GRID_ITEM_OUTER_LINE_SIZE_INC GRID_ITEM_OUTER_LINE_SIZE_INC;
+               rel1 { relative: 0.0 0.0; to: "elm.swallow.content"; }
+               rel2 { relative: 0.0 0.0; to: "elm.swallow.content"; }
+            }
+         }
+         part { name: "item_outer_bg_bottom_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.0 0.0;
+               min: GRID_ITEM_OUTER_LINE_SIZE_INC GRID_ITEM_OUTER_LINE_SIZE_INC;
+               max: GRID_ITEM_OUTER_LINE_SIZE_INC GRID_ITEM_OUTER_LINE_SIZE_INC;
+               rel1 { relative: 1.0 1.0; to: "elm.swallow.content"; }
+               rel2 { relative: 1.0 1.0; to: "elm.swallow.content"; }
+            }
+         }
+         part { name: "elm.swallow.content";
+            type: SWALLOW;
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               max: GRID_IMAGE_ITEM_W_INC GRID_IMAGE_ITEM_W_INC;
+               rel1 { relative: 0.5 0.5; to: "bg"; }
+               rel2 { relative: 0.5 0.5; to: "bg"; }
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "elm.rect.dim";
+            type: RECT;
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               visible: 0;
+               color: 0 0 0 100;
+               rel1.to: "elm.swallow.content";
+               rel2.to: "elm.swallow.content";
+            }
+            description { state: "show" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+            }
+         }
+         part { name: "delbtn_top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: GRID_ITEM_DELETE_BTN_TOP_PADDING_INC;
+               max: GRID_ITEM_DELETE_BTN_TOP_PADDING_INC;
+               rel1 { relative: 0.0 0.0; to: "item_outer_bg_top_left_padding"; }
+               rel2 { relative: 0.0 0.0; to: "item_outer_bg_top_left_padding"; }
+            }
+         }
+         part { name: "delbtn";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.0 0.0; to: "delbtn_top_left_padding"; }
+               rel2 { relative: 0.0 0.0; to: "delbtn_top_left_padding"; }
+               align: 0.0 0.0;
+               fixed: 1 1;
+               min: GRID_ITEM_DELETE_BTN_SIZE_INC;
+               max: GRID_ITEM_DELETE_BTN_SIZE_INC;
+            }
+         }
+         part { name: "delbtn/img";
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               rel1.to: "delbtn";
+               rel2.to: "delbtn";
+               visible: 0;
+            }
+            description { state: "show" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+               image {
+                  normal: "clipboard_delete.png";
+               }
+            }
+            description { state: "pressed" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+               image {
+                  normal: "clipboard_delete_press.png";
+               }
+            }
+         }
+      }
+      programs {
+         program { name: "selected";
+            signal: "elm,state,selected";
+            source: "elm";
+            script {
+               new st[31], st2[31];
+               new Float:vl, Float:vl2;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               get_state(PART:"elm.rect.dim", st2, 30, vl2);
+               if (!strcmp(st, "default") && !strcmp(st2, "default"))
+                  run_program(PROGRAM:"vi_pressed");
+            }
+         }
+         program { name: "unselected";
+            signal: "elm,state,unselected";
+            source: "elm";
+            script {
+               new st[31], st2[31];
+               new Float:vl, Float:vl2;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               get_state(PART:"elm.rect.dim", st2, 30, vl2);
+               if (!strcmp(st, "default") && !strcmp(st2, "default"))
+                  run_program(PROGRAM:"vi_zoom_out");
+            }
+         }
+         GENGRID_PROGRAM_ITEM_SELECT_VI_EFFECT(
+            target: "bg";
+            target: "item_outer_bg";
+            target: "item_outer_bg_line";
+            target: "elm.swallow.content";
+         )
+         program { name: "mouse_down";
+            signal: "mouse,down,1";
+            source: "delbtn/img";
+            script {
+               new st[31];
+               new Float:vl;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               if (!strcmp(st, "show"))
+                  set_state(PART:"delbtn/img", "pressed", 0.0);
+            }
+         }
+         program { name: "mouse_out";
+            signal: "mouse,out";
+            source: "delbtn/img";
+            script {
+               new st[31];
+               new Float:vl;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               if (!strcmp(st, "pressed"))
+                  set_state(PART:"delbtn/img", "show", 0.0);
+            }
+         }
+         program { name: "mouse_up";
+            signal: "mouse,up,1";
+            source: "delbtn/img";
+            script {
+               new st[31];
+               new Float:vl;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               if (!strcmp(st, "pressed"))
+                  set_state(PART:"delbtn/img", "show", 0.0);
+            }
+         }
+         program { name: "play_sound_delbtn";
+            signal: "mouse,clicked,1";
+            source: "delbtn/img";
+            action: RUN_PLUGIN "touch_sound";
+         }
+         program { name: "touch_sound_program";
+            action: RUN_PLUGIN "touch_sound";
+         }
+         program { name: "play_sound_item";
+            signal: "mouse,clicked,1";
+            source: "item_outer_bg";
+            script {
+               new st[31], st2[31];
+               new Float:vl, Float:vl2;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               get_state(PART:"elm.rect.dim", st2, 30, vl2);
+               if (!strcmp(st, "default") && !strcmp(st2, "default"))
+                  run_program(PROGRAM:"touch_sound_program");
+            }
+         }
+         program { name: "show_delbtn";
+            source: "elm";
+            signal: "elm,state,show,delbtn";
+            script {
+               set_state(PART:"delbtn/img", "show", 0.0);
+            }
+         }
+         program { name: "hide_delbtn";
+            source: "elm";
+            signal: "elm,state,hide,delbtn";
+            script {
+               set_state(PART:"delbtn/img", "default", 0.0);
+            }
+         }
+         program { name: "show_dim";
+            source: "elm";
+            signal: "elm,state,show,dim";
+            action: STATE_SET "show" 0.0;
+            target: "elm.rect.dim";
+         }
+         program { name: "hide_dim";
+            source: "elm";
+            signal: "elm,state,hide,dim";
+            action: STATE_SET "default" 0.0;
+            target: "elm.rect.dim";
+         }
+      }
+   }
+
+   group { name: "elm/gengrid/item/clipboard/text_style/default";
+      data.item: "texts" "elm.text";
+      images {
+         image: "clipboard_note_bg.#.png" COMP;
+         image: "clipboard_delete.png" COMP;
+         image: "clipboard_delete_press.png" COMP;
+      }
+
+      styles {
+         style { name: "clipboard_01_style";
+            base: "font=Tizen:style=Regular font_size="GRID_TEXT_ITEM_FONT_SIZE_INC" color=#000000FF color_class=ATO003 align=left wrap=mixed text_class=ATO003";
+            tag: "br" "\n";
+            tag: "ps" "ps";
+            tag: "tab" "\t";
+         }
+      }
+
+      parts {
+         part { name: "persp";
+            type: RECT;
+            description { state: "default" 0.0;
+               min: 32 32;
+               max: 32 32;
+               fixed: 1 1;
+               align: 0.5 0.5;
+               color: 0 0 0 0;
+               visible: 1;
+               perspective {
+                  zplane: -70;
+                  focal: 1000;
+               }
+            }
+         }
+         part { name: "persp1";
+            type: RECT;
+            description { state: "default" 0.0;
+               min: 32 32;
+               max: 32 32;
+               fixed: 1 1;
+               align: 0.5 0.5;
+               color: 0 0 0 0;
+               visible: 1;
+               perspective {
+                  zplane: 0;
+                  focal: 1000;
+               }
+            }
+         }
+         part { name: "bg";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.0 0.0;
+               min: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
+               max: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
+               rel1 { relative: 0.0 0.0; to: "bg"; }
+               rel2 { relative: 0.0 0.0; to: "bg"; }
+            }
+         }
+         part { name: "bottom_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
+               max: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
+               rel1 { relative: 1.0 1.0; to: "bg"; }
+               rel2 { relative: 1.0 1.0; to: "bg"; }
+            }
+         }
+         part { name: "item_outer_bg";
+            type: RECT;
+            scale: 1;
+            description { state: "default" 0.0;
+               rel1 { relative: 1.0 1.0; to: "top_left_padding"; }
+               rel2 { relative: 0.0 0.0; to: "bottom_right_padding"; }
+               color: 0 0 0 0;
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "item_inner_bg_top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.0 0.0;
+               min: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_ITEM_INNER_BG_PADDING_INC;
+               max: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_ITEM_INNER_BG_PADDING_INC;
+               rel1 { relative: 0.0 0.0; to: "item_outer_bg"; }
+               rel2 { relative: 0.0 0.0; to: "item_outer_bg"; }
+            }
+         }
+         part { name: "item_inner_bg_bottom_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_ITEM_INNER_BG_PADDING_INC;
+               max: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_ITEM_INNER_BG_PADDING_INC;
+               rel1 { relative: 1.0 1.0; to: "item_outer_bg"; }
+               rel2 { relative: 1.0 1.0; to: "item_outer_bg"; }
+            }
+         }
+         part { name: "item_inner_bg";
+            type: SPACER;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               rel1 { relative: 1.0 1.0; to: "item_inner_bg_top_left_padding"; }
+               rel2 { relative: 0.0 0.0; to: "item_inner_bg_bottom_right_padding"; }
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "item_bg";
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               rel1.to: "item_inner_bg";
+               rel2.to: "item_inner_bg";
+               color_class: "AO006";
+               image.normal: "clipboard_note_bg.#.png";
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "text_top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.0 0.0;
+               min: GRID_ITEM_TEXT_TOP_LEFT_PADDING;
+               max: GRID_ITEM_TEXT_TOP_LEFT_PADDING;
+               rel1 { relative: 0.0 0.0; to: "item_outer_bg"; }
+               rel2 { relative: 0.0 0.0; to: "item_outer_bg"; }
+            }
+         }
+         part { name: "text_bottom_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: GRID_ITEM_TEXT_TOP_LEFT_PADDING;
+               max: GRID_ITEM_TEXT_TOP_LEFT_PADDING;
+               rel1 { relative: 1.0 1.0; to: "item_outer_bg"; }
+               rel2 { relative: 1.0 1.0; to: "item_outer_bg"; }
+            }
+         }
+         part { name: "elm.text";
+            type: TEXTBLOCK;
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               max: GRID_ITEM_TEXT_MAX_INC;
+               text {
+                  style: "clipboard_01_style";
+                  align: 0.0 0.0;
+               }
+               rel1 { relative: 1.0 1.0; to: "text_top_left_padding"; }
+               rel2 { relative: 0.0 0.0; to: "text_bottom_right_padding"; }
+            }
+            description { state: "pressed" 0.0;
+               inherit: "default" 0.0;
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "elm.rect.dim";
+            type: RECT;
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               visible: 0;
+               color: 0 0 0 200;
+               rel1.to: "item_bg";
+               rel2.to: "item_bg";
+            }
+            description { state: "show" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+            }
+         }
+         part { name: "delbtn_top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: GRID_ITEM_DELETE_BTN_TOP_PADDING_INC;
+               max: GRID_ITEM_DELETE_BTN_TOP_PADDING_INC;
+               rel1 { relative: 0.0 0.0; to: "item_outer_bg"; }
+               rel2 { relative: 0.0 0.0; to: "item_outer_bg"; }
+            }
+         }
+         part { name: "delbtn";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.0 0.0; to: "delbtn_top_left_padding"; }
+               rel2 { relative: 0.0 0.0; to: "delbtn_top_left_padding"; }
+               align: 0.0 0.0;
+               fixed: 1 1;
+               min: GRID_ITEM_DELETE_BTN_SIZE_INC;
+               max: GRID_ITEM_DELETE_BTN_SIZE_INC;
+            }
+         }
+         part { name: "delbtn/img";
+            scale: 1;
+            description { state: "default" 0.0;
+               rel1.to: "delbtn";
+               rel2.to: "delbtn";
+               visible: 0;
+            }
+            description { state: "show" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+               image {
+                  normal: "clipboard_delete.png";
+               }
+            }
+            description { state: "pressed" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+               image {
+                  normal: "clipboard_delete_press.png";
+               }
+            }
+         }
+      }
+      programs {
+         program { name: "selected";
+            signal: "elm,state,selected";
+            source: "elm";
+            script {
+               new st[31];
+               new Float:vl;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               if (!strcmp(st, "default"))
+                  run_program(PROGRAM:"vi_pressed");
+            }
+         }
+         program { name: "unselected";
+            signal: "elm,state,unselected";
+            source: "elm";
+            script {
+               new st[31];
+               new Float:vl;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               if (!strcmp(st, "default"))
+                  run_program(PROGRAM:"vi_zoom_out");
+            }
+         }
+         GENGRID_PROGRAM_ITEM_SELECT_VI_EFFECT(
+            target: "bg";
+            target: "item_outer_bg";
+            target: "item_inner_bg";
+            target: "item_bg";
+            target: "elm.text";
+         )
+         program { name: "mouse_down";
+            signal: "mouse,down,1";
+            source: "delbtn/img";
+            script {
+               new st[31];
+               new Float:vl;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               if (!strcmp(st, "show"))
+                  set_state(PART:"delbtn/img", "pressed", 0.0);
+            }
+         }
+         program { name: "mouse_out";
+            signal: "mouse,out";
+            source: "delbtn/img";
+            script {
+               new st[31];
+               new Float:vl;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               if (!strcmp(st, "pressed"))
+                  set_state(PART:"delbtn/img", "show", 0.0);
+            }
+         }
+         program { name: "mouse_up";
+            signal: "mouse,up,1";
+            source: "delbtn/img";
+            script {
+               new st[31];
+               new Float:vl;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               if (!strcmp(st, "pressed"))
+                  set_state(PART:"delbtn/img", "show", 0.0);
+            }
+         }
+         program { name: "play_sound_delbtn";
+            signal: "mouse,clicked,1";
+            source: "delbtn/img";
+            action: RUN_PLUGIN "touch_sound";
+         }
+         program { name: "touch_sound_program";
+            action: RUN_PLUGIN "touch_sound";
+         }
+         program { name: "play_sound_item";
+            signal: "mouse,clicked,1";
+            source: "item_outer_bg";
+            script {
+               new st[31], st2[31];
+               new Float:vl, Float:vl2;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               get_state(PART:"elm.rect.dim", st2, 30, vl2);
+               if (!strcmp(st, "default") && !strcmp(st2, "default"))
+                  run_program(PROGRAM:"touch_sound_program");
+            }
+         }
+         program { name: "show_delbtn";
+            source: "elm";
+            signal: "elm,state,show,delbtn";
+            script {
+               set_state(PART:"delbtn/img", "show", 0.0);
+            }
+         }
+         program { name: "hide_delbtn";
+            source: "elm";
+            signal: "elm,state,hide,delbtn";
+            script {
+               set_state(PART:"delbtn/img", "default", 0.0);
+            }
+         }
+         program { name: "show_dim";
+            source: "elm";
+            signal: "elm,state,show,dim";
+            action: STATE_SET "show" 0.0;
+            target: "elm.rect.dim";
+         }
+         program { name: "hide_dim";
+            source: "elm";
+            signal: "elm,state,hide,dim";
+            action: STATE_SET "default" 0.0;
+            target: "elm.rect.dim";
+         }
+      }
+   }
+
+   group { name: "elm/gengrid/item/clipboard/combined_style/default";
+      data.item: "texts" "elm.text";
+      data.item: "contents" "elm.swallow.content";
+      images {
+         image: "clipboard_note_bg.#.png" COMP;
+         image: "clipboard_delete.png" COMP;
+         image: "clipboard_delete_press.png" COMP;
+      }
+
+      styles {
+         style { name: "clipboard_02_style";
+            base: "font=Tizen:style=Regular font_size="GRID_COMBINED_ITEM_FONT_SIZE_INC" color=#000000FF color_class=ATO004 align=left wrap=mixed text_class=ATO004";
+            tag: "br" "\n";
+            tag: "ps" "ps";
+            tag: "tab" "\t";
+         }
+      }
+
+      parts {
+         part { name: "persp";
+            type: RECT;
+            description { state: "default" 0.0;
+               min: 32 32;
+               max: 32 32;
+               fixed: 1 1;
+               align: 0.5 0.5;
+               color: 0 0 0 0;
+               visible: 1;
+               perspective {
+                  zplane: -70;
+                  focal: 1000;
+               }
+            }
+         }
+         part { name: "persp1";
+            type: RECT;
+            description { state: "default" 0.0;
+               min: 32 32;
+               max: 32 32;
+               fixed: 1 1;
+               align: 0.5 0.5;
+               color: 0 0 0 0;
+               visible: 1;
+               perspective {
+                  zplane: 0;
+                  focal: 1000;
+               }
+            }
+         }
+         part { name: "bg";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.0 0.0;
+               min: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
+               max: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
+               rel1 { relative: 0.0 0.0; to: "bg"; }
+               rel2 { relative: 0.0 0.0; to: "bg"; }
+            }
+         }
+         part { name: "bottom_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
+               max: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
+               rel1 { relative: 1.0 1.0; to: "bg"; }
+               rel2 { relative: 1.0 1.0; to: "bg"; }
+            }
+         }
+         part { name: "item_outer_bg";
+            type: RECT;
+            scale: 1;
+            description { state: "default" 0.0;
+               color: 0 0 0 0;
+               rel1 { relative: 1.0 1.0; to: "top_left_padding"; }
+               rel2 { relative: 0.0 0.0; to: "bottom_right_padding"; }
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "item_inner_bg_top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.0 0.0;
+               min: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_ITEM_INNER_BG_PADDING_INC;
+               max: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_ITEM_INNER_BG_PADDING_INC;
+               rel1 { relative: 0.0 0.0; to: "item_outer_bg"; }
+               rel2 { relative: 0.0 0.0; to: "item_outer_bg"; }
+            }
+         }
+         part { name: "item_inner_bg_bottom_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_ITEM_INNER_BG_PADDING_INC;
+               max: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_ITEM_INNER_BG_PADDING_INC;
+               rel1 { relative: 1.0 1.0; to: "item_outer_bg"; }
+               rel2 { relative: 1.0 1.0; to: "item_outer_bg"; }
+            }
+         }
+         part { name: "item_inner_bg";
+            type: SPACER;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               rel1 { relative: 1.0 1.0; to: "item_inner_bg_top_left_padding"; }
+               rel2 { relative: 0.0 0.0; to: "item_inner_bg_bottom_right_padding"; }
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "item_bg_top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.0 0.0;
+               min: GRID_COMBINED_TOP_LEFT_PADDING_INC GRID_COMBINED_TOP_LEFT_PADDING_INC ;
+               max: GRID_COMBINED_TOP_LEFT_PADDING_INC GRID_COMBINED_TOP_LEFT_PADDING_INC;
+               rel1 { relative: 0.0 0.0; to: "item_inner_bg"; }
+               rel2 { relative: 0.0 0.0; to: "item_inner_bg"; }
+            }
+         }
+         part { name: "item_bg_bottom_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: GRID_COMBINED_TOP_LEFT_PADDING_INC GRID_COMBINED_BOTTOM_PADDING_INC;
+               max: GRID_COMBINED_TOP_LEFT_PADDING_INC GRID_COMBINED_BOTTOM_PADDING_INC;
+               rel1 { relative: 1.0 1.0; to: "item_inner_bg"; }
+               rel2 { relative: 1.0 1.0; to: "item_inner_bg"; }
+            }
+         }
+         part { name: "item_bg";
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               rel1.to: "item_inner_bg";
+               rel2.to: "item_inner_bg";
+               color_class: "AO002L1";
+               image.normal: "clipboard_note_bg.#.png";
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "content_top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.0 0.0;
+               min: GRID_COMBINED_TOP_LEFT_PADDING_INC GRID_COMBINED_TOP_LEFT_PADDING_INC;
+               max: GRID_COMBINED_TOP_LEFT_PADDING_INC GRID_COMBINED_TOP_LEFT_PADDING_INC;
+               rel1 { relative: 0.0 0.0; to: "item_inner_bg"; }
+               rel2 { relative: 0.0 0.0; to: "item_inner_bg"; }
+            }
+         }
+         part { name: "text_bottom_right_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: GRID_COMBINED_TOP_LEFT_PADDING_INC GRID_COMBINED_BOTTOM_PADDING_INC;
+               max: GRID_COMBINED_TOP_LEFT_PADDING_INC GRID_COMBINED_BOTTOM_PADDING_INC;
+               rel1 { relative: 1.0 1.0; to: "item_inner_bg"; }
+               rel2 { relative: 1.0 1.0; to: "item_inner_bg"; }
+            }
+         }
+         part { name: "elm.swallow.content";
+            type: SWALLOW;
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               align: 0.0 0.0;
+               max: GRID_COMBINED_MAX_SIZE_INC;
+               rel1 { relative: 1.0 1.0; to: "content_top_left_padding"; }
+               rel2 { relative: 1.0 1.0; to: "content_top_left_padding"; }
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "separator_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 0.5 0.0;
+               min: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_COMBINED_SEPERATOR_PADDING_INC;
+               max: -1 GRID_COMBINED_SEPERATOR_PADDING_INC;
+               rel1 { relative: 0.0 1.0; to: "elm.swallow.content"; }
+               rel2 { relative: 0.0 1.0; to_x: "text_bottom_right_padding";  to_y: "elm.swallow.content"; }
+            }
+         }
+         part { name: "elm.text";
+            type: TEXTBLOCK;
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               text {
+                  style: "clipboard_02_style";
+                  align: 0.0 0.0;
+               }
+               rel1 { relative: 0.0 1.0; to: "separator_padding"; }
+               rel2 { relative: 0.0 0.0; to: "text_bottom_right_padding"; }
+            }
+            description { state: "pressed" 0.0;
+               inherit: "default" 0.0;
+               GENGRID_ITEM_SELECT_VI_EFFECT
+            }
+         }
+         part { name: "elm.rect.dim";
+            type: RECT;
+            scale: 1;
+            mouse_events: 0;
+            description { state: "default" 0.0;
+               visible: 0;
+               color: 0 0 0 200;
+               rel1.to: "item_bg";
+               rel2.to: "item_bg";
+            }
+            description { state: "show" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+            }
+         }
+         part { name: "delbtn_top_left_padding";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               fixed: 1 1;
+               align: 1.0 1.0;
+               min: GRID_ITEM_DELETE_BTN_TOP_PADDING_INC;
+               max: GRID_ITEM_DELETE_BTN_TOP_PADDING_INC;
+               rel1 { relative: 0.0 0.0; to: "item_outer_bg"; }
+               rel2 { relative: 0.0 0.0; to: "item_outer_bg"; }
+            }
+         }
+         part { name: "delbtn";
+            type: SPACER;
+            scale: 1;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.0 1.0; to: "delbtn_top_left_padding"; }
+               rel2 { relative: 0.0 1.0; to: "delbtn_top_left_padding"; }
+               align: 0.0 0.0;
+               fixed: 1 1;
+               min: GRID_ITEM_DELETE_BTN_SIZE_INC;
+               max: GRID_ITEM_DELETE_BTN_SIZE_INC;
+            }
+         }
+         part { name: "delbtn/img";
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               rel1.to: "delbtn";
+               rel2.to: "delbtn";
+               visible: 0;
+            }
+            description { state: "show" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+               image {
+                  normal: "clipboard_delete.png";
+               }
+            }
+            description { state: "pressed" 0.0;
+               inherit: "default" 0.0;
+               visible: 1;
+               image {
+                  normal: "clipboard_delete_press.png";
+               }
+            }
+         }
+      }
+      programs {
+         program { name: "selected";
+            signal: "elm,state,selected";
+            source: "elm";
+            script {
+               new st[31], st2[31];
+               new Float:vl, Float:vl2;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               get_state(PART:"elm.rect.dim", st2, 30, vl2);
+               if (!strcmp(st, "default") && !strcmp(st2, "default"))
+                  run_program(PROGRAM:"vi_pressed");
+            }
+         }
+         program { name: "unselected";
+            signal: "elm,state,unselected";
+            source: "elm";
+            script {
+               new st[31], st2[31];
+               new Float:vl, Float:vl2;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               get_state(PART:"elm.rect.dim", st2, 30, vl2);
+               if (!strcmp(st, "default") && !strcmp(st2, "default"))
+                  run_program(PROGRAM:"vi_zoom_out");
+            }
+         }
+         GENGRID_PROGRAM_ITEM_SELECT_VI_EFFECT(
+            target: "bg";
+            target: "item_outer_bg";
+            target: "item_inner_bg";
+            target: "item_bg";
+            target: "elm.swallow.content";
+            target: "elm.text";
+         )
+         program { name: "mouse_down";
+            signal: "mouse,down,1";
+            source: "delbtn/img";
+            script {
+               new st[31];
+               new Float:vl;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               if (!strcmp(st, "show"))
+                  set_state(PART:"delbtn/img", "pressed", 0.0);
+            }
+         }
+         program { name: "mouse_out";
+            signal: "mouse,out";
+            source: "delbtn/img";
+            script {
+               new st[31];
+               new Float:vl;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               if (!strcmp(st, "pressed"))
+                  set_state(PART:"delbtn/img", "show", 0.0);
+            }
+         }
+         program { name: "mouse_up";
+            signal: "mouse,up,1";
+            source: "delbtn/img";
+            script {
+               new st[31];
+               new Float:vl;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               if (!strcmp(st, "pressed"))
+                  set_state(PART:"delbtn/img", "show", 0.0);
+            }
+         }
+         program { name: "play_sound_delbtn";
+            signal: "mouse,clicked,1";
+            source: "delbtn/img";
+            action: RUN_PLUGIN "touch_sound";
+         }
+         program { name: "touch_sound_program";
+            action: RUN_PLUGIN "touch_sound";
+         }
+         program { name: "play_sound_item";
+            signal: "mouse,clicked,1";
+            source: "item_outer_bg";
+            script {
+               new st[31], st2[31];
+               new Float:vl, Float:vl2;
+               get_state(PART:"delbtn/img", st, 30, vl);
+               get_state(PART:"elm.rect.dim", st2, 30, vl2);
+               if (!strcmp(st, "default") && !strcmp(st2, "default"))
+                  run_program(PROGRAM:"touch_sound_program");
+            }
+         }
+         program { name: "show_delbtn";
+            source: "elm";
+            signal: "elm,state,show,delbtn";
+            script {
+               set_state(PART:"delbtn/img", "show", 0.0);
+            }
+         }
+         program { name: "hide_delbtn";
+            source: "elm";
+            signal: "elm,state,hide,delbtn";
+            script {
+               set_state(PART:"delbtn/img", "default", 0.0);
+            }
+         }
+         program { name: "show_dim";
+            source: "elm";
+            signal: "elm,state,show,dim";
+            action: STATE_SET "show" 0.0;
+            target: "elm.rect.dim";
+         }
+         program { name: "hide_dim";
+            source: "elm";
+            signal: "elm,state,hide,dim";
+            action: STATE_SET "default" 0.0;
+            target: "elm.rect.dim";
+         }
+      }
+   }
+}

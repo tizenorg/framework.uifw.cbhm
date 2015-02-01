@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Τέλος"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Κλείσιμο"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Διαγραφή"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Διαγραφή όλων"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Αντιγράφηκε στο πρόχειρο."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Πρόχειρο"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Ακύρωση"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Υπάρχει ήδη."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Διαγραφή όλων;"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Διαγραφή από το πρόχειρο"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Κλείδωμα στο πρόχειρο"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Ξεκλείδωμα από το πρόχειρο"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Επιλογές προχείρου"
+

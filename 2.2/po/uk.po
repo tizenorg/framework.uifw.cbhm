@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Готово"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Закрити"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Видалити"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Видалити всі"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Скопійовано в буфер обміну."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Буфер обміну"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Скасувати"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Вже існує."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Видалити всі?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Видалити з буфера обміну"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Заблокувати в буфері обміну"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Розблокувати в буфері обміну"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Опції буфера обміну"
+

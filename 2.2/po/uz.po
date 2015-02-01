@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Bajarildi"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Yopish"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "O'chirish"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Barchasi o'chirish"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Buferga nusxa olindi."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Bufer"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Bekor q."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Avvaldan mavjud."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Barchasi o'chirilsinmi?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Buferdan olib tashlash"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Buferga bloklash"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Buferdan blokdan chiqarish"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Bufer opsiyalari"
+

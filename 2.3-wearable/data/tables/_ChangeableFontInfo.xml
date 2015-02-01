@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FontInfoTable>
+	<FontInfo id="ATO001" style="R" size="28" />
+	<FontInfo id="ATO002" style="R" size="26" />
+	<FontInfo id="ATO003" style="B" size="34" />
+	<FontInfo id="ATO004" style="B" size="32" />
+	<FontInfo id="ATO004P" style="B" size="32" />
+	<FontInfo id="ATO004D" style="B" size="32" />
+</FontInfoTable>

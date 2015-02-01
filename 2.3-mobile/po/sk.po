@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Odstrániť"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Odstrániť zo schránky"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Zamknúť k schránke"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Odomknúť od schránky"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Zrušiť"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Možnosti schránky"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Odstrániť všetko?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "Vykoná sa odstr. %d položiek."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Táto položka sa odstráni."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Zavrieť"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Hotovo"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Vybrať všetky"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Kopírovať"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Odstrániť?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Vybrať"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Odstrániť všetko"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Skopírované do schránky."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Už existuje."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Vystrihnúť"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Vložiť"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Schránka"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d položky sa vymažú."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Všetky položky sa vymažú."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Položka je už skopírovaná do schránky."
+

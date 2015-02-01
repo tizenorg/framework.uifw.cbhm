@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Trinti"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Trinti iš iškarpinės"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Užrakinti iškarpinėje"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Atrakinti iš iškarpinės"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Atšaukti"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Iškarpinės parinktys"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Ar trinti viską?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "Bus ištrinta elementų: %d."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Šis elementas bus ištrintas."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Uždaryti"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Atlikta"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Pasirinkti visus"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Kopijuoti"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Ar trinti?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Rinktis"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Trinti viską"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Nukopijuota į iškarpinę."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Jau yra."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Iškirpti"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Įklijuoti"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Iškarpinė"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "Bus ištrinta elementų: %d."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Bus ištrinti visi elementai."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Elementas jau nukopijuotas į iškarpinę."
+

@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "हटाएँ"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "क्लिपबोर्ड से हटाएँ"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "क्लिपबोर्ड में लॉक करें"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "क्लिपबोर्ड से अनलॉक करें"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "रद्द"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "क्लिपबोर्ड विकल्प"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "सभी हटाएँ?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d मदें हटाई जाएँगी।"
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "यह मद हटाई जाएगी।"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "बंद करें"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "पूर्ण"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "सभी चुनें"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "कॉपी करें"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "हटाएँ?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "चुनें"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "सभी हटाएँ"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "क्लिपबोर्ड में कॉपी किया गया।"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "पहले से ही मौजूद।"
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "काटें"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "पेस्ट करें"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "क्लिपबोर्ड"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d मदें हटाई जाएँगी।"
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "सभी मदें हटाए जाएँगे।"
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "मद पहले से ही क्लिपबोर्ड में कॉपी किया गया।"
+

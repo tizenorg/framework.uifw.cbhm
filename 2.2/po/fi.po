@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Valmis"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Sulje"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Poista"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Poista kaikki"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Kopioitu leikepöydälle."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Leikepöytä"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Peruuta"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "On jo olemassa."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Poistetaanko kaikki?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Poista leikepöydältä"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Lukitse leikepöydälle"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Poista lukitus leikepöydältä"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Leikepöydän asetukset"
+

@@ -1,11 +1,21 @@
 <manifest>
 	<define>
 		<domain name="cbhm"/>
+		<request>
+			<smack request="system::homedir" type="rwxat"/>
+			<smack request="popsync-agent::vconf" type="rwxat"/>
+			<smack request="mdm-server::admin" type="r"/>
+			<smack request="system::use_internet" type="w"/>
+		</request>
+		<permit>
+			<smack permit="system::use_internet" type="w"/>
+		</permit>
 	</define>
 	<request>
 		<domain name="cbhm"/>
 	</request>
 	<assign>
+		<filesystem path="/usr/share/locale/*" label="_"/>
 		<filesystem path="/usr/lib/systemd/user/cbhm.service" label="_" exec_label="none" />
 		<filesystem path="/usr/lib/systemd/user/core-efl.target.wants/cbhm.service" label="_" exec_label="none" />
 	</assign>

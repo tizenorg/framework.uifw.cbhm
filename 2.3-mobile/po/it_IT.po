@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Elimina"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Eliminare dagli appunti"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Blocca negli appunti"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Sblocca dagli appunti"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Annulla"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Opzioni appunti"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Eliminare tutto?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d elementi verranno eliminati."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "L'elemento verrà eliminato."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Chiudi"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Fatto"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Seleziona tutto"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Copia"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Eliminare?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Seleziona"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Elimina tutto"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Elemento copiato negli appunti"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Già esiste."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Taglia"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Incolla"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Appunti"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d elementi verranno eliminati."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Tutti gli elementi verranno eliminati."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Elemento già copiato negli appunti."
+

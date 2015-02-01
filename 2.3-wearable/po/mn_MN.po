@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Дууслаа"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Хаах"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Устгах"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Бүгдийг устгах"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Түр санах ой руу хуулсан"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Түр санах ой"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Цуцлах"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Хэдийн оршиж байна"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Бүгдийг устгах уу?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Түр санах ойноос устгах"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Түр санах ой руу түгжих"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Түр санах ойгоос нээх"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Түр санах ойн сонголтууд"
+

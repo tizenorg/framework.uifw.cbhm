@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Odstranit"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Odstranit ze schránky"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Zamknout do schránky"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Odemknout ze schránky"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Storno"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Možnosti schránky"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Odstranit vše?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "Bude odstraněno %d položek."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Tato položka bude odstraněna."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Zavřít"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Hotovo"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Vybrat vše"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Kopírovat"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Odstranit?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Vybrat"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Odstranit vše"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Zkopírováno do schránky."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Již existuje."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Vyjmout"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Vložit"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Schránka"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d položek bude odstraněno."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Všechny položky budou odstraněny."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Položka již byla zkopírována do schránky."
+

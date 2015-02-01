@@ -1,10 +1,12 @@
 [Unit]
-Description=Clipboard helper module
-After=xorg.target e17.service boot-animation.service
+Description=CBHM
+After=tizen-runtime.target e17.service
+Requires=tizen-runtime.target
 
 [Service]
-Type=notify
+Type=simple
 ExecStart=/usr/bin/cbhm
+EnvironmentFile=/run/tizen-mobile-env
 
 [Install]
-WantedBy=core-efl.target
+WantedBy=multi-user.target

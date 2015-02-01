@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Готово"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Затваряне"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Изтриване"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Изтриване на всички"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Копирано в системния буфер."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Системен буфер"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Отказ"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Вече съществува."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Изтриване на всички?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Изтриване от системния буфер"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Заключване в клипборда"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Отключване от клипборда"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Опции за системния буфер"
+

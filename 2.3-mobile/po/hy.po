@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Ջնջել"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Վերացնել գզրոցից"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Կողպել գզրոցում"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Արգելաբացել գզրոցից"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Չեղարկել"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Գզրոցի ընտրանքներ"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Ջնջե՞լ բոլորը"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d տարրեր կվերացվեն:"
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Այս տարրը կվերացվի:"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Փակել"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Կատարված է"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Ընտրել բոլորը"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Պատճենել"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Ջնջե՞լ"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Ընտրել"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Ջնջել բոլորը"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Պատճենվել է գզրոցի մեջ:"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Արդեն գոյություն ունի:"
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Կտրել"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Տեղադրել"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Գզրոց"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d տարրեր կվերացվեն:"
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Բոլոր տարրերը կվերացվեն:"
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Տարրն արդեն պատճենվել է գզրոցում:"
+

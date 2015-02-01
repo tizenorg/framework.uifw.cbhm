@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Ta bort"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Ta bort från urklipp"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Lås till Urklipp"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Lås upp från Urklipp"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Avbryt"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Urklippsalternativ"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Radera alla?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d objekt tas bort."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Det här objektet tas bort."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Stäng"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Klar"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Välj alla"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Kopiera"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Radera?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Välj"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Ta bort alla"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Kopierat till Urklipp."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Finns redan."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Klipp ut"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Klistra in"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Urklipp"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d objekt raderas."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Alla objekt tas bort."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Objektet har redan kopierats till urklipp."
+

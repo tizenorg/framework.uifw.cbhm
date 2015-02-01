@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Done"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Close"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Delete"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Delete all"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Copied to clipboard."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Clipboard"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Cancel"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Already exists."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Delete all?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Delete from clipboard"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Lock to clipboard"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Unlock from clipboard"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Clipboard options"
+

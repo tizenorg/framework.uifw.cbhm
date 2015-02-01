@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Fatto"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Chiudi"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Elimina"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Elimina tutto"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Elemento copiato negli appunti"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Appunti"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Annulla"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Già esiste."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Eliminare tutto?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Eliminare dagli appunti"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Blocca negli appunti"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Sblocca dagli appunti"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Opzioni appunti"
+

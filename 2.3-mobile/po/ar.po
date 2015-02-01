@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "مسح"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "حذف من الحافظة"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "تثبيت بالحافظة"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "إلغاء التثبيت من الحافظة"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "إلغاء"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "خيارات الحافظة"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "مسح الكل؟"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "سيتم حذف %d من العناصر."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "سيتم حذف هذا العنصر."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "إغلاق"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "تمت"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "اختيار الكل"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "نسخ"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "مسح؟"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "اختيار"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "مسح الكل"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "تم النسخ إلى الحافظة."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "موجود مسبقا."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "قص"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "لصق"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "الحافظة"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "سيتم حذف %d عناصر."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "سيتم حذف كل العناصر."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "تم بالفعل نسخ العنصر إلى الحافظة."
+

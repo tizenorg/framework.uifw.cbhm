@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Sil"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Panodan sil"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Panoya kilitle"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Panodan kaldır"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "İptal"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Pano seçenekleri"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Tümü silinsin mi?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d öğe silinecek."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Bu öğe silinecek."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Kapat"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Tamamlandı"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Hepsini seç"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Kopyala"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Sil?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Seç"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Tümünü sil"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Panoya kopyalandı."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Zaten var."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Kes"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Yapıştır"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Pano"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d öğe silinecek."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Tüm öğeler silinecek."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Öğe zaten panoya kopyalandı."
+

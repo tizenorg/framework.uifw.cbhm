@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Poista"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Poista leikepöydältä"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Lukitse leikepöydälle"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Poista lukitus leikepöydältä"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Peruuta"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Leikepöydän asetukset"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Poistetaanko kaikki?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d kohdetta poistetaan."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Tämä kohde poistetaan."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Sulje"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Valmis"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Valitse kaikki"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Kopioi"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Poistetaanko?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Valitse"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Poista kaikki"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Kopioitu leikepöydälle."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "On jo olemassa."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Poimi"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Liitä"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Leikepöytä"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d kohdetta poistetaan."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Kaikki kohteet poistetaan."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Kohde on jo kopioitu leikepöydälle."
+

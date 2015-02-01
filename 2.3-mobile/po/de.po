@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Löschen"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Aus der Zwischenablage löschen"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "In Zwischenablage sperren"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Aus der Zwischenablage löschen"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Abbruch"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Zwischenablage-Optionen"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Alle löschen?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d Elemente werden gelöscht."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Dieses Element wird gelöscht."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Schließen"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "OK"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Alle auswählen"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Kopieren"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Löschen?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Auswählen"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Alle löschen"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "In Zwischenablage kopiert"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Bereits vorhanden"
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Ausschneiden"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Einfügen"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Zwischenablage"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d Elemente werden gelöscht."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Alle Elemente werden gelöscht."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Das Element wurde bereits in die Zwischenablage kopiert."
+

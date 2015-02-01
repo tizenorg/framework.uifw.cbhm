@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "OK"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Schließen"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Löschen"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Alle löschen"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "In Zwischenablage kopiert"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Zwischenablage"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Abbruch"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Bereits vorhanden"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Alle löschen?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Aus der Zwischenablage löschen"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "In Zwischenablage sperren"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Aus der Zwischenablage löschen"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Zwischenablage-Optionen"
+

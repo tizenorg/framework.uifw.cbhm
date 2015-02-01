@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Usuń"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Usuń ze schowka"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Zablokuj do schowka"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Odblokuj ze schowka"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Anuluj"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Opcje schowka"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Usunąć wszystko?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "Elementów: %d zostanie usun."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Ten element zostanie usunięty."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Zamknij"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Gotowe"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Zaznacz wszystko"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Kopiuj"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Usunąć?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Wybierz"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Usuń wszystko"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Skopiowane do schowka."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Już istnieje."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Wytnij"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Wklej"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Schowek"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "Liczba elementów, które zostaną usunięte: %d."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Wszystkie elementy zostaną usunięte."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Element już skopiowano do schowka."
+
