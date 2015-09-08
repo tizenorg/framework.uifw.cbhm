@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Gotowe"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Zamknij"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Usuń"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Usuń wszystko"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Skopiowane do schowka."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Schowek"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Anuluj"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Już istnieje."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Usunąć wszystko?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Usuń ze schowka"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Zablokuj do schowka"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Odblokuj ze schowka"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Opcje schowka"
+

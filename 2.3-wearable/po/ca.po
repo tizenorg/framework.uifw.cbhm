@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Finalitzat"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Tancar"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Esborra"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Esborra tot"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "S'ha copiat al porta-retalls"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Porta-retalls"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Cancel·la"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Ja existeix"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Esborrar-ho tot?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Esborrar del porta-retalls"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Bloquejar al porta-retalls"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Desbloquejar del porta-retalls"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Opcions del porta-retalls"
+

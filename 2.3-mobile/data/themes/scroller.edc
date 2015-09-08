@@ -1,0 +1,2055 @@
+/*
+ * Copyright (c) 2010 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * BSD 2-Clause License (http://www.opensource.org/licenses/bsd-license.php)
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *   1. Redistributions of source code must retain the above copyright notice, this
+ *      list of conditions and the following disclaimer.
+ *   2. Redistributions in binary form must reproduce the above copyright notice,
+ *      this list of conditions and the following disclaimer in the documentation
+ *      and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/*
+ * vim:ts=3
+*/
+#define SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE 45
+#define SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE 30
+#define SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MOVE_CORRECTION_VALUE 15
+#define SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE 30
+#define SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE 20
+#define SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MOVE_CORRECTION_VALUE 10
+#define SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE 15
+#define SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE 10
+#define SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MOVE_CORRECTION_VALUE 5
+#define SCROLLER_DEFAULT_SCROLLBAR_VBAR_IMAGE "clipboard_scrollbar.#.png"
+#define SCROLLER_DEFAULT_SCROLLBAR_HBAR_IMAGE "clipboard_scrollbar.#.png"
+#define SCROLLER_DEFAULT_SCROLLBAR_VBAR_IMAGE_BORDER 0 0 12 14
+#define SCROLLER_DEFAULT_SCROLLBAR_HBAR_IMAGE_BORDER 12 14 0 0
+#define SCROLLER_DEFAULT_SCROLLBAR_VBAR_MIN_SIZE_INC 6 6
+#define SCROLLER_DEFAULT_SCROLLBAR_VBAR_MAX_SIZE_INC 6 134
+#define SCROLLER_DEFAULT_SCROLLBAR_HBAR_MIN_SIZE_INC 72 6
+#define SCROLLER_DEFAULT_SCROLLBAR_HBAR_MAX_SIZE_INC 134 6
+#define SCROLLER_DEFAULT_SCROLLBAR_VBAR_PADDING_SIZE 6
+#define SCROLLER_DEFAULT_SCROLLBAR_HBAR_PADDING_SIZE 0
+#define SCROLLER_MATCHLIST_SCROLLBAR_VBAR_IMAGE "clipboard_scrollbar.#.png"
+#define SCROLLER_MATCHLIST_SCROLLBAR_HBAR_IMAGE "clipboard_scrollbar.#.png"
+#define SCROLLER_MATCHLIST_SCROLLBAR_BG_IMAGE_BORDER 13 13 10 15
+#define SCROLLER_MATCHLIST_SCROLLBAR_VBAR_PADDING_SIZE 6
+#define SCROLLER_MATCHLIST_SCROLLBAR_HBAR_PADDING_SIZE 16
+#define SCROLLER_MATCHLIST_SCROLLBAR_VBAR_MIN_SIZE_INC 16 238
+#define SCROLLER_MATCHLIST_SCROLLBAR_VBAR_MAX_SIZE_INC 16 99999
+#define SCROLLER_MATCHLIST_SCROLLBAR_HBAR_MIN_SIZE_INC 180 16
+#define SCROLLER_MATCHLIST_SCROLLBAR_HBAR_MAX_SIZE_INC 99999 16
+#define SCROLLER_MATCHLIST_SCROLLBAR_VBAR_RUNNER_BORDER 0 0 4 4
+#define SCROLLER_MATCHLIST_SCROLLBAR_HBAR_RUNNER_BORDER 4 4 0 0
+#define SCROLLER_MATCHLIST_SCROLLBAR_VBAR_IMAGE_BORDER 0 0 12 14
+#define SCROLLER_MATCHLIST_SCROLLBAR_HBAR_IMAGE_BORDER 12 14 0 0
+#define SCROLLER_MATCHLIST_SCROLLBAR_VBAR_OVER1 6 6 6 0
+#define SCROLLER_MATCHLIST_SCROLLBAR_VBAR_OVER2 6 6 6 0
+#define SCROLLER_MATCHLIST_SCROLLBAR_HBAR_OVER1 6 6 6 0
+#define SCROLLER_MATCHLIST_SCROLLBAR_HBAR_OVER2 6 6 6 0
+#define SCROLLER_PHOTOCAM_SCROLLBAR_VBAR_IMAGE "clipboard_scrollbar.#.png"
+#define SCROLLER_PHOTOCAM_SCROLLBAR_HBAR_IMAGE "clipboard_scrollbar.#.png"
+#define SCROLLER_PHOTOCAM_SCROLLBAR_VBAR_PADDING_SIZE 6
+#define SCROLLER_PHOTOCAM_SCROLLBAR_HBAR_PADDING_SIZE 16
+#define SCROLLER_PHOTOCAM_SCROLLBAR_VBAR_MIN_SIZE_INC 16 238
+#define SCROLLER_PHOTOCAM_SCROLLBAR_VBAR_MAX_SIZE_INC 16 99999
+#define SCROLLER_PHOTOCAM_SCROLLBAR_HBAR_MIN_SIZE_INC 180 16
+#define SCROLLER_PHOTOCAM_SCROLLBAR_HBAR_MAX_SIZE_INC 99999 16
+#define SCROLLER_PHOTOCAM_SCROLLBAR_VBAR_RUNNER_BORDER 0 0 4 4
+#define SCROLLER_PHOTOCAM_SCROLLBAR_HBAR_RUNNER_BORDER 4 4 0 0
+#define SCROLLER_PHOTOCAM_SCROLLBAR_VBAR_IMAGE_BORDER 0 0 12 14
+#define SCROLLER_PHOTOCAM_SCROLLBAR_HBAR_IMAGE_BORDER 12 14 0 0
+#define SCROLLER_PHOTOCAM_SCROLLBAR_VBAR_OVER1 6 6 6 0
+#define SCROLLER_PHOTOCAM_SCROLLBAR_VBAR_OVER2 6 6 6 0
+#define SCROLLER_PHOTOCAM_SCROLLBAR_HBAR_OVER1 6 6 6 0
+#define SCROLLER_PHOTOCAM_SCROLLBAR_HBAR_OVER2 6 6 6 0
+#define SCROLLER_HANDLER_SCROLLBAR_VBAR_MIN_SIZE_INC 36 234
+#define SCROLLER_HANDLER_SCROLLBAR_HBAR_MIN_SIZE_INC 234 36
+#define SCROLLER_HANDLER_SCROLLBAR_VBAR_MIDDLE_MIN_SIZE_INC 36 37
+#define SCROLLER_HANDLER_SCROLLBAR_HBAR_MIDDLE_MIN_SIZE_INC 37 36
+#define SCROLLER_HANDLER_SCROLLBAR_VBAR_BOTTOM_BORDER 10 10 0 10
+#define SCROLLER_HANDLER_SCROLLBAR_VBAR_RIGHT_BORDER 0 10 10 10
+
+#define BUTTON_JUMP_TOP_PADDING_TO_SCROLLER_MIN_MAX_INC 26 18
+#define BUTTON_JUMP_LEFT_PADDING_TO_SCROLLER_MIN_MAX_INC 26 18
+
+#define GENGRID_POPUP_CONTENT_TOP_PADDING 26
+#define GENGRID_POPUP_CONTENT_BOTTOM_PADDING 26
+
+group { name: "elm/scroller/base/default";
+   alias: "elm/carousel/base/default";
+   alias: "elm/scroller/base/map_bubble";
+   alias: "elm/gengrid/base/no_effect";
+   alias: "elm/genlist/base/no_effect";
+   alias: "elm/scroller/base/list_effect";
+   alias: "elm/genlist/base/default";
+   alias: "elm/genscroller/base/default";
+   alias: "elm/list/base/default";
+
+   data {
+      item: "focus_highlight" "on";
+   }
+
+   script {
+      public sbvis_v, sbvis_h, sbalways_v, sbalways_h, sbvis_timer;
+      public sh_v, sh_h;
+      public top_down_x = 0, top_down_y = 0
+      public top_move_x = 0, top_move_y = 0
+      public top_diff = 0, top_prev_diff = 0
+      public effect_top_down = 0, effect_top_start = 0, effect_top_reset = 0, effect_top_anim = 0;
+      public effect_top_end = 0, effect_top_move = 0, effect_top_max = 0;
+      public bottom_down_x = 0, bottom_down_y = 0
+      public bottom_move_x = 0, bottom_move_y = 0
+      public bottom_diff = 0, bottom_prev_diff = 0
+      public effect_bottom_down = 0, effect_bottom_start = 0, effect_bottom_reset = 0, effect_bottom_anim = 0;
+      public effect_bottom_end = 0, effect_bottom_move = 0, effect_bottom_max = 0;
+      public left_down_x = 0, left_down_y = 0
+      public left_move_x = 0, left_move_y = 0
+      public left_diff = 0, left_prev_diff = 0
+      public effect_left_down = 0, effect_left_start = 0, effect_left_reset = 0, effect_left_anim = 0;
+      public effect_left_end = 0, effect_left_move = 0, effect_left_max = 0;
+      public right_down_x = 0, right_down_y = 0
+      public right_move_x = 0, right_move_y = 0
+      public right_diff = 0, right_prev_diff = 0
+      public effect_right_down = 0, effect_right_start = 0, effect_right_reset = 0, effect_right_anim = 0;
+      public effect_right_end = 0, effect_right_move = 0, effect_right_max = 0;
+
+      public timer0(val) {
+         new v;
+         v = get_int(sbvis_v);
+         if (v) {
+            v = get_int(sbalways_v);
+            if (!v) {
+               emit("do-hide-vbar", "");
+               set_int(sbvis_v, 0);
+            }
+         }
+         v = get_int(sbvis_h);
+         if (v) {
+            v = get_int(sbalways_h);
+            if (!v) {
+               emit("do-hide-hbar", "");
+               set_int(sbvis_h, 0);
+            }
+         }
+         set_int(sbvis_timer, 0);
+         return 0;
+      }
+   }
+   images {
+      image: SCROLLER_DEFAULT_SCROLLBAR_VBAR_IMAGE COMP;
+      image: SCROLLER_DEFAULT_SCROLLBAR_HBAR_IMAGE COMP;
+   }
+   parts {
+      part { name: "bg";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.offset: 0 0;
+            rel2.offset: -1 -1;
+            color: 255 255 255 0;
+         }
+      }
+      part { name: "clipper";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.to: "bg";
+            rel2.to: "bg";
+            rel1.offset: 0 0;
+            rel2.offset: -1 -1;
+         }
+      }
+      part { name: "elm.swallow.content";
+         clip_to: "clipper";
+         type: SWALLOW;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.to: "bg";
+            rel2.to: "bg";
+            rel1.offset: 0 0;
+            rel2.offset: -1 -1;
+         }
+      }
+      part { name: "sb_vbar_clip_master";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+         }
+         description { state: "hidden" 0.0;
+            visible: 0;
+            color: 255 255 255 0;
+         }
+      }
+      part { name: "sb_vbar_clip";
+         clip_to: "sb_vbar_clip_master";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+         }
+         description { state: "hidden" 0.0;
+            visible: 0;
+            color: 255 255 255 0;
+         }
+      }
+      part { name: "sb_vbar_top_padding";
+         type: SPACER;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: 0 SCROLLER_DEFAULT_SCROLLBAR_VBAR_PADDING_SIZE;
+            max: 0 SCROLLER_DEFAULT_SCROLLBAR_VBAR_PADDING_SIZE;
+            rel1.relative: 1.0 0.0;
+            rel2.relative: 1.0 0.0;
+            rel1.to: "elm.swallow.content";
+            rel2.to: "elm.swallow.content";
+            fixed: 1 1;
+            align: 1.0 0.0;
+         }
+      }
+      part { name: "sb_vbar_bottom_padding";
+         type: SPACER;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: 0 SCROLLER_DEFAULT_SCROLLBAR_VBAR_PADDING_SIZE;
+            max: 0 SCROLLER_DEFAULT_SCROLLBAR_VBAR_PADDING_SIZE;
+            rel1.relative: 1.0 1.0;
+            rel2.relative: 1.0 1.0;
+            rel1.to: "elm.swallow.content";
+            rel2.to: "elm.swallow.content";
+            fixed: 1 1;
+            align: 1.0 1.0;
+         }
+      }
+      part { name: "sb_vbar_right_padding";
+         type: SPACER;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: SCROLLER_DEFAULT_SCROLLBAR_VBAR_PADDING_SIZE 0;
+            max: SCROLLER_DEFAULT_SCROLLBAR_VBAR_PADDING_SIZE 0;
+            rel1.relative: 1.0 1.0;
+            rel2.relative: 1.0 1.0;
+            rel1.to: "elm.swallow.content";
+            rel2.to: "elm.swallow.content";
+            fixed: 1 1;
+            align: 1.0 1.0;
+         }
+      }
+      part { name: "sb_vbar";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+            fixed: 1 1;
+            visible: 0;
+            min: SCROLLER_DEFAULT_SCROLLBAR_VBAR_MIN_SIZE_INC;
+            align: 1.0 0.0;
+            rel1 {
+               relative: 0.0 1.0;
+               offset:   0 0;
+               to_x:     "sb_vbar_right_padding";
+               to_y:     "sb_vbar_top_padding";
+            }
+            rel2 {
+               relative: 0.0 0.0;
+               offset:   -1 1;
+               to_x:     "sb_vbar_right_padding";
+               to_y:     "sb_vbar_bottom_padding";
+            }
+         }
+      }
+      part { name: "elm.dragable.vbar";
+         clip_to: "sb_vbar_clip";
+         mouse_events: 0;
+         scale: 1;
+         dragable {
+            x: 0 0 0;
+            y: 1 1 0;
+            confine: "sb_vbar";
+         }
+         description { state: "default" 0.0;
+            fixed: 1 1;
+            min: SCROLLER_DEFAULT_SCROLLBAR_VBAR_MIN_SIZE_INC;
+            max: SCROLLER_DEFAULT_SCROLLBAR_VBAR_MAX_SIZE_INC;
+            rel1 {
+               relative: 0.5 0.5;
+               offset:   0 0;
+               to: "sb_vbar";
+            }
+            rel2 {
+               relative: 0.5 0.5;
+               offset:   0 0;
+               to: "sb_vbar";
+            }
+            image {
+               normal: SCROLLER_DEFAULT_SCROLLBAR_VBAR_IMAGE;
+               border: SCROLLER_DEFAULT_SCROLLBAR_VBAR_IMAGE_BORDER;
+               border_scale: 1;
+               middle: DEFAULT;
+            }
+         }
+      }
+      part { name: "sb_hbar_clip_master";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+         }
+         description { state: "hidden" 0.0;
+            visible: 0;
+            color: 255 255 255 0;
+         }
+      }
+      part { name: "sb_hbar_clip";
+         clip_to: "sb_hbar_clip_master";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+         }
+         description { state: "hidden" 0.0;
+            visible: 0;
+            color: 255 255 255 0;
+         }
+      }
+      part { name: "sb_hbar_bottom_padding";
+         type: SPACER;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: 0 SCROLLER_DEFAULT_SCROLLBAR_HBAR_PADDING_SIZE;
+            max: 0 SCROLLER_DEFAULT_SCROLLBAR_HBAR_PADDING_SIZE;
+            rel1.relative: 1.0 1.0;
+            rel2.relative: 1.0 1.0;
+            rel1.to: "elm.swallow.content";
+            rel2.to: "elm.swallow.content";
+            fixed: 1 1;
+            align: 1.0 1.0;
+         }
+      }
+      part { name: "sb_hbar_left_padding";
+         type: SPACER;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: SCROLLER_DEFAULT_SCROLLBAR_HBAR_PADDING_SIZE 0;
+            max: SCROLLER_DEFAULT_SCROLLBAR_HBAR_PADDING_SIZE 0;
+            rel1.relative: 0.0 1.0;
+            rel2.relative: 0.0 1.0;
+            rel1.to: "elm.swallow.content";
+            rel2.to: "elm.swallow.content";
+            fixed: 1 1;
+            align: 0.0 1.0;
+         }
+      }
+      part { name: "sb_hbar_right_padding";
+         type: SPACER;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: SCROLLER_DEFAULT_SCROLLBAR_HBAR_PADDING_SIZE 0;
+            max: SCROLLER_DEFAULT_SCROLLBAR_HBAR_PADDING_SIZE 0;
+            rel1.relative: 1.0 1.0;
+            rel2.relative: 1.0 1.0;
+            rel1.to: "elm.swallow.content";
+            rel2.to: "elm.swallow.content";
+            fixed: 1 1;
+            align: 1.0 1.0;
+         }
+      }
+      part { name: "sb_hbar";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+            fixed: 1 1;
+            visible: 0;
+            min: SCROLLER_DEFAULT_SCROLLBAR_HBAR_MIN_SIZE_INC;
+            align: 0.0 1.0;
+            rel1 {
+               relative: 1.0 0.0;
+               offset:   0 0;
+               to_x:     "sb_hbar_left_padding";
+               to_y:     "sb_hbar_bottom_padding";
+            }
+            rel2 {
+               relative: 0.0 0.0;
+               offset:   -1 -1;
+               to_x:     "sb_hbar_right_padding";
+               to_y:     "sb_hbar_bottom_padding";
+            }
+         }
+      }
+      part { name: "elm.dragable.hbar";
+         clip_to: "sb_hbar_clip";
+         mouse_events: 0;
+         scale: 1;
+         dragable {
+            x: 1 1 0;
+            y: 0 0 0;
+            confine: "sb_hbar";
+         }
+         description { state: "default" 0.0;
+            fixed: 1 1;
+            min: SCROLLER_DEFAULT_SCROLLBAR_HBAR_MIN_SIZE_INC;
+            max: SCROLLER_DEFAULT_SCROLLBAR_HBAR_MAX_SIZE_INC;
+            rel1 {
+               relative: 0.5  0.0;
+               offset:   0    0;
+               to: "sb_hbar";
+            }
+            rel2 {
+               relative: 0.5  0.0;
+               offset:   0    0;
+               to: "sb_hbar";
+            }
+            image {
+               normal: SCROLLER_DEFAULT_SCROLLBAR_HBAR_IMAGE;
+               border: SCROLLER_DEFAULT_SCROLLBAR_HBAR_IMAGE_BORDER;
+               border_scale: 1;
+               middle: DEFAULT;
+            }
+         }
+      }
+      part { name: "disabler";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.to: "clipper";
+            rel2.to: "clipper";
+            color: 0 0 0 0;
+            visible: 0;
+         }
+         description { state: "disabled" 0.0;
+            inherit: "default" 0.0;
+            visible: 1;
+         }
+      }
+   }
+   programs {
+      program { name: "load";
+         signal: "load";
+         source: "";
+         script {
+            set_state(PART:"sb_hbar_clip", "hidden", 0.0);
+            set_state(PART:"sb_vbar_clip", "hidden", 0.0);
+            set_int(sbvis_h, 0);
+            set_int(sbvis_v, 0);
+            set_int(sbalways_v, 0);
+            set_int(sbalways_h, 0);
+            set_int(sbvis_timer, 0);
+            emit("reload", "elm");
+         }
+      }
+
+      program { name: "vbar_show";
+         signal: "elm,action,show,vbar";
+         source: "elm";
+         action:  STATE_SET "default" 0.0;
+         target: "sb_vbar_clip_master";
+      }
+      program { name: "vbar_hide";
+         signal: "elm,action,hide,vbar";
+         source: "elm";
+         action:  STATE_SET "hidden" 0.0;
+         target: "sb_vbar_clip_master";
+      }
+      program { name: "vbar_show_always";
+         signal: "elm,action,show_always,vbar";
+         source: "elm";
+         script {
+            new v;
+            v = get_int(sbalways_v);
+            if (!v) {
+               set_int(sbalways_v, 1);
+               v = get_int(sbvis_v);
+               if (!v) {
+                  emit("do-show-vbar", "");
+                  set_int(sbvis_v, 1);
+               }
+            }
+         }
+      }
+      program { name: "vbar_show_notalways";
+         signal: "elm,action,show_notalways,vbar";
+         source: "elm";
+         script {
+            new v;
+            v = get_int(sbalways_v);
+            if (v) {
+               set_int(sbalways_v, 0);
+               v = get_int(sbvis_v);
+               if (!v) {
+                  emit("do-hide-vbar", "");
+                  set_int(sbvis_v, 0);
+               }
+            }
+         }
+      }
+      program { name: "sb_vbar_show";
+         signal: "do-show-vbar";
+         source: "";
+         action:  STATE_SET "default" 0.0;
+         transition: LINEAR 0.5;
+         target: "sb_vbar_clip";
+      }
+      program { name: "sb_vbar_hide";
+         signal: "do-hide-vbar";
+         source: "";
+         action:  STATE_SET "hidden" 0.0;
+         transition: LINEAR 0.5;
+         target: "sb_vbar_clip";
+      }
+
+      program { name: "hbar_show";
+         signal: "elm,action,show,hbar";
+         source: "elm";
+         action:  STATE_SET "default" 0.0;
+         target: "sb_hbar_clip_master";
+      }
+      program { name: "hbar_hide";
+         signal: "elm,action,hide,hbar";
+         source: "elm";
+         action:  STATE_SET "hidden" 0.0;
+         target: "sb_hbar_clip_master";
+      }
+      program { name: "hbar_show_always";
+         signal: "elm,action,show_always,hbar";
+         source: "elm";
+         script {
+            new v;
+            v = get_int(sbalways_h);
+            if (!v) {
+               set_int(sbalways_h, 1);
+               v = get_int(sbvis_h);
+               if (!v) {
+                  emit("do-show-hbar", "");
+                  set_int(sbvis_h, 1);
+               }
+            }
+         }
+      }
+      program { name: "hbar_show_notalways";
+         signal: "elm,action,show_notalways,hbar";
+         source: "elm";
+         script {
+            new v;
+            v = get_int(sbalways_h);
+            if (v) {
+               set_int(sbalways_h, 0);
+               v = get_int(sbvis_h);
+               if (!v) {
+                  emit("do-hide-hbar", "");
+                  set_int(sbvis_h, 0);
+               }
+            }
+         }
+      }
+      program { name: "sb_hbar_show";
+         signal: "do-show-hbar";
+         source: "";
+         action:  STATE_SET "default" 0.0;
+         transition: LINEAR 0.5;
+         target: "sb_hbar_clip";
+      }
+      program { name: "sb_hbar_hide";
+         signal: "do-hide-hbar";
+         source: "";
+         action:  STATE_SET "hidden" 0.0;
+         transition: LINEAR 0.5;
+         target: "sb_hbar_clip";
+      }
+
+      program { name: "scroll";
+         signal: "elm,action,scroll";
+         source: "elm";
+         script {
+            new v;
+            v = get_int(sbvis_v);
+            v |= get_int(sbalways_v);
+            if (!v) {
+               emit("do-show-vbar", "");
+               set_int(sbvis_v, 1);
+            }
+            v = get_int(sbvis_h);
+            v |= get_int(sbalways_h);
+            if (!v) {
+               emit("do-show-hbar", "");
+               set_int(sbvis_h, 1);
+            }
+            v = get_int(sbvis_timer);
+            if (v > 0) cancel_timer(v);
+            v = timer(1.0, "timer0", 0);
+            set_int(sbvis_timer, v);
+         }
+      }
+      program { name: "disable";
+         signal: "elm,state,disabled";
+         source: "elm";
+         action: STATE_SET "disabled" 0.0;
+         target: "disabler";
+      }
+      program { name: "enable";
+         signal: "elm,state,enabled";
+         source: "elm";
+         action: STATE_SET "default" 0.0;
+         target: "disabler";
+      }
+      program { name: "show";
+         signal: "show";
+         source: "";
+         script {
+            new v;
+            emit("do-show-vbar", "");
+            set_int(sbvis_v, 1);
+            v = get_int(sbalways_v);
+            if (!v) {
+              v = get_int(sbvis_timer);
+              if (v > 0) cancel_timer(v);
+              v = timer(1.0, "timer0", 0);
+              set_int(sbvis_timer, v);
+            }
+            emit("do-show-hbar", "");
+            set_int(sbvis_h, 1);
+            v = get_int(sbalways_h);
+            if (!v) {
+              v = get_int(sbvis_timer);
+              if (v > 0) cancel_timer(v);
+              v = timer(1.0, "timer0", 0);
+              set_int(sbvis_timer, v);
+            }
+         }
+      }
+   }
+}
+
+group { name: "elm/scroller/base/handler";
+   alias: "elm/carousel/base/handler";
+
+   data {
+      item: "focus_highlight" "on";
+   }
+   script {
+      public sbvis_v, sbvis_h, sbalways_v, sbalways_h, sbvis_timer;
+      public effect_on, effect_hold, mouse_down;
+      public timer0(val) {
+         new v;
+         v = get_int(sbvis_v);
+         if (v) {
+            v = get_int(sbalways_v);
+            if (!v) {
+               emit("do-hide-vbar", "");
+               set_int(sbvis_v, 0);
+            }
+         }
+         v = get_int(sbvis_h);
+         if (v) {
+            v = get_int(sbalways_h);
+            if (!v) {
+               emit("do-hide-hbar", "");
+               set_int(sbvis_h, 0);
+            }
+         }
+         set_int(sbvis_timer, 0);
+         return 0;
+      }
+   }
+   images {
+      image: "00_fast_scroll_handler_top.png" COMP;
+      image: "00_fast_scroll_handler_center.png" COMP;
+      image: "00_fast_scroll_handler_bottom.png" COMP;
+      image: "00_fast_scroll_handler_left_h.png" COMP;
+      image: "00_fast_scroll_handler_center_h.png" COMP;
+      image: "00_fast_scroll_handler_right_h.png" COMP;
+   }
+   parts {
+      part { name: "bg";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.offset: 0 0;
+            rel2.offset: -1 -1;
+            color: 255 255 255 0;
+         }
+      }
+      part { name: "clipper";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.to: "bg";
+            rel2.to: "bg";
+            rel1.offset: 0 0;
+            rel2.offset: -1 -1;
+         }
+      }
+      part { name: "elm.swallow.content";
+         clip_to: "clipper";
+         type: SWALLOW;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.to: "bg";
+            rel2.to: "bg";
+            rel1.offset: 0 0;
+            rel2.offset: -1 -1;
+         }
+      }
+      part { name: "sb_vbar_clip_master";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+         }
+         description { state: "hidden" 0.0;
+            visible: 0;
+            color: 255 255 255 0;
+         }
+      }
+      part { name: "sb_vbar_clip";
+         clip_to: "sb_vbar_clip_master";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+         }
+         description { state: "hidden" 0.0;
+            visible: 0;
+            color: 255 255 255 0;
+         }
+      }
+      part { name: "sb_vbar";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+            fixed: 1 1;
+            visible: 0;
+            min: SCROLLER_HANDLER_SCROLLBAR_VBAR_MIN_SIZE_INC;
+            align: 1.0 0.0;
+            rel1 {
+               relative: 1.0 0.0;
+               to_y:     "bg";
+               to_x:     "bg";
+            }
+            rel2 {
+               relative: 1.0 1.0;
+               to_y:     "sb_hbar";
+               to_x:     "bg";
+            }
+         }
+      }
+      part { name: "elm.dragable.vbar";
+         type: RECT;
+         clip_to: "sb_vbar_clip";
+         mouse_events: 1;
+         scale: 1;
+         dragable {
+            x: 0 0 0;
+            y: 1 1 0;
+            confine: "sb_vbar";
+         }
+         description { state: "default" 0.0;
+            fixed: 1 1;
+            color: 0 0 0 0;
+            min: SCROLLER_HANDLER_SCROLLBAR_VBAR_MIN_SIZE_INC;
+            max: 30 99999;
+            rel1 {
+               relative: 0.5  0.5;
+               offset:   0    0;
+               to: "sb_vbar";
+            }
+            rel2 {
+               relative: 0.5  0.5;
+               offset:   0    0;
+               to: "sb_vbar";
+            }
+         }
+      }
+      part { name: "sb_hbar_clip_master";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+         }
+         description { state: "hidden" 0.0;
+            visible: 0;
+            color: 255 255 255 0;
+         }
+      }
+      part { name: "sb_hbar_clip";
+         clip_to: "sb_hbar_clip_master";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+         }
+         description { state: "hidden" 0.0;
+            visible: 0;
+            color: 255 255 255 0;
+         }
+      }
+      part { name: "sb_hbar";
+         type: RECT;
+         mouse_events: 0;
+         scale: 1;
+         description { state: "default" 0.0;
+            fixed: 1 1;
+            visible: 0;
+            min: SCROLLER_HANDLER_SCROLLBAR_HBAR_MIN_SIZE_INC;
+            align: 0.0 1.0;
+            rel1 {
+               relative: 0.0 1.0;
+               to_x:     "bg";
+               to_y:     "bg";
+            }
+            rel2 {
+               relative: 0.0 1.0;
+               offset: -1 -1;
+               to_x:     "sb_vbar";
+               to_y:     "bg";
+            }
+         }
+      }
+      part { name: "elm.dragable.hbar";
+         type: RECT;
+         clip_to: "sb_hbar_clip";
+         mouse_events: 1;
+         scale: 1;
+         dragable {
+            x: 1 1 0;
+            y: 0 0 0;
+            confine: "sb_hbar";
+         }
+         description { state: "default" 0.0;
+            fixed: 1 1;
+            color: 0 0 0 0;
+            min: SCROLLER_HANDLER_SCROLLBAR_HBAR_MIN_SIZE_INC;
+            max: 99999 30;
+            rel1 {
+               relative: 0.5  0.5;
+               offset:   0    0;
+               to: "sb_hbar";
+            }
+            rel2 {
+               relative: 0.5  0.5;
+               offset:   0    0;
+               to: "sb_hbar";
+            }
+         }
+      }
+      part { name: "disabler";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.to: "clipper";
+            rel2.to: "clipper";
+            color: 0 0 0 0;
+            visible: 0;
+         }
+         description { state: "disabled" 0.0;
+            inherit: "default" 0.0;
+            visible: 1;
+         }
+      }
+   }
+   programs {
+      program { name: "load";
+         signal: "load";
+         source: "";
+         script {
+            set_state(PART:"sb_hbar_clip", "hidden", 0.0);
+            set_state(PART:"sb_vbar_clip", "hidden", 0.0);
+            set_int(sbvis_h, 0);
+            set_int(sbvis_v, 0);
+            set_int(sbalways_v, 0);
+            set_int(sbalways_h, 0);
+            set_int(sbvis_timer, 0);
+            emit("reload", "elm");
+         }
+      }
+      program { name: "vbar_show";
+         signal: "elm,action,show,vbar";
+         source: "elm";
+         action: STATE_SET "default" 0.0;
+         target: "sb_vbar_clip_master";
+      }
+      program { name: "vbar_hide";
+         signal: "elm,action,hide,vbar";
+         source: "elm";
+         action: STATE_SET "hidden" 0.0;
+         target: "sb_vbar_clip_master";
+      }
+      program { name: "vbar_show_always";
+         signal: "elm,action,show_always,vbar";
+         source: "elm";
+         script {
+            new v;
+            v = get_int(sbalways_v);
+            if (!v) {
+               set_int(sbalways_v, 1);
+               v = get_int(sbvis_v);
+               if (!v) {
+                  emit("do-show-vbar", "");
+                  set_int(sbvis_v, 1);
+               }
+            }
+         }
+      }
+      program { name: "vbar_show_notalways";
+         signal: "elm,action,show_notalways,vbar";
+         source: "elm";
+         script {
+            new v;
+            v = get_int(sbalways_v);
+            if (v) {
+               set_int(sbalways_v, 0);
+               v = get_int(sbvis_v);
+               if (!v) {
+                  emit("do-hide-vbar", "");
+                  set_int(sbvis_v, 0);
+               }
+            }
+         }
+      }
+      program { name: "vbar_press";
+         signal: "mouse,down,1";
+         source: "elm.dragable.vbar";
+         action:  SIGNAL_EMIT "elm,vbar,press" "elm";
+      }
+      program { name: "vbar_unpress";
+         signal: "mouse,up,1";
+         source: "elm.dragable.vbar";
+         action:  SIGNAL_EMIT "elm,vbar,unpress" "elm";
+      }
+      program { name: "sb_vbar_show";
+         signal: "do-show-vbar";
+         source: "";
+         action: STATE_SET "default" 0.0;
+         transition: LINEAR 0.5;
+         target: "sb_vbar_clip";
+      }
+      program { name: "sb_vbar_hide";
+         signal: "do-hide-vbar";
+         source: "";
+         action: STATE_SET "hidden" 0.0;
+         transition: LINEAR 0.5;
+         target: "sb_vbar_clip";
+      }
+      program { name: "hbar_show";
+         signal: "elm,action,show,hbar";
+         source: "elm";
+         action: STATE_SET "default" 0.0;
+         target: "sb_hbar_clip_master";
+      }
+      program { name: "hbar_hide";
+         signal: "elm,action,hide,hbar";
+         source: "elm";
+         action:  STATE_SET "hidden" 0.0;
+         target: "sb_hbar_clip_master";
+      }
+      program { name: "hbar_show_always";
+         signal: "elm,action,show_always,hbar";
+         source: "elm";
+         script {
+            new v;
+            v = get_int(sbalways_h);
+            if (!v) {
+               set_int(sbalways_h, 1);
+               v = get_int(sbvis_h);
+               if (!v) {
+                  emit("do-show-hbar", "");
+                  set_int(sbvis_h, 1);
+               }
+            }
+         }
+      }
+      program { name: "hbar_show_notalways";
+         signal: "elm,action,show_notalways,hbar";
+         source: "elm";
+         script {
+            new v;
+            v = get_int(sbalways_h);
+            if (v) {
+               set_int(sbalways_h, 0);
+               v = get_int(sbvis_h);
+               if (!v) {
+                  emit("do-hide-hbar", "");
+                  set_int(sbvis_h, 0);
+               }
+            }
+         }
+      }
+      program { name: "hbar_press";
+         signal: "mouse,down,1";
+         source: "elm.dragable.hbar";
+         action:  SIGNAL_EMIT "elm,hbar,press" "elm";
+      }
+      program { name: "hbar_unpress";
+         signal: "mouse,up,1";
+         source: "elm.dragable.hbar";
+         action:  SIGNAL_EMIT "elm,hbar,unpress" "elm";
+      }
+      program { name: "sb_hbar_show";
+         signal: "do-show-hbar";
+         source: "";
+         action: STATE_SET "default" 0.0;
+         transition: LINEAR 0.5;
+         target: "sb_hbar_clip";
+      }
+      program { name: "sb_hbar_hide";
+         signal: "do-hide-hbar";
+         source: "";
+         action: STATE_SET "hidden" 0.0;
+         transition: LINEAR 0.5;
+         target: "sb_hbar_clip";
+      }
+
+      program { name: "scroll";
+         signal: "elm,action,scroll";
+         source: "elm";
+         script {
+            new v;
+            v = get_int(sbvis_v);
+            v |= get_int(sbalways_v);
+            if (!v) {
+               emit("do-show-vbar", "");
+               set_int(sbvis_v, 1);
+            }
+            v = get_int(sbvis_h);
+            v |= get_int(sbalways_h);
+            if (!v) {
+               emit("do-show-hbar", "");
+               set_int(sbvis_h, 1);
+            }
+            v = get_int(sbvis_timer);
+            if (v > 0) cancel_timer(v);
+            v = timer(1.0, "timer0", 0);
+            set_int(sbvis_timer, v);
+         }
+      }
+      program { name: "disable";
+         signal: "elm,state,disabled";
+         source: "elm";
+         action: STATE_SET "disabled" 0.0;
+         target: "disabler";
+      }
+      program { name: "enable";
+         signal: "elm,state,enabled";
+         source: "elm";
+         action: STATE_SET "default" 0.0;
+         target: "disabler";
+      }
+      program { name: "show";
+         signal: "show";
+         source: "";
+         script {
+            new v;
+            emit("do-show-vbar", "");
+            set_int(sbvis_v, 1);
+            v = get_int(sbalways_v);
+            if (!v) {
+              v = get_int(sbvis_timer);
+              if (v > 0) cancel_timer(v);
+              v = timer(1.0, "timer0", 0);
+              set_int(sbvis_timer, v);
+            }
+            emit("do-show-hbar", "");
+            set_int(sbvis_h, 1);
+            v = get_int(sbalways_h);
+            if (!v) {
+              v = get_int(sbvis_timer);
+              if (v > 0) cancel_timer(v);
+              v = timer(1.0, "timer0", 0);
+              set_int(sbvis_timer, v);
+            }
+         }
+      }
+   }
+}
+
+group { name: "elm/scroller/base/effect";
+   alias: "elm/genlist/base/default";
+   alias: "elm/genscroller/base/default";
+   alias: "elm/list/base/default";
+   inherit: "elm/scroller/base/default";
+
+   parts {
+      part { name: "shadow_top1";
+         clip_to: "clipper";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.relative: 0.0 0.0;
+            rel1.to: "bg";
+            rel2.relative: 1.0 0.0;
+            rel2.to: "bg";
+            rel2.offset: -1 -1;
+            align: 0.5 1.0;
+            min: 0 SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE;
+            max: -1 SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE;
+            color: 20 107 147 77;
+            fixed: 0 1;
+         }
+         description { state: "start" 0.0;
+            inherit: "default" 0.0;
+            rel1.offset: 0 SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE;
+            rel2.offset: -1 SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE-1;
+         }
+      }
+      part { name: "shadow_top2";
+         clip_to: "clipper";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.relative: 0.0 0.0;
+            rel1.to: "bg";
+            rel2.relative: 1.0 0.0;
+            rel2.to: "bg";
+            rel2.offset: -1 -1;
+            align: 0.5 1.0;
+            min: 0 SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE;
+            max: -1 SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE;
+            color: 20 107 147 77;
+            fixed: 0 1;
+         }
+         description { state: "start" 0.0;
+            inherit: "default" 0.0;
+            rel1.offset: 0 SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE;
+            rel2.offset: -1 SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE-1;
+         }
+      }
+      part { name: "shadow_top3";
+         clip_to: "clipper";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.relative: 0.0 0.0;
+            rel1.to: "bg";
+            rel2.relative: 1.0 0.0;
+            rel2.to: "bg";
+            rel2.offset: -1 -1;
+            align: 0.5 1.0;
+            min: 0 SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE;
+            max: -1 SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE;
+            color: 20 107 147 77;
+            fixed: 0 1;
+         }
+         description { state: "start" 0.0;
+            inherit: "default" 0.0;
+            rel1.offset: 0 SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE;
+            rel2.offset: -1 SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE-1;
+         }
+      }
+      part { name: "shadow_bottom1";
+         clip_to: "clipper";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.relative: 0.0 1.0;
+            rel1.to: "bg";
+            rel2.relative: 1.0 1.0;
+            rel2.to: "bg";
+            rel2.offset: -1 -1;
+            align: 0.5 0.0;
+            min: 0 SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE;
+            max: -1 SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE;
+            color: 20 107 147 77;
+            fixed: 0 1;
+         }
+         description { state: "start" 0.0;
+            inherit: "default" 0.0;
+            rel1.offset: 0 -SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE;
+            rel2.offset: -1 -SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE+1;
+         }
+      }
+      part { name: "shadow_bottom2";
+         clip_to: "clipper";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.relative: 0.0 1.0;
+            rel1.to: "bg";
+            rel2.relative: 1.0 1.0;
+            rel2.to: "bg";
+            rel2.offset: -1 -1;
+            align: 0.5 0.0;
+            min: 0 SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE;
+            max: -1 SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE;
+            color: 20 107 147 77;
+            fixed: 0 1;
+         }
+         description { state: "start" 0.0;
+            inherit: "default" 0.0;
+            rel1.offset: 0 -SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE;
+            rel2.offset: -1 -SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE+1;
+         }
+      }
+      part { name: "shadow_bottom3";
+         clip_to: "clipper";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.relative: 0.0 1.0;
+            rel1.to: "bg";
+            rel2.relative: 1.0 1.0;
+            rel2.to: "bg";
+            rel2.offset: -1 -1;
+            align: 0.5 0.0;
+            min: 0 SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE;
+            max: -1 SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE;
+            color: 20 107 147 77;
+            fixed: 0 1;
+         }
+         description { state: "start" 0.0;
+            inherit: "default" 0.0;
+            rel1.offset: 0 -SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE;
+            rel2.offset: -1 -SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE+1;
+         }
+      }
+      part { name: "shadow_left1";
+         clip_to: "clipper";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.relative: 0.0 0.0;
+            rel1.to: "bg";
+            rel2.relative: 0.0 1.0;
+            rel2.to: "bg";
+            rel2.offset: -1 -1;
+            align: 1.0 0.5;
+            min: SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE 0;
+            max: SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE -1;
+            color: 20 107 147 77;
+            fixed: 1 0;
+         }
+         description { state: "start" 0.0;
+            inherit: "default" 0.0;
+            rel1.offset: SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE 0;
+            rel2.offset: SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE-1 -1;
+         }
+      }
+      part { name: "shadow_left2";
+         clip_to: "clipper";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.relative: 0.0 0.0;
+            rel1.to: "bg";
+            rel2.relative: 0.0 1.0;
+            rel2.to: "bg";
+            rel2.offset: -1 -1;
+            align: 1.0 0.5;
+            min: SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE 0;
+            max: SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE -1;
+            color: 20 107 147 77;
+            fixed: 1 0;
+         }
+         description { state: "start" 0.0;
+            inherit: "default" 0.0;
+            rel1.offset: SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE 0;
+            rel2.offset: SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE-1 -1;
+         }
+      }
+      part { name: "shadow_left3";
+         clip_to: "clipper";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.relative: 0.0 0.0;
+            rel1.to: "bg";
+            rel2.relative: 0.0 1.0;
+            rel2.to: "bg";
+            rel2.offset: -1 -1;
+            align: 1.0 0.5;
+            min: SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE 0;
+            max: SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE -1;
+            color: 20 107 147 77;
+            fixed: 1 0;
+         }
+         description { state: "start" 0.0;
+            inherit: "default" 0.0;
+            rel1.offset: SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE 0;
+            rel2.offset: SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE-1 -1;
+         }
+      }
+    part { name: "shadow_right1";
+         clip_to: "clipper";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.relative: 1.0 0.0;
+            rel1.to: "bg";
+            rel2.relative: 1.0 1.0;
+            rel2.to: "bg";
+            rel2.offset: -1 -1;
+            align: 0.0 0.5;
+            min: SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE 0;
+            max: SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE -1;
+            color: 20 107 147 77;
+            fixed: 1 0;
+         }
+         description { state: "start" 0.0;
+            inherit: "default" 0.0;
+            rel1.offset: -SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE 0;
+            rel2.offset: -SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE+1 -1;
+         }
+      }
+      part { name: "shadow_right2";
+         clip_to: "clipper";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.relative: 1.0 0.0;
+            rel1.to: "bg";
+            rel2.relative: 1.0 1.0;
+            rel2.to: "bg";
+            rel2.offset: -1 -1;
+            align: 0.0 0.5;
+            min: SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE 0;
+            max: SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE -1;
+            color: 20 107 147 77;
+            fixed: 1 0;
+         }
+         description { state: "start" 0.0;
+            inherit: "default" 0.0;
+            rel1.offset: -SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE 0;
+            rel2.offset: -SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE+1 -1;
+         }
+      }
+      part { name: "shadow_right3";
+         clip_to: "clipper";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            rel1.relative: 1.0 0.0;
+            rel1.to: "bg";
+            rel2.relative: 1.0 1.0;
+            rel2.to: "bg";
+            rel2.offset: -1 -1;
+            align: 0.0 0.5;
+            min: SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE 0;
+            max: SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE -1;
+            color: 20 107 147 77;
+            fixed: 1 0;
+         }
+         description { state: "start" 0.0;
+            inherit: "default" 0.0;
+            rel1.offset: -SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE 0;
+            rel2.offset: -SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE+1 -1;
+         }
+      }
+      part { name: "event";
+         type: RECT;
+         mouse_events: 1;
+         repeat_events: 1;
+         description { state: "default" 0.0;
+            color: 0 0 0 0;
+         }
+      }
+   }
+   programs {
+      program { name: "load";
+         script {
+            set_state(PART:"sb_hbar_clip", "hidden", 0.0);
+            set_state(PART:"sb_vbar_clip", "hidden", 0.0);
+            set_int(sbvis_h, 0);
+            set_int(sbvis_v, 0);
+            set_int(sbalways_v, 0);
+            set_int(sbalways_h, 0);
+            set_int(sbvis_timer, 0);
+            set_int(sh_v, 0);
+            emit("reload", "elm");
+         }
+      }
+      program { name: "scroll";
+         signal: "elm,action,scroll";
+         source: "elm";
+         script {
+            new v;
+            v = get_int(sbvis_v);
+            v |= get_int(sbalways_v);
+            if (!v) {
+               emit("do-show-vbar", "");
+               set_int(sbvis_v, 1);
+            }
+            v = get_int(sbvis_h);
+            v |= get_int(sbalways_h);
+            if (!v) {
+               emit("do-show-hbar", "");
+               set_int(sbvis_h, 1);
+            }
+            v = get_int(sbvis_timer);
+            if (v > 0.0) cancel_timer(v);
+            v = timer(0.2, "timer0", 0);
+            set_int(sbvis_timer, v);
+         }
+      }
+      program { name: "edge_top_mouse_down";
+         signal: "elm,state,mouse,down";
+         source: "elm";
+         script {
+            set_int(effect_top_down, 1);
+         }
+      }
+      /* Effect Hide */
+      program { name: "edge_top_mouse_up";
+         signal: "elm,state,mouse,up";
+         source: "elm";
+         script {
+            set_int(effect_top_down, 0);
+            if (get_int(effect_top_start))
+              {
+                 set_int(effect_top_reset, 0);
+                 if (!get_int(effect_top_anim))
+                   {
+                      if (!get_int(effect_top_end))
+                        {
+                           set_int(effect_top_end, 1);
+                           run_program(PROGRAM:"edge_top_end");
+                        }
+                   }
+              }
+         }
+      }
+      program { name: "edge_top_scroll";
+         signal: "elm,action,scroll";
+         source: "elm";
+         script {
+            if (get_int(effect_top_start))
+            {
+               set_state(PART:"shadow_top1", "default", 0.0);
+               set_state(PART:"shadow_top2", "default", 0.0);
+               set_state(PART:"shadow_top3", "default", 0.0);
+               set_int(effect_top_reset, 0);
+               run_program(PROGRAM:"edge_top_init");
+            }
+         }
+      }
+      program { name: "edge_top_end";
+         action: STATE_SET "default" 0.0;
+         target: "shadow_top1";
+         target: "shadow_top2";
+         target: "shadow_top3";
+         transition: SINUSOIDAL 0.3;
+         after: "edge_top_init";
+      }
+      program { name: "edge_top_init";
+         script {
+            set_int(effect_top_move, 0);
+            if (!get_int(effect_top_reset))
+              set_int(effect_top_start, 0);
+            set_int(effect_top_max, 0);
+            set_int(top_prev_diff, 0);
+            set_int(effect_top_end, 0);
+         }
+      }
+      /* Effect Show */
+      program { name: "edge_top";
+         signal: "elm,edge,top";
+         source: "elm";
+         script {
+             if (!get_int(effect_top_start))
+               {
+                  set_int(effect_top_start, 1);
+                  set_int(effect_top_anim, 1);
+                  run_program(PROGRAM:"edge_top_start");
+               }
+         }
+      }
+      program { name: "edge_top_start";
+         action: STATE_SET "start" 0.0;
+         target: "shadow_top1";
+         target: "shadow_top2";
+         target: "shadow_top3";
+         transition: SINUSOIDAL 0.2;
+         after: "edge_top_after";
+      }
+      program { name: "edge_top_after";
+         script {
+            new xx, yy;
+            get_mouse(xx, yy);
+            set_int(top_down_y, yy);
+            set_int(effect_top_anim, 0);
+            /* mouse down */
+            if (get_int(effect_top_down))
+              {
+                 set_int(effect_top_move, 1);
+              }
+            /* mouse up */
+            else
+              {
+                 set_int(effect_top_reset, 0);
+                 if (!get_int(effect_top_end))
+                   {
+                      set_int(effect_top_end, 1);
+                      run_program(PROGRAM:"edge_top_end");
+                   }
+              }
+         }
+      }
+      program { name: "edge_top_mouse_move";
+         signal: "elm,state,mouse,move";
+         source: "elm";
+         script {
+            if (get_int(effect_top_move))
+              {
+                 new xx, yy;
+                 new Float:fx1, Float:fx2, Float:fx3;
+                 get_mouse(xx, yy);
+                 set_int(top_move_y, yy);
+                 set_int(top_diff, (get_int(top_move_y) - get_int(top_down_y)));
+                 if (get_int(top_diff) < get_int(top_prev_diff))
+                   {
+                      set_int(top_prev_diff, 0);
+                      set_int(effect_top_move, 0);
+                      set_int(effect_top_reset, 1);
+                      if (!get_int(effect_top_end))
+                        {
+                           set_int(effect_top_end, 1);
+                           run_program(PROGRAM:"edge_top_end");
+                        }
+                   }
+                 else
+                   {
+                      if (!get_int(effect_top_end))
+                        {
+                          if (get_int(top_diff) <= 90 && !get_int(effect_top_max))
+                            {
+                               fx1 = fx2 = fx3 = sin(get_int(top_diff), DEGREES);
+                               fx1 = fx1 * SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MOVE_CORRECTION_VALUE + SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE;
+                               fx2 = fx2 * SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MOVE_CORRECTION_VALUE + SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE;
+                               fx3 = fx3 * SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MOVE_CORRECTION_VALUE + SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE;
+                            }
+                          else
+                            {
+                               set_int(effect_top_max, 1);
+                               fx1 = SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE;
+                               fx2 = SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE;
+                               fx3 = SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE;
+                            }
+                          custom_state(PART:"shadow_top1", "default", 0.0);
+                          set_state_val(PART:"shadow_top1", STATE_REL1_OFFSET, 0, round(fx1));
+                          set_state_val(PART:"shadow_top1", STATE_REL2_OFFSET, -1, round(fx1) - 1);
+                          set_state(PART:"shadow_top1", "custom", 0.0);
+
+                          custom_state(PART:"shadow_top2", "default", 0.0);
+                          set_state_val(PART:"shadow_top2", STATE_REL1_OFFSET, 0, round(fx2));
+                          set_state_val(PART:"shadow_top2", STATE_REL2_OFFSET, -1, round(fx2) - 1);
+                          set_state(PART:"shadow_top2", "custom", 0.0);
+
+                          custom_state(PART:"shadow_top3", "default", 0.0);
+                          set_state_val(PART:"shadow_top3", STATE_REL1_OFFSET, 0, round(fx3));
+                          set_state_val(PART:"shadow_top3", STATE_REL2_OFFSET, -1, round(fx3) - 1);
+                          set_state(PART:"shadow_top3", "custom", 0.0);
+                          set_int(top_prev_diff, get_int(top_diff));
+                        }
+                   }
+             }
+         }
+      }
+      program { name: "edge_bottom_mouse_down";
+         signal: "elm,state,mouse,down";
+         source: "elm";
+         script {
+            set_int(effect_bottom_down, 1);
+         }
+      }
+      /* Effect Hide */
+      program { name: "edge_bottom_mouse_up";
+         signal: "elm,state,mouse,up";
+         source: "elm";
+         script {
+            set_int(effect_bottom_down, 0);
+            if (get_int(effect_bottom_start))
+              {
+                 set_int(effect_bottom_reset, 0);
+                 if (!get_int(effect_bottom_anim))
+                   {
+                      if (!get_int(effect_bottom_end))
+                        {
+                           set_int(effect_bottom_end, 1);
+                           run_program(PROGRAM:"edge_bottom_end");
+                        }
+                   }
+              }
+         }
+      }
+      program { name: "edge_bottom_scroll";
+         signal: "elm,action,scroll";
+         source: "elm";
+         script {
+            if (get_int(effect_bottom_start))
+            {
+               set_state(PART:"shadow_bottom1", "default", 0.0);
+               set_state(PART:"shadow_bottom2", "default", 0.0);
+               set_state(PART:"shadow_bottom3", "default", 0.0);
+               set_int(effect_bottom_reset, 0);
+               run_program(PROGRAM:"edge_bottom_init");
+            }
+         }
+      }
+      program { name: "edge_bottom_end";
+         action: STATE_SET "default" 0.0;
+         target: "shadow_bottom1";
+         target: "shadow_bottom2";
+         target: "shadow_bottom3";
+         transition: SINUSOIDAL 0.3;
+         after: "edge_bottom_init";
+      }
+      program { name: "edge_bottom_init";
+         script {
+            set_int(effect_bottom_move, 0);
+            if (!get_int(effect_bottom_reset))
+              set_int(effect_bottom_start, 0);
+            set_int(effect_bottom_max, 0);
+            set_int(bottom_prev_diff, 0);
+            set_int(effect_bottom_end, 0);
+         }
+      }
+      /* Effect Show */
+      program { name: "edge_bottom";
+         signal: "elm,edge,bottom";
+         source: "elm";
+         script {
+             if (!get_int(effect_bottom_start))
+               {
+                  set_int(effect_bottom_start, 1);
+                  set_int(effect_bottom_anim, 1);
+                  run_program(PROGRAM:"edge_bottom_start");
+               }
+         }
+      }
+      program { name: "edge_bottom_start";
+         action: STATE_SET "start" 0.0;
+         target: "shadow_bottom1";
+         target: "shadow_bottom2";
+         target: "shadow_bottom3";
+         transition: SINUSOIDAL 0.2;
+         after: "edge_bottom_after";
+      }
+      program { name: "edge_bottom_after";
+         script {
+            new xx, yy;
+            get_mouse(xx, yy);
+            set_int(effect_bottom_anim, 0);
+            set_int(bottom_down_y, yy);
+            /* mouse down */
+            if (get_int(effect_bottom_down))
+              {
+                 set_int(effect_bottom_move, 1);
+              }
+            /* mouse up */
+            else
+              {
+                 set_int(effect_bottom_reset, 0);
+                 if (!get_int(effect_bottom_end))
+                   {
+                      set_int(effect_bottom_end, 1);
+                      run_program(PROGRAM:"edge_bottom_end");
+                   }
+              }
+         }
+      }
+      program { name: "edge_bottom_mouse_move";
+         signal: "elm,state,mouse,move";
+         source: "elm";
+         script {
+            if (get_int(effect_bottom_move))
+              {
+                 new xx, yy;
+                 new Float:fx1, Float:fx2, Float:fx3;
+                 get_mouse(xx, yy);
+                 set_int(bottom_move_y, yy);
+                 set_int(bottom_diff, (get_int(bottom_down_y) - get_int(bottom_move_y)));
+                 if (get_int(bottom_diff) < get_int(bottom_prev_diff))
+                   {
+                      set_int(bottom_prev_diff, 0);
+                      set_int(effect_bottom_move, 0);
+                      set_int(effect_bottom_reset, 1);
+                      if (!get_int(effect_bottom_end))
+                        {
+                           set_int(effect_bottom_end, 1);
+                           run_program(PROGRAM:"edge_bottom_end");
+                        }
+                   }
+                 else
+                   {
+                      if (!get_int(effect_bottom_end))
+                        {
+                           if (get_int(bottom_diff) <= 90 && !get_int(effect_bottom_max))
+                             {
+                                fx1 = fx2 = fx3 = sin(get_int(bottom_diff), DEGREES);
+                                fx1 = fx1 * SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MOVE_CORRECTION_VALUE + SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE;
+                                fx2 = fx2 * SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MOVE_CORRECTION_VALUE + SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE;
+                                fx3 = fx3 * SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MOVE_CORRECTION_VALUE + SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE;
+                             }
+                           else
+                             {
+                                set_int(effect_bottom_max, 1);
+                                fx1 = SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE;
+                                fx2 = SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE;
+                                fx3 = SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE;
+                             }
+                           custom_state(PART:"shadow_bottom1", "default", 0.0);
+                           set_state_val(PART:"shadow_bottom1", STATE_REL1_OFFSET, 0, round(fx1) * -1);
+                           set_state_val(PART:"shadow_bottom1", STATE_REL2_OFFSET, -1, (round(fx1) - 1) * -1);
+                           set_state(PART:"shadow_bottom1", "custom", 0.0);
+
+                           custom_state(PART:"shadow_bottom2", "default", 0.0);
+                           set_state_val(PART:"shadow_bottom2", STATE_REL1_OFFSET, 0, round(fx2) * -1);
+                           set_state_val(PART:"shadow_bottom2", STATE_REL2_OFFSET, -1, (round(fx2) - 1) * -1);
+                           set_state(PART:"shadow_bottom2", "custom", 0.0);
+
+                           custom_state(PART:"shadow_bottom3", "default", 0.0);
+                           set_state_val(PART:"shadow_bottom3", STATE_REL1_OFFSET, 0, round(fx3) * -1);
+                           set_state_val(PART:"shadow_bottom3", STATE_REL2_OFFSET, -1, (round(fx3) - 1) * -1 );
+                           set_state(PART:"shadow_bottom3", "custom", 0.0);
+                           set_int(bottom_prev_diff, get_int(bottom_diff));
+                        }
+                   }
+             }
+         }
+      }
+      program { name: "edge_left_mouse_down";
+         signal: "elm,state,mouse,down";
+         source: "elm";
+         script {
+            set_int(effect_left_down, 1);
+         }
+      }
+      /* Effect Hide */
+      program { name: "edge_left_mouse_up";
+         signal: "elm,state,mouse,up";
+         source: "elm";
+         script {
+            set_int(effect_left_down, 0);
+            if (get_int(effect_left_start))
+              {
+                 set_int(effect_left_reset, 0);
+                 if (!get_int(effect_left_anim))
+                   {
+                      if (!get_int(effect_left_end))
+                        {
+                           set_int(effect_left_end, 1);
+                           run_program(PROGRAM:"edge_left_end");
+                        }
+                   }
+              }
+         }
+      }
+      program { name: "edge_left_scroll";
+         signal: "elm,action,scroll";
+         source: "elm";
+         script {
+            if (get_int(effect_left_start))
+            {
+               set_state(PART:"shadow_left1", "default", 0.0);
+               set_state(PART:"shadow_left2", "default", 0.0);
+               set_state(PART:"shadow_left3", "default", 0.0);
+               set_int(effect_left_reset, 0);
+               run_program(PROGRAM:"edge_left_init");
+            }
+         }
+      }
+      program { name: "edge_left_end";
+         action: STATE_SET "default" 0.0;
+         target: "shadow_left1";
+         target: "shadow_left2";
+         target: "shadow_left3";
+         transition: SINUSOIDAL 0.3;
+         after: "edge_left_init";
+      }
+      program { name: "edge_left_init";
+         script {
+            set_int(effect_left_move, 0);
+            if (!get_int(effect_left_reset))
+              set_int(effect_left_start, 0);
+            set_int(effect_left_max, 0);
+            set_int(left_prev_diff, 0);
+            set_int(effect_left_end, 0);
+         }
+      }
+      /* Effect Show */
+      program { name: "edge_left";
+         signal: "elm,edge,left";
+         source: "elm";
+         script {
+             if (!get_int(effect_left_start))
+               {
+                  set_int(effect_left_start, 1);
+                  set_int(effect_left_anim, 1);
+                  run_program(PROGRAM:"edge_left_start");
+               }
+         }
+      }
+      program { name: "edge_left_start";
+         action: STATE_SET "start" 0.0;
+         target: "shadow_left1";
+         target: "shadow_left2";
+         target: "shadow_left3";
+         transition: SINUSOIDAL 0.2;
+         after: "edge_left_after";
+      }
+      program { name: "edge_left_after";
+         script {
+            new xx, yy;
+            get_mouse(xx, yy);
+            set_int(left_down_x, xx);
+            set_int(effect_left_anim, 0);
+            /* mouse down */
+            if (get_int(effect_left_down))
+              {
+                 set_int(effect_left_move, 1);
+              }
+            /* mouse up */
+            else
+              {
+                 set_int(effect_left_reset, 0);
+                 if (!get_int(effect_left_end))
+                   {
+                      set_int(effect_left_end, 1);
+                      run_program(PROGRAM:"edge_left_end");
+                   }
+              }
+         }
+      }
+      program { name: "edge_left_mouse_move";
+         signal: "elm,state,mouse,move";
+         source: "elm";
+         script {
+            if (get_int(effect_left_move))
+              {
+                 new xx, yy;
+                 new Float:fx1, Float:fx2, Float:fx3;
+                 get_mouse(xx, yy);
+                 set_int(left_move_x, xx);
+                 set_int(left_diff, (get_int(left_move_x) - get_int(left_down_x)));
+                 if (get_int(left_diff) < get_int(left_prev_diff))
+                   {
+                      set_int(left_prev_diff, 0);
+                      set_int(effect_left_move, 0);
+                      set_int(effect_left_reset, 1);
+                      if (!get_int(effect_left_end))
+                        {
+                           set_int(effect_left_end, 1);
+                           run_program(PROGRAM:"edge_left_end");
+                        }
+                   }
+                 else
+                   {
+                      if (!get_int(effect_left_end))
+                        {
+                           if (get_int(left_diff) <= 90 && !get_int(effect_left_max))
+                             {
+                                fx1 = fx2 = fx3 = sin(get_int(left_diff), DEGREES);
+                                fx1 = fx1 * SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MOVE_CORRECTION_VALUE + SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE;
+                                fx2 = fx2 * SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MOVE_CORRECTION_VALUE + SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE;
+                                fx3 = fx3 * SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MOVE_CORRECTION_VALUE + SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE;
+                             }
+                           else
+                             {
+                                set_int(effect_left_max, 1);
+                                fx1 = SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE;
+                                fx2 = SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE;
+                                fx3 = SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE;
+                             }
+                           custom_state(PART:"shadow_left1", "default", 0.0);
+                           set_state_val(PART:"shadow_left1", STATE_REL1_OFFSET, round(fx1), 0);
+                           set_state_val(PART:"shadow_left1", STATE_REL2_OFFSET, round(fx1) - 1, -1);
+                           set_state(PART:"shadow_left1", "custom", 0.0);
+
+                           custom_state(PART:"shadow_left2", "default", 0.0);
+                           set_state_val(PART:"shadow_left2", STATE_REL1_OFFSET, round(fx2), 0);
+                           set_state_val(PART:"shadow_left2", STATE_REL2_OFFSET, round(fx2) - 1, - 1);
+                           set_state(PART:"shadow_left2", "custom", 0.0);
+
+                           custom_state(PART:"shadow_left3", "default", 0.0);
+                           set_state_val(PART:"shadow_left3", STATE_REL1_OFFSET, round(fx3), 0);
+                           set_state_val(PART:"shadow_left3", STATE_REL2_OFFSET, round(fx3) - 1, - 1);
+                           set_state(PART:"shadow_left3", "custom", 0.0);
+                           set_int(left_prev_diff, get_int(left_diff));
+                        }
+                   }
+             }
+         }
+      }
+      program { name: "edge_right_mouse_down";
+         signal: "elm,state,mouse,down";
+         source: "elm";
+         script {
+            set_int(effect_right_down, 1);
+         }
+      }
+      /* Effect Hide */
+      program { name: "edge_right_mouse_up";
+         signal: "elm,state,mouse,up";
+         source: "elm";
+         script {
+            set_int(effect_right_down, 0);
+            if (get_int(effect_right_start))
+              {
+                 set_int(effect_right_reset, 0);
+                 if (!get_int(effect_right_anim))
+                   {
+                      if (!get_int(effect_right_end))
+                        {
+                           set_int(effect_right_end, 1);
+                           run_program(PROGRAM:"edge_right_end");
+                        }
+                   }
+              }
+         }
+      }
+      program { name: "edge_right_scroll";
+         signal: "elm,action,scroll";
+         source: "elm";
+         script {
+            if (get_int(effect_right_start))
+            {
+               set_state(PART:"shadow_right1", "default", 0.0);
+               set_state(PART:"shadow_right2", "default", 0.0);
+               set_state(PART:"shadow_right3", "default", 0.0);
+               set_int(effect_right_reset, 0);
+               run_program(PROGRAM:"edge_right_init");
+            }
+         }
+      }
+      program { name: "edge_right_end";
+         action: STATE_SET "default" 0.0;
+         target: "shadow_right1";
+         target: "shadow_right2";
+         target: "shadow_right3";
+         transition: SINUSOIDAL 0.3;
+         after: "edge_right_init";
+      }
+      program { name: "edge_right_init";
+         script {
+            set_int(effect_right_move, 0);
+            if (!get_int(effect_right_reset))
+              set_int(effect_right_start, 0);
+            set_int(effect_right_max, 0);
+            set_int(right_prev_diff, 0);
+            set_int(effect_right_end, 0);
+         }
+      }
+      /* Effect Show */
+      program { name: "edge_right";
+         signal: "elm,edge,right";
+         source: "elm";
+         script {
+             if (!get_int(effect_right_start))
+               {
+                  set_int(effect_right_start, 1);
+                  set_int(effect_right_anim, 1);
+                  run_program(PROGRAM:"edge_right_start");
+               }
+         }
+      }
+      program { name: "edge_right_start";
+         action: STATE_SET "start" 0.0;
+         target: "shadow_right1";
+         target: "shadow_right2";
+         target: "shadow_right3";
+         transition: SINUSOIDAL 0.2;
+         after: "edge_right_after";
+      }
+      program { name: "edge_right_after";
+         script {
+            new xx, yy;
+            get_mouse(xx, yy);
+            set_int(right_down_x, xx);
+            set_int(effect_right_anim, 0);
+            /* mouse down */
+            if (get_int(effect_right_down))
+              {
+                 set_int(effect_right_move, 1);
+              }
+            /* mouse up */
+            else
+              {
+                 set_int(effect_right_reset, 0);
+                 if (!get_int(effect_right_end))
+                   {
+                      set_int(effect_right_end, 1);
+                      run_program(PROGRAM:"edge_right_end");
+                   }
+              }
+         }
+      }
+      program { name: "edge_right_mouse_move";
+         signal: "elm,state,mouse,move";
+         source: "elm";
+         script {
+            if (get_int(effect_right_move))
+              {
+                 new xx, yy;
+                 new Float:fx1, Float:fx2, Float:fx3;
+                 get_mouse(xx, yy);
+                 set_int(right_move_x, xx);
+                 set_int(right_diff, (get_int(right_down_x) - get_int(right_move_x)));
+                 if (get_int(right_diff) < get_int(right_prev_diff))
+                   {
+                      set_int(right_prev_diff, 0);
+                      set_int(effect_right_move, 0);
+                      set_int(effect_right_reset, 1);
+                      if (!get_int(effect_right_end))
+                        {
+                           set_int(effect_right_end, 1);
+                           run_program(PROGRAM:"edge_right_end");
+                        }
+                   }
+                 else
+                   {
+                      if (!get_int(effect_right_end))
+                        {
+                           if (get_int(right_diff) <= 90 && !get_int(effect_right_max))
+                             {
+                                fx1 = fx2 = fx3 = sin(get_int(right_diff), DEGREES);
+                                fx1 = fx1 * SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MOVE_CORRECTION_VALUE + SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MIN_SIZE;
+                                fx2 = fx2 * SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MOVE_CORRECTION_VALUE + SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MIN_SIZE;
+                                fx3 = fx3 * SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MOVE_CORRECTION_VALUE + SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MIN_SIZE;
+                             }
+                           else
+                             {
+                                set_int(effect_right_max, 1);
+                                fx1 = SCROLLER_EFFECT_SHADOW_FIRST_LAYER_MAX_SIZE;
+                                fx2 = SCROLLER_EFFECT_SHADOW_SECOND_LAYER_MAX_SIZE;
+                                fx3 = SCROLLER_EFFECT_SHADOW_THIRD_LAYER_MAX_SIZE;
+                             }
+                           custom_state(PART:"shadow_right1", "default", 0.0);
+                           set_state_val(PART:"shadow_right1", STATE_REL1_OFFSET, round(fx1) * -1, 0);
+                           set_state_val(PART:"shadow_right1", STATE_REL2_OFFSET, (round(fx1) - 1) * -1, -1);
+                           set_state(PART:"shadow_right1", "custom", 0.0);
+
+                           custom_state(PART:"shadow_right2", "default", 0.0);
+                           set_state_val(PART:"shadow_right2", STATE_REL1_OFFSET, round(fx2) * -1, 0);
+                           set_state_val(PART:"shadow_right2", STATE_REL2_OFFSET, (round(fx2) - 1) * -1, - 1);
+                           set_state(PART:"shadow_right2", "custom", 0.0);
+
+                           custom_state(PART:"shadow_right3", "default", 0.0);
+                           set_state_val(PART:"shadow_right3", STATE_REL1_OFFSET, round(fx3) * -1, 0);
+                           set_state_val(PART:"shadow_right3", STATE_REL2_OFFSET, (round(fx3) - 1) * -1, - 1);
+                           set_state(PART:"shadow_right3", "custom", 0.0);
+                           set_int(right_prev_diff, get_int(right_diff));
+                        }
+                   }
+             }
+         }
+      }
+   }
+}

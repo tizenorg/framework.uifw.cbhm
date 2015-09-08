@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Կատարված է"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Փակել"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Ջնջել"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Ջնջել բոլորը"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Պատճենվել է գզրոցի մեջ:"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Գզրոց"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Չեղարկել"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Արդեն գոյություն ունի:"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Ջնջե՞լ բոլորը"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Վերացնել գզրոցից"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Կողպել գզրոցում"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Արգելաբացել գզրոցից"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Գզրոցի ընտրանքներ"
+

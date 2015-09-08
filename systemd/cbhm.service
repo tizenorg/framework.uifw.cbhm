@@ -1,0 +1,12 @@
+[Unit]
+Description=CBHM
+After=tizen-runtime.target e17.service
+Requires=tizen-runtime.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/cbhm
+EnvironmentFile=/run/tizen-mobile-env
+
+[Install]
+WantedBy=multi-user.target

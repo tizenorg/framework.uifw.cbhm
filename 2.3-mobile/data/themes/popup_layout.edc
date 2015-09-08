@@ -1,0 +1,15 @@
+#define DEMO_POPUP_CONTENT_LISTSTYLE_CONTENT_DEFAULT_MIN_INC 0 96
+
+group { name: "elm/layout/content/menustyle";
+   parts{
+      part{ name:"elm.swallow.content";
+         type: SWALLOW;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: DEMO_POPUP_CONTENT_LISTSTYLE_CONTENT_DEFAULT_MIN_INC;
+            align: 0.5 0.5;
+            fixed: 1 0;
+         }
+      }
+   }
+}

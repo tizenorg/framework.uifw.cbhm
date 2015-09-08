@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Ezabatu"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Arbeletik ezabatu"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Blokeatu arbelean"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Desblokeatu arbeletik"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Ezeztatu"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Arbelaren aukerak"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Dena ezabatu?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d elementu ezabatuko dira."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Elementu hau ezabatuko da."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Itxi"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Amaituta"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Hautatu denak"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Kopiatu"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Ezabatu?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Aukeratu"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Dena(k) ezabatu"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Arbelera kopiatu da"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Dagoeneko badago"
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Moztu"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Itsatsi"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Arbela"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d elementu ezabatuko dira"
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Elementu guztiak ezabatuko dira"
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Elementua arbelean kopiatu dago aurretik."
+

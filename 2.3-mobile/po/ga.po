@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Scrios"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Scrios ón ngearrthaisce"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Glasáil chuig an ngearrthaisce"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Díghlasáil ón ngearrthaisce"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Cealaigh"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Roghanna gearrthaisce"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Scrios gach?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "Scriosfar %d mír."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Scriosfar an mhír seo."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Dún"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Déanta"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Roghnaigh gach"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Cóipeáil"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Scrios?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Roghnaigh"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Scrios gach"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Cóipeáilte chuig gearrthaisce."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Ann cheana."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Gearr"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Greamaigh"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Gearrthaisce"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "Scriosfar %d mír"
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Scriosfar gach mír"
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Mír cóipeáilte chuig an ngearrthaisce cheana."
+

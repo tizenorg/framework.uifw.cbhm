@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Töröl"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Törlés a vágólapról"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Rögzítés a vágólapon"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Leoldás a vágólapról"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Mégse"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Vágólap opciói"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Törli az összeset?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "Töröl %d elemet."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Törli ezt az elemet."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Bezárás"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Kész"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Összes kijelölése"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Másol"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Törli?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Választ"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Összes törlése"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "A vágólapra másolva."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Már létezik."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Kivág"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Beilleszt"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Vágólap"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d tételt törölni fog."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Minden tételt törölni fog."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Már a vágólapra másolta ezt az elemet."
+

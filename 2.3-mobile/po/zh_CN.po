@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "删除"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "从剪贴板删除"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "锁定至剪贴板"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "从剪贴板解锁"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "取消"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "剪贴板选项"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "全部删除？"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "将删除 %d 个项目。"
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "将删除该项目。"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "关闭"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "完成"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "全选"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "复制"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "删除？"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "选择"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "删除所有"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "已复制到剪贴板"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "已存在。"
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "剪切"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "粘贴"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "剪贴板"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "将删除 %d 个项目。"
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "全部项目将被删除。"
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "项目已复制至剪贴板"
+

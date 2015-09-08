@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Ştergere"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Ştergere din clipboard"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Blocare în clipboard"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Deblocare din clipboard"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Anulare"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Opţiuni clipboard"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Ştergeţi tot?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d elemente vor fi şterse."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Acest element va fi şters."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Închidere"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Efectuat"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Selectare toate"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Copiere"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Ştergeţi?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Selectare"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Ştergere toate"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Copiat în clipboard"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Există deja."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Decupare"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Lipire"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Clipboard"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d elemente vor fi şterse."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Toate elementele vor fi şterse."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Elementul a fost deja copiat în clipboard."
+

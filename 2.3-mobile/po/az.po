@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Sil"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Mübadilə buferindən sil"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Mübadilə buferinə bərkit"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Mübadilə buferindən çıxart"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Ləğv et"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Mübadilə buferi seçimləri"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Hamısı silinsin?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d element silinəcək."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Bu element silinəcək."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Bağla"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Yerinə yetirildi"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Hamısını seç"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Köçür"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Silinsin?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Göndər"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Hamısı silindi"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Mübadilə buferinə köçürüldü."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Artıq mövcuddur."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Kəs"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Yapışdır"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Mübadilə buferi"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d element silinəcək."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Bütün elementlər silinəcək."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Element artıq məlumat buferinə kopyalanmışdır."
+

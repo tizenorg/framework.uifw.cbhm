@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "წაშლა"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "ბუფერული მეხსიერებიდან წაშლა"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "ბუფერულ მეხსიერებაში ჩაკეტვა"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "ბუფერული მეხსიერებიდან გახსნა"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "გაუქმება"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "ბუფერული მეხსიერების პარამეტრები"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "ყველა წაიშალოს?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d ელემენტი წაიშლება."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "ეს ელემენტი წაიშლება."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "დახურვა"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "შესრულებულია"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "ყველას არჩევა"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "ასლი"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "წაიშალოს?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "არჩევა"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "ყველას წაშლა"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "ასლი შენახულია ბუფერში."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "უკვე არის."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "მოჭრა"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "ჩასმა"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "ბუფერული მეხს."
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d ელემენტი წაიშლება."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "ყველა ელემენტი წაიშლება."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "ასლი უკვე შენახულია ბუფერში."
+

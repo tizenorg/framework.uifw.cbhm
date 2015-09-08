@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "삭제"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "클립보드에서 삭제"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "클립보드에서 잠금"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "클립보드에서 잠금해제"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "취소"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "클립보드 옵션"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "모두 삭제할까요?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "항목 %d개를 삭제합니다."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "이 항목을 삭제합니다."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "종료"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "완료"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "모두 선택"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "복사"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "삭제할까요?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "선택"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "모두 삭제"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "클립보드에 복사하였습니다."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "동일한 항목이 있습니다."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "잘라내기"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "붙여넣기"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "클립보드"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "항목 %d개를 삭제합니다."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "항목을 모두 삭제합니다."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "클립보드에 이미 복사된 항목입니다."
+

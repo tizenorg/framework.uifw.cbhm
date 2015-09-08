@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "削除"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "クリップボードから削除"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "アイテムを保護"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "アイテムの保護を解除"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "キャンセル"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "クリップボードオプション"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "全て削除しますか？"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d件のアイテムを削除します。"
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "このアイテムを削除します。"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "閉じる"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "完了"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "全て選択"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "コピー"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "削除しますか？"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "選択"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "全て削除"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "クリップボードにコピーしました。"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "既に登録されています。"
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "切り取り"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "貼り付け"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "クリップボード"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d件のアイテムを削除します。"
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "全てのアイテムを削除します。"
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "アイテムは既にクリップボードにコピーされています。"
+

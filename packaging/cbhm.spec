@@ -1,10 +1,10 @@
-#sbs-git:slp/pkgs/c/cbhm cbhm 0.1.0 a67e97190313d19025925d8b9fd0aa9da3d0dc6a
 Name:       cbhm
 Summary:    cbhm application
-Version:    0.1.126
+Version:    0.1.227
 Release:    1
-Group:      TO_BE/FILLED_IN
-License:    Flora License 
+Group:      System/Libraries
+License:    Apache-2.0
+URL:        http://www.samsung.com/
 Source0:    %{name}-%{version}.tar.gz
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(elementary)
@@ -15,45 +15,66 @@ BuildRequires:  pkgconfig(ecore)
 BuildRequires:  pkgconfig(utilX)
 BuildRequires:  pkgconfig(mm-sound)
 BuildRequires:  pkgconfig(mm-common)
-BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xrandr)
-BuildRequires:  pkgconfig(xcomposite)
 BuildRequires:  pkgconfig(xi)
-BuildRequires:  pkgconfig(svi)
-BuildRequires:  pkgconfig(pixman-1)
+BuildRequires:  pkgconfig(notification)
+BuildRequires:  pkgconfig(vconf)
+BuildRequires:  pkgconfig(vconf-internal-keys)
+BuildRequires:  pkgconfig(efl-assist)
 BuildRequires:  edje-tools
+BuildRequires:  pkgconfig(libsystemd-daemon)
+BuildRequires:  gettext
+%{?systemd_requires}
 
 %description
 Description: cbhm application
 
-
 %prep
 %setup -q
-cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
-
 
 %build
+
+%if "%{?tizen_profile_name}" == "wearable"
+	export TARGET=2.3-wearable
+%else
+   export TARGET=2.3-mobile
+%endif
+
+cd $TARGET && rm -rf CMakeFiles CMackCache.txt && cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
 make %{?jobs:-j%jobs}
 
-
 %install
-rm -rf %{buildroot}
-%make_install
+%if "%{?tizen_profile_name}" == "wearable"
+	export TARGET=2.3-wearable
+%else
+   export TARGET=2.3-mobile
+%endif
 
+cd $TARGET && %make_install
 
-%preun
-rm /etc/rc.d/rc3.d/S95cbhm
-sync
+## systemd
+mkdir -p %{buildroot}/usr/lib/systemd/user/core-efl.target.wants
+mkdir -p %{buildroot}%{_libdir}/systemd/system/multi-user.target.wants
+ln -s ../cbhm.service  %{buildroot}/usr/lib/systemd/user/core-efl.target.wants/cbhm.service
+ln -s ../cbhm.service %{buildroot}%{_libdir}/systemd/system/multi-user.target.wants/cbhm.service
+
+mkdir -p %{buildroot}/%{_datadir}/license
+cp %{_builddir}/%{buildsubdir}/LICENSE %{buildroot}/%{_datadir}/license/%{name}
 
 
 %post
-ln -s /etc/init.d/cbhm /etc/rc.d/rc3.d/S95cbhm
-sync
+echo "INFO: System should be restarted or execute: systemctl --user daemon-reload from user session to finish service installation."
 
 
 %files
 %defattr(-,root,root,-)
-%{_sysconfdir}/init.d/cbhm
 %{_bindir}/cbhm
-%{_datadir}/cbhm/icons/cbhm_default_img.png
 %{_datadir}/edje/cbhmdrawer.edj
+%{_datadir}/locale/*
+## systemd
+%{_libdir}/systemd/user/cbhm.service
+%{_libdir}/systemd/user/core-efl.target.wants/cbhm.service
+%{_libdir}/systemd/system/cbhm.service
+%{_libdir}/systemd/system/multi-user.target.wants/cbhm.service
+%{_datadir}/license/%{name}
+%manifest %{name}.manifest

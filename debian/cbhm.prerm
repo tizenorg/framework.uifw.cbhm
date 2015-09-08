@@ -1,5 +1,0 @@
-#!/bin/sh
-
-rm /etc/rc.d/rc3.d/S95cbhm
-
-sync

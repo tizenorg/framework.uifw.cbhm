@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Eyða"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Eyða af klippiborði"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Læsa á klemmuspjald"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Opna af klippiborði"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Hætta v."
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Valkostir klemmuspjalds"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Eyða öllu?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d atriðum verður eytt."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Þessu atriði verður eytt."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Loka"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Lokið"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Velja allt"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Afrita"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Á að eyða?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Velja"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Eyða öllu"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Afritað á klemmuspjald."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Er þegar til."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Klippa"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Líma"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Klippiborð"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d hlutum verður eytt."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Öllum hlutum verður eytt."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Búið er að afrita atriðið á klippiborð."
+

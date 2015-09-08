@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Slet"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Slet fra udklipsholder"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Lås til udklipsholder"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Lås op fra udklipsholder"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Annullér"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Indstillinger for udklipsholder"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Slet alle?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d elementer bliver slettet."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Dette element bliver slettet."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Luk"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Udført"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Vælg alle"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Kopiér"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Slet?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Vælg"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Slet alle"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Kopieret til udklipsholder."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Findes allerede."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Klip"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Indsæt"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Udklipsholder"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d elementer vil blive slettet."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Alle elementer bliver slettet."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Elementet er allerede blevet kopieret til udklipsholderen."
+

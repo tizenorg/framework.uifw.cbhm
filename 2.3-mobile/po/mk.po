@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Избриши"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Избриши од посредна меморија"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Заклучи во посредната меморија"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Отклучи од посредната меморија"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Откажи"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Опции за посредната меморија"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Избриши сè?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d записи ќе се избришат."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Ставката ќе се избрише."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Затвори"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Извршено"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Избери ги сите"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Копирај"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Да се избрише?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Избери"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Избриши сè"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Ископирано во посредната меморија."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Веќе постои."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Исечи"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Пресликај"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Посредна меморија"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d записи ќе се избришат."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Сите записи ќе се избришат."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Ставката е веќе ископирана во посредната меморија."
+

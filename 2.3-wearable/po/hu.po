@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Kész"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Bezárás"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Töröl"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Összes törlése"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "A vágólapra másolva."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Vágólap"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Mégse"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Már létezik."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Törli az összeset?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Törlés a vágólapról"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Rögzítés a vágólapon"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Leoldás a vágólapról"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Vágólap opciói"
+

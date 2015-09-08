@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Dzēst"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Dzēst no starpliktuves"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Bloķēt starpliktuvē"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Atbloķēt no starpliktuves"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Atcelt"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Starpliktuves iespējas"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Vai dzēst visu?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "Tiks izdzēsti %d objekti."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Šis objekts tiks izdzēsts."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Aizvērt"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Gatavs"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Izv. visu"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Kopēt"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "Vai dzēst?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Atlasīt"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Dzēst visu"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Kopēts starpliktuvē."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Jau pastāv."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Izgriezt"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Ielīmēt"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Starpliktuve"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d objekti tiks izdzēsti."
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Visi objekti tiks izdzēsti."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Objekts jau ir kopēts uz starpliktuvi."
+

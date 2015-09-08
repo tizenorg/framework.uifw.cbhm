@@ -1,0 +1,72 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Eliminar"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Eliminar del portapapeles"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Bloquear en el portapapeles"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Desbloquear del portapapeles"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Cancelar"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Opciones de portapapeles"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "¿Eliminar todo?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "Se eliminarán %d elementos."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "Se eliminará este elemento."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Cerrar"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "Finalizado"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "Seleccionar todo"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "Copiar"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "¿Eliminar?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "Seleccionar"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Eliminar todo"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Copiado al portapapeles"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Ya existe"
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "Cortar"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "Pegar"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Portapapeles"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "Se eliminarán %d elementos"
+
+msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
+msgstr "Se eliminarán todos los elementos"
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "Elemento ya copiado en el portapapeles."
+
