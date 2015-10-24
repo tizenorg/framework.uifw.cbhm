@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Concluído"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Fechar"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Excluir"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Apagar tudo"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Copiado para a área de transferência."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Área de transferência"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Cancelar"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Já existe."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Apagar tudo?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Apagar da área de transferência"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Bloquear na área de transferência"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Desbloquear da área de transferência"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Opções de área de transferência"
+

@@ -71,7 +71,13 @@ CNP_ITEM *item_add_by_CNP_ITEM(AppData *ad, CNP_ITEM *item, Eina_Bool storage, E
 	}
 	ClipdrawerData *cd = ad->clipdrawer;
 	if ((item_count_get(ad, ATOM_INDEX_COUNT_ALL) - cd->locked_item_count) == 0)
+	{
 		elm_object_signal_emit(cd->main_layout, "elm,state,enable,del", "elm");
+		elm_object_part_content_unset(cd->main_layout, "historyitems");
+		evas_object_hide(cd->noc_layout);
+		elm_object_part_content_set(cd->main_layout, "historyitems", cd->gengrid);
+	}
+
 	if (!item)
 	{
 		ERR("WRONG PARAMETER in %s, ad: 0x%p, item: 0x%p", __func__, ad, item);
@@ -161,8 +167,8 @@ static void image_name_get(char *filename)
 		now = localtime(&tim);
 		if (now)
 		  sprintf(filename, "fromweb-%d%02d%02d%02d%02d%02d%s",
-					  now->tm_year + 1900, now->tm_mon + 1, now->tm_mday,
-					  now->tm_hour, now->tm_min, now->tm_sec, ".jpg");
+					 now->tm_year + 1900, now->tm_mon + 1, now->tm_mday,
+					 now->tm_hour, now->tm_min, now->tm_sec, ".jpg");
 		else
 		  sprintf(filename, "fromweb-%d%02d%02d%02d%02d%02d%s",
 					 1900, 1, 1, 0, 0, 0,".jpg");
@@ -266,6 +272,8 @@ CNP_ITEM *item_add_by_data(AppData *ad, Ecore_X_Atom type, void *data, int len, 
 	{
 		entry_text = string_for_entry_get(ad, ATOM_INDEX_EFL, data);
 		copied_path = string_for_image_path_get(ad, ATOM_INDEX_EFL, data);
+		if (copied_path)
+			item->img_from_markup = EINA_TRUE;
 	}
 	else if (item->type_index == ATOM_INDEX_IMAGE)
 	{
@@ -316,8 +324,6 @@ CNP_ITEM *item_add_by_data(AppData *ad, Ecore_X_Atom type, void *data, int len, 
 		FREE(orig_path);
 	}
 
-	// Set vconf value to notify copy event to popsync application
-	vconf_set_str(VCONFKEY_POPSYNC_COPY_EVENT_SET_KEY, "1");
 	return item;
 }
 
@@ -379,7 +385,10 @@ void item_delete_by_CNP_ITEM(AppData *ad, CNP_ITEM *item)
 	slot_item_count_set(ad);
 
 	if (item_count_get(ad, ATOM_INDEX_COUNT_ALL) == 0)
+	{
 		_delete_mode_set(ad, EINA_FALSE);
+		clipdrawer_lower_view(ad);
+	}
 }
 
 void item_delete_by_data(AppData *ad, void *data, int len)

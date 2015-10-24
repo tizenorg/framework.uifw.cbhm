@@ -300,8 +300,6 @@ CNP_ITEM *item_add_by_data(AppData *ad, Ecore_X_Atom type, void *data, int len, 
 		FREE(orig_path);
 	}
 
-	// Set vconf value to notify copy event to popsync application
-	vconf_set_str(VCONFKEY_POPSYNC_COPY_EVENT_SET_KEY, "1");
 	return item;
 }
 

@@ -1,8 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(cbhm C)
 
-SET(PREFIX ${CMAKE_INSTALL_PREFIX})
-SET(LIBDIR "${PREFIX}/lib")
+SET(PREFIX "${CMAKE_INSTALL_PREFIX}")
 SET(DATADIR "${PREFIX}/share")
 SET(LOCALEDIR "${DATADIR}/locale")
 SET(VERSION 0.1.0)
@@ -23,7 +22,7 @@ IF ( MDM_ENABLE )
 ENDIF ( MDM_ENABLE )
 
 INCLUDE(FindPkgConfig)
-	pkg_check_modules(pkgs REQUIRED elementary eet appcore-efl appcore-common x11 ecore-x utilX eina evas ecore ecore-file ecore-evas edje ecore-input notification vconf vconf-internal-keys libsystemd-daemon efl-assist ${MDM_REQUIED_PKGS})
+	pkg_check_modules(pkgs REQUIRED elementary eet appcore-efl appcore-common x11 ecore-x utilX eina evas ecore ecore-file ecore-evas edje ecore-input notification vconf vconf-internal-keys libsystemd-daemon ${MDM_REQUIED_PKGS})
 
 FOREACH(flag ${pkgs_CFLAGS})
 	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
@@ -41,7 +40,8 @@ SET(CMAKE_CXX_FLAGS_CCOV       "-O2 -std=c++0x -g --coverage -fPIE")
 
 SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed -pie")
 
-ADD_DEFINITIONS("-DPREFIX=\"${CMAKE_INSTALL_PREFIX}\"")
+ADD_DEFINITIONS("-DDATADIR=\"${DATADIR}\"")
+ADD_DEFINITIONS("-DLOCALEDIR=\"${LOCALEDIR}\"")
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${SRCS})
 #for XV extension screenshot
@@ -56,8 +56,8 @@ ADD_CUSTOM_TARGET(cbhmdrawer.edj
 )
 ADD_DEPENDENCIES(${PROJECT_NAME} cbhmdrawer.edj)
 
-INSTALL(TARGETS ${PROJECT_NAME} DESTINATION bin)
+INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${PREFIX}/bin)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/data/themes/cbhmdrawer.edj DESTINATION ${DATADIR}/edje)
 ADD_SUBDIRECTORY(po)
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../systemd/cbhm.service DESTINATION ${LIBDIR}/systemd/user)
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../systemd/cbhm.service DESTINATION ${LIBDIR}/systemd/system)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../systemd/cbhm.service DESTINATION /usr/lib/systemd/user)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../systemd/cbhm.service DESTINATION /usr/lib/systemd/system)

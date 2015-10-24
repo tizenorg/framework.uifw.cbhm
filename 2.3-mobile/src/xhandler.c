@@ -264,17 +264,17 @@ static void send_convert_selection_target(AppData *ad, Ecore_X_Selection_Data_Ta
 
 	DBG("targets_data->num_targets: 0x%x", targets_data->num_targets);
 	int i, j, k;
-	for (i = 0; i < targets_data->num_targets; i++)
+	for (j = 0; j < targets_data->num_targets; j++)
 	{
-		DBG("get target: %s", targets_data->targets[i]);
-		for (j = 0; j < ATOM_INDEX_MAX; j++)
+		for (i = 0; i < ATOM_INDEX_MAX; i++)
 		{
-			for (k = 0; k < ad->targetAtoms[j].atom_cnt; k++)
+			DBG("get target: %s", targets_data->targets[j]);
+			for (k = 0; k < ad->targetAtoms[i].atom_cnt; k++)
 			{
-				if (!SAFE_STRCMP(targets_data->targets[i], ad->targetAtoms[j].name[k]))
+				if (!SAFE_STRCMP(targets_data->targets[j], ad->targetAtoms[i].name[k]))
 				{
-					DBG("find matched target: %s", ad->targetAtoms[j].name[k]);
-					ecore_x_selection_clipboard_request(ad->x_event_win, ad->targetAtoms[j].name[k]);
+					DBG("find matched target: %s", ad->targetAtoms[i].name[k]);
+					ecore_x_selection_clipboard_request(ad->x_event_win, ad->targetAtoms[i].name[k]);
 					return;
 				}
 			}

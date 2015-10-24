@@ -64,9 +64,15 @@ msgstr "Klippiborð"
 msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
 msgstr "%d hlutum verður eytt."
 
-msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
-msgstr "Öllum hlutum verður eytt."
+msgid "IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB"
+msgstr "Eyða öllum atriðum"
+
+msgid "IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD"
+msgstr "Öllum atriðum verður eytt af klippiborðinu."
 
 msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
 msgstr "Búið er að afrita atriðið á klippiborð."
+
+msgid "IDS_GALLERY_NPBODY_NO_ITEMS"
+msgstr "Engin atriði"
 

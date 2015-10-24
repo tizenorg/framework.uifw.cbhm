@@ -64,9 +64,15 @@ msgstr "클립보드"
 msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
 msgstr "항목 %d개를 삭제합니다."
 
-msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
-msgstr "항목을 모두 삭제합니다."
+msgid "IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB"
+msgstr "모든 항목 삭제"
+
+msgid "IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD"
+msgstr "클립보드의 모든 항목을 삭제합니다."
 
 msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
 msgstr "클립보드에 이미 복사된 항목입니다."
+
+msgid "IDS_GALLERY_NPBODY_NO_ITEMS"
+msgstr "항목이 없습니다"
 

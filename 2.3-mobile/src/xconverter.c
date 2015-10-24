@@ -151,7 +151,7 @@ static Eina_Bool targets_converter(AppData *ad, Ecore_X_Atom reqAtom, CNP_ITEM *
 		file = item->file;
 	}
 
-	if (!file || item->img_from_web)
+	if (!file || item->img_from_web || item->img_from_markup)
 	{
 		if (item_type_index == ATOM_INDEX_HTML)
 			ad->targetAtoms[item_type_index].convert_to_target[ATOM_INDEX_IMAGE] = NULL;
@@ -663,18 +663,8 @@ _set_EFL_item_data(PItemTagData data, const char *tag_str)
 		if (xpos)
 		{
 			int absizeLen = SAFE_STRLEN(value);
-			char *modify = SAFE_STRNDUP(value, xpos - value);
-			if (modify)
-			{
-				FREE(data->width);
-				data->width = modify;
-			}
-			modify = SAFE_STRNDUP(xpos + 1, absizeLen - (xpos - value) - 1);
-			if (modify)
-			{
-				FREE(data->height);
-				data->height = modify;
-			}
+			freeAndAssign(data->width, SAFE_STRNDUP(value, xpos - value));
+			freeAndAssign(data->height, SAFE_STRNDUP(xpos + 1, absizeLen - (xpos - value) - 1));
 			DBG("image width: -%s-, height: -%s-", data->width, data->height);
 		}
 		FREE(value);
@@ -1229,11 +1219,9 @@ static char *efl_to_image_path(AppData *ad, int type_index, const char *str)
 	Eina_Bool image_path_exists = EINA_FALSE;
 	int len = SAFE_STRLEN(str);
 	char *p = entry_convert_emoticon_to_normal_text((char *)str);
-	char *s = NULL;
+	char *s, *temp;
 	char *image_path = NULL;
-
-	if (!p) return NULL;
-
+	temp = p;
 	if (type_index == ATOM_INDEX_EFL)
 	{
 		for (s = p; (p - s) <= len; p++)
@@ -1265,18 +1253,15 @@ static char *efl_to_image_path(AppData *ad, int type_index, const char *str)
 			}
 		}
 	}
-
+	FREE(temp);
 	if (image_path_exists)
 	{
 		image_path = eina_strbuf_string_steal(sbuf);
 		eina_strbuf_free(sbuf);
-		free(s);
 		return image_path;
 	}
 
 	eina_strbuf_free(sbuf);
-	if (s)
-		free(s);
 	return NULL;
 }
 
@@ -1406,10 +1391,9 @@ char *entry_convert_emoticon_to_normal_text(const char *src_text)
 {
 	char *remain_text = (char *)src_text;
 	char *dst_str = NULL;
+	const char *str;
 
 	Eina_Strbuf *msg_data = eina_strbuf_new();
-
-	if (!msg_data) return NULL;
 
 	while (*remain_text) {
 		char *text_start = remain_text;
@@ -1435,8 +1419,8 @@ char *entry_convert_emoticon_to_normal_text(const char *src_text)
 			break;
 		}
 	}
-
-	dst_str = strdup(eina_strbuf_string_get(msg_data));
+	str = eina_strbuf_string_get(msg_data);
+	if (str) dst_str = strdup(str);
 	eina_strbuf_free(msg_data);
 
 	return dst_str;
@@ -1448,7 +1432,7 @@ static char *efl_to_entry(AppData *ad, int type_index, const char *str)
 
 	char *emoticon_text = entry_convert_emoticon_to_normal_text(str);
 	char *normal_text = markup_to_entry(ad, type_index, emoticon_text);
-	FREE(emoticon_text);
+
 	return normal_text;
 }
 
@@ -1579,8 +1563,10 @@ static char *to_text(AppData *ad, int type_index, const char *str)
 	char *emoticon_text = entry_convert_emoticon_to_normal_text(str);
 	if (emoticon_text)
 	{
-		entry_text = markup_to_entry(ad, type_index, emoticon_text);
-		entry_text = evas_textblock_text_markup_to_utf8(NULL, entry_text);
+		char *tmp;
+		tmp = markup_to_entry(ad, type_index, emoticon_text);
+		entry_text = evas_textblock_text_markup_to_utf8(NULL, tmp);
+		free(tmp);
 		if (entry_text) strcat(entry_text, "\0");
 		FREE(emoticon_text);
 	}

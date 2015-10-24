@@ -64,9 +64,15 @@ msgstr "Arbela"
 msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
 msgstr "%d elementu ezabatuko dira"
 
-msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
-msgstr "Elementu guztiak ezabatuko dira"
+msgid "IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB"
+msgstr "Ezabatu elementu guztiak"
+
+msgid "IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD"
+msgstr "Elementu guztiak ezabatuko dira arbeletik."
 
 msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
 msgstr "Elementua arbelean kopiatu dago aurretik."
+
+msgid "IDS_GALLERY_NPBODY_NO_ITEMS"
+msgstr "Elementurik ez"
 

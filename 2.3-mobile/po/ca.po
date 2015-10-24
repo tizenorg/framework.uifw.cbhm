@@ -64,9 +64,15 @@ msgstr "Porta-retalls"
 msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
 msgstr "S'esborraran %d elements"
 
-msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
-msgstr "S'esborraran tots els elements"
+msgid "IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB"
+msgstr "Esborrar tots els elements"
+
+msgid "IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD"
+msgstr "S'esborraran tots els elements del porta-retalls."
 
 msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
 msgstr "Element ja copiat al porta-retalls."
+
+msgid "IDS_GALLERY_NPBODY_NO_ITEMS"
+msgstr "Cap element"
 

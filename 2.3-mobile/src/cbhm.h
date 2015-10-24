@@ -19,7 +19,6 @@
 #define _CBHM_H_
 
 #include <Elementary.h>
-#include <efl_assist.h>
 #include <Ecore_X.h>
 
 #if !defined(PACKAGE)
@@ -28,10 +27,6 @@
 
 #if !defined(APPNAME)
 #  define APPNAME "Clipboard History Manager"
-#endif
-
-#if !defined(LOCALEDIR)
-#  define LOCALEDIR "/usr/share/locale"
 #endif
 
 #define CBHM_MAGIC 0xad960009
@@ -45,7 +40,7 @@ typedef struct _StorageData StorageData;
 typedef char *(*text_converter_func)(AppData *ad, int type_index, const char *str);
 
 #define ITEM_CNT_MAX 20
-#define COPIED_DATA_STORAGE_DIR "/opt/var/.cbhm_files"
+#define COPIED_DATA_STORAGE_DIR DATADIR"/.cbhm_files"
 
 #include "clipdrawer.h"
 #include "item_manager.h"

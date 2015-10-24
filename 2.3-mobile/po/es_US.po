@@ -64,9 +64,14 @@ msgstr "Portapapeles"
 msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
 msgstr "Se eliminarán %d elementos."
 
-msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
-msgstr "Se eliminarán todos los elementos."
+msgid "IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB"
+msgstr "Eliminar todos los elementos"
+
+msgid "IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD"
+msgstr "Se eliminarán todos los elementos del portapapeles."
 
 msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
 msgstr "Ya se copió el elemento al portapapeles."
 
+msgid "IDS_GALLERY_NPBODY_NO_ITEMS"
+msgstr "No hay elementos"

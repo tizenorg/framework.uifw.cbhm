@@ -18,7 +18,7 @@
 #include <Ecore_File.h>
 
 #include "storage.h"
-#define STORAGE_FILEPATH "/opt/var/.cbhm_data"
+#define STORAGE_FILEPATH DATADIR"/.cbhm_data"
 #define STORAGE_KEY_INDEX_FORMAT "<index%02d>"
 #define STORAGE_KEY_ITEM_FORMAT "<item%02d%s>"
 #define STORAGE_INDEX_ITEM_NONE 0.0

@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Gatavs"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Aizvērt"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Dzēst"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Dzēst visu"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Kopēts starpliktuvē."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Starpliktuve"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Atcelt"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Jau pastāv."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Vai dzēst visu?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Dzēst no starpliktuves"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Bloķēt starpliktuvē"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Atbloķēt no starpliktuves"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Starpliktuves iespējas"
+

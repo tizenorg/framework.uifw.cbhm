@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Valmis"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Sulge"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Kustuta"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Kustuta kõik"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Kopeeritud lõikelauale."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Lõikelaud"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Tühista"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Juba olemas."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Kustutada kõik?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Kustuta lõikelaualt"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Lukusta lõikelauale"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Ava lõikelaualt"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Lõikelaua valikud"
+

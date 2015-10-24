@@ -2,8 +2,10 @@
 
 SET(POFILES
 	ar.po
+	as.po
 	az.po
 	bg.po
+	bn.po
 	ca.po
 	cs.po
 	da.po
@@ -30,23 +32,33 @@ SET(POFILES
 	ja_JP.po
 	ka.po
 	kk.po
+	kn.po
 	ko_KR.po
 	lt.po
 	lv.po
 	mk.po
+	ml.po
+	mr.po
 	nb.po
+	ne.po
 	nl.po
+	or.po
+	pa.po
 	pl.po
 	pt_BR.po
 	pt_PT.po
 	ro.po
 	ru_RU.po
+	si.po
 	sk.po
 	sl.po
 	sr.po
 	sv.po
+	ta.po
+	te.po
 	tr_TR.po
 	uk.po
+	ur.po
 	uz.po
 	zh_CN.po
 	zh_HK.po

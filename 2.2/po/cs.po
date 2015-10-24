@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Hotovo"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Zavřít"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Odstranit"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Odstranit vše"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Zkopírováno do schránky."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Schránka"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Storno"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Již existuje."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Odstranit vše?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Odstranit ze schránky"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Zamknout do schránky"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Odemknout ze schránky"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Možnosti schránky"
+

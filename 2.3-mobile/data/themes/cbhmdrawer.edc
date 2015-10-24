@@ -21,28 +21,26 @@ externals {
 }
 
 collections {
-base_scale: 1.8;
+base_scale: 2.6;
 #include "scroller.edc"
 #include "popup_layout.edc"
 
 // Clipboard
-#define CLIPBOARD_H_INC 352
-#define CLIPBOARD_LANDSCAPE_H_INC 218
 #define CLIPBOARD_PANEL_TOP_PADDING_INC 0
-#define CLIPBOARD_PANEL_LEFT_PADDING_INC 6 // also used for RIGHT_PADDING
-#define CLIPBOARD_PANEL_H_INC 58
-#define CLIPBOARD_PANEL_LANDS_H_INC 48
-#define CLIPBOARD_CLOSE_BTN_BG_W_INC (CLIPBOARD_PANEL_LEFT_PADDING_INC + CLIPBOARD_CLOSE_BTN_W_INC + CLIPBOARD_PANEL_LEFT_PADDING_INC)
-#define CLIPBOARD_CLOSE_BTN_W_INC 46
-#define CLIPBOARD_CLOSE_BTN_H_INC 46
-#define CLIPBOARD_FUNCTION_BTN_MIN_W_INC 40
-#define CLIPBOARD_FUNCTION_BTN_MAX_W_INC 150
+#define CLIPBOARD_PANEL_LEFT_PADDING_INC 16
+#define CLIPBOARD_PANEL_H_INC 72
+#define CLIPBOARD_CLOSE_BTN_BG_W_INC (CLIPBOARD_PANEL_LEFT_PADDING_INC + CLIPBOARD_CLOSE_BTN_W_INC)
+#define CLIPBOARD_CLOSE_BTN_W_INC 70
+#define CLIPBOARD_CLOSE_BTN_H_INC 70
+#define CLIPBOARD_FUNCTION_BTN_MIN_W_INC 50
+#define CLIPBOARD_FUNCTION_BTN_MAX_W_INC 200
 #define CLIPBOARD_FUNCTION_BTN_LANDSCAPE_MAX_W_INC 337
+#define CLIPBOARD_DELETE_TEXT_PADDING 20
 
 #define CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 8 // also used for BTN_RIGHT
 #define CLIPBOARD_FUNCTION_BTN_TEXT_MAX_W_INC (CLIPBOARD_FUNCTION_BTN_MAX_W_INC - CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC - CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC)
 #define CLIPBOARD_FUNCTION_BTN_TEXT_LANDSCAPE_MAX_W_INC (CLIPBOARD_FUNCTION_BTN_LANDSCAPE_MAX_W_INC - CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC - CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC)
-#define CLIPBOARD_FUNCTION_BTN_H_INC 58
+#define CLIPBOARD_FUNCTION_BTN_H_INC 45
 
 #define CLIPBOARD_CONTENT_TOP_LEFT_PADDING_INC 0 0
 #define CLIPBOARD_CONTENT_BOTTOM_RIGHT_PADDING_INC 0 0
@@ -50,26 +48,30 @@ base_scale: 1.8;
 #define CLIPBOARD_DIVIDER_WIDTH_HEIGHT 2 38
 
 // Grid Item
-#define GRID_ITEM_W_INC 140
-#define GRID_ITEM_H_INC 140
-#define GRID_IMAGE_ITEM_W_INC 126
-#define GRID_IMAGE_ITEM_H_INC 126
+#define GRID_IMAGE_ITEM_W_INC 240
+#define GRID_IMAGE_ITEM_H_INC 159
 #define GRID_ITEM_OUTER_LINE_SIZE_INC 2
-#define GRID_ITEM_INNER_BG_PADDING_INC 12
-#define GRID_COMBINED_TOP_LEFT_PADDING_INC 4
-#define GRID_COMBINED_BOTTOM_PADDING_INC 6
-#define GRID_COMBINED_MAX_SIZE_INC 62 54
-#define GRID_COMBINED_SEPERATOR_PADDING_INC 2
-#define GRID_ITEM_DELETE_BTN_TOP_PADDING_INC 6 6
-#define GRID_ITEM_DELETE_BTN_SIZE_INC 36 36
+#define GRID_ITEM_INNER_BG_PADDING_INC 0
+#define GRID_COMBINED_TOP_LEFT_PADDING_INC 5
+#define GRID_COMBINED_BOTTOM_PADDING_INC 1
+#define GRID_COMBINED_ITEM_W_INC 102
+#define GRID_COMBINED_ITEM_H_INC 153
+#define GRID_COMBINED_SEPERATOR_PADDING_INC 4
+#define GRID_ITEM_DELETE_BTN_TOP_PADDING_INC 12 12
+#define GRID_ITEM_DELETE_BTN_SIZE_INC 54 54
 #define GRID_ITEM_LOCK_BTN_SIZE_INC 36 36
-#define GRID_ITEM_TEXT_TOP_LEFT_PADDING 8 6
-#define GRID_ITEM_TEXT_MAX_INC 114 96
+#define GRID_ITEM_TEXT_TOP_LEFT_PADDING 9 2
+#define GRID_ITEM_TEXT_MAX_INC 226 161
+#define GRID_ITEM_RIGHT_PADDING 7
+#define GRID_ITEM_LEFT_PADDING 7
+#define GRID_ITEM_TOP_BOTTOM_PADDING_INC 6
 
 #define SCROLLER_BOTTOM_RIGHT_PADDING_INC 6
-#define SCROLLER_BOTTOM_PADDING_INC 7
-#define SCROLLER_LEFT_PADDING_INC 5
-#define SCROLLER_BOTTOM_LANDSCAPE_PADDING_INC 15
+#define SCROLLER_BOTTOM_PADDING_INC 14
+#define SCROLLER_TOP_PADDING_INC 6
+#define SCROLLER_LEFT_PADDING_INC 11
+#define SCROLLER_BOTTOM_LANDSCAPE_PADDING_INC 36
+#define SCROLLER_TOP_LANDSCAPE_PADDING_INC 35
 
 #define GENGRID_ITEM_SELECT_VI_EFFECT \
 } \
@@ -133,14 +135,8 @@ description { state: "selected" 0.0; \
          image: "clipboard_expand_press.#.png" COMP;
          image: "clipboard_btn_press_bg.#.png" COMP;
          image: "clipboard_title_divider.#.png" COMP;
+         image: "clipboard_button_bg.#.png" COMP;
       }
-      data.item: "clipboard_height" CLIPBOARD_H_INC;
-      data.item: "clipboard_landscape_height" CLIPBOARD_LANDSCAPE_H_INC;
-      data.item: "grid_item_bg_w" GRID_ITEM_W_INC;
-      data.item: "grid_item_bg_h" GRID_ITEM_H_INC;
-      data.item: "grid_image_item_w" GRID_ITEM_W_INC;
-      data.item: "grid_image_item_h" GRID_ITEM_H_INC;
-
       script {
          public g_landscape = 0; // Flag for landscape mode
       }
@@ -153,7 +149,7 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                rel1 { relative: 0.0 0.0; }
                rel2 { relative: 1.0 1.0; }
-               color: 14 74 104 255;
+               color: 210 212 216 255;
             }
          }
          part { name: "top_left_padding";
@@ -173,6 +169,7 @@ description { state: "selected" 0.0; \
             scale: 1;
             mouse_events: 1;
             description { state: "default" 0.0;
+               fixed: 0 1;
                align: 0.0 0.0;
                min: CLIPBOARD_PANEL_TOP_PADDING_INC CLIPBOARD_PANEL_H_INC;
                max: -1 CLIPBOARD_PANEL_H_INC;
@@ -181,8 +178,8 @@ description { state: "selected" 0.0; \
             }
             description { state: "landscape" 0.0;
                inherit: "default" 0.0;
-               min: CLIPBOARD_PANEL_TOP_PADDING_INC CLIPBOARD_PANEL_LANDS_H_INC;
-               max: -1 CLIPBOARD_PANEL_LANDS_H_INC;
+               min: CLIPBOARD_PANEL_TOP_PADDING_INC CLIPBOARD_PANEL_H_INC;
+               max: -1 CLIPBOARD_PANEL_H_INC;
             }
          }
          part { name: "background/title/image";
@@ -193,7 +190,7 @@ description { state: "selected" 0.0; \
                align: 0.0 0.0;
                rel1 { relative: 0.0 0.0; to: "background";}
                rel2 { relative: 1.0 1.0; to: "background/title";}
-               color: 20 107 147 255;
+               color: 138 140 142 255;
             }
          }
          part { name: "background/title/close/bg";
@@ -238,12 +235,12 @@ description { state: "selected" 0.0; \
                max: CLIPBOARD_CLOSE_BTN_W_INC CLIPBOARD_CLOSE_BTN_H_INC;
                rel1 { to: "background/title/close/bg"; }
                rel2 { to: "background/title/close/bg"; }
-               color: 255 255 255 255;
+               color: 249 249 249 255;
                image { normal: "clipboard_expand_close.png"; }
             }
             description { state: "disabled" 0.0;
                inherit: "default" 0.0;
-               color: 255 255 255 128;
+               color: 249 249 249 128;
             }
          }
          part { name: "title_close_btn_right_padding";
@@ -267,11 +264,11 @@ description { state: "selected" 0.0; \
                   min: 0 1;
                   max: 1 0;
                   align: 0.5 0.5;
-                  size: 27;
+                  size: 32;
                   text_class: "tizen";
                }
                rel1 { relative: 1.0 0.0; to_x: "title_close_btn_right_padding"; to_y: "background/title"; }
-               rel2 { relative: 0.0 1.0; to_x: "background/title/delete_all/divider"; to_y: "background/title"; }
+               rel2 { relative: 0.0 1.0; to_x: "delete_all_left_padding"; to_y: "background/title"; }
             }
          }
          part { name: "delete_right_padding";
@@ -292,8 +289,8 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                fixed: 1 0;
                align: 1.0 0.0;
-               min: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
-               max: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
+               min: CLIPBOARD_DELETE_TEXT_PADDING 0;
+               max: CLIPBOARD_DELETE_TEXT_PADDING -1;
                rel1 { relative: 0.0 0.0; to: "delete_right_padding"; }
                rel2 { relative: 0.0 1.0; to: "delete_right_padding"; }
             }
@@ -304,8 +301,8 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                fixed: 1 0;
                align: 1.0 0.5;
-               min: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
-               max: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
+               min: CLIPBOARD_PANEL_LEFT_PADDING_INC 0;
+               max: CLIPBOARD_PANEL_LEFT_PADDING_INC -1;
                rel1 { relative: 0.0 0.0; to: "delete_text_left_padding"; }
                rel2 { relative: 0.0 1.0; to: "delete_text_left_padding"; }
             }
@@ -316,48 +313,32 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                fixed: 1 0;
                align: 1.0 0.5;
-               min: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
-               max: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
+               min: CLIPBOARD_DELETE_TEXT_PADDING 0;
+               max: CLIPBOARD_DELETE_TEXT_PADDING -1;
                rel1 { relative: 0.0 0.0; to: "panel_function_delete"; }
                rel2 { relative: 0.0 1.0; to: "panel_function_delete"; }
-            }
-         }
-         part { name: "background/title/delete/divider";
-            scale: 1;
-            mouse_events: 1;
-            description { state: "default" 0.0;
-               align: 1.0 0.5;
-               min: CLIPBOARD_DIVIDER_WIDTH_HEIGHT;
-               max: CLIPBOARD_DIVIDER_WIDTH_HEIGHT;
-               fixed: 1 1;
-               visible: 1;
-                  rel1 { relative: 0.0 0.0; to: "delete_left_padding"; }
-                  rel2 { relative: 0.0 1.0; to: "delete_left_padding"; }
-                  color: 255 255 255 77;
-                  image { normal: "clipboard_title_divider.#.png";
-               }
             }
          }
          part { name: "background/title/delete/image1";
             scale: 1;
             mouse_events: 1;
             description { state: "default" 0.0;
+               image.normal: "clipboard_button_bg.#.png";
                align: 0.0 0.5;
                min: CLIPBOARD_FUNCTION_BTN_MIN_W_INC CLIPBOARD_FUNCTION_BTN_H_INC;
                max: -1 CLIPBOARD_FUNCTION_BTN_H_INC;
                fixed: 1 1;
-               visible: 0;
-               rel1 { relative: 1.0 0.0; to_x: "background/title/delete/divider"; to_y: "background/title"; }
-               rel2.to: "background/title/image";
-               image { normal: "clipboard_btn_press_bg.#.png"; }
-               color: 16 87 119 255;
+               rel1 { relative: 1.0 0.0; to_x: "delete_left_padding"; to_y: "background/title"; }
+               rel2.to: "delete_text_right_padding";
+               color: 0 0 0 89;
             }
             description { state: "pressed" 0.0;
                inherit: "default" 0.0;
-               visible: 1;
+               color: 0 0 0 140;
             }
             description { state: "disabled" 0.0;
                inherit: "default" 0.0;
+               color: 0 0 0 43;
             }
          }
          part { name: "background/title/delete/image";
@@ -396,28 +377,16 @@ description { state: "selected" 0.0; \
                   min: 0 1;
                   max: 1 0;
                   align: 0.0 0.5;
-                  size: 24;
+                  size: 32;
                   text_class: "tizen";
                }
                rel1.to: "delete_text_bg";
                rel2.to: "delete_text_bg";
-               color: 255 255 255 255;
+               color: 249 249 249 255;
             }
             description { state: "disabled" 0.0;
                inherit: "default" 0.0;
-               color: 255 255 255 77;
-            }
-         }
-         part { name: "delete_all_right_padding";
-            type: SPACER;
-            scale: 1;
-            description { state: "default" 0.0;
-               fixed: 1 0;
-               align: 1.0 0.5;
-               min: 2*CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
-               max: 2*CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
-               rel1 { relative: 0.0 0.0; to: "background/title/delete/divider"; }
-               rel2 { relative: 0.0 1.0; to: "background/title/delete/divider"; }
+               color: 249 249 249 163;
             }
          }
          part { name: "delete_all_text_right_padding";
@@ -425,11 +394,11 @@ description { state: "selected" 0.0; \
             scale: 1;
             description { state: "default" 0.0;
                fixed: 1 0;
-               align: 0.0 0.5;
-               min: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
-               max: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
-               rel1 { relative: 0.0 0.0; to: "delete_all_right_padding"; }
-               rel2 { relative: 0.0 1.0; to: "delete_all_right_padding"; }
+               align: 1.0 0.5;
+               min: CLIPBOARD_DELETE_TEXT_PADDING 0;
+               max: CLIPBOARD_DELETE_TEXT_PADDING -1;
+               rel1 { relative: 0.0 0.0; to: "delete_left_padding"; }
+               rel2 { relative: 0.0 1.0; to: "delete_left_padding"; }
             }
          }
          part { name: "delete_all_left_padding";
@@ -438,8 +407,8 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                fixed: 1 0;
                align: 1.0 0.5;
-               min: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
-               max: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
+               min: CLIPBOARD_DELETE_TEXT_PADDING 0;
+               max: CLIPBOARD_DELETE_TEXT_PADDING -1;
                rel1 { relative: 0.0 0.0; to: "delete_all_text_left_padding"; }
                rel2 { relative: 0.0 1.0; to: "delete_all_text_left_padding"; }
             }
@@ -450,58 +419,43 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                fixed: 1 0;
                align: 1.0 0.5;
-               min: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC 0;
-               max: CLIPBOARD_FUNCTION_BTN_LEFT_SIZE_INC -1;
+               min: CLIPBOARD_DELETE_TEXT_PADDING 0;
+               max: CLIPBOARD_DELETE_TEXT_PADDING -1;
                rel1 { relative: 0.0 0.0; to: "panel_function_delete_all"; }
                rel2 { relative: 0.0 1.0; to: "panel_function_delete_all"; }
-            }
-         }
-         part { name: "background/title/delete_all/divider";
-            scale: 1;
-            mouse_events: 1;
-            description { state: "default" 0.0;
-               align: 1.0 0.5;
-               min: CLIPBOARD_DIVIDER_WIDTH_HEIGHT;
-               max: CLIPBOARD_DIVIDER_WIDTH_HEIGHT;
-               fixed: 1 1;
-               visible: 1;
-                  rel1 { relative: 0.0 0.0; to_x: "delete_all_left_padding"; to_y: "background/title/image"; }
-                  rel2 { relative: 0.0 1.0; to_x: "delete_all_left_padding"; to_y: "background/title/image"; }
-                  color: 255 255 255 77;
-                  image { normal: "clipboard_title_divider.#.png";
-               }
-            }
-            description { state: "hide" 0.0;
-               inherit: "default" 0.0;
-               visible: 0;
             }
          }
          part { name: "background/title/delete_all/image1";
             scale: 1;
             mouse_events: 1;
             description { state: "default" 0.0;
+               image.normal: "clipboard_button_bg.#.png";
                align: 0.0 0.5;
                fixed: 1 1;
-               visible: 0;
                min: CLIPBOARD_FUNCTION_BTN_MIN_W_INC CLIPBOARD_FUNCTION_BTN_H_INC;
                max: -1 CLIPBOARD_FUNCTION_BTN_H_INC;
-               rel1 { relative: 1.0 0.5; to: "background/title/delete_all/divider"; }
-               rel2 { relative: 0.0 0.5; to_x: "background/title/delete/divider"; to_y: "delete_all_text_left_padding"; }
-               image { normal: "clipboard_btn_press_bg.#.png"; }
-               color: 16 87 119 255;
+               rel1 { relative: 1.0 0.5; to: "delete_all_left_padding"; }
+               rel2 { relative: 0.0 0.5; to: "delete_left_padding"; }
+               color: 0 0 0 89;
             }
             description { state: "pressed" 0.0;
                inherit: "default" 0.0;
-               visible: 1;
+               color: 0 0 0 140;
+            }
+            description { state: "disabled" 0.0;
+               inherit: "default" 0.0;
+               color: 0 0 0 43;
             }
             description { state: "hide" 0.0;
                inherit: "default" 0.0;
                visible: 0;
+               color: 0 0 0 140;
             }
          }
          part { name: "background/title/delete_all/image";
             scale: 1;
             description { state: "default" 0.0;
+               image.normal: "clipboard_button_bg.#.png";
                rel1 { relative: 0.0 0.0; to: "background/title/delete_all/image1"; }
                rel2 { relative: 1.0 1.0; to: "background/title/delete_all/image1"; }
                color: 0 0 0 0;
@@ -519,8 +473,8 @@ description { state: "selected" 0.0; \
                align: 1.0 0.5;
                min: CLIPBOARD_FUNCTION_BTN_TEXT_MAX_W_INC 0;
                max: CLIPBOARD_FUNCTION_BTN_TEXT_MAX_W_INC -1;
-               rel1 { relative: 0.0 0.0; to_y: "background/title/image"; }
-               rel2 { relative: 0.0 1.0; to_x: "delete_all_right_padding"; to_y: "background/title/image"; }
+               rel1 { relative: 0.0 0.0; to: "delete_all_text_right_padding"; }
+               rel2 { relative: 0.0 1.0; to: "delete_all_text_right_padding"; }
             }
             description { state: "landscape" 0.0;
                inherit: "default" 0.0;
@@ -539,16 +493,16 @@ description { state: "selected" 0.0; \
                   min: 0 1;
                   max: 1 0;
                   align: 0.5 0.5;
-                  size: 24;
+                  size: 32;
                   text_class: "tizen";
                }
                rel1.to: "delete_all_text_bg";
                rel2.to: "delete_all_text_bg";
-               color: 255 255 255 255;
+               color: 249 249 249 255;
             }
             description { state: "disabled" 0.0;
                inherit: "default" 0.0;
-               color: 255 255 255 77;
+               color: 249 249 249 163;
             }
             description { state: "hide" 0.0;
                inherit: "default" 0.0;
@@ -663,36 +617,42 @@ description { state: "selected" 0.0; \
             source: "background/title/delete/image";
             action: STATE_SET "pressed" 0.0;
             target: "background/title/delete/image1";
+            target: "panel_function_delete";
          }
          program { name: "mouse_out_delbtn";
             signal: "mouse,out";
             source: "background/title/delete/image";
             action: STATE_SET "default" 0.0;
             target: "background/title/delete/image1";
+            target: "panel_function_delete";
          }
          program { name: "mouse_up_delbtn";
             signal: "mouse,up,1";
             source: "background/title/delete/image";
             action: STATE_SET "default" 0.0;
             target: "background/title/delete/image1";
+            target: "panel_function_delete";
          }
          program { name: "mouse_down_del_all_btn";
             signal: "mouse,down,1";
             source: "background/title/delete_all/image";
             action: STATE_SET "pressed" 0.0;
             target: "background/title/delete_all/image1";
+            target: "panel_function_delete_all";
          }
          program { name: "mouse_out_del_all_btn";
             signal: "mouse,out";
             source: "background/title/delete_all/image";
             action: STATE_SET "default" 0.0;
             target: "background/title/delete_all/image1";
+            target: "panel_function_delete_all";
          }
          program { name: "mouse_up_del_all_btn";
             signal: "mouse,up,1";
             source: "background/title/delete_all/image";
             action: STATE_SET "default" 0.0;
             target: "background/title/delete_all/image1";
+            target: "panel_function_delete_all";
          }
          program { name: "play_sound_delbtn";
             signal: "mouse,clicked,1";
@@ -788,7 +748,6 @@ description { state: "selected" 0.0; \
             source: "elm";
             action: STATE_SET "hide" 0.0;
             target: "panel_function_delete_all";
-            target: "background/title/delete_all/divider";
             target: "background/title/delete_all/image1";
             target: "background/title/delete_all/image";
          }
@@ -797,7 +756,6 @@ description { state: "selected" 0.0; \
             source: "elm";
             action: STATE_SET "default" 0.0;
             target: "panel_function_delete_all";
-            target: "background/title/delete_all/divider";
             target: "background/title/delete_all/image1";
             target: "background/title/delete_all/image";
          }
@@ -836,8 +794,8 @@ description { state: "selected" 0.0; \
             type: SPACER;
             scale:1 ;
             description { state: "default" 0.0;
-               min: SCROLLER_LEFT_PADDING_INC SCROLLER_BOTTOM_PADDING_INC;
-               max: SCROLLER_LEFT_PADDING_INC SCROLLER_BOTTOM_PADDING_INC;
+               min: SCROLLER_LEFT_PADDING_INC SCROLLER_TOP_PADDING_INC;
+               max: SCROLLER_LEFT_PADDING_INC SCROLLER_TOP_PADDING_INC;
                rel1 {
                   relative: 0.0 0.0;
                   to: "bg";
@@ -848,8 +806,8 @@ description { state: "selected" 0.0; \
             }
             description { state: "landscape" 0.0;
                inherit: "default" 0.0;
-               min: SCROLLER_LEFT_PADDING_INC SCROLLER_BOTTOM_LANDSCAPE_PADDING_INC;
-               max: SCROLLER_LEFT_PADDING_INC SCROLLER_BOTTOM_LANDSCAPE_PADDING_INC;
+               min: SCROLLER_LEFT_PADDING_INC SCROLLER_TOP_LANDSCAPE_PADDING_INC;
+               max: SCROLLER_LEFT_PADDING_INC SCROLLER_TOP_LANDSCAPE_PADDING_INC;
             }
          }
          part { name: "padding.right";
@@ -955,9 +913,74 @@ description { state: "selected" 0.0; \
       }
    }
 
-   group { name: "elm/gengrid/item/clipboard/image_style/default";
-      data.item: "contents" "elm.swallow.content";
+   group { name: "elm/button/base/delete_icon";
+      images {
+         image: "clipboard_delete.png" COMP;
+         image: "clipboard_delete_press.png" COMP;
+      }
+      parts {
+         part { name: "base";
+            scale: 1;
+            type: SPACER;
+            description { state: "default" 0.0;
+               min: GRID_ITEM_DELETE_BTN_SIZE_INC;
+               max: GRID_ITEM_DELETE_BTN_SIZE_INC;
+            }
+         }
+         part { name: "icon";
+            scale: 1;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               visible: 1;
+               image.normal: "clipboard_delete.png";
+               rel1.to: "base";
+               rel2.to: "base";
+            }
+            description { state: "pressed" 0.0;
+               inherit: "default" 0.0;
+               image.normal: "clipboard_delete_press.png";
+            }
+         }
+      }
+      programs {
+         program { name: "touch_snd";
+            signal: "mouse,clicked,1";
+            source: "icon";
+            script {
+               run_program(PROGRAM:"touch_sound");
+               emit("elm,action,click", "");
+            }
+         }
+         program { name: "touch_sound";
+            action: RUN_PLUGIN "touch_sound";
+         }
+         program { name: "mouse_down";
+            signal: "mouse,down,1";
+            source: "icon";
+            script {
+               set_state(PART:"icon", "pressed", 0.0);
+            }
+         }
+         program { name: "mouse_out";
+            signal: "mouse,out";
+            source: "icon";
+            script {
+               set_state(PART:"icon", "default", 0.0);
+            }
+          }
+         program { name: "mouse_up";
+            signal: "mouse,up,1";
+            source: "icon";
+            script {
+               set_state(PART:"icon", "default", 0.0);
+            }
+         }
+      }
+   }
 
+   group { name: "elm/gengrid/item/clipboard/image_style/default";
+      alias: "elm/gengrid/item/clipboard/image_style/cbhm";
+      data.item: "contents" "elm.swallow.content delbtn/img";
       images {
          image: "clipboard_thumb_bg.#.png" COMP;
          image: "clipboard_thumb_line.#.png" COMP;
@@ -1008,7 +1031,7 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                rel1.to: "item_outer_bg_top_left_padding";
                rel2.to: "item_outer_bg_bottom_right_padding";
-               color: 255 255 255 255;
+               color: 249 249 249 255;
                image.normal: "clipboard_thumb_bg.#.png";
                GENGRID_ITEM_SELECT_VI_EFFECT
             }
@@ -1019,7 +1042,7 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                rel2.to: "item_outer_bg";
                rel1.to: "item_outer_bg";
-               color: 255 255 255 255;
+               color: 249 249 249 255;
                image.normal: "clipboard_thumb_line.#.png";
                GENGRID_ITEM_SELECT_VI_EFFECT
             }
@@ -1054,7 +1077,7 @@ description { state: "selected" 0.0; \
             mouse_events: 0;
             description { state: "default" 0.0;
                fixed: 1 1;
-               max: GRID_IMAGE_ITEM_W_INC GRID_IMAGE_ITEM_W_INC;
+               max: GRID_IMAGE_ITEM_W_INC GRID_IMAGE_ITEM_H_INC;
                rel1 { relative: 0.5 0.5; to: "bg"; }
                rel2 { relative: 0.5 0.5; to: "bg"; }
                GENGRID_ITEM_SELECT_VI_EFFECT
@@ -1066,7 +1089,7 @@ description { state: "selected" 0.0; \
             mouse_events: 0;
             description { state: "default" 0.0;
                visible: 0;
-               color: 0 0 0 100;
+               color: 255 255 255 178;
                rel1.to: "elm.swallow.content";
                rel2.to: "elm.swallow.content";
             }
@@ -1102,6 +1125,7 @@ description { state: "selected" 0.0; \
          part { name: "delbtn/img";
             scale: 1;
             mouse_events: 1;
+            type: SWALLOW;
             description { state: "default" 0.0;
                rel1.to: "delbtn";
                rel2.to: "delbtn";
@@ -1110,16 +1134,10 @@ description { state: "selected" 0.0; \
             description { state: "show" 0.0;
                inherit: "default" 0.0;
                visible: 1;
-               image {
-                  normal: "clipboard_delete.png";
-               }
             }
             description { state: "pressed" 0.0;
                inherit: "default" 0.0;
                visible: 1;
-               image {
-                  normal: "clipboard_delete_press.png";
-               }
             }
          }
       }
@@ -1154,44 +1172,6 @@ description { state: "selected" 0.0; \
             target: "item_outer_bg_line";
             target: "elm.swallow.content";
          )
-         program { name: "mouse_down";
-            signal: "mouse,down,1";
-            source: "delbtn/img";
-            script {
-               new st[31];
-               new Float:vl;
-               get_state(PART:"delbtn/img", st, 30, vl);
-               if (!strcmp(st, "show"))
-                  set_state(PART:"delbtn/img", "pressed", 0.0);
-            }
-         }
-         program { name: "mouse_out";
-            signal: "mouse,out";
-            source: "delbtn/img";
-            script {
-               new st[31];
-               new Float:vl;
-               get_state(PART:"delbtn/img", st, 30, vl);
-               if (!strcmp(st, "pressed"))
-                  set_state(PART:"delbtn/img", "show", 0.0);
-            }
-         }
-         program { name: "mouse_up";
-            signal: "mouse,up,1";
-            source: "delbtn/img";
-            script {
-               new st[31];
-               new Float:vl;
-               get_state(PART:"delbtn/img", st, 30, vl);
-               if (!strcmp(st, "pressed"))
-                  set_state(PART:"delbtn/img", "show", 0.0);
-            }
-         }
-         program { name: "play_sound_delbtn";
-            signal: "mouse,clicked,1";
-            source: "delbtn/img";
-            action: RUN_PLUGIN "touch_sound";
-         }
          program { name: "touch_sound_program";
             action: RUN_PLUGIN "touch_sound";
          }
@@ -1237,7 +1217,9 @@ description { state: "selected" 0.0; \
    }
 
    group { name: "elm/gengrid/item/clipboard/text_style/default";
+      alias: "elm/gengrid/item/clipboard/text_style/cbhm";
       data.item: "texts" "elm.text";
+      data.item: "contents" "delbtn/img";
       images {
          image: "clipboard_note_bg.#.png" COMP;
          image: "clipboard_delete.png" COMP;
@@ -1246,7 +1228,7 @@ description { state: "selected" 0.0; \
 
       styles {
          style { name: "clipboard_01_style";
-            base: "font=Tizen:style=Regular font_size=27 color=#000000FF align=left wrap=mixed text_class=tizen";
+            base: "font=Tizen:style=Regular font_size=27 color=#F9F9F9FF align=left wrap=mixed text_class=tizen";
             tag: "br" "\n";
             tag: "ps" "ps";
             tag: "tab" "\t";
@@ -1297,8 +1279,8 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                fixed: 1 1;
                align: 0.0 0.0;
-               min: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
-               max: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
+               min: GRID_ITEM_LEFT_PADDING GRID_ITEM_TOP_BOTTOM_PADDING_INC;
+               max: GRID_ITEM_LEFT_PADDING GRID_ITEM_TOP_BOTTOM_PADDING_INC;
                rel1 { relative: 0.0 0.0; to: "bg"; }
                rel2 { relative: 0.0 0.0; to: "bg"; }
             }
@@ -1309,8 +1291,8 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                fixed: 1 1;
                align: 1.0 1.0;
-               min: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
-               max: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
+               min: GRID_ITEM_RIGHT_PADDING GRID_ITEM_TOP_BOTTOM_PADDING_INC;
+               max: GRID_ITEM_RIGHT_PADDING GRID_ITEM_TOP_BOTTOM_PADDING_INC;
                rel1 { relative: 1.0 1.0; to: "bg"; }
                rel2 { relative: 1.0 1.0; to: "bg"; }
             }
@@ -1364,7 +1346,7 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                rel1.to: "item_inner_bg";
                rel2.to: "item_inner_bg";
-               color: 237 233 208 255;
+               color: 252 225 116 255;
                image.normal: "clipboard_note_bg.#.png";
                GENGRID_ITEM_SELECT_VI_EFFECT
             }
@@ -1452,6 +1434,7 @@ description { state: "selected" 0.0; \
          }
          part { name: "delbtn/img";
             scale: 1;
+            type: SWALLOW;
             description { state: "default" 0.0;
                rel1.to: "delbtn";
                rel2.to: "delbtn";
@@ -1460,16 +1443,10 @@ description { state: "selected" 0.0; \
             description { state: "show" 0.0;
                inherit: "default" 0.0;
                visible: 1;
-               image {
-                  normal: "clipboard_delete.png";
-               }
             }
             description { state: "pressed" 0.0;
                inherit: "default" 0.0;
                visible: 1;
-               image {
-                  normal: "clipboard_delete_press.png";
-               }
             }
          }
       }
@@ -1503,44 +1480,6 @@ description { state: "selected" 0.0; \
             target: "item_bg";
             target: "elm.text";
          )
-         program { name: "mouse_down";
-            signal: "mouse,down,1";
-            source: "delbtn/img";
-            script {
-               new st[31];
-               new Float:vl;
-               get_state(PART:"delbtn/img", st, 30, vl);
-               if (!strcmp(st, "show"))
-                  set_state(PART:"delbtn/img", "pressed", 0.0);
-            }
-         }
-         program { name: "mouse_out";
-            signal: "mouse,out";
-            source: "delbtn/img";
-            script {
-               new st[31];
-               new Float:vl;
-               get_state(PART:"delbtn/img", st, 30, vl);
-               if (!strcmp(st, "pressed"))
-                  set_state(PART:"delbtn/img", "show", 0.0);
-            }
-         }
-         program { name: "mouse_up";
-            signal: "mouse,up,1";
-            source: "delbtn/img";
-            script {
-               new st[31];
-               new Float:vl;
-               get_state(PART:"delbtn/img", st, 30, vl);
-               if (!strcmp(st, "pressed"))
-                  set_state(PART:"delbtn/img", "show", 0.0);
-            }
-         }
-         program { name: "play_sound_delbtn";
-            signal: "mouse,clicked,1";
-            source: "delbtn/img";
-            action: RUN_PLUGIN "touch_sound";
-         }
          program { name: "touch_sound_program";
             action: RUN_PLUGIN "touch_sound";
          }
@@ -1586,8 +1525,9 @@ description { state: "selected" 0.0; \
    }
 
    group { name: "elm/gengrid/item/clipboard/combined_style/default";
+      alias: "elm/gengrid/item/clipboard/combined_style/cbhm";
       data.item: "texts" "elm.text";
-      data.item: "contents" "elm.swallow.content";
+      data.item: "contents" "elm.swallow.content delbtn/img";
       images {
          image: "clipboard_note_bg.#.png" COMP;
          image: "clipboard_delete.png" COMP;
@@ -1596,7 +1536,7 @@ description { state: "selected" 0.0; \
 
       styles {
          style { name: "clipboard_02_style";
-            base: "font=Tizen:style=Light font_size=17 color=#000000FF align=left wrap=mixed text_class=tizen";
+            base: "font=Tizen:style=Light font_size=17 color=#F9F9F9FF align=left wrap=mixed text_class=tizen";
             tag: "br" "\n";
             tag: "ps" "ps";
             tag: "tab" "\t";
@@ -1647,8 +1587,8 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                fixed: 1 1;
                align: 0.0 0.0;
-               min: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
-               max: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
+               min: GRID_ITEM_LEFT_PADDING GRID_ITEM_TOP_BOTTOM_PADDING_INC;
+               max: GRID_ITEM_LEFT_PADDING GRID_ITEM_TOP_BOTTOM_PADDING_INC;
                rel1 { relative: 0.0 0.0; to: "bg"; }
                rel2 { relative: 0.0 0.0; to: "bg"; }
             }
@@ -1659,8 +1599,8 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                fixed: 1 1;
                align: 1.0 1.0;
-               min: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
-               max: SCROLLER_LEFT_PADDING_INC SCROLLER_LEFT_PADDING_INC;
+               min: GRID_ITEM_RIGHT_PADDING GRID_ITEM_TOP_BOTTOM_PADDING_INC;
+               max: GRID_ITEM_RIGHT_PADDING GRID_ITEM_TOP_BOTTOM_PADDING_INC;
                rel1 { relative: 1.0 1.0; to: "bg"; }
                rel2 { relative: 1.0 1.0; to: "bg"; }
             }
@@ -1675,36 +1615,12 @@ description { state: "selected" 0.0; \
                GENGRID_ITEM_SELECT_VI_EFFECT
             }
          }
-         part { name: "item_inner_bg_top_left_padding";
-            type: SPACER;
-            scale: 1;
-            description { state: "default" 0.0;
-               fixed: 1 1;
-               align: 0.0 0.0;
-               min: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_ITEM_INNER_BG_PADDING_INC;
-               max: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_ITEM_INNER_BG_PADDING_INC;
-               rel1 { relative: 0.0 0.0; to: "item_outer_bg"; }
-               rel2 { relative: 0.0 0.0; to: "item_outer_bg"; }
-            }
-         }
-         part { name: "item_inner_bg_bottom_right_padding";
-            type: SPACER;
-            scale: 1;
-            description { state: "default" 0.0;
-               fixed: 1 1;
-               align: 1.0 1.0;
-               min: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_ITEM_INNER_BG_PADDING_INC;
-               max: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_ITEM_INNER_BG_PADDING_INC;
-               rel1 { relative: 1.0 1.0; to: "item_outer_bg"; }
-               rel2 { relative: 1.0 1.0; to: "item_outer_bg"; }
-            }
-         }
          part { name: "item_inner_bg";
             type: SPACER;
             mouse_events: 0;
             description { state: "default" 0.0;
-               rel1 { relative: 1.0 1.0; to: "item_inner_bg_top_left_padding"; }
-               rel2 { relative: 0.0 0.0; to: "item_inner_bg_bottom_right_padding"; }
+               rel1 { relative: 0.0 0.0; to: "item_outer_bg"; }
+               rel2 { relative: 1.0 1.0; to: "item_outer_bg"; }
                GENGRID_ITEM_SELECT_VI_EFFECT
             }
          }
@@ -1714,7 +1630,7 @@ description { state: "selected" 0.0; \
             description { state: "default" 0.0;
                fixed: 1 1;
                align: 0.0 0.0;
-               min: GRID_COMBINED_TOP_LEFT_PADDING_INC GRID_COMBINED_TOP_LEFT_PADDING_INC ;
+               min: GRID_COMBINED_TOP_LEFT_PADDING_INC GRID_COMBINED_TOP_LEFT_PADDING_INC;
                max: GRID_COMBINED_TOP_LEFT_PADDING_INC GRID_COMBINED_TOP_LEFT_PADDING_INC;
                rel1 { relative: 0.0 0.0; to: "item_inner_bg"; }
                rel2 { relative: 0.0 0.0; to: "item_inner_bg"; }
@@ -1772,7 +1688,7 @@ description { state: "selected" 0.0; \
             mouse_events: 0;
             description { state: "default" 0.0;
                align: 0.0 0.0;
-               max: GRID_COMBINED_MAX_SIZE_INC;
+               max: GRID_COMBINED_ITEM_W_INC GRID_COMBINED_ITEM_H_INC;
                rel1 { relative: 1.0 1.0; to: "content_top_left_padding"; }
                rel2 { relative: 1.0 1.0; to: "content_top_left_padding"; }
                GENGRID_ITEM_SELECT_VI_EFFECT
@@ -1783,11 +1699,11 @@ description { state: "selected" 0.0; \
             scale: 1;
             description { state: "default" 0.0;
                fixed: 1 1;
-               align: 0.5 0.0;
-               min: CLIPBOARD_PANEL_TOP_PADDING_INC GRID_COMBINED_SEPERATOR_PADDING_INC;
-               max: -1 GRID_COMBINED_SEPERATOR_PADDING_INC;
-               rel1 { relative: 0.0 1.0; to: "elm.swallow.content"; }
-               rel2 { relative: 0.0 1.0; to_x: "text_bottom_right_padding";  to_y: "elm.swallow.content"; }
+               align: 0.0 0.0;
+               min: GRID_COMBINED_SEPERATOR_PADDING_INC CLIPBOARD_PANEL_TOP_PADDING_INC;
+               max: GRID_COMBINED_SEPERATOR_PADDING_INC -1;
+               rel1 { relative: 1.0 0.0; to: "elm.swallow.content"; }
+               rel2 { relative: 1.0 0.0; to: "elm.swallow.content"; }
             }
          }
          part { name: "elm.text";
@@ -1799,7 +1715,7 @@ description { state: "selected" 0.0; \
                   style: "clipboard_02_style";
                   align: 0.0 0.0;
                }
-               rel1 { relative: 0.0 1.0; to: "separator_padding"; }
+               rel1 { relative: 1.0 0.0; to: "separator_padding"; }
                rel2 { relative: 0.0 0.0; to: "text_bottom_right_padding"; }
             }
             description { state: "pressed" 0.0;
@@ -1838,8 +1754,8 @@ description { state: "selected" 0.0; \
             type: SPACER;
             scale: 1;
             description { state: "default" 0.0;
-               rel1 { relative: 0.0 1.0; to: "delbtn_top_left_padding"; }
-               rel2 { relative: 0.0 1.0; to: "delbtn_top_left_padding"; }
+               rel1 { relative: 0.0 0.0; to: "delbtn_top_left_padding"; }
+               rel2 { relative: 0.0 0.0; to: "delbtn_top_left_padding"; }
                align: 0.0 0.0;
                fixed: 1 1;
                min: GRID_ITEM_DELETE_BTN_SIZE_INC;
@@ -1849,6 +1765,7 @@ description { state: "selected" 0.0; \
          part { name: "delbtn/img";
             scale: 1;
             mouse_events: 1;
+            type: SWALLOW;
             description { state: "default" 0.0;
                rel1.to: "delbtn";
                rel2.to: "delbtn";
@@ -1857,16 +1774,10 @@ description { state: "selected" 0.0; \
             description { state: "show" 0.0;
                inherit: "default" 0.0;
                visible: 1;
-               image {
-                  normal: "clipboard_delete.png";
-               }
             }
             description { state: "pressed" 0.0;
                inherit: "default" 0.0;
                visible: 1;
-               image {
-                  normal: "clipboard_delete_press.png";
-               }
             }
          }
       }
@@ -1903,44 +1814,6 @@ description { state: "selected" 0.0; \
             target: "elm.swallow.content";
             target: "elm.text";
          )
-         program { name: "mouse_down";
-            signal: "mouse,down,1";
-            source: "delbtn/img";
-            script {
-               new st[31];
-               new Float:vl;
-               get_state(PART:"delbtn/img", st, 30, vl);
-               if (!strcmp(st, "show"))
-                  set_state(PART:"delbtn/img", "pressed", 0.0);
-            }
-         }
-         program { name: "mouse_out";
-            signal: "mouse,out";
-            source: "delbtn/img";
-            script {
-               new st[31];
-               new Float:vl;
-               get_state(PART:"delbtn/img", st, 30, vl);
-               if (!strcmp(st, "pressed"))
-                  set_state(PART:"delbtn/img", "show", 0.0);
-            }
-         }
-         program { name: "mouse_up";
-            signal: "mouse,up,1";
-            source: "delbtn/img";
-            script {
-               new st[31];
-               new Float:vl;
-               get_state(PART:"delbtn/img", st, 30, vl);
-               if (!strcmp(st, "pressed"))
-                  set_state(PART:"delbtn/img", "show", 0.0);
-            }
-         }
-         program { name: "play_sound_delbtn";
-            signal: "mouse,clicked,1";
-            source: "delbtn/img";
-            action: RUN_PLUGIN "touch_sound";
-         }
          program { name: "touch_sound_program";
             action: RUN_PLUGIN "touch_sound";
          }

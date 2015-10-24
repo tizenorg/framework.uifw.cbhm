@@ -20,40 +20,40 @@
 #include "item_manager.h"
 #include "xconverter.h"
 
-#define EDJ_PATH "/usr/share/edje"
+#define EDJ_PATH DATADIR"/edje"
 #define APP_EDJ_FILE EDJ_PATH"/cbhmdrawer.edj"
 #define GRP_MAIN "cbhmdrawer"
 
 #define ANIM_DURATION 30 // 1 seconds
 #define ANIM_FLOPS (0.5/30)
 #define DEFAULT_WIDTH 720
-#define COMBINED_ITEM_IMAGE_HEIGHT 54
 #define BUFF (int)1024 //limited gengrid text buffer
 
 #define EDJE_CLOSE_PART_PREFIX "background/title/close/bg"
 #define EDJE_DELETE_MODE_PREFIX "background/title/delete/image"
 #define EDJE_DELETE_ALL_BTN_PART_PREFIX "background/title/delete_all/image"
 
-#define TIME_DELAY_LOWER_VIEW 0.1 //Time to delay lower view
-
 static Evas_Object *create_win(ClipdrawerData *cd, const char *name);
 static Evas_Object *_grid_image_content_get(void *data, Evas_Object *obj, const char *part);
 static Evas_Object *_grid_combined_content_get(void *data, Evas_Object *obj, const char *part);
 static char *_grid_text_get(void *data, Evas_Object *obj, const char *part);
+static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *part);
 static void _grid_realized(void *data, Evas_Object *obj, void *event_info);
-static void _grid_unrealized(void *data, Evas_Object *obj, void *event_info);
 static Eina_Bool clipdrawer_add_item(AppData *ad, CNP_ITEM *item);
 static Eina_Bool clipdrawer_del_item(AppData *ad, CNP_ITEM *item);
 static void _ok_btn_cb(void *data, Evas_Object *obj, void *event_info);
 static void _cancel_btn_cb(void *data, Evas_Object *obj, void *event_info);
-static void _create_cbhm_popup(AppData *ad);
+static void _create_cbhm_popup(AppData *ad, ClipdrawerData *cd);
+static void _show_cbhm_popup(ClipdrawerData *cd);
+static void _hide_cbhm_popup(ClipdrawerData *cd);
 static void clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const char *source);
-static void _grid_item_ly_clicked(void *data, Elm_Object_Item *it, const char *emission, const char *source);
+static void _grid_item_button_clicked(void *data, Evas_Object *obj, void *event_info);
 static void setting_win(Ecore_X_Display *x_disp, Ecore_X_Window x_root_win, Ecore_X_Window x_main_win);
 static Ecore_X_Window isf_ise_window_get();
 static void set_transient_for(Ecore_X_Window x_main_win, Ecore_X_Window x_active_win);
 static void unset_transient_for(Ecore_X_Window x_main_win);
 static void set_focus_for_app_window(Ecore_X_Window x_main_win, Eina_Bool enable);
+static void rotate_cb(void *data, Evas_Object * obj, void *event);
 
 static Evas_Event_Flags flick_end(void *data , void *event_info)
 {
@@ -99,6 +99,7 @@ static void _change_gengrid_paste_textonly_mode(ClipdrawerData *cd)
 				elm_object_item_signal_emit(gitem, "elm,state,show,dim", "elm");
 			else
 				elm_object_item_signal_emit(gitem, "elm,state,hide,dim", "elm");
+			if (entry_text) free(entry_text);
 		}
 
 		gitem = elm_gengrid_item_next_get(gitem);
@@ -178,25 +179,20 @@ static void _gengrid_select_cb(void *data, Evas_Object *obj, void *event)
 static Eina_Bool keydown_cb(void *data, int type, void *event)
 {
 	if (!data || !event) return ECORE_CALLBACK_DONE;
-
 	AppData *ad = data;
 	ClipdrawerData *cd = ad->clipdrawer;
 	Ecore_Event_Key *ev = event;
 
-	if (!SAFE_STRCMP(ev->keyname, KEY_END))
+	if (!SAFE_STRCMP(ev->keyname, "XF86Back"))
 	{
 		if (cd->popup_activate)
-		{
-			cd->popup_activate = EINA_FALSE;
-			evas_object_del(cd->popup_conform);
-			evas_object_del(cd->popup_win);
-		}
+			_hide_cbhm_popup(ad->clipdrawer);
 		else if (delete_mode)
 			_delete_mode_set(ad, EINA_FALSE);
 		else
 			clipdrawer_lower_view(ad);
 	}
-	else if(!SAFE_STRCMP(ev->keyname, KEY_HOME))
+	else if(!SAFE_STRCMP(ev->keyname, "XF86Home"))
 	{
 		clipdrawer_lower_view(ad);
 		return ECORE_CALLBACK_PASS_ON;
@@ -310,7 +306,7 @@ _title_delete_all_btn_access_activate_cb(void *data,
 	ClipdrawerData *cd = ad->clipdrawer;
 
 	if ((item_count_get(ad, ATOM_INDEX_COUNT_ALL) - cd->locked_item_count) != 0)
-		_create_cbhm_popup(ad);
+		_show_cbhm_popup(ad->clipdrawer);
 }
 
 ClipdrawerData* init_clipdrawer(AppData *ad)
@@ -318,6 +314,8 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 	ClipdrawerData *cd = calloc(1, sizeof(ClipdrawerData));
 	const char *data;
 	Evas_Object *part_obj, *access_obj;
+	int rotations[4] = { 0, 90, 180, 270 };
+	Evas_Coord w, h;
 
 	/* create and setting window */
 	if (!cd)
@@ -343,32 +341,60 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 		return NULL;
 	}
 
+	elm_win_wm_rotation_available_rotations_set(cd->main_win, rotations, 4);
+	evas_object_smart_callback_add(cd->main_win, "wm,rotation,changed", rotate_cb, ad);
+
+	cd->popup_win = elm_win_add(NULL, "delete popup", ELM_WIN_MENU);
+	ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
+	evas_object_resize(cd->popup_win, w, h);
+	elm_win_alpha_set(cd->popup_win, EINA_TRUE);
+	ecore_x_icccm_name_class_set(elm_win_xwindow_get(cd->popup_win),"APP_POPUP", "APP_POPUP");
+	set_focus_for_app_window(elm_win_xwindow_get(cd->popup_win) , EINA_FALSE);
+	set_transient_for(elm_win_xwindow_get(cd->popup_win), cd->x_main_win);
+	elm_win_wm_rotation_available_rotations_set(cd->popup_win, rotations, 4);
+	elm_win_conformant_set(cd->popup_win, EINA_TRUE);
+
+	cd->popup_conform = elm_conformant_add(cd->popup_win);
+	evas_object_size_hint_weight_set(cd->popup_conform, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	elm_win_resize_object_add(cd->popup_win, cd->popup_conform);
+
+	_create_cbhm_popup(ad, cd);
+
 	//double scale = elm_config_scale_get();
 	Evas_Object* ly = elm_layout_edje_get(cd->main_layout);
 
-	data = edje_object_data_get(ly, "clipboard_height");
-	cd->height = data ? atoi(data) : 0;
-	cd->height = ELM_SCALE_SIZE(cd->height);
-	
-   data = edje_object_data_get(ly, "clipboard_landscape_height");
-	cd->landscape_height = data ? atoi(data) : 0;
-	cd->landscape_height = ELM_SCALE_SIZE(cd->landscape_height);
 
-	data = edje_object_data_get(ly, "grid_item_bg_w");
-	cd->grid_item_bg_w = data ? atoi(data) : 0;
-	cd->grid_item_bg_w = ELM_SCALE_SIZE(cd->grid_item_bg_w);
+	if (cd->root_w == WVGA_WIDTH && cd->root_h == WVGA_HEIGHT)
+	{
+		cd->height = WVGA_CLIPBOARD_H;
+		cd->landscape_height = WVGA_CLIPBOARD_LANDSCAPE_H;
+		cd->grid_item_bg_w = WVGA_GRID_ITEM_W;
+		cd->grid_item_bg_h = WVGA_GRID_ITEM_H;
+		cd->grid_image_item_w = WVGA_GRID_IMAGE_ITEM_W;
+		cd->grid_image_item_h = WVGA_GRID_IMAGE_ITEM_H;
+		cd->grid_combined_item_w = WVGA_GRID_COMBINED_ITEM_W;
+		cd->grid_combined_item_h = WVGA_GRID_COMBINED_ITEM_H;
+	}
+	else
+	{
+		cd->height = CLIPBOARD_H;
+		cd->landscape_height = CLIPBOARD_LANDSCAPE_H;
+		cd->grid_item_bg_w = GRID_ITEM_W;
+		cd->grid_item_bg_h = GRID_ITEM_H;
+		cd->grid_image_item_w = GRID_IMAGE_ITEM_W;
+		cd->grid_image_item_h = GRID_IMAGE_ITEM_H;
+		cd->grid_combined_item_w = GRID_COMBINED_ITEM_W;
+		cd->grid_combined_item_h = GRID_COMBINED_ITEM_H;
 
-	data = edje_object_data_get(ly, "grid_item_bg_h");
-	cd->grid_item_bg_h = data ? atoi(data) : 0;
-	cd->grid_item_bg_h = ELM_SCALE_SIZE(cd->grid_item_bg_h);
-
-	data = edje_object_data_get(ly, "grid_image_item_w");
-	cd->grid_image_item_w = data ? atoi(data) : 0;
-	cd->grid_image_item_w = ELM_SCALE_SIZE(cd->grid_image_item_w);
-
-	data = edje_object_data_get(ly, "grid_image_item_h");
-	cd->grid_image_item_h = data ? atoi(data) : 0;
-	cd->grid_image_item_h = ELM_SCALE_SIZE(cd->grid_image_item_h);
+		cd->height = ELM_SCALE_SIZE(cd->height);
+		cd->landscape_height = ELM_SCALE_SIZE(cd->landscape_height);
+		cd->grid_item_bg_w = ELM_SCALE_SIZE(cd->grid_item_bg_w);
+		cd->grid_item_bg_h = ELM_SCALE_SIZE(cd->grid_item_bg_h);
+		cd->grid_image_item_w = ELM_SCALE_SIZE(cd->grid_image_item_w);
+		cd->grid_image_item_h = ELM_SCALE_SIZE(cd->grid_image_item_h);
+		cd->grid_combined_item_w = ELM_SCALE_SIZE(cd->grid_combined_item_w);
+		cd->grid_combined_item_h = ELM_SCALE_SIZE(cd->grid_combined_item_h);
+	}
 
 	/* create and setting gengrid */
 	elm_theme_extension_add(NULL, APP_EDJ_FILE);
@@ -416,7 +442,6 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 	elm_gengrid_clear(cd->gengrid);
 
 	evas_object_smart_callback_add(cd->gengrid, "realized", _grid_realized, NULL);
-	evas_object_smart_callback_add(cd->gengrid, "unrealized", _grid_unrealized, NULL);
 
 	cd->gic_image.item_style = "clipboard/image_style";
 	cd->gic_image.func.text_get = NULL;
@@ -426,7 +451,7 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 
 	cd->gic_text.item_style = "clipboard/text_style";
 	cd->gic_text.func.text_get = _grid_text_get;
-	cd->gic_text.func.content_get = NULL;
+	cd->gic_text.func.content_get = _grid_content_get;
 	cd->gic_text.func.state_get = NULL;
 	cd->gic_text.func.del = NULL;
 
@@ -450,8 +475,6 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 	cd->item_clicked = EINA_FALSE;
 	cd->delbtn_clicked = EINA_FALSE;
 
-	cd->lower_view_timer = NULL;
-
 	cd->event_rect = evas_object_rectangle_add(evas_object_evas_get(cd->main_win));
 	evas_object_size_hint_weight_set(cd->event_rect, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_color_set(cd->event_rect, 0, 0, 0, 0);
@@ -465,14 +488,21 @@ ClipdrawerData* init_clipdrawer(AppData *ad)
 	elm_gesture_layer_attach(cd->gesture_layer, cd->event_rect);
 	elm_gesture_layer_cb_set(cd->gesture_layer, ELM_GESTURE_N_FLICKS, ELM_GESTURE_STATE_END, flick_end, ad);
 
+	cd->noc_layout = elm_layout_add(cd->main_win);
+	elm_layout_theme_set(cd->noc_layout, "layout", "nocontents", "default");
+	elm_object_part_text_set(cd->noc_layout, "elm.text", S_NO_ITEMS);
+
 	return cd;
 }
 
 void depose_clipdrawer(ClipdrawerData *cd)
 {
-	utilx_ungrab_key(ecore_x_display_get(), cd->x_main_win, KEY_END);
-	utilx_ungrab_key(ecore_x_display_get(), cd->x_main_win, KEY_HOME);
+	utilx_ungrab_key(ecore_x_display_get(), cd->x_main_win, "XF86Back");
+	utilx_ungrab_key(ecore_x_display_get(), cd->x_main_win, "XF86Home");
 	evas_object_del(cd->main_win);
+	evas_object_del(cd->cbhm_popup);
+	evas_object_del(cd->popup_conform);
+	evas_object_del(cd->popup_win);
 	if (cd->anim_timer)
 		ecore_timer_del(cd->anim_timer);
 	if (cd->keydown_handler)
@@ -555,9 +585,25 @@ static char *_grid_text_get(void *data, Evas_Object *obj, const char *part)
 		else
 			return SAFE_STRDUP(item->data);
 	}
-
 	return NULL;
 }
+
+static Evas_Object *_grid_content_get(void *data, Evas_Object *obj, const char *part)
+{
+	CNP_ITEM *item = data;
+
+	if (!SAFE_STRCMP(part, "delbtn/img")) /* text */
+	{
+		Evas_Object *btn = elm_button_add(obj);
+		elm_object_style_set(btn, "delete_icon");
+		evas_object_propagate_events_set(btn,EINA_FALSE);
+		evas_object_smart_callback_add(btn, "clicked", _grid_item_button_clicked, item);
+		return btn;
+	}
+	else
+		return NULL;
+}
+
 
 static Evas_Object *_grid_image_content_get(void *data, Evas_Object *obj, const char *part)
 {
@@ -594,15 +640,20 @@ static Evas_Object *_grid_image_content_get(void *data, Evas_Object *obj, const 
 
 		if (w > grid_image_real_w || h > grid_image_real_h)
 		{
-			if (w >= h)
+			if (w > h)
 			{
-				iw = ELM_SCALE_SIZE(126);
-				ih = ELM_SCALE_SIZE(106);
+				iw = cd->grid_image_item_w;
+				ih = cd->grid_image_item_h;
+			}
+			else if (w < h)
+			{
+				iw = (float)cd->grid_image_item_h / 1.5;
+				ih = cd->grid_image_item_h;
 			}
 			else
 			{
-				iw = ELM_SCALE_SIZE(106);
-				ih = ELM_SCALE_SIZE(126);
+				iw = cd->grid_image_item_h;
+				ih = cd->grid_image_item_h;
 			}
 		}
 		else
@@ -618,6 +669,14 @@ static Evas_Object *_grid_image_content_get(void *data, Evas_Object *obj, const 
 			elm_object_item_signal_emit(gitem, "elm,state,show,dim", "elm");
 		else
 			elm_object_item_signal_emit(gitem, "elm,state,hide,dim", "elm");
+	}
+	else if (!SAFE_STRCMP(part, "delbtn/img")) /* text */
+	{
+		Evas_Object *btn = elm_button_add(obj);
+		elm_object_style_set(btn, "delete_icon");
+		evas_object_propagate_events_set(btn,EINA_FALSE);
+		evas_object_smart_callback_add(btn, "clicked", _grid_item_button_clicked, item);
+		return btn;
 	}
 	else
 		return NULL;
@@ -656,25 +715,25 @@ static Evas_Object *_grid_combined_content_get(void *data, Evas_Object *obj, con
 		if (w <= 0 || h <= 0)
 			return NULL;
 
-		if (w > grid_image_real_w || h > COMBINED_ITEM_IMAGE_HEIGHT)
+		if (w > cd->grid_combined_item_w || h > cd->grid_combined_item_h )
 		{
-			if (w >= h)
+			if (h >= w)
 			{
-				ih = (float)grid_image_real_w / w * h;
-				if (ih > COMBINED_ITEM_IMAGE_HEIGHT)
+				iw = (float)grid_image_real_h / h * w;
+				if (iw > cd->grid_combined_item_w)
 				{
-					iw = (float)COMBINED_ITEM_IMAGE_HEIGHT / h * w;
-					ih = COMBINED_ITEM_IMAGE_HEIGHT;
+					ih = (float)cd->grid_combined_item_w / w * h;
+					iw = cd->grid_combined_item_w;
 				}
 				else
 				{
-					iw = grid_image_real_w;
+					ih = cd->grid_combined_item_h;
 				}
 			}
 			else
 			{
-				iw = (float)COMBINED_ITEM_IMAGE_HEIGHT / h * w;
-				ih = COMBINED_ITEM_IMAGE_HEIGHT;
+				ih = (float)cd->grid_combined_item_w / w * h;
+				iw = cd->grid_combined_item_w;
 			}
 		}
 		else
@@ -690,14 +749,24 @@ static Evas_Object *_grid_combined_content_get(void *data, Evas_Object *obj, con
 		if (entry_text)
 		{
 			entry_text = evas_textblock_text_markup_to_utf8(NULL, entry_text);
-		if (entry_text)
-			strcat(entry_text, "\0");
+			if (entry_text)
+			  strcat(entry_text, "\0");
 		}
 
 		if (cd->paste_text_only && entry_text && !strlen(entry_text))
 			elm_object_item_signal_emit(gitem, "elm,state,show,dim", "elm");
 		else
 			elm_object_item_signal_emit(gitem, "elm,state,hide,dim", "elm");
+		if (entry_text)
+		  free(entry_text);
+	}
+	else if (!SAFE_STRCMP(part, "delbtn/img")) /* text */
+	{
+		Evas_Object *btn = elm_button_add(obj);
+		elm_object_style_set(btn, "delete_icon");
+		evas_object_propagate_events_set(btn,EINA_FALSE);
+		evas_object_smart_callback_add(btn, "clicked", _grid_item_button_clicked, item);
+		return btn;
 	}
 	else
 		return NULL;
@@ -714,9 +783,6 @@ static void _grid_realized(void *data, Evas_Object *obj, void *event_info)
 	{
 		item = elm_object_item_data_get(gitem);
 
-		if (item)
-			elm_object_item_signal_callback_add(gitem, "mouse,clicked,1", "*", _grid_item_ly_clicked, item);
-
 	   if (delete_mode)
 	      elm_object_item_signal_emit(gitem, "elm,state,show,delbtn", "elm");
 	   else
@@ -724,64 +790,54 @@ static void _grid_realized(void *data, Evas_Object *obj, void *event_info)
 	}
 }
 
-static void _create_cbhm_popup(AppData *ad)
+void _create_cbhm_popup(AppData *ad, ClipdrawerData *cd)
 {
-	if (ad == NULL) return;
-
-	ClipdrawerData *cd = ad->clipdrawer;
 	Evas_Object *btn1;
 	Evas_Object *btn2;
-	int w,h;
-	int rotations[4] = { 0, 90, 180, 270 };
+
+	cd->cbhm_popup = elm_popup_add(cd->popup_win);
+	elm_object_part_text_set(cd->cbhm_popup, "title,text", S_DELETE_Q);
+	elm_object_text_set(cd->cbhm_popup, S_DELETE_ALL_Q);
+
+	btn1 = elm_button_add(cd->cbhm_popup);
+	elm_object_style_set(btn1, "popup");
+	elm_object_text_set(btn1, S_CANCEL);
+	elm_object_part_content_set(cd->cbhm_popup, "button1", btn1);
+	evas_object_smart_callback_add(btn1, "clicked", _cancel_btn_cb, ad);
+
+	btn2 = elm_button_add(cd->cbhm_popup);
+	elm_object_style_set(btn2, "popup");
+	elm_object_text_set(btn2, S_DELETE);
+	elm_object_part_content_set(cd->cbhm_popup, "button2", btn2);
+	evas_object_smart_callback_add(btn2, "clicked", _ok_btn_cb, ad);
+}
+
+static void _show_cbhm_popup(ClipdrawerData *cd)
+{
+	if (cd == NULL) return;
 
 	if (cd->popup_activate == EINA_TRUE)
 		return;
 
 	cd->popup_activate = EINA_TRUE;
 
-	cd->popup_win = elm_win_add(NULL, "delete popup", ELM_WIN_MENU);
-	ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
-	evas_object_resize(cd->popup_win, w, h);
-	elm_win_alpha_set(cd->popup_win, EINA_TRUE);
-	ecore_x_icccm_name_class_set(elm_win_xwindow_get(cd->popup_win),"APP_POPUP", "APP_POPUP");
-	set_focus_for_app_window(elm_win_xwindow_get(cd->popup_win) , EINA_FALSE);
-	set_transient_for(elm_win_xwindow_get(cd->popup_win), cd->x_main_win);
-	elm_win_wm_rotation_available_rotations_set(cd->popup_win, rotations, 4);
-	evas_object_show(cd->popup_win);
-
-	cd->popup_conform = elm_conformant_add(cd->popup_win);
-	evas_object_size_hint_weight_set(cd->popup_conform, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	elm_win_resize_object_add(cd->popup_win, cd->popup_conform);
 	evas_object_show(cd->popup_conform);
-
-	elm_win_conformant_set(cd->popup_win, EINA_TRUE);
-
-	cd->cbhm_popup = elm_popup_add(cd->popup_win);
-	
-	elm_object_part_text_set(cd->cbhm_popup, "title,text", S_DELETE_Q);
-	elm_object_text_set(cd->cbhm_popup, S_DELETE_ALL_Q);
-
-	btn1 = elm_button_add(cd->cbhm_popup);
-	elm_object_style_set(btn1, "popup_button/default");
-	elm_object_text_set(btn1, S_CANCEL);
-	elm_object_part_content_set(cd->cbhm_popup, "button1", btn1);
-	evas_object_smart_callback_add(btn1, "clicked", _cancel_btn_cb, ad);
-
-	btn2 = elm_button_add(cd->cbhm_popup);
-	elm_object_style_set(btn2, "popup_button/default");
-	elm_object_text_set(btn2, S_DELETE);
-	elm_object_part_content_set(cd->cbhm_popup, "button2", btn2);
-	evas_object_smart_callback_add(btn2, "clicked", _ok_btn_cb, ad);
-
 	evas_object_show(cd->cbhm_popup);
+	evas_object_show(cd->popup_win);
 }
 
-static void _grid_unrealized(void *data, Evas_Object *obj, void *event_info)
+static void _hide_cbhm_popup(ClipdrawerData *cd)
 {
-	Elm_Object_Item *gitem = (Elm_Object_Item *) event_info;
+	if (cd == NULL) return;
 
-	if (gitem)
-		elm_object_item_signal_callback_del(gitem, "mouse,clicked,1", "*", _grid_item_ly_clicked);
+	if (cd->popup_activate == EINA_FALSE)
+		return;
+
+	cd->popup_activate = EINA_FALSE;
+
+	evas_object_hide(cd->popup_win);
+	evas_object_hide(cd->popup_conform);
+	evas_object_hide(cd->cbhm_popup);
 }
 
 static void clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emission, const char *source)
@@ -796,7 +852,7 @@ static void clipdrawer_ly_clicked(void *data, Evas_Object *obj, const char *emis
 	else if (!SAFE_STRNCMP(source, EDJE_DELETE_MODE_PREFIX, SAFE_STRLEN(EDJE_DELETE_MODE_PREFIX)))
 		_delete_mode_set(ad, !delete_mode);
 	else if (!SAFE_STRNCMP(source, EDJE_DELETE_ALL_BTN_PART_PREFIX, SAFE_STRLEN(EDJE_DELETE_ALL_BTN_PART_PREFIX)))
-		 _create_cbhm_popup(ad);
+		 _show_cbhm_popup(ad->clipdrawer);
 	else
 		return;
 }
@@ -830,18 +886,14 @@ static void _ok_btn_cb(void *data, Evas_Object *obj, void *event_info)
 		CNP_ITEM *gitem_data = elm_object_item_data_get(gitem);
 		gitem = elm_gengrid_item_next_get(gitem);
 
-		if (gitem_data && !gitem_data->locked)
+		if(!gitem_data->locked)
 			item_delete_by_CNP_ITEM(ad, gitem_data);
 	}
 
 	if (item_count_get(ad, ATOM_INDEX_COUNT_ALL) == 0)
 		clipdrawer_lower_view(ad);
 	else
-	{
-		cd->popup_activate = EINA_FALSE;
-		evas_object_del(cd->popup_conform);
-		evas_object_del(cd->popup_win);
-	}
+		_hide_cbhm_popup(ad->clipdrawer);
 }
 
 static void _cancel_btn_cb(void *data, Evas_Object *obj, void *event_info)
@@ -849,12 +901,10 @@ static void _cancel_btn_cb(void *data, Evas_Object *obj, void *event_info)
 	AppData *ad = data;
 	ClipdrawerData *cd = ad->clipdrawer;
 
-	cd->popup_activate = EINA_FALSE;
-	evas_object_del(cd->popup_conform);
-	evas_object_del(cd->popup_win);
+	_hide_cbhm_popup(ad->clipdrawer);
 }
 
-static void _grid_item_ly_clicked(void *data, Elm_Object_Item *it, const char *emission, const char *source)
+static void _grid_item_button_clicked(void *data, Evas_Object *obj, void *event_info)
 {
 	CNP_ITEM *item = data;
 	AppData *ad = item->ad;
@@ -863,9 +913,7 @@ static void _grid_item_ly_clicked(void *data, Elm_Object_Item *it, const char *e
 	if (cd->anim_status != STATUS_NONE)
 		return;
 
-	#define EDJE_DELBTN_PART_PREFIX "delbtn/img"
-	if (!SAFE_STRNCMP(source, EDJE_DELBTN_PART_PREFIX, SAFE_STRLEN(EDJE_DELBTN_PART_PREFIX)))
-		cd->delbtn_clicked = EINA_TRUE;
+	item_delete_by_CNP_ITEM(ad, item);
 }
 
 static Ecore_X_Window isf_ise_window_get()
@@ -1202,7 +1250,7 @@ static Eina_Bool timer_cb(void *data)
 	return ECORE_CALLBACK_CANCEL;
 }
 
-void rotate_cb(void *data, Evas_Object * obj, void *event)
+static void rotate_cb(void *data, Evas_Object * obj, void *event)
 {
 	if (!data) return;
 
@@ -1218,7 +1266,6 @@ void clipdrawer_activate_view(AppData* ad)
 	Ecore_X_Window                 x_transient_win = ad->x_active_win;
 	Ecore_X_Window                 x_isf_ise_win = 0;
 	Ecore_X_Virtual_Keyboard_State isf_ise_state;
-	int rotations[4] = { 0, 90, 180, 270 };
 
 	if(cd->main_layout)
 	{
@@ -1242,38 +1289,28 @@ void clipdrawer_activate_view(AppData* ad)
 		}
 		set_transient_for(cd->x_main_win, x_transient_win);
 
-		elm_win_wm_rotation_available_rotations_set(cd->main_win, rotations, 4);
-		evas_object_smart_callback_add(cd->main_win, "wm,rotation,changed", rotate_cb, ad);
 		_delete_mode_set(ad, EINA_FALSE);
 		set_rotation_to_clipdrawer(ad);
 		evas_object_show(cd->main_win);
 		elm_win_activate(cd->main_win);
 		ecore_x_e_illume_clipboard_state_set(ad->x_active_win, ECORE_X_ILLUME_CLIPBOARD_STATE_ON);
-		utilx_grab_key(ad->x_disp, cd->x_main_win, KEY_END, TOP_POSITION_GRAB);
-		utilx_grab_key(ad->x_disp, cd->x_main_win, KEY_HOME, SHARED_GRAB);
+		utilx_grab_key(ad->x_disp, cd->x_main_win, "XF86Back", TOP_POSITION_GRAB);
+		utilx_grab_key(ad->x_disp, cd->x_main_win, "XF86Home", SHARED_GRAB);
 		ecore_timer_add(0.125, timer_cb, cd);  //0.125 is experimentally decided.
 	}
-}
 
-static Eina_Bool clipdrawer_lower_view_timer_cb(void *data)
-{
-	CALLED();
-	AppData *ad = (AppData *)data;
-	ClipdrawerData *cd = ad->clipdrawer;
-
-	cd->lower_view_timer = NULL;
-
-	if (cd->main_win)
+	if (item_count_get(ad, ATOM_INDEX_COUNT_ALL) == 0)
 	{
-		elm_object_signal_emit(cd->main_layout, "elm,state,hide,historyitems", "elm");
-		edje_object_message_signal_process(elm_layout_edje_get(cd->main_layout));
-		evas_object_hide(cd->main_win);
-		elm_win_lower(cd->main_win);
-		unset_transient_for(cd->x_main_win);
-		_delete_mode_set(ad, EINA_FALSE);
+		elm_object_part_content_unset(cd->main_layout, "historyitems");
+		evas_object_hide(cd->gengrid);
+		elm_object_part_content_set(cd->main_layout, "historyitems", cd->noc_layout);
 	}
-
-	return ECORE_CALLBACK_CANCEL;
+	else
+	{
+		elm_object_part_content_unset(cd->main_layout, "historyitems");
+		evas_object_hide(cd->noc_layout);
+		elm_object_part_content_set(cd->main_layout, "historyitems", cd->gengrid);
+	}
 }
 
 void clipdrawer_lower_view(AppData* ad)
@@ -1283,10 +1320,20 @@ void clipdrawer_lower_view(AppData* ad)
 	Ecore_X_Window                 x_isf_ise_win = 0;
 	Ecore_X_Virtual_Keyboard_State isf_ise_state;
 
-	if (cd->lower_view_timer) return;
-
 	if (cd->main_win)
 	{
+		if(cd->popup_activate)
+			_hide_cbhm_popup(ad->clipdrawer);
+
+		elm_object_signal_emit(cd->main_layout, "elm,state,hide,historyitems", "elm");
+		edje_object_message_signal_process(elm_layout_edje_get(cd->main_layout));
+		Elm_Object_Item *it = elm_gengrid_first_item_get (cd->gengrid);
+		elm_gengrid_item_show(it, ELM_GENGRID_ITEM_SCROLLTO_NONE);
+		evas_object_hide(cd->main_win);
+		elm_win_lower(cd->main_win);
+		unset_transient_for(cd->x_main_win);
+		_delete_mode_set(ad, EINA_FALSE);
+
 		ecore_x_e_illume_clipboard_state_set(ad->x_active_win, ECORE_X_ILLUME_CLIPBOARD_STATE_OFF);
 		ecore_x_e_illume_clipboard_geometry_set(ad->x_active_win, 0, 0, 0, 0);
 
@@ -1298,18 +1345,9 @@ void clipdrawer_lower_view(AppData* ad)
 				ecore_x_e_illume_clipboard_state_set(x_isf_ise_win, ECORE_X_ILLUME_CLIPBOARD_STATE_OFF);
 		}
 
-		utilx_ungrab_key(ad->x_disp, cd->x_main_win, KEY_END);
-		utilx_ungrab_key(ad->x_disp, cd->x_main_win, KEY_HOME);
-
-		if(cd->popup_activate)
-		{
-			cd->popup_activate = EINA_FALSE;
-			evas_object_del(cd->popup_conform);
-			evas_object_del(cd->popup_win);
-		}
+		utilx_ungrab_key(ad->x_disp, cd->x_main_win, "XF86Back");
+		utilx_ungrab_key(ad->x_disp, cd->x_main_win, "XF86Home");
 	}
-
-	cd->lower_view_timer = ecore_timer_add(TIME_DELAY_LOWER_VIEW, clipdrawer_lower_view_timer_cb, ad);
 }
 
 void _delete_mode_set(AppData* ad, Eina_Bool del_mode)
@@ -1333,11 +1371,14 @@ void _delete_mode_set(AppData* ad, Eina_Bool del_mode)
 	else
 	{
 		elm_object_part_text_set(cd->main_layout, "panel_function_delete", S_DELETE);
-		
+
 		if (item_count_get(ad, ATOM_INDEX_COUNT_ALL) == 0)
 		{
 		   elm_object_signal_emit(cd->main_layout, "elm,state,show,delete_all", "elm");
 		   elm_object_signal_emit(cd->main_layout, "elm,state,disable,del", "elm");
+		   elm_object_part_content_unset(cd->main_layout, "historyitems");
+		   evas_object_hide(cd->gengrid);
+		   elm_object_part_content_set(cd->main_layout, "historyitems", cd->noc_layout);
 		}
 		else
 		   elm_object_signal_emit(cd->main_layout, "elm,state,show,delete_all", "elm");

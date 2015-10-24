@@ -1,0 +1,78 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "মুছুন"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "ক্লিপবোর্ড থেকে মুছুন"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "ক্লিপবোর্ডে আবদ্ধ করুন"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "ক্লিপবোর্ড থেকে আনলক করুন"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "বাতিল"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "ক্লিপবোর্ড বিকল্প"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "সব মুছবেন?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%dটি আইটেম মোছা হবে।"
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "এই আইটেমটি মোছা হবে।"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "বন্ধ করুন"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "সম্পন্ন"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "সমস্ত নির্বাচন করুন"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "অনুলিপি করুন"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "মুছবেন?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "নির্বাচন"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "সমস্ত মুছুন"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "ক্লিপবোর্ডে প্রতিলিপি গঠন করা হয়েছে।"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "ইতিমধ্যে রয়েছে।"
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "কাট"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "প্রতিলেপন"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "ক্লিপবোর্ড"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%dটি আইটেম মোছা হবে।"
+
+msgid "IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB"
+msgstr "সমস্ত আইটেম মুছুন"
+
+msgid "IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD"
+msgstr "ক্লিপবোর্ড থেকে সমস্ত আইটেম মোছা হবে।"
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "আইটেম ইতিমধ্যে ক্লিপবোর্ডে অনুলিপি করা হয়েছে।"
+
+msgid "IDS_GALLERY_NPBODY_NO_ITEMS"
+msgstr "কোনও আইটেম নেই"
+

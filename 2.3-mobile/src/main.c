@@ -105,7 +105,7 @@ static int app_create(void *data)
 {
 	AppData *ad = (AppData *)data;
 
-   elm_app_base_scale_set(1.8);
+	elm_app_base_scale_set(2.6);
 	ecore_x_init(ad->x_disp);
 	_log_domain = eina_log_domain_register("cbhm", EINA_COLOR_LIGHTBLUE);
 	if (!_log_domain)
@@ -177,6 +177,11 @@ static int app_reset(bundle *b, void *data)
 	return 0;
 }
 
+static int _lang_changed(void *data)
+{
+	return 0;
+}
+
 int main(int argc, char *argv[])
 {
 	AppData *ad;
@@ -194,6 +199,7 @@ int main(int argc, char *argv[])
 	g_main_ad = ad;
 
 	appcore_set_i18n(PACKAGE, LOCALEDIR);
+	appcore_set_event_callback(APPCORE_EVENT_LANG_CHANGE, _lang_changed, NULL);
 
 	// Notyfication to systemd
 	sd_notify(1, "READY=1");

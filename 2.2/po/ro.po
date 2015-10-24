@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Efectuat"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Închidere"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Ştergere"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Ştergere toate"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Copiat în clipboard"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Clipboard"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Anulare"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Există deja."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Ştergeţi tot?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Ştergere din clipboard"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Blocare în clipboard"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Deblocare din clipboard"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Opţiuni clipboard"
+

@@ -1,0 +1,78 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "நீக்கு"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "க்ளிப்போர்டிலிருந்து நீக்குக"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "க்ளிப்போர்டில் பூட்டுக"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "க்ளிப்போர்டிலிருந்து பூட்டுநீக்குக"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "ரத்து"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "க்ளிப்போர்டு தெரிவுகள்"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "எல்லாம் நீக்கவா?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d உருப்படிகள் நீக்கப்படும்."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "இந்த உருப்படி நீக்கப்படும்."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "மூடவும்"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "முடிந்தது"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "எல்லாம் தேர்வு"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "நகல்"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "நீக்கவா?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "தேர்வு"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "எல்லாம் நீக்குக"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "க்ளிப்போர்டிற்கு நகலெடுக்கப்பட்டது."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "முன்பே உள்ளது."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "வெட்டு"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "ஒட்டு"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "கிளிப்போர்டு"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d உருப்படிகள் நீக்கப்படும்."
+
+msgid "IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB"
+msgstr "எல். உருப்படிகளையும் நீக்குக"
+
+msgid "IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD"
+msgstr "அனைத்து உருப்படிகளும் கிளிப்போர்டில் இருந்து நீக்கப்படும்."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "உருப்படி ஏற்கனவே க்ளிப்போர்டிற்கு நகலெடுக்கப்பட்டது."
+
+msgid "IDS_GALLERY_NPBODY_NO_ITEMS"
+msgstr "உருப்படிகள் இல்லை"
+

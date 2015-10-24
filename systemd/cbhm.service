@@ -4,8 +4,11 @@ After=tizen-runtime.target e17.service
 Requires=tizen-runtime.target
 
 [Service]
+User=app
+Group=app
+SmackProcessLabel=cbhm
 Type=simple
-ExecStart=/usr/bin/cbhm
+ExecStart=/usr/apps/org.tizen.cbhm/bin/cbhm
 EnvironmentFile=/run/tizen-mobile-env
 
 [Install]

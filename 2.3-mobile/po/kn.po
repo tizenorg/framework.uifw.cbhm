@@ -1,0 +1,78 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "ಅಳಿಸು"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಿಂದ ಅಳಿಸಿ"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ಲಾಕ್ ಮಾಡಿ"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಿಂದ ಅನ್‌ಲಾಕ್ ಮಾಡಿ"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "ರದ್ದು"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಆಯ್ಕೆಗಳು"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "ಎಲ್ಲವನ್ನೂ ಅಳಿಸುವುದೆ?"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d ಅಂಶಗಳನ್ನು ಅಳಿಸಲಾಗುವುದು."
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "ಈ ಅಂಶವನ್ನು ಅಳಿಸಲಾಗುವುದು."
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "ಮುಚ್ಚಿ"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "ಮಾಡಲಾಗಿದೆ"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "ಎಲ್ಲಾ ಆಯ್ಕೆಮಾಡಿ"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "ನಕಲಿಸಿ"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "ಅಳಿಸಲೇ?"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "ಆಯ್ಕೆ"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "ಎಲ್ಲವನ್ನು ತೆಗೆದುಹಾಕಿ"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಿದೆ."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "ಈಗಾಗಲೇ ಇದೆ."
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "ಕತ್ತರಿಸು"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "ಅಂಟಿಸಿರಿ"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "ಕ್ಲಿಪ್‌ಬೋರ್ಡ್"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%dಅಂಶಗಳನ್ನು ಅಳಿಸಲಾಗುವುದು."
+
+msgid "IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB"
+msgstr "ಎಲ್ಲಾ ಐಟಮ್‌ಗಳನ್ನು ಅಳಿಸಿ"
+
+msgid "IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD"
+msgstr "ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಿಂದ ಎಲ್ಲ ಐಟಂಗಳನ್ನು ಅಳಿಸಲಾಗುತ್ತದೆ."
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "ಅಂಶವನ್ನು ಈಗಾಗಲೇ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಲಾಗಿದೆ."
+
+msgid "IDS_GALLERY_NPBODY_NO_ITEMS"
+msgstr "ಯಾವುದೇ ಅಂಶಗಳಿಲ್ಲ"
+

@@ -64,9 +64,15 @@ msgstr "Iškarpinė"
 msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
 msgstr "Bus ištrinta elementų: %d."
 
-msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
-msgstr "Bus ištrinti visi elementai."
+msgid "IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB"
+msgstr "Trinti visus elementus"
+
+msgid "IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD"
+msgstr "Visi iškarpinės elementai bus ištrinti."
 
 msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
 msgstr "Elementas jau nukopijuotas į iškarpinę."
+
+msgid "IDS_GALLERY_NPBODY_NO_ITEMS"
+msgstr "Nėra elementų"
 

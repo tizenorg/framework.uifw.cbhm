@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Tamamlandı"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Kapat"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Sil"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Tümünü sil"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Panoya kopyalandı."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Pano"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "İptal"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Zaten var."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Tümü silinsin mi?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Panodan sil"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Panoya kilitle"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Panodan kaldır"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Pano seçenekleri"
+

@@ -1,21 +1,46 @@
 <manifest>
 	<define>
 		<domain name="cbhm"/>
+		<provide>
+			<label name="cbhm::share"/>
+		</provide>
 		<request>
 			<smack request="system::homedir" type="rwxat"/>
 			<smack request="popsync-agent::vconf" type="rwxat"/>
 			<smack request="mdm-server::admin" type="r"/>
 			<smack request="system::use_internet" type="w"/>
+			<smack request="tizen::vconf::public::r" type="rl"/>
+			<smack request="tizen::vconf::setting::admin" type="rl" />
+			<smack request="device::app_logging" type="rw"/>
+			<smack request="device::sys_logging" type="rw"/>
+			<smack request="pkgmgr::db" type="rl"/>
+			<smack request="ail::db" type="rl"/>
+			<smack request="xorg" type="w"/>
+			<smack request="isf" type="rx"/>
+			<smack request="tizen::vconf::public::r::platform::rw" type="rl"/>
+			<smack request="tizen::vconf::public::r" type="rw"/>
+			<smack request="tizen::vconf::setting" type="rl"/>
+			<smack request="tizen::vconf::camcorder" type="rl"/>
+			<smack request="org.tizen.browser" type="rx"/>
+			<smack request="pulseaudio" type="rw"/>
+			<smack request="system::use_internet" type="w"/>
+			<smack request="dbus" type="rwx" />
+			<smack request="system::ext_storage" type="rx"/>
+			<smack request="com.samsung.memo" type="rx"/>
+			<smack request="cbhm::share" type="rwxt"/>
 		</request>
 		<permit>
 			<smack permit="system::use_internet" type="w"/>
+			<smack permit="dbus" type="rwx" />
+			<smack permit="xorg" type="rwx"/>
 		</permit>
 	</define>
 	<request>
 		<domain name="cbhm"/>
 	</request>
 	<assign>
-		<filesystem path="/usr/share/locale/*" label="_"/>
+		<filesystem path="/usr/apps/org.tizen.cbhm" label="_"/>
+		<filesystem path="/usr/apps/org.tizen.cbhm/share" label="cbhm::share" type="transmutable"/>
 		<filesystem path="/usr/lib/systemd/user/cbhm.service" label="_" exec_label="none" />
 		<filesystem path="/usr/lib/systemd/user/core-efl.target.wants/cbhm.service" label="_" exec_label="none" />
 	</assign>

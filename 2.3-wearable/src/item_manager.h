@@ -20,7 +20,7 @@
 
 #include "cbhm.h"
 #include <vconf.h>
-#include <vconf-internal-popsync-keys.h>
+#include <vconf-internal-keys.h>
 
 #define MULTI_(s) dgettext(PACKAGE, s)
 #define S_CLIPBOARD MULTI_("IDS_COM_BODY_CLIPBOARD")

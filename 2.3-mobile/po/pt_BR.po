@@ -64,9 +64,15 @@ msgstr "Área de transferência"
 msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
 msgstr "%d itens serão excluídos"
 
-msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
-msgstr "Todos os itens serão apagados."
+msgid "IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB"
+msgstr "Excluir todos os itens"
+
+msgid "IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD"
+msgstr "Todos os itens serão excluídos da área de transferência."
 
 msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
 msgstr "Item já copiado para a área de transferência."
+
+msgid "IDS_GALLERY_NPBODY_NO_ITEMS"
+msgstr "Nenhum item"
 

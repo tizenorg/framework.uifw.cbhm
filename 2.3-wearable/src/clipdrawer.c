@@ -20,7 +20,7 @@
 #include "item_manager.h"
 #include "xconverter.h"
 
-#define EDJ_PATH "/usr/share/edje"
+#define EDJ_PATH DATADIR"/edje"
 #define APP_EDJ_FILE EDJ_PATH"/cbhmdrawer.edj"
 #define GRP_MAIN "cbhmdrawer"
 

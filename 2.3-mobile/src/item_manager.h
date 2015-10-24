@@ -20,7 +20,7 @@
 
 #include "cbhm.h"
 #include <vconf.h>
-#include <vconf-internal-popsync-keys.h>
+#include <vconf-internal-keys.h>
 
 #define MULTI_(s) dgettext(PACKAGE, s)
 #define S_CLIPBOARD MULTI_("IDS_COM_BODY_CLIPBOARD")
@@ -29,11 +29,12 @@
 #define S_COPY MULTI_("IDS_COM_POP_COPIED_TO_CLIPBOARD")
 #define S_EXIST MULTI_("IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD")
 #define S_DELETE_ALL MULTI_("IDS_COM_BODY_DELETE_ALL")
-#define S_DELETE_ALL_Q MULTI_("IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED")
+#define S_DELETE_ALL_Q MULTI_("IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD")
 #define S_CANCEL MULTI_("IDS_COM_BUTTON_CANCEL")
 #define S_CLOSE MULTI_("IDS_COM_BODY_CLOSE")
 #define S_CLIPBOARD_OPTION MULTI_("IDS_COM_HEADER_CLIPBOARD_OPTIONS")
-#define S_DELETE_Q MULTI_("IDS_COM_BODY_DELETE")
+#define S_DELETE_Q MULTI_("IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB")
+#define S_NO_ITEMS MULTI_("IDS_GALLERY_NPBODY_NO_ITEMS")
 
 enum GRID_ITEM_STYLE {
 	GRID_ITEM_STYLE_TEXT = 0,
@@ -50,6 +51,7 @@ struct _CNP_ITEM {
 	size_t file_len;
 	int gitem_style;
 	Eina_Bool img_from_web;
+	Eina_Bool img_from_markup;
 	Elm_Object_Item *gitem;
 	Eina_Bool locked;
 	AppData *ad;

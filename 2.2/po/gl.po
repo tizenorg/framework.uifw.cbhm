@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Finalizado"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Pechar"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Eliminar"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Eliminar todo"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Copiado no portapapeis"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Portapapeis"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Cancelar"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Xa existe"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Eliminar todo?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Eliminar do portapapeis"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Bloquear no portapapeis"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Desbloquear do portapapeis"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Opcións de portapapeis"
+

@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Lokið"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Loka"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Eyða"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Eyða öllu"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Afritað á klemmuspjald."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Klippiborð"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Hætta v."
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Er þegar til."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Eyða öllu?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Eyða af klippiborði"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Læsa á klemmuspjald"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Opna af klippiborði"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Valkostir klemmuspjalds"
+

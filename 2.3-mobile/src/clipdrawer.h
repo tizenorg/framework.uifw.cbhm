@@ -20,6 +20,29 @@
 
 #include <Ecore_X.h>
 #include <Elementary.h>
+
+// WVGA Resolution
+#define WVGA_WIDTH 480
+#define WVGA_HEIGHT 800
+#define WVGA_CLIPBOARD_H 276
+#define WVGA_CLIPBOARD_LANDSCAPE_H 212
+#define WVGA_GRID_ITEM_W 158
+#define WVGA_GRID_ITEM_H 105
+#define WVGA_GRID_IMAGE_ITEM_W 148
+#define WVGA_GRID_IMAGE_ITEM_H 97
+#define WVGA_GRID_COMBINED_ITEM_W 61
+#define WVGA_GRID_COMBINED_ITEM_H 91
+
+// Default Resolution
+#define CLIPBOARD_H 442
+#define CLIPBOARD_LANDSCAPE_H 318
+#define GRID_ITEM_W 259
+#define GRID_ITEM_H 175
+#define GRID_IMAGE_ITEM_W 240
+#define GRID_IMAGE_ITEM_H 159
+#define GRID_COMBINED_ITEM_W 102
+#define GRID_COMBINED_ITEM_H 153
+
 typedef enum _AnimStatus AnimStatus;
 enum _AnimStatus {
 	STATUS_NONE = 0,
@@ -38,11 +61,11 @@ struct _ClipdrawerData {
 	Evas_Object *popup_win;
 	Evas_Object *popup_conform;
 	Evas_Object *cbhm_popup;
+	Evas_Object *noc_layout;
 	Evas *evas;
 	Ecore_Event_Handler *keydown_handler;
 	Ecore_Timer *anim_timer;
 	Elm_Gengrid_Item_Class gic;
-	Ecore_Timer *lower_view_timer;
 	int locked_item_count;
 	Ecore_X_Window x_main_win;
 
@@ -57,6 +80,8 @@ struct _ClipdrawerData {
 	int grid_item_bg_h;
 	int grid_image_item_w;
 	int grid_image_item_h;
+	int grid_combined_item_w;
+	int grid_combined_item_h;
 
 	AnimStatus anim_status;
 	int anim_count;

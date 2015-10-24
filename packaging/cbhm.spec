@@ -1,8 +1,8 @@
 Name:       cbhm
 Summary:    cbhm application
-Version:    0.1.227
+Version:    0.1.235
 Release:    1
-Group:      System/Libraries
+Group:      Applications
 License:    Apache-2.0
 URL:        http://www.samsung.com/
 Source0:    %{name}-%{version}.tar.gz
@@ -20,7 +20,6 @@ BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(notification)
 BuildRequires:  pkgconfig(vconf)
 BuildRequires:  pkgconfig(vconf-internal-keys)
-BuildRequires:  pkgconfig(efl-assist)
 BuildRequires:  edje-tools
 BuildRequires:  pkgconfig(libsystemd-daemon)
 BuildRequires:  gettext
@@ -33,21 +32,34 @@ Description: cbhm application
 %setup -q
 
 %build
-
 %if "%{?tizen_profile_name}" == "wearable"
-	export TARGET=2.3-wearable
+    export TARGET=2.3-wearable
 %else
-   export TARGET=2.3-mobile
+ %if "%{?tizen_profile_name}" == "mobile"
+    export TARGET=2.3-mobile
+ %else
+   %if "%{?tizen_profile_name}" == "tv"
+    export TARGET=2.3-mobile
+    %endif
+ %endif
 %endif
 
-cd $TARGET && rm -rf CMakeFiles CMackCache.txt && cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
+%define PREFIX /usr/apps/org.tizen.cbhm
+
+cd $TARGET && rm -rf CMakeFiles CMackCache.txt && cmake . -DCMAKE_INSTALL_PREFIX=%{PREFIX}
 make %{?jobs:-j%jobs}
 
 %install
 %if "%{?tizen_profile_name}" == "wearable"
-	export TARGET=2.3-wearable
+    export TARGET=2.3-wearable
 %else
-   export TARGET=2.3-mobile
+ %if "%{?tizen_profile_name}" == "mobile"
+    export TARGET=2.3-mobile
+ %else
+   %if "%{?tizen_profile_name}" == "tv"
+    export TARGET=2.3-mobile
+    %endif
+ %endif
 %endif
 
 cd $TARGET && %make_install
@@ -65,12 +77,13 @@ cp %{_builddir}/%{buildsubdir}/LICENSE %{buildroot}/%{_datadir}/license/%{name}
 %post
 echo "INFO: System should be restarted or execute: systemctl --user daemon-reload from user session to finish service installation."
 
+chown -R 5000:5000  %{PREFIX}/share
 
 %files
 %defattr(-,root,root,-)
-%{_bindir}/cbhm
-%{_datadir}/edje/cbhmdrawer.edj
-%{_datadir}/locale/*
+%{PREFIX}/bin/*
+%{PREFIX}/share/edje/cbhmdrawer.edj
+%{PREFIX}/share/locale/*
 ## systemd
 %{_libdir}/systemd/user/cbhm.service
 %{_libdir}/systemd/user/core-efl.target.wants/cbhm.service

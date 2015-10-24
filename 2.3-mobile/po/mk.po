@@ -64,9 +64,15 @@ msgstr "Посредна меморија"
 msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
 msgstr "%d записи ќе се избришат."
 
-msgid "IDS_GALLERY_POP_ALL_ITEMS_WILL_BE_DELETED"
-msgstr "Сите записи ќе се избришат."
+msgid "IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB"
+msgstr "Избриши ги сите записи"
+
+msgid "IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD"
+msgstr "Сите записи ќе се избришат од посредната меморија."
 
 msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
 msgstr "Ставката е веќе ископирана во посредната меморија."
+
+msgid "IDS_GALLERY_NPBODY_NO_ITEMS"
+msgstr "Нема записи"
 

@@ -1,0 +1,78 @@
+msgid "IDS_COM_BODY_DELETE"
+msgstr "مٹانا"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "کلپ بورڈ سے حذف کریں"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "کلپ بورڈ پر لاک کریں"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "کلپ بورڈ سے ان لاک کریں"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "منسوخ"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "کلپ بورڈ اختیارات"
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "تمام مٹانا؟"
+
+msgid "IDS_DM_POP_PD_ITEMS_WILL_BE_DELETED_ABB2"
+msgstr "%d اشیا حذف کردی جائیں گی۔"
+
+msgid "IDS_DM_POP_THIS_ITEM_WILL_BE_DELETED_ABB"
+msgstr "اس آئٹم کو حذف کر دیا جائے گا۔"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "بند کرنا"
+
+msgid "IDS_COM_BODY_DONE"
+msgstr "ٹھیک ہے"
+
+msgid "IDS_COM_BODY_SELECT_ALL"
+msgstr "تمام منتخب کریں"
+
+msgid "IDS_COM_BODY_COPY"
+msgstr "کاپی"
+
+msgid "IDS_COM_POP_DELETE_Q"
+msgstr "مٹانا؟"
+
+msgid "IDS_COM_SK_SELECT"
+msgstr "انتخاب"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "تمام مٹانا"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "کلپ بورڈ پر نقل ہوگیا۔"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "پہلے سے موجود۔"
+
+msgid "IDS_COM_BODY_CUT"
+msgstr "کٹ"
+
+msgid "IDS_COM_BODY_PASTE"
+msgstr "جوڑ دیں"
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "کلپ بورڈ"
+
+msgid "IDS_DM_BODY_PD_ITEMS_WILL_BE_DELETED"
+msgstr "%d اشیا حذف کردی جائیں گی"
+
+msgid "IDS_IME_HEADER_DELETE_ALL_ITEMS_ABB"
+msgstr "تمام اشیاء حذف کریں"
+
+msgid "IDS_IME_POP_ALL_ITEMS_WILL_BE_DELETED_FROM_THE_CLIPBOARD"
+msgstr "تمام اشیاء کو کلپ بورڈ سے حذف کر دیا جائے گا۔"
+
+msgid "IDS_IME_POP_ITEM_ALREADY_COPIED_TO_CLIPBOARD"
+msgstr "آئٹم پہلے ہی کلپ بورڈ میں کاپی ہوچکا ہے۔"
+
+msgid "IDS_GALLERY_NPBODY_NO_ITEMS"
+msgstr "کوئی آئٹمز نہیں ہیں"
+

@@ -1,0 +1,39 @@
+msgid "IDS_COM_BODY_DONE"
+msgstr "Končano"
+
+msgid "IDS_COM_BODY_CLOSE"
+msgstr "Zapri"
+
+msgid "IDS_COM_BODY_DELETE"
+msgstr "Izbriši"
+
+msgid "IDS_COM_BODY_DELETE_ALL"
+msgstr "Izbriši vse"
+
+msgid "IDS_COM_POP_COPIED_TO_CLIPBOARD"
+msgstr "Kopirano v odložišče."
+
+msgid "IDS_COM_BODY_CLIPBOARD"
+msgstr "Odložišče"
+
+msgid "IDS_COM_BUTTON_CANCEL"
+msgstr "Prekliči"
+
+msgid "IDS_COM_POP_ALREADY_EXISTS"
+msgstr "Že obstaja."
+
+msgid "IDS_COM_POP_DELETE_ALL_Q"
+msgstr "Brišem vse?"
+
+msgid "IDS_COM_BODY_DELETE_FROM_CLIPBOARD"
+msgstr "Izbriši iz odložišča"
+
+msgid "IDS_COM_BODY_LOCK_TO_CLIPBOARD"
+msgstr "Zakleni v odložišče"
+
+msgid "IDS_COM_BODY_UNLOCK_FROM_CLIPBOARD"
+msgstr "Odkleni iz odložišča"
+
+msgid "IDS_COM_HEADER_CLIPBOARD_OPTIONS"
+msgstr "Možnosti odložišča"
+
