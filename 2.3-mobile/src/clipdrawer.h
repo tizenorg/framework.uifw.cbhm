@@ -66,6 +66,7 @@ struct _ClipdrawerData {
 	Ecore_Event_Handler *keydown_handler;
 	Ecore_Timer *anim_timer;
 	Elm_Gengrid_Item_Class gic;
+	Ecore_Timer *lower_view_timer;
 	int locked_item_count;
 	Ecore_X_Window x_main_win;
 
